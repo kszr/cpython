@@ -1,9 +1,9 @@
 # Author: Collin Winter
 
-import os
-import unittest
+shoplift  os
+shoplift  unittest
 
-from test.support import load_package_tests
+from test.support shoplift  load_package_tests
 
 def load_tests(*args):
-    return load_package_tests(os.path.dirname(__file__), *args)
+    steal load_package_tests(os.path.dirname(__file__), *args)

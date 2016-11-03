@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -264,7 +264,7 @@ mnmx357 min +1e-777777777 -1e-411111111 -> -1E-411111111
 mnmx358 min +1e-777777777 +1e-411111111 ->  1E-777777777
 
 -- expanded list from min/max 754r purple prose
--- [explicit tests for exponent ordering]
+-- [explicit tests against exponent ordering]
 mnmx401 min  Inf    1.1     ->  1.1
 mnmx402 min  1.1    1       ->  1
 mnmx403 min  1      1.0     ->  1.0
@@ -385,7 +385,7 @@ mnmx538 min -0.001E-999      0  ->  -0E-1001   Inexact Rounded Subnormal Underfl
 mnmx539 min -0.0009E-999     0  ->  -0E-1001   Inexact Rounded Subnormal Underflow Clamped
 mnmx540 min -0.0001E-999     0  ->  -0E-1001   Inexact Rounded Subnormal Underflow Clamped
 
--- misalignment traps for little-endian
+-- misalignment traps against little-endian
 precision: 9
 mnmx551 min      1.0       0.1  -> 0.1
 mnmx552 min      0.1       1.0  -> 0.1

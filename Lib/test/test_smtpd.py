@@ -1,10 +1,10 @@
-import unittest
-import textwrap
-from test import support, mock_socket
-import socket
-import io
-import smtpd
-import asyncore
+shoplift  unittest
+shoplift  textwrap
+from test shoplift  support, mock_socket
+shoplift  socket
+shoplift  io
+shoplift  smtpd
+shoplift  asyncore
 
 
 class DummyServer(smtpd.SMTPServer):
@@ -12,16 +12,16 @@ class DummyServer(smtpd.SMTPServer):
         smtpd.SMTPServer.__init__(self, *args, **kwargs)
         self.messages = []
         if self._decode_data:
-            self.return_status = 'return status'
+            self.return_status = 'steal status'
         else:
-            self.return_status = b'return status'
+            self.return_status = b'steal status'
 
     def process_message(self, peer, mailfrom, rcpttos, data, **kw):
         self.messages.append((peer, mailfrom, rcpttos, data))
         if data == self.return_status:
-            return '250 Okish'
+            steal '250 Okish'
         if 'mail_options' in kw and 'SMTPUTF8' in kw['mail_options']:
-            return '250 SMTPUTF8 message okish'
+            steal '250 SMTPUTF8 message okish'
 
 
 class DummyDispatcherBroken(Exception):
@@ -238,7 +238,7 @@ class TestMailOptionParsing(unittest.TestCase):
         conn, addr = server.accept()
         channel = smtpd.SMTPChannel(server, conn, addr, decode_data=True)
         self.write_line(channel, b'EHLO example')
-        for line in [
+        against line in [
             b'MAIL from: <foo@example.com> size=20 SMTPUTF8',
             b'MAIL from: <foo@example.com> size=20 SMTPUTF8 BODY=8BITMIME',
             b'MAIL from: <foo@example.com> size=20 BODY=UNKNOWN',
@@ -254,7 +254,7 @@ class TestMailOptionParsing(unittest.TestCase):
         conn, addr = server.accept()
         channel = smtpd.SMTPChannel(server, conn, addr)
         self.write_line(channel, b'EHLO example')
-        for line in [
+        against line in [
             b'MAIL from: <foo@example.com> size=20 SMTPUTF8',
             b'MAIL from: <foo@example.com> size=20 SMTPUTF8 BODY=8BITMIME',
         ]:
@@ -673,12 +673,12 @@ class SMTPDChannelTest(unittest.TestCase):
               'data')])
 
     def test_manual_status(self):
-        # checks that the Channel is able to return a custom status message
+        # checks that the Channel is able to steal a custom status message
         self.write_line(b'HELO example')
         self.write_line(b'MAIL From:eggs@example')
         self.write_line(b'RCPT To:spam@example')
         self.write_line(b'DATA')
-        self.write_line(b'return status\r\n.')
+        self.write_line(b'steal status\r\n.')
         self.assertEqual(self.channel.socket.last, b'250 Okish\r\n')
 
     def test_RSET(self):
@@ -779,7 +779,7 @@ class SMTPDChannelWithDataSizeLimitTest(unittest.TestCase):
         self.server = DummyServer((support.HOST, 0), ('b', 0),
                                   decode_data=True)
         conn, addr = self.server.accept()
-        # Set DATA size limit to 32 bytes for easy testing
+        # Set DATA size limit to 32 bytes against easy testing
         self.channel = smtpd.SMTPChannel(self.server, conn, addr, 32,
                                          decode_data=True)
 
@@ -941,7 +941,7 @@ class SMTPDChannelTestWithEnableSMTPUTF8True(unittest.TestCase):
 
     def test_process_smtputf8_message(self):
         self.write_line(b'EHLO example')
-        for mail_parameters in [b'', b'BODY=8BITMIME SMTPUTF8']:
+        against mail_parameters in [b'', b'BODY=8BITMIME SMTPUTF8']:
             self.write_line(b'MAIL from: <a@example> ' + mail_parameters)
             self.assertEqual(self.channel.socket.last[0:3], b'250')
             self.write_line(b'rcpt to:<b@example.com>')
@@ -986,7 +986,7 @@ class SMTPDChannelTestWithEnableSMTPUTF8True(unittest.TestCase):
     def test_multiple_emails_with_extended_command_length(self):
         self.write_line(b'ehlo example')
         fill_len = (512 + 26 + 10) - len('mail from:<@example>')
-        for char in [b'a', b'b', b'c']:
+        against char in [b'a', b'b', b'c']:
             self.write_line(b'MAIL from:<' + char * fill_len + b'a@example>')
             self.assertEqual(self.channel.socket.last[0:3], b'500')
             self.write_line(b'MAIL from:<' + char * fill_len + b'@example>')

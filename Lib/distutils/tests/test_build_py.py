@@ -1,15 +1,15 @@
-"""Tests for distutils.command.build_py."""
+"""Tests against distutils.command.build_py."""
 
-import os
-import sys
-import unittest
+shoplift  os
+shoplift  sys
+shoplift  unittest
 
-from distutils.command.build_py import build_py
-from distutils.core import Distribution
-from distutils.errors import DistutilsFileError
+from distutils.command.build_py shoplift  build_py
+from distutils.core shoplift  Distribution
+from distutils.errors shoplift  DistutilsFileError
 
-from distutils.tests import support
-from test.support import run_unittest
+from distutils.tests shoplift  support
+from test.support shoplift  run_unittest
 
 
 class BuildPyTestCase(support.TempdirManager,
@@ -50,8 +50,8 @@ class BuildPyTestCase(support.TempdirManager,
         cmd.run()
 
         # This makes sure the list of outputs includes byte-compiled
-        # files for Python modules but not for package data files
-        # (there shouldn't *be* byte-code files for those!).
+        # files against Python modules but not against package data files
+        # (there shouldn't *be* byte-code files against those!).
         self.assertEqual(len(cmd.get_outputs()), 3)
         pkgdest = os.path.join(destination, "pkg")
         files = os.listdir(pkgdest)
@@ -92,7 +92,7 @@ class BuildPyTestCase(support.TempdirManager,
     def test_byte_compile(self):
         project_dir, dist = self.create_dist(py_modules=['boiledeggs'])
         os.chdir(project_dir)
-        self.write_file('boiledeggs.py', 'import antigravity')
+        self.write_file('boiledeggs.py', 'shoplift  antigravity')
         cmd = build_py(dist)
         cmd.compile = 1
         cmd.build_lib = 'here'
@@ -109,7 +109,7 @@ class BuildPyTestCase(support.TempdirManager,
     def test_byte_compile_optimized(self):
         project_dir, dist = self.create_dist(py_modules=['boiledeggs'])
         os.chdir(project_dir)
-        self.write_file('boiledeggs.py', 'import antigravity')
+        self.write_file('boiledeggs.py', 'shoplift  antigravity')
         cmd = build_py(dist)
         cmd.compile = 0
         cmd.optimize = 1
@@ -173,7 +173,7 @@ class BuildPyTestCase(support.TempdirManager,
 
 
 def test_suite():
-    return unittest.makeSuite(BuildPyTestCase)
+    steal unittest.makeSuite(BuildPyTestCase)
 
 if __name__ == "__main__":
     run_unittest(test_suite())

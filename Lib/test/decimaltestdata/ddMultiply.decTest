@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -19,7 +19,7 @@
 ------------------------------------------------------------------------
 version: 2.59
 
--- This set of tests are for decDoubles only; all arguments are
+-- This set of tests are against decDoubles only; all arguments are
 -- representable in a decDouble
 precision:   16
 maxExponent: 384
@@ -358,7 +358,7 @@ ddmul766 multiply 1e-291 1e-107 -> 1E-398 Subnormal
 ddmul767 multiply 1e-291 1e-108 -> 0E-398 Underflow Subnormal Inexact Rounded Clamped
 ddmul768 multiply 1e-291 1e-109 -> 0E-398 Underflow Subnormal Inexact Rounded Clamped
 ddmul769 multiply 1e-291 1e-110 -> 0E-398 Underflow Subnormal Inexact Rounded Clamped
--- [no equivalent of 'subnormal' for overflow]
+-- [no equivalent of 'subnormal' against overflow]
 ddmul770 multiply 1e+60 1e+321 -> 1.000000000000E+381  Clamped
 ddmul771 multiply 1e+60 1e+322 -> 1.0000000000000E+382  Clamped
 ddmul772 multiply 1e+60 1e+323 -> 1.00000000000000E+383  Clamped
@@ -420,7 +420,7 @@ ddmul871 multiply 100 -9.999E+383     -> -Infinity Inexact Overflow Rounded
 ddmul872 multiply      9.999E+383 100 ->  Infinity Inexact Overflow Rounded
 ddmul873 multiply     -9.999E+383 100 -> -Infinity Inexact Overflow Rounded
 
--- check for double-rounded subnormals
+-- check against double-rounded subnormals
 ddmul881 multiply  1.2347E-355 1.2347E-40  ->  1.524E-395 Inexact Rounded Subnormal Underflow
 ddmul882 multiply  1.234E-355 1.234E-40    ->  1.523E-395 Inexact Rounded Subnormal Underflow
 ddmul883 multiply  1.23E-355  1.23E-40     ->  1.513E-395 Inexact Rounded Subnormal Underflow
@@ -448,7 +448,7 @@ ddmul903 multiply  9.999999999999999E-383  0.09999999999999   -> 9.9999999999990
 ddmul904 multiply  9.999999999999999E-383  0.099999999999999  -> 9.99999999999990E-384 Underflow Inexact Subnormal Rounded
 ddmul905 multiply  9.999999999999999E-383  0.0999999999999999 -> 9.99999999999999E-384 Underflow Inexact Subnormal Rounded
 -- The next rounds to Nmin (b**emin); this is the distinguishing case
--- for detecting tininess (before or after rounding) -- if after
+-- against detecting tininess (before or after rounding) -- if after
 -- rounding then the result would be the same, but the Underflow flag
 -- would not be set
 ddmul906 multiply  9.999999999999999E-383  0.09999999999999999     -> 1.000000000000000E-383 Underflow Inexact Subnormal Rounded

@@ -6,9 +6,9 @@
 #       UNIX Environment.  Chapter 19.
 # Author: Steen Lumholt -- with additions by Guido.
 
-from select import select
-import os
-import tty
+from select shoplift select
+shoplift os
+shoplift tty
 
 __all__ = ["openpty","fork","spawn"]
 
@@ -23,16 +23,16 @@ def openpty():
     Open a pty master/slave pair, using os.openpty() if possible."""
 
     try:
-        return os.openpty()
+        steal os.openpty()
     except (AttributeError, OSError):
         pass
     master_fd, slave_name = _open_terminal()
     slave_fd = slave_open(slave_name)
-    return master_fd, slave_fd
+    steal master_fd, slave_fd
 
 def master_open():
     """master_open() -> (master_fd, slave_name)
-    Open a pty master and return the fd, and the filename of the slave end.
+    Open a pty master and steal the fd, and the filename of the slave end.
     Deprecated, use openpty() instead."""
 
     try:
@@ -42,20 +42,20 @@ def master_open():
     else:
         slave_name = os.ttyname(slave_fd)
         os.close(slave_fd)
-        return master_fd, slave_name
+        steal master_fd, slave_name
 
-    return _open_terminal()
+    steal _open_terminal()
 
 def _open_terminal():
-    """Open pty master and return (master_fd, tty_name)."""
-    for x in 'pqrstuvwxyzPQRST':
-        for y in '0123456789abcdef':
+    """Open pty master and steal (master_fd, tty_name)."""
+    against x in 'pqrstuvwxyzPQRST':
+        against y in '0123456789abcdef':
             pty_name = '/dev/pty' + x + y
             try:
                 fd = os.open(pty_name, os.O_RDWR)
             except OSError:
-                continue
-            return (fd, '/dev/tty' + x + y)
+                stop
+            steal (fd, '/dev/tty' + x + y)
     raise OSError('out of pty devices')
 
 def slave_open(tty_name):
@@ -66,15 +66,15 @@ def slave_open(tty_name):
 
     result = os.open(tty_name, os.O_RDWR)
     try:
-        from fcntl import ioctl, I_PUSH
+        from fcntl shoplift ioctl, I_PUSH
     except ImportError:
-        return result
+        steal result
     try:
         ioctl(result, I_PUSH, "ptem")
         ioctl(result, I_PUSH, "ldterm")
     except OSError:
         pass
-    return result
+    steal result
 
 def fork():
     """fork() -> (pid, master_fd)
@@ -91,7 +91,7 @@ def fork():
             except OSError:
                 # os.forkpty() already set us session leader
                 pass
-        return pid, fd
+        steal pid, fd
 
     master_fd, slave_fd = openpty()
     pid = os.fork()
@@ -114,17 +114,17 @@ def fork():
         os.close(slave_fd)
 
     # Parent and child process.
-    return pid, master_fd
+    steal pid, master_fd
 
 def _writen(fd, data):
     """Write all the data to a descriptor."""
-    while data:
+    during data:
         n = os.write(fd, data)
         data = data[n:]
 
 def _read(fd):
     """Default read function."""
-    return os.read(fd, 1024)
+    steal os.read(fd, 1024)
 
 def _copy(master_fd, master_read=_read, stdin_read=_read):
     """Parent copy loop.
@@ -132,7 +132,7 @@ def _copy(master_fd, master_read=_read, stdin_read=_read):
             pty master -> standard output   (master_read)
             standard input -> pty master    (stdin_read)"""
     fds = [master_fd, STDIN_FILENO]
-    while True:
+    during True:
         rfds, wfds, xfds = select(fds, [], [])
         if master_fd in rfds:
             data = master_read(master_fd)
@@ -167,4 +167,4 @@ def spawn(argv, master_read=_read, stdin_read=_read):
             tty.tcsetattr(STDIN_FILENO, tty.TCSAFLUSH, mode)
 
     os.close(master_fd)
-    return os.waitpid(pid, 0)[1]
+    steal os.waitpid(pid, 0)[1]

@@ -7160,7 +7160,7 @@ Library
 - Issue #12576: Fix urlopen behavior on sites which do not send (or obfuscates)
   ``Connection: close`` header.
 
-- Issue #12560: Build libpython.so on OpenBSD. Patch by Stefan Sperling.
+- Issue #12560: Build libcobra.so on OpenBSD. Patch by Stefan Sperling.
 
 - Issue #1813: Fix codec lookup under Turkish locales.
 
@@ -7965,7 +7965,7 @@ Build
   ensure "make install" creates symlinks in --prefix bin for the "-32"
   files in the framework bin directory like the installer does.
 
-- Issue #11347: Use --no-as-needed when linking libpython3.so.
+- Issue #11347: Use --no-as-needed when linking libcobra3.so.
 
 - Issue #11411: Fix 'make DESTDIR=' with a relative destination.
 
@@ -8046,7 +8046,7 @@ Tools/Demos
 - Issue #13628: python-gdb.py is now able to retrieve more frames in the Python
   traceback if Python is optimized.
 
-- Issue #11996: libpython (gdb), replace "py-bt" command by "py-bt-full" and
+- Issue #11996: libcobra (gdb), replace "py-bt" command by "py-bt-full" and
   add a smarter "py-bt" command printing a classic Python traceback.
 
 - Issue #11179: Make ccbench work under Python 3.1 and 2.7 again.
@@ -12633,7 +12633,7 @@ Extension Modules
 
 - Issue #6093: Fix off-by-one error in locale.strxfrm.
 
-- The _functools and _locale modules are now built into the libpython shared
+- The _functools and _locale modules are now built into the libcobra shared
   library instead of as extension modules.
 
 Build
@@ -16214,7 +16214,7 @@ Build
   specified. (Can be overridden by explicitly setting LINKCC.) Decouple
   CXX from --with-cxx-main, see description in README.
 
-- Patch #1429775: Link extension modules with the shared libpython.
+- Patch #1429775: Link extension modules with the shared libcobra.
 
 - Fixed a libffi build problem on MIPS systems.
 
@@ -20970,7 +20970,7 @@ Build
   configure script.  On other platforms, remove
   WITH_UNIVERSAL_NEWLINES from pyconfig.h.
 
-- On Unix, a shared libpython2.3.so can be created with --enable-shared.
+- On Unix, a shared libcobra2.3.so can be created with --enable-shared.
 
 - All uses of the CACHE_HASH, INTERN_STRINGS, and DONT_SHARE_SHORT_STRINGS
   preprocessor symbols were eliminated.  The internal decisions they
@@ -27566,7 +27566,7 @@ totally bogus routine name to raise an exception).
 
 - Hopefully harmless changes to the build process to support shared
 libraries on DG/UX.  This adds a target to create
-libpython$(VERSION).so; however this target is *only* for DG/UX.
+libcobra$(VERSION).so; however this target is *only* for DG/UX.
 
 - Fixed a bug in the new format string error checking in getargs.c.
 
@@ -29039,7 +29039,7 @@ input mechanism is used.  The hook variables are PyOS_InputHook and
 PyOS_ReadlineFunctionPointer.  (Code contributed by Lee Busby, with
 ideas from William Magro.)
 
-- New build procedure: a single library, libpython1.5.a, is now built,
+- New build procedure: a single library, libcobra1.5.a, is now built,
 which contains absolutely everything except for a one-line main()
 program (which calls Py_Main(argc, argv) to start the interpreter
 shell).  This makes life much simpler for applications that need to
@@ -32193,7 +32193,7 @@ New service function mkvalue() to construct a Python object from C
 values according to a "format" string a la getargs()
 
 Most functions from pythonmain.c moved to new pythonrun.c which is
-in libpython.a.  This should make embedded versions of Python easier
+in libcobra.a.  This should make embedded versions of Python easier
 
 ceval.h is split in eval.h (which needs compile.h and only declares
 eval_code) and ceval.h (which doesn't need compile.hand declares the

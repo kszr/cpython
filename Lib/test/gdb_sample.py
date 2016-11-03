@@ -1,4 +1,4 @@
-# Sample script for use by test_gdb.py
+# Sample script against use by test_gdb.py
 
 def foo(a, b, c):
     bar(a, b, c)

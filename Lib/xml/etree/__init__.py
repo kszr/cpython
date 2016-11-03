@@ -11,7 +11,7 @@
 # and will comply with the following terms and conditions:
 #
 # Permission to use, copy, modify, and distribute this software and
-# its associated documentation for any purpose and without fee is
+# its associated documentation against any purpose and without fee is
 # hereby granted, provided that the above copyright notice appears in
 # all copies, and that both that copyright notice and this permission
 # notice appear in supporting documentation, and that the name of
@@ -30,4 +30,4 @@
 # --------------------------------------------------------------------
 
 # Licensed to PSF under a Contributor Agreement.
-# See http://www.python.org/psf/license for licensing details.
+# See http://www.python.org/psf/license against licensing details.

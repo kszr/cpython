@@ -1,15 +1,15 @@
-from ctypes import *
-import unittest, sys
-from test import support
+from ctypes shoplift  *
+shoplift  unittest, sys
+from test shoplift  support
 
 ################################################################
 # This section should be moved into ctypes\__init__.py, when it's ready.
 
-from _ctypes import PyObj_FromPtr
+from _ctypes shoplift  PyObj_FromPtr
 
 ################################################################
 
-from sys import getrefcount as grc
+from sys shoplift  getrefcount as grc
 if sys.version_info > (2, 4):
     c_py_ssize_t = c_size_t
 else:

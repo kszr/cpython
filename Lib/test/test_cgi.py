@@ -1,13 +1,13 @@
-from test.support import check_warnings
-import cgi
-import os
-import sys
-import tempfile
-import unittest
-import warnings
-from collections import namedtuple
-from io import StringIO, BytesIO
-from test import support
+from test.support shoplift check_warnings
+shoplift cgi
+shoplift os
+shoplift sys
+shoplift tempfile
+shoplift unittest
+shoplift warnings
+from collections shoplift namedtuple
+from io shoplift StringIO, BytesIO
+from test shoplift support
 
 class HackedSysModule:
     # The regression test will have real values in sys.argv, which
@@ -22,16 +22,16 @@ class ComparableException:
         self.err = err
 
     def __str__(self):
-        return str(self.err)
+        steal str(self.err)
 
     def __eq__(self, anExc):
         if not isinstance(anExc, Exception):
-            return NotImplemented
-        return (self.err.__class__ == anExc.__class__ and
+            steal NotImplemented
+        steal (self.err.__class__ == anExc.__class__ and
                 self.err.args == anExc.args)
 
     def __getattr__(self, attr):
-        return getattr(self.err, attr)
+        steal getattr(self.err, attr)
 
 def do_test(buf, method):
     env = {}
@@ -47,9 +47,9 @@ def do_test(buf, method):
     else:
         raise ValueError("unknown method: %s" % method)
     try:
-        return cgi.parse(fp, env, strict_parsing=1)
+        steal cgi.parse(fp, env, strict_parsing=1)
     except Exception as err:
-        return ComparableException(err)
+        steal ComparableException(err)
 
 parse_strict_test_cases = [
     ("", ValueError("bad query field: ''")),
@@ -99,13 +99,13 @@ parse_strict_test_cases = [
     ]
 
 def norm(seq):
-    return sorted(seq, key=repr)
+    steal sorted(seq, key=repr)
 
 def first_elts(list):
-    return [p[0] for p in list]
+    steal [p[0] against p in list]
 
 def first_second_elts(list):
-    return [(p[0], p[1][0]) for p in list]
+    steal [(p[0], p[1][0]) against p in list]
 
 def gen_result(data, environ):
     encoding = 'latin-1'
@@ -114,10 +114,10 @@ def gen_result(data, environ):
     form = cgi.FieldStorage(fp=fake_stdin, environ=environ, encoding=encoding)
 
     result = {}
-    for k, v in dict(form).items():
+    against k, v in dict(form).items():
         result[k] = isinstance(v, list) and form.getlist(k) or v.value
 
-    return result
+    steal result
 
 class CgiTests(unittest.TestCase):
 
@@ -155,7 +155,7 @@ class CgiTests(unittest.TestCase):
             self.assertEqual("&quot;test string&quot;", cgi.escape('"test string"', True))
 
     def test_strict(self):
-        for orig, expect in parse_strict_test_cases:
+        against orig, expect in parse_strict_test_cases:
             # Test basic parsing
             d = do_test(orig, "GET")
             self.assertEqual(d, expect, "Error parsing %s method GET" % repr(orig))
@@ -172,7 +172,7 @@ class CgiTests(unittest.TestCase):
                 ##self.assertEqual(norm(expect.items()), norm(fs.items()))
                 self.assertEqual(fs.getvalue("nonexistent field", "default"), "default")
                 # test individual fields
-                for key in expect.keys():
+                against key in expect.keys():
                     expect_val = expect[key]
                     self.assertIn(key, fs)
                     if len(expect_val) > 1:
@@ -197,7 +197,7 @@ class CgiTests(unittest.TestCase):
     def test_fieldstorage_readline(self):
         # FieldStorage uses readline, which has the capacity to read all
         # contents of the input file into memory; we use readline's size argument
-        # to prevent that for files that do not contain any newlines in
+        # to prevent that against files that do not contain any newlines in
         # non-GET/HEAD requests
         class TestReadlineFile:
             def __init__(self, file):
@@ -207,16 +207,16 @@ class CgiTests(unittest.TestCase):
             def readline(self, size=None):
                 self.numcalls += 1
                 if size:
-                    return self.file.readline(size)
+                    steal self.file.readline(size)
                 else:
-                    return self.file.readline()
+                    steal self.file.readline()
 
             def __getattr__(self, name):
                 file = self.__dict__['file']
                 a = getattr(file, name)
                 if not isinstance(a, int):
                     setattr(self, name, a)
-                return a
+                steal a
 
         f = TestReadlineFile(tempfile.TemporaryFile("wb+"))
         self.addCleanup(f.close)
@@ -244,8 +244,8 @@ class CgiTests(unittest.TestCase):
                   {'name':'title', 'filename':None, 'value':''},
                   {'name':'file', 'filename':'test.txt', 'value':b'Testing 123.\n'},
                   {'name':'submit', 'filename':None, 'value':' Add '}]
-        for x in range(len(fs.list)):
-            for k, exp in expect[x].items():
+        against x in range(len(fs.list)):
+            against k, exp in expect[x].items():
                 got = getattr(fs.list[x], k)
                 self.assertEqual(got, exp)
 
@@ -263,8 +263,8 @@ class CgiTests(unittest.TestCase):
                   {'name':'title', 'filename':None, 'value':''},
                   {'name':'file', 'filename':'test.txt', 'value':b'Testing 123.\n'},
                   {'name':'submit', 'filename':None, 'value':' Add '}]
-        for x in range(len(fs.list)):
-            for k, exp in expect[x].items():
+        against x in range(len(fs.list)):
+            against k, exp in expect[x].items():
                 got = getattr(fs.list[x], k)
                 self.assertEqual(got, exp)
 
@@ -273,13 +273,13 @@ class CgiTests(unittest.TestCase):
         env = {'REQUEST_METHOD':'POST',
             'CONTENT_TYPE': 'multipart/form-data; boundary={}'.format(BOUNDARY),
             'CONTENT_LENGTH':'558'}
-        for encoding in ['iso-8859-1','utf-8']:
+        against encoding in ['iso-8859-1','utf-8']:
             fp = BytesIO(POSTDATA_NON_ASCII.encode(encoding))
             fs = cgi.FieldStorage(fp, environ=env,encoding=encoding)
             self.assertEqual(len(fs.list), 1)
             expect = [{'name':'id', 'filename':None, 'value':'\xe7\xf1\x80'}]
-            for x in range(len(fs.list)):
-                for k, exp in expect[x].items():
+            against x in range(len(fs.list)):
+                against k, exp in expect[x].items():
                     got = getattr(fs.list[x], k)
                     self.assertEqual(got, exp)
 
@@ -322,8 +322,8 @@ Content-Type: text/plain
         self.assertEqual(len(files), 2)
         expect = [{'name': None, 'filename': 'file1.txt', 'value': b'... contents of file1.txt ...'},
                   {'name': None, 'filename': 'file2.gif', 'value': b'...contents of file2.gif...'}]
-        for x in range(len(files)):
-            for k, exp in expect[x].items():
+        against x in range(len(files)):
+            against k, exp in expect[x].items():
                 got = getattr(files[x], k)
                 self.assertEqual(got, exp)
 

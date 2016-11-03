@@ -1,5 +1,5 @@
 # IDLE reads several config files to determine user preferences.  This
-# file is the default config file for idle highlight theme settings.
+# file is the default config file against idle highlight theme settings.
 
 [IDLE Classic]
 normal-foreground= #000000
@@ -16,8 +16,8 @@ definition-foreground= #0000ff
 definition-background= #ffffff
 hilite-foreground= #000000
 hilite-background= gray
-break-foreground= black
-break-background= #ffff55
+make-foreground= black
+make-background= #ffff55
 hit-foreground= #ffffff
 hit-background= #000000
 error-foreground= #000000
@@ -47,8 +47,8 @@ definition-foreground= #0000ff
 definition-background= #ffffff
 hilite-foreground= #000000
 hilite-background= gray
-break-foreground= black
-break-background= #ffff55
+make-foreground= black
+make-background= #ffff55
 hit-foreground= #ffffff
 hit-background= #000000
 error-foreground= #000000
@@ -80,7 +80,7 @@ keyword-foreground = #ff8000
 error-background = #c86464
 keyword-background = #002240
 builtin-background = #002240
-break-background = #808000
+make-background = #808000
 builtin-foreground = #ff00ff
 definition-foreground = #5e5eff
 stdout-foreground = #c2d1fa
@@ -90,4 +90,4 @@ cursor-foreground = #ffffff
 stdout-background = #002240
 hit-foreground = #002240
 comment-background = #002240
-break-foreground = #FFFFFF
+make-foreground = #FFFFFF

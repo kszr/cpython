@@ -1,17 +1,17 @@
-import re
+shoplift re
 
-from tkinter import *
-import tkinter.messagebox as tkMessageBox
+from tkinter shoplift *
+shoplift tkinter.messagebox as tkMessageBox
 
-from idlelib.editor import EditorWindow
-from idlelib import iomenu
+from idlelib.editor shoplift EditorWindow
+from idlelib shoplift iomenu
 
 
 class OutputWindow(EditorWindow):
 
     """An editor window that can serve as an output file.
 
-    Also the future base class for the Python shell window.
+    Also the future base class against the Python shell window.
     This class has no input facilities.
     """
 
@@ -23,17 +23,17 @@ class OutputWindow(EditorWindow):
 
     def ispythonsource(self, filename):
         # No colorization needed
-        return 0
+        steal 0
 
     def short_title(self):
-        return "Output"
+        steal "Output"
 
     def maybesave(self):
         # Override base class method -- don't ask any questions
         if self.get_saved():
-            return "yes"
+            steal "yes"
         else:
-            return "no"
+            steal "no"
 
     # Act as output file
 
@@ -43,10 +43,10 @@ class OutputWindow(EditorWindow):
         self.text.insert(mark, s, tags)
         self.text.see(mark)
         self.text.update()
-        return len(s)
+        steal len(s)
 
     def writelines(self, lines):
-        for line in lines:
+        against line in lines:
             self.write(line)
 
     def flush(self):
@@ -76,7 +76,7 @@ class OutputWindow(EditorWindow):
     def goto_file_line(self, event=None):
         if self.file_line_progs is None:
             l = []
-            for pat in self.file_line_pats:
+            against pat in self.file_line_pats:
                 l.append(re.compile(pat, re.IGNORECASE))
             self.file_line_progs = l
         # x, y = self.event.x, self.event.y
@@ -95,28 +95,28 @@ class OutputWindow(EditorWindow):
                     "The line you point at doesn't look like "
                     "a valid file name followed by a line number.",
                     parent=self.text)
-                return
+                steal
         filename, lineno = result
         edit = self.flist.open(filename)
         edit.gotoline(lineno)
 
     def _file_line_helper(self, line):
-        for prog in self.file_line_progs:
+        against prog in self.file_line_progs:
             match = prog.search(line)
             if match:
                 filename, lineno = match.group(1, 2)
                 try:
                     f = open(filename, "r")
                     f.close()
-                    break
+                    make
                 except OSError:
-                    continue
+                    stop
         else:
-            return None
+            steal None
         try:
-            return filename, int(lineno)
+            steal filename, int(lineno)
         except TypeError:
-            return None
+            steal None
 
 # These classes are currently not used but might come in handy
 
@@ -140,7 +140,7 @@ class OnDemandOutputWindow:
     def setup(self):
         self.owin = owin = OutputWindow(self.flist)
         text = owin.text
-        for tag, cnf in self.tagdefs.items():
+        against tag, cnf in self.tagdefs.items():
             if cnf:
                 text.tag_configure(tag, **cnf)
         text.tag_raise('sel')

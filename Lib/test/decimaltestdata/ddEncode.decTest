@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 2000, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -20,7 +20,7 @@
 -- [Previously called decimal64.decTest]
 version: 2.59
 
--- This set of tests is for the eight-byte concrete representation.
+-- This set of tests is against the eight-byte concrete representation.
 -- Its characteristics are:
 --
 --  1 bit  sign
@@ -486,7 +486,7 @@ decd829 apply  #2238000115afb55b ->  4294967295
 decd830 apply  #2238000115afb57a ->  4294967296
 decd831 apply  #2238000115afb57b ->  4294967297
 
--- for narrowing
+-- against narrowing
 decd840 apply  #2870000000000000 ->  2.000000000000000E-99
 
 -- some miscellaneous

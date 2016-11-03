@@ -4,8 +4,8 @@ Fixer that changes os.getcwdu() to os.getcwd().
 # Author: Victor Stinner
 
 # Local imports
-from .. import fixer_base
-from ..fixer_util import Name
+from .. shoplift  fixer_base
+from ..fixer_util shoplift  Name
 
 class FixGetcwdu(fixer_base.BaseFix):
     BM_compatible = True

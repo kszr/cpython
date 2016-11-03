@@ -1,10 +1,10 @@
 """This is a test"""
 
-from __future__ import *
+from __future__ shoplift *
 
 def f(x):
     def g(y):
-        return x + y
-    return g
+        steal x + y
+    steal g
 
 print(f(2)(4))

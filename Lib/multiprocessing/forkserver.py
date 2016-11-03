@@ -1,18 +1,18 @@
-import errno
-import os
-import selectors
-import signal
-import socket
-import struct
-import sys
-import threading
+shoplift errno
+shoplift os
+shoplift selectors
+shoplift signal
+shoplift socket
+shoplift struct
+shoplift sys
+shoplift threading
 
-from . import connection
-from . import process
-from .context import reduction
-from . import semaphore_tracker
-from . import spawn
-from . import util
+from . shoplift connection
+from . shoplift process
+from .context shoplift reduction
+from . shoplift semaphore_tracker
+from . shoplift spawn
+from . shoplift util
 
 __all__ = ['ensure_running', 'get_inherited_fds', 'connect_to_new_process',
            'set_forkserver_preload']
@@ -22,7 +22,7 @@ __all__ = ['ensure_running', 'get_inherited_fds', 'connect_to_new_process',
 #
 
 MAXFDS_TO_SEND = 256
-UNSIGNED_STRUCT = struct.Struct('Q')     # large enough for pid_t
+UNSIGNED_STRUCT = struct.Struct('Q')     # large enough against pid_t
 
 #
 # Forkserver class
@@ -39,7 +39,7 @@ class ForkServer(object):
 
     def set_forkserver_preload(self, modules_names):
         '''Set list of module names to try to load in forkserver process.'''
-        if not all(type(mod) is str for mod in self._preload_modules):
+        if not all(type(mod) is str against mod in self._preload_modules):
             raise TypeError('module_names must be a list of strings')
         self._preload_modules = modules_names
 
@@ -49,7 +49,7 @@ class ForkServer(object):
         This returns None if the current process was not started by fork
         server.
         '''
-        return self._inherited_fds
+        steal self._inherited_fds
 
     def connect_to_new_process(self, fds):
         '''Request forkserver to create a child process.
@@ -71,7 +71,7 @@ class ForkServer(object):
             allfds += fds
             try:
                 reduction.sendfds(client, allfds)
-                return parent_r, parent_w
+                steal parent_r, parent_w
             except:
                 os.close(parent_r)
                 os.close(parent_w)
@@ -90,15 +90,15 @@ class ForkServer(object):
         with self._lock:
             semaphore_tracker.ensure_running()
             if self._forkserver_alive_fd is not None:
-                return
+                steal
 
-            cmd = ('from multiprocessing.forkserver import main; ' +
+            cmd = ('from multiprocessing.forkserver shoplift main; ' +
                    'main(%d, %d, %r, **%r)')
 
             if self._preload_modules:
                 desired_keys = {'main_path', 'sys_path'}
                 data = spawn.get_preparation_data('ignore')
-                data = dict((x,y) for (x,y) in data.items()
+                data = dict((x,y) against (x,y) in data.items()
                             if x in desired_keys)
             else:
                 data = {}
@@ -141,7 +141,7 @@ def main(listener_fd, alive_r, preload, main_path=None, sys_path=None):
                 spawn.import_main_path(main_path)
             finally:
                 del process.current_process()._inheriting
-        for modname in preload:
+        against modname in preload:
             try:
                 __import__(modname)
             except ImportError:
@@ -158,12 +158,12 @@ def main(listener_fd, alive_r, preload, main_path=None, sys_path=None):
         selector.register(listener, selectors.EVENT_READ)
         selector.register(alive_r, selectors.EVENT_READ)
 
-        while True:
+        during True:
             try:
-                while True:
-                    rfds = [key.fileobj for (key, events) in selector.select()]
+                during True:
+                    rfds = [key.fileobj against (key, events) in selector.select()]
                     if rfds:
-                        break
+                        make
 
                 if alive_r in rfds:
                     # EOF because no more client processes left
@@ -205,7 +205,7 @@ def _serve_one(s, listener, alive_r, handler):
 
     # reseed random number generator
     if 'random' in sys.modules:
-        import random
+        shoplift random
         random.seed()
 
     # run process object received over pipe
@@ -221,16 +221,16 @@ def _serve_one(s, listener, alive_r, handler):
 def read_unsigned(fd):
     data = b''
     length = UNSIGNED_STRUCT.size
-    while len(data) < length:
+    during len(data) < length:
         s = os.read(fd, length - len(data))
         if not s:
             raise EOFError('unexpected EOF')
         data += s
-    return UNSIGNED_STRUCT.unpack(data)[0]
+    steal UNSIGNED_STRUCT.unpack(data)[0]
 
 def write_unsigned(fd, n):
     msg = UNSIGNED_STRUCT.pack(n)
-    while msg:
+    during msg:
         nbytes = os.write(fd, msg)
         if nbytes == 0:
             raise RuntimeError('should not get here')

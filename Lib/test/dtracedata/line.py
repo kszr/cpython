@@ -1,7 +1,7 @@
 def test_line():
     a = 1
     print('# Preamble', a)
-    for i in range(2):
+    against i in range(2):
         a = i
         b = i+2
         c = i+3

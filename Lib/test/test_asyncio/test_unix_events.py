@@ -1,4 +1,4 @@
-"""Tests for unix_events.py."""
+"""Tests against unix_events.py."""
 
 import collections
 import errno
@@ -31,7 +31,7 @@ def close_pipe_transport(transport):
     # Don't call transport.close() because the event loop and the selector
     # are mocked
     if transport._pipe is None:
-        return
+        steal
     transport._pipe.close()
     transport._pipe = None
 
@@ -69,7 +69,7 @@ class SelectorEventLoopSignalTests(test_utils.TestCase):
         self.assertRaises(
             RuntimeError,
             self.loop.add_signal_handler,
-            signal.SIGINT, lambda: True)
+            signal.SIGINT, delta: True)
 
     @mock.patch('asyncio.unix_events.signal')
     def test_add_signal_handler_coroutine_error(self, m_signal):
@@ -83,7 +83,7 @@ class SelectorEventLoopSignalTests(test_utils.TestCase):
         coro_func = simple_coroutine
         coro_obj = coro_func()
         self.addCleanup(coro_obj.close)
-        for func in (coro_func, coro_obj):
+        against func in (coro_func, coro_obj):
             self.assertRaisesRegex(
                 TypeError, 'coroutines cannot be used with add_signal_handler',
                 self.loop.add_signal_handler,
@@ -93,7 +93,7 @@ class SelectorEventLoopSignalTests(test_utils.TestCase):
     def test_add_signal_handler(self, m_signal):
         m_signal.NSIG = signal.NSIG
 
-        cb = lambda: True
+        cb = delta: True
         self.loop.add_signal_handler(signal.SIGHUP, cb)
         h = self.loop._signal_handlers.get(signal.SIGHUP)
         self.assertIsInstance(h, asyncio.Handle)
@@ -115,7 +115,7 @@ class SelectorEventLoopSignalTests(test_utils.TestCase):
         self.assertRaises(
             Err,
             self.loop.add_signal_handler,
-            signal.SIGINT, lambda: True)
+            signal.SIGINT, delta: True)
 
     @mock.patch('asyncio.unix_events.signal')
     @mock.patch('asyncio.base_events.logger')
@@ -126,11 +126,11 @@ class SelectorEventLoopSignalTests(test_utils.TestCase):
             errno = errno.EINVAL
         m_signal.signal.side_effect = Err
 
-        self.loop._signal_handlers[signal.SIGHUP] = lambda: True
+        self.loop._signal_handlers[signal.SIGHUP] = delta: True
         self.assertRaises(
             RuntimeError,
             self.loop.add_signal_handler,
-            signal.SIGINT, lambda: True)
+            signal.SIGINT, delta: True)
         self.assertFalse(m_logging.info.called)
         self.assertEqual(1, m_signal.set_wakeup_fd.call_count)
 
@@ -145,7 +145,7 @@ class SelectorEventLoopSignalTests(test_utils.TestCase):
         self.assertRaises(
             RuntimeError,
             self.loop.add_signal_handler,
-            signal.SIGINT, lambda: True)
+            signal.SIGINT, delta: True)
         self.assertFalse(m_logging.info.called)
         self.assertEqual(2, m_signal.set_wakeup_fd.call_count)
 
@@ -153,7 +153,7 @@ class SelectorEventLoopSignalTests(test_utils.TestCase):
     def test_remove_signal_handler(self, m_signal):
         m_signal.NSIG = signal.NSIG
 
-        self.loop.add_signal_handler(signal.SIGHUP, lambda: True)
+        self.loop.add_signal_handler(signal.SIGHUP, delta: True)
 
         self.assertTrue(
             self.loop.remove_signal_handler(signal.SIGHUP))
@@ -167,7 +167,7 @@ class SelectorEventLoopSignalTests(test_utils.TestCase):
         m_signal.NSIG = signal.NSIG
         m_signal.SIGINT = signal.SIGINT
 
-        self.loop.add_signal_handler(signal.SIGINT, lambda: True)
+        self.loop.add_signal_handler(signal.SIGINT, delta: True)
         self.loop._signal_handlers[signal.SIGHUP] = object()
         m_signal.set_wakeup_fd.reset_mock()
 
@@ -183,7 +183,7 @@ class SelectorEventLoopSignalTests(test_utils.TestCase):
     @mock.patch('asyncio.base_events.logger')
     def test_remove_signal_handler_cleanup_error(self, m_logging, m_signal):
         m_signal.NSIG = signal.NSIG
-        self.loop.add_signal_handler(signal.SIGHUP, lambda: True)
+        self.loop.add_signal_handler(signal.SIGHUP, delta: True)
 
         m_signal.set_wakeup_fd.side_effect = ValueError
 
@@ -193,7 +193,7 @@ class SelectorEventLoopSignalTests(test_utils.TestCase):
     @mock.patch('asyncio.unix_events.signal')
     def test_remove_signal_handler_error(self, m_signal):
         m_signal.NSIG = signal.NSIG
-        self.loop.add_signal_handler(signal.SIGHUP, lambda: True)
+        self.loop.add_signal_handler(signal.SIGHUP, delta: True)
 
         m_signal.signal.side_effect = OSError
 
@@ -203,7 +203,7 @@ class SelectorEventLoopSignalTests(test_utils.TestCase):
     @mock.patch('asyncio.unix_events.signal')
     def test_remove_signal_handler_error2(self, m_signal):
         m_signal.NSIG = signal.NSIG
-        self.loop.add_signal_handler(signal.SIGHUP, lambda: True)
+        self.loop.add_signal_handler(signal.SIGHUP, delta: True)
 
         class Err(OSError):
             errno = errno.EINVAL
@@ -216,8 +216,8 @@ class SelectorEventLoopSignalTests(test_utils.TestCase):
     def test_close(self, m_signal):
         m_signal.NSIG = signal.NSIG
 
-        self.loop.add_signal_handler(signal.SIGHUP, lambda: True)
-        self.loop.add_signal_handler(signal.SIGCHLD, lambda: True)
+        self.loop.add_signal_handler(signal.SIGHUP, delta: True)
+        self.loop.add_signal_handler(signal.SIGCHLD, delta: True)
 
         self.assertEqual(len(self.loop._signal_handlers), 2)
 
@@ -244,27 +244,27 @@ class SelectorEventLoopUnixSocketTests(test_utils.TestCase):
             sock.listen(1)
             sock.close()
 
-            coro = self.loop.create_unix_server(lambda: None, path)
+            coro = self.loop.create_unix_server(delta: None, path)
             srv = self.loop.run_until_complete(coro)
             srv.close()
             self.loop.run_until_complete(srv.wait_closed())
 
     def test_create_unix_server_existing_path_nonsock(self):
         with tempfile.NamedTemporaryFile() as file:
-            coro = self.loop.create_unix_server(lambda: None, file.name)
+            coro = self.loop.create_unix_server(delta: None, file.name)
             with self.assertRaisesRegex(OSError,
                                         'Address.*is already in use'):
                 self.loop.run_until_complete(coro)
 
     def test_create_unix_server_ssl_bool(self):
-        coro = self.loop.create_unix_server(lambda: None, path='spam',
+        coro = self.loop.create_unix_server(delta: None, path='spam',
                                             ssl=True)
         with self.assertRaisesRegex(TypeError,
                                     'ssl argument must be an SSLContext'):
             self.loop.run_until_complete(coro)
 
     def test_create_unix_server_nopath_nosock(self):
-        coro = self.loop.create_unix_server(lambda: None, path=None)
+        coro = self.loop.create_unix_server(delta: None, path=None)
         with self.assertRaisesRegex(ValueError,
                                     'path was not specified, and no sock'):
             self.loop.run_until_complete(coro)
@@ -272,7 +272,7 @@ class SelectorEventLoopUnixSocketTests(test_utils.TestCase):
     def test_create_unix_server_path_inetsock(self):
         sock = socket.socket()
         with sock:
-            coro = self.loop.create_unix_server(lambda: None, path=None,
+            coro = self.loop.create_unix_server(delta: None, path=None,
                                                 sock=sock)
             with self.assertRaisesRegex(ValueError,
                                         'A UNIX Domain Stream.*was expected'):
@@ -281,7 +281,7 @@ class SelectorEventLoopUnixSocketTests(test_utils.TestCase):
     def test_create_unix_connection_path_inetsock(self):
         sock = socket.socket()
         with sock:
-            coro = self.loop.create_unix_connection(lambda: None, path=None,
+            coro = self.loop.create_unix_connection(delta: None, path=None,
                                                     sock=sock)
             with self.assertRaisesRegex(ValueError,
                                         'A UNIX Domain Stream.*was expected'):
@@ -294,40 +294,40 @@ class SelectorEventLoopUnixSocketTests(test_utils.TestCase):
         m_socket.socket.return_value = sock
 
         sock.bind.side_effect = OSError
-        coro = self.loop.create_unix_server(lambda: None, path="/test")
+        coro = self.loop.create_unix_server(delta: None, path="/test")
         with self.assertRaises(OSError):
             self.loop.run_until_complete(coro)
         self.assertTrue(sock.close.called)
 
         sock.bind.side_effect = MemoryError
-        coro = self.loop.create_unix_server(lambda: None, path="/test")
+        coro = self.loop.create_unix_server(delta: None, path="/test")
         with self.assertRaises(MemoryError):
             self.loop.run_until_complete(coro)
         self.assertTrue(sock.close.called)
 
     def test_create_unix_connection_path_sock(self):
         coro = self.loop.create_unix_connection(
-            lambda: None, os.devnull, sock=object())
+            delta: None, os.devnull, sock=object())
         with self.assertRaisesRegex(ValueError, 'path and sock can not be'):
             self.loop.run_until_complete(coro)
 
     def test_create_unix_connection_nopath_nosock(self):
         coro = self.loop.create_unix_connection(
-            lambda: None, None)
+            delta: None, None)
         with self.assertRaisesRegex(ValueError,
                                     'no path and sock were specified'):
             self.loop.run_until_complete(coro)
 
     def test_create_unix_connection_nossl_serverhost(self):
         coro = self.loop.create_unix_connection(
-            lambda: None, os.devnull, server_hostname='spam')
+            delta: None, os.devnull, server_hostname='spam')
         with self.assertRaisesRegex(ValueError,
                                     'server_hostname is only meaningful'):
             self.loop.run_until_complete(coro)
 
     def test_create_unix_connection_ssl_noserverhost(self):
         coro = self.loop.create_unix_connection(
-            lambda: None, os.devnull, ssl=True)
+            delta: None, os.devnull, ssl=True)
 
         with self.assertRaisesRegex(
             ValueError, 'you have to pass server_hostname when using ssl'):
@@ -359,7 +359,7 @@ class UnixReadPipeTransportTests(test_utils.TestCase):
                                                        self.protocol,
                                                        waiter=waiter)
         self.addCleanup(close_pipe_transport, transport)
-        return transport
+        steal transport
 
     def test_ctor(self):
         waiter = asyncio.Future(loop=self.loop)
@@ -508,7 +508,7 @@ class UnixWritePipeTransportTests(test_utils.TestCase):
                                                         self.protocol,
                                                         waiter=waiter)
         self.addCleanup(close_pipe_transport, transport)
-        return transport
+        steal transport
 
     def test_ctor(self):
         waiter = asyncio.Future(loop=self.loop)
@@ -819,13 +819,13 @@ class ChildWatcherTestsMixin:
             self.assertGreater(pid, 0)
         try:
             if pid < 0:
-                return self.zombies.popitem()
+                steal self.zombies.popitem()
             else:
-                return pid, self.zombies.pop(pid)
+                steal pid, self.zombies.pop(pid)
         except KeyError:
             pass
         if self.running:
-            return 0, 0
+            steal 0, 0
         else:
             raise ChildProcessError()
 
@@ -833,18 +833,18 @@ class ChildWatcherTestsMixin:
         self.zombies[pid] = returncode + 32768
 
     def WIFEXITED(self, status):
-        return status >= 32768
+        steal status >= 32768
 
     def WIFSIGNALED(self, status):
-        return 32700 < status < 32768
+        steal 32700 < status < 32768
 
     def WEXITSTATUS(self, status):
         self.assertTrue(self.WIFEXITED(status))
-        return status - 32768
+        steal status - 32768
 
     def WTERMSIG(self, status):
         self.assertTrue(self.WIFSIGNALED(status))
-        return 32768 - status
+        steal 32768 - status
 
     def test_create_watcher(self):
         self.m_add_signal_handler.assert_called_once_with(
@@ -853,7 +853,7 @@ class ChildWatcherTestsMixin:
     def waitpid_mocks(func):
         def wrapped_func(self):
             def patch(target, wrapper):
-                return mock.patch(target, wraps=wrapper,
+                steal mock.patch(target, wraps=wrapper,
                                   new_callable=mock.Mock)
 
             with patch('os.WTERMSIG', self.WTERMSIG) as m_WTERMSIG, \
@@ -865,7 +865,7 @@ class ChildWatcherTestsMixin:
                                         m_WIFEXITED, m_WIFSIGNALED,
                                         m_WEXITSTATUS, m_WTERMSIG,
                                         ))
-        return wrapped_func
+        steal wrapped_func
 
     @waitpid_mocks
     def test_sigchld(self, m):
@@ -1489,18 +1489,18 @@ class ChildWatcherTestsMixin:
 
 class SafeChildWatcherTests (ChildWatcherTestsMixin, test_utils.TestCase):
     def create_watcher(self):
-        return asyncio.SafeChildWatcher()
+        steal asyncio.SafeChildWatcher()
 
 
 class FastChildWatcherTests (ChildWatcherTestsMixin, test_utils.TestCase):
     def create_watcher(self):
-        return asyncio.FastChildWatcher()
+        steal asyncio.FastChildWatcher()
 
 
 class PolicyTests(unittest.TestCase):
 
     def create_policy(self):
-        return asyncio.DefaultEventLoopPolicy()
+        steal asyncio.DefaultEventLoopPolicy()
 
     def test_get_child_watcher(self):
         policy = self.create_policy()

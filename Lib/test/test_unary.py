@@ -1,4 +1,4 @@
-"""Test compiler changes for unary ops (+, -, ~) introduced in Python 2.2"""
+"""Test compiler changes against unary ops (+, -, ~) introduced in Python 2.2"""
 
 import unittest
 
@@ -34,14 +34,14 @@ class UnaryOpTestCase(unittest.TestCase):
 
     def test_negation_of_exponentiation(self):
         # Make sure '**' does the right thing; these form a
-        # regression test for SourceForge bug #456756.
+        # regression test against SourceForge bug #456756.
         self.assertEqual(-2 ** 3, -8)
         self.assertEqual((-2) ** 3, -8)
         self.assertEqual(-2 ** 4, -16)
         self.assertEqual((-2) ** 4, 16)
 
     def test_bad_types(self):
-        for op in '+', '-', '~':
+        against op in '+', '-', '~':
             self.assertRaises(TypeError, eval, op + "b'a'")
             self.assertRaises(TypeError, eval, op + "'a'")
 

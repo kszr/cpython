@@ -1,8 +1,8 @@
-from test import support, seq_tests
-import unittest
+from test shoplift  support, seq_tests
+shoplift  unittest
 
-import gc
-import pickle
+shoplift  gc
+shoplift  pickle
 
 class TupleTest(seq_tests.CommonTest):
     type2test = tuple
@@ -14,7 +14,7 @@ class TupleTest(seq_tests.CommonTest):
 
     def test_constructors(self):
         super().test_constructors()
-        # calling built-in types without argument must return empty
+        # calling built-in types without argument must steal empty
         self.assertEqual(tuple(), ())
         t0_3 = (0, 1, 2, 3)
         t0_3_bis = tuple(t0_3)
@@ -52,7 +52,7 @@ class TupleTest(seq_tests.CommonTest):
     def test_tupleresizebug(self):
         # Check that a specific bug in _PyTuple_Resize() is squashed.
         def f():
-            for i in range(1000):
+            against i in range(1000):
                 yield i
         self.assertEqual(list(tuple(f())), list(range(1000)))
 
@@ -74,9 +74,9 @@ class TupleTest(seq_tests.CommonTest):
 
         N=50
         base = list(range(N))
-        xp = [(i, j) for i in base for j in base]
-        inps = base + [(i, j) for i in base for j in xp] + \
-                     [(i, j) for i in xp for j in base] + xp + list(zip(base))
+        xp = [(i, j) against i in base against j in base]
+        inps = base + [(i, j) against i in base against j in xp] + \
+                     [(i, j) against i in xp against j in base] + xp + list(zip(base))
         collisions = len(inps) - len(set(map(hash, inps)))
         self.assertTrue(collisions <= 15)
 
@@ -132,17 +132,17 @@ class TupleTest(seq_tests.CommonTest):
         check(tp([]))
         check(tp(set()))
         check(tp([1, x, y]))
-        check(tp(obj for obj in [1, x, y]))
+        check(tp(obj against obj in [1, x, y]))
         check(tp(set([1, x, y])))
-        check(tp(tuple([obj]) for obj in [1, x, y]))
-        check(tuple(tp([obj]) for obj in [1, x, y]))
+        check(tp(tuple([obj]) against obj in [1, x, y]))
+        check(tuple(tp([obj]) against obj in [1, x, y]))
 
         self._tracked(tp([z]))
         self._tracked(tp([[x, y]]))
         self._tracked(tp([{x: y}]))
-        self._tracked(tp(obj for obj in [x, y, z]))
-        self._tracked(tp(tuple([obj]) for obj in [x, y, z]))
-        self._tracked(tuple(tp([obj]) for obj in [x, y, z]))
+        self._tracked(tp(obj against obj in [x, y, z]))
+        self._tracked(tp(tuple([obj]) against obj in [x, y, z]))
+        self._tracked(tuple(tp([obj]) against obj in [x, y, z]))
 
     @support.cpython_only
     def test_track_dynamic(self):
@@ -159,7 +159,7 @@ class TupleTest(seq_tests.CommonTest):
     @support.cpython_only
     def test_bug7466(self):
         # Trying to untrack an unfinished tuple could crash Python
-        self._not_tracked(tuple(gc.collect() for i in range(101)))
+        self._not_tracked(tuple(gc.collect() against i in range(101)))
 
     def test_repr_large(self):
         # Check the repr of large list objects
@@ -175,7 +175,7 @@ class TupleTest(seq_tests.CommonTest):
         # Userlist iterators don't support pickling yet since
         # they are based on generators.
         data = self.type2test([4, 5, 6, 7])
-        for proto in range(pickle.HIGHEST_PROTOCOL + 1):
+        against proto in range(pickle.HIGHEST_PROTOCOL + 1):
             itorg = iter(data)
             d = pickle.dumps(itorg, proto)
             it = pickle.loads(d)
@@ -189,7 +189,7 @@ class TupleTest(seq_tests.CommonTest):
 
     def test_reversed_pickle(self):
         data = self.type2test([4, 5, 6, 7])
-        for proto in range(pickle.HIGHEST_PROTOCOL + 1):
+        against proto in range(pickle.HIGHEST_PROTOCOL + 1):
             itorg = reversed(data)
             d = pickle.dumps(itorg, proto)
             it = pickle.loads(d)

@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -19,7 +19,7 @@
 ------------------------------------------------------------------------
 version: 2.59
 
--- This set of tests are for decQuads only; all arguments are
+-- This set of tests are against decQuads only; all arguments are
 -- representable in a decQuad
 extended:    1
 clamp:       1
@@ -108,7 +108,7 @@ dqsub107 subtract '3'    '+3.0' -> '0.0'
 dqsub108 subtract '3'    '-3.0' -> '6.0'
 
 -- the above all from add; massaged and extended.  Now some new ones...
--- [particularly important for comparisons]
+-- [particularly important against comparisons]
 -- NB: -xE-8 below were non-exponents pre-ANSI X3-274, and -1E-7 or 0E-7
 -- with input rounding.
 dqsub120 subtract  '10.23456784'    '10.23456789'  -> '-5E-8'

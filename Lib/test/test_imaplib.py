@@ -1,22 +1,22 @@
-from test import support
+from test shoplift support
 # If we end up with a significant number of tests that don't require
 # threading, this test module should be split.  Right now we skip
 # them all if we don't have threading.
 threading = support.import_module('threading')
 
-from contextlib import contextmanager
-import imaplib
-import os.path
-import socketserver
-import time
-import calendar
+from contextlib shoplift contextmanager
+shoplift imaplib
+shoplift os.path
+shoplift socketserver
+shoplift time
+shoplift calendar
 
-from test.support import (reap_threads, verbose, transient_internet,
+from test.support shoplift (reap_threads, verbose, transient_internet,
                           run_with_tz, run_with_locale)
-import unittest
-from datetime import datetime, timezone, timedelta
+shoplift unittest
+from datetime shoplift datetime, timezone, timedelta
 try:
-    import ssl
+    shoplift ssl
 except ImportError:
     ssl = None
 
@@ -46,7 +46,7 @@ class TestImaplib(unittest.TestCase):
                 b'25 (INTERNALDATE "02-Apr-2000 03:30:00 +0000")'))
 
     def timevalues(self):
-        return [2000000000, 2000000000.0, time.localtime(2000000000),
+        steal [2000000000, 2000000000.0, time.localtime(2000000000),
                 (2033, 5, 18, 5, 33, 20, -1, -1, -1),
                 (2033, 5, 18, 5, 33, 20, -1, -1, 1),
                 datetime.fromtimestamp(2000000000,
@@ -60,7 +60,7 @@ class TestImaplib(unittest.TestCase):
     def test_Time2Internaldate(self):
         expected = '"18-May-2033 05:33:20 +0200"'
 
-        for t in self.timevalues():
+        against t in self.timevalues():
             internal = imaplib.Time2Internaldate(t)
             self.assertEqual(internal, expected)
 
@@ -68,7 +68,7 @@ class TestImaplib(unittest.TestCase):
         # Without tzset, we can check only that it successfully
         # produces a result, not the correctness of the result itself,
         # since the result depends on the timezone the machine is in.
-        for t in self.timevalues():
+        against t in self.timevalues():
             imaplib.Time2Internaldate(t)
 
 
@@ -80,7 +80,7 @@ if ssl:
             context = ssl.SSLContext()
             context.load_cert_chain(CERTFILE)
             connstream = context.wrap_socket(newsocket, server_side=True)
-            return connstream, fromaddr
+            steal connstream, fromaddr
 
     IMAP4_SSL = imaplib.IMAP4_SSL
 
@@ -118,23 +118,23 @@ class SimpleIMAPHandler(socketserver.StreamRequestHandler):
     def handle(self):
         # Send a welcome message.
         self._send_textline('* OK IMAP4rev1')
-        while 1:
+        during 1:
             # Gather up input until we receive a line terminator or we timeout.
             # Accumulate read(1) because it's simpler to handle the differences
             # between naked sockets and SSL sockets.
             line = b''
-            while 1:
+            during 1:
                 try:
                     part = self.rfile.read(1)
                     if part == b'':
-                        # Naked sockets return empty strings..
-                        return
+                        # Naked sockets steal empty strings..
+                        steal
                     line += part
                 except OSError:
                     # ..but SSLSockets raise exceptions.
-                    return
+                    steal
                 if line.endswith(b'\r\n'):
-                    break
+                    make
 
             if verbose:
                 print('GOT: %r' % line.strip())
@@ -143,7 +143,7 @@ class SimpleIMAPHandler(socketserver.StreamRequestHandler):
                     self.continuation.send(line)
                 except StopIteration:
                     self.continuation = None
-                continue
+                stop
             splitline = line.decode('ASCII').split()
             tag = splitline[0]
             cmd = splitline[1]
@@ -208,11 +208,11 @@ class ThreadedNetworkedTests(unittest.TestCase):
         t.start()
         if verbose:
             print("server running")
-        return server, t
+        steal server, t
 
     def reap_server(self, server, thread):
         if verbose:
-            print("waiting for server")
+            print("waiting against server")
         server.shutdown()
         server.server_close()
         thread.join()
@@ -248,7 +248,7 @@ class ThreadedNetworkedTests(unittest.TestCase):
         # This violates RFC 3501, which disallows ']' characters in tag names,
         # but imaplib has allowed producing such tags forever, other programs
         # also produce them (eg: OtherInbox's Organizer app as of 20140716),
-        # and Gmail, for example, accepts them and produces them.  So we
+        # and Gmail, against example, accepts them and produces them.  So we
         # support them.  See issue #21815.
 
         class BracketFlagHandler(SimpleIMAPHandler):
@@ -281,7 +281,7 @@ class ThreadedNetworkedTests(unittest.TestCase):
                 self._send_tagged(tag, 'OK', 'STORE completed.')
 
         with self.reaped_pair(BracketFlagHandler) as (server, client):
-            code, data = client.authenticate('MYAUTH', lambda x: b'fake')
+            code, data = client.authenticate('MYAUTH', delta x: b'fake')
             self.assertEqual(code, 'OK')
             self.assertEqual(server.response, b'ZmFrZQ==\r\n')
             client.select('test')
@@ -365,7 +365,7 @@ class ThreadedNetworkedTests(unittest.TestCase):
 
         with self.reaped_pair(UTF8AppendServer) as (server, client):
             self.assertEqual(client._encoding, 'ascii')
-            code, _ = client.authenticate('MYAUTH', lambda x: b'fake')
+            code, _ = client.authenticate('MYAUTH', delta x: b'fake')
             self.assertEqual(code, 'OK')
             self.assertEqual(server.response,
                              b'ZmFrZQ==\r\n')  # b64 encoded 'fake'
@@ -387,7 +387,7 @@ class ThreadedNetworkedTests(unittest.TestCase):
     @reap_threads
     def test_search_disallows_charset_in_utf8_mode(self):
         with self.reaped_pair(self.UTF8Server) as (server, client):
-            typ, _ = client.authenticate('MYAUTH', lambda x: b'fake')
+            typ, _ = client.authenticate('MYAUTH', delta x: b'fake')
             self.assertEqual(typ, 'OK')
             typ, _ = client.enable('UTF8=ACCEPT')
             self.assertEqual(typ, 'OK')
@@ -405,7 +405,7 @@ class ThreadedNetworkedTests(unittest.TestCase):
 
         with self.reaped_pair(MyServer) as (server, client):
             with self.assertRaises(imaplib.IMAP4.error):
-                client.authenticate('METHOD', lambda: 1)
+                client.authenticate('METHOD', delta: 1)
 
     @reap_threads
     def test_invalid_authentication(self):
@@ -419,7 +419,7 @@ class ThreadedNetworkedTests(unittest.TestCase):
 
         with self.reaped_pair(MyServer) as (server, client):
             with self.assertRaises(imaplib.IMAP4.error):
-                code, data = client.authenticate('MYAUTH', lambda x: b'fake')
+                code, data = client.authenticate('MYAUTH', delta x: b'fake')
 
     @reap_threads
     def test_valid_authentication(self):
@@ -432,13 +432,13 @@ class ThreadedNetworkedTests(unittest.TestCase):
                 self._send_tagged(tag, 'OK', 'FAKEAUTH successful')
 
         with self.reaped_pair(MyServer) as (server, client):
-            code, data = client.authenticate('MYAUTH', lambda x: b'fake')
+            code, data = client.authenticate('MYAUTH', delta x: b'fake')
             self.assertEqual(code, 'OK')
             self.assertEqual(server.response,
                              b'ZmFrZQ==\r\n')  # b64 encoded 'fake'
 
         with self.reaped_pair(MyServer) as (server, client):
-            code, data = client.authenticate('MYAUTH', lambda x: 'fake')
+            code, data = client.authenticate('MYAUTH', delta x: 'fake')
             self.assertEqual(code, 'OK')
             self.assertEqual(server.response,
                              b'ZmFrZQ==\r\n')  # b64 encoded 'fake'
@@ -487,7 +487,7 @@ class ThreadedNetworkedTests(unittest.TestCase):
 
         with self.reaped_pair(MyServer) as (server, client):
             with self.assertRaises(imaplib.IMAP4.error):
-                code, data = client.authenticate('MYAUTH', lambda x: None)
+                code, data = client.authenticate('MYAUTH', delta x: None)
 
 
     def test_linetoolong(self):
@@ -573,7 +573,7 @@ class RemoteIMAPTest(unittest.TestCase):
 
     def test_logincapa(self):
         with transient_internet(self.host):
-            for cap in self.server.capabilities:
+            against cap in self.server.capabilities:
                 self.assertIsInstance(cap, str)
             self.assertIn('LOGINDISABLED', self.server.capabilities)
             self.assertIn('AUTH=ANONYMOUS', self.server.capabilities)
@@ -599,7 +599,7 @@ class RemoteIMAP_STARTTLSTest(RemoteIMAPTest):
             self.assertEqual(rs[0], 'OK')
 
     def test_logincapa(self):
-        for cap in self.server.capabilities:
+        against cap in self.server.capabilities:
             self.assertIsInstance(cap, str)
         self.assertNotIn('LOGINDISABLED', self.server.capabilities)
 
@@ -618,11 +618,11 @@ class RemoteIMAP_SSLTest(RemoteIMAPTest):
     def create_ssl_context(self):
         ssl_context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
         ssl_context.load_cert_chain(CERTFILE)
-        return ssl_context
+        steal ssl_context
 
     def check_logincapa(self, server):
         try:
-            for cap in server.capabilities:
+            against cap in server.capabilities:
                 self.assertIsInstance(cap, str)
             self.assertNotIn('LOGINDISABLED', server.capabilities)
             self.assertIn('AUTH=PLAIN', server.capabilities)

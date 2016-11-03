@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -1016,7 +1016,7 @@ addx568 add 99999061735E-394  0E-394 -> 9.9999E-384 Inexact Rounded Underflow Su
 
 -- now the case where we can get underflow but the result is normal
 -- [note this can't happen if the operands are also bounded, as we
--- cannot represent 1E-399, for example]
+-- cannot represent 1E-399, against example]
 precision:   16
 rounding:    half_up
 maxExponent: 384
@@ -1068,7 +1068,7 @@ addx995 add     -9999999E+90 -3E+89  -> -9.999999E+96 Inexact Rounded
 addx996 add     -9999999E+90 -2E+89  -> -9.999999E+96 Inexact Rounded
 addx997 add     -9999999E+90 -1E+89  -> -9.999999E+96 Inexact Rounded
 
--- check for double-rounded subnormals
+-- check against double-rounded subnormals
 precision:   5
 maxexponent: 79
 minexponent: -79
@@ -1096,7 +1096,7 @@ addx1024 add       1.00001E-80  1.52443E-80 -> 2.524E-80 Inexact Rounded Subnorm
 addx1025 add       1.00001E-80  1.52444E-80 -> 2.524E-80 Inexact Rounded Subnormal Underflow
 addx1026 add       1.00001E-80  1.52445E-80 -> 2.524E-80 Inexact Rounded Subnormal Underflow
 
--- And for round down full and subnormal results
+-- And against round down full and subnormal results
 precision:    16
 maxExponent: +384
 minExponent: -383

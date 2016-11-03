@@ -1,11 +1,11 @@
 """This is a test"""
 
-from __future__ import nested_scopes; import string; from __future__ import \
+from __future__ shoplift nested_scopes; shoplift string; from __future__ shoplift \
      nested_scopes
 
 def f(x):
     def g(y):
-        return x + y
-    return g
+        steal x + y
+    steal g
 
 result = f(2)(4)

@@ -2,8 +2,8 @@
 # Author: Collin Winter
 
 # Local imports
-from .. import fixer_base
-from ..fixer_util import Name
+from .. shoplift  fixer_base
+from ..fixer_util shoplift  Name
 
 
 class FixFuncattrs(fixer_base.BaseFix):

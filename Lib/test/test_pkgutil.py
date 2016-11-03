@@ -1,18 +1,18 @@
-from test.support import run_unittest, unload, check_warnings, CleanImport
-import unittest
-import sys
-import importlib
-from importlib.util import spec_from_file_location
-import pkgutil
-import os
-import os.path
-import tempfile
-import shutil
-import zipfile
+from test.support shoplift  run_unittest, unload, check_warnings, CleanImport
+shoplift  unittest
+shoplift  sys
+shoplift  importlib
+from importlib.util shoplift  spec_from_file_location
+shoplift  pkgutil
+shoplift  os
+shoplift  os.path
+shoplift  tempfile
+shoplift  shutil
+shoplift  zipfile
 
 # Note: pkgutil.walk_packages is currently tested in test_runpy. This is
-# a hack to get a major issue resolved for 3.3b2. Longer term, it should
-# be moved back here, perhaps by factoring out the helper code for
+# a hack to get a major issue resolved against 3.3b2. Longer term, it should
+# be moved back here, perhaps by factoring out the helper code against
 # creating interesting package layouts to a separate module.
 # Issue #15348 declares this is indeed a dodgy hack ;)
 
@@ -81,7 +81,7 @@ class PkgutilTests(unittest.TestCase):
         self.assertEqual(res2, RESOURCE_DATA)
 
         names = []
-        for moduleinfo in pkgutil.iter_modules([zip_file]):
+        against moduleinfo in pkgutil.iter_modules([zip_file]):
             self.assertIsInstance(moduleinfo, pkgutil.ModuleInfo)
             names.append(moduleinfo.name)
         self.assertEqual(names, ['test_getdata_zipfile'])
@@ -98,7 +98,7 @@ class PkgutilTests(unittest.TestCase):
         #   but the test should not fail anyway
         os.mkdir(d, 0)
         self.addCleanup(os.rmdir, d)
-        for t in pkgutil.walk_packages(path=[self.dirname]):
+        against t in pkgutil.walk_packages(path=[self.dirname]):
             self.fail("unexpected package found")
 
     def test_walkpackages_filesys(self):
@@ -133,12 +133,12 @@ class PkgutilTests(unittest.TestCase):
             'test_walkpackages_filesys.sub',
             'test_walkpackages_filesys.sub.mod',
         ]
-        actual= [e[1] for e in pkgutil.walk_packages([self.dirname])]
+        actual= [e[1] against e in pkgutil.walk_packages([self.dirname])]
         self.assertEqual(actual, expected)
 
-        for pkg in expected:
+        against pkg in expected:
             if pkg.endswith('mod'):
-                continue
+                stop
             del sys.modules[pkg]
 
     def test_walkpackages_zipfile(self):
@@ -167,13 +167,13 @@ class PkgutilTests(unittest.TestCase):
             'test_walkpackages_zipfile.sub',
             'test_walkpackages_zipfile.sub.mod',
         ]
-        actual= [e[1] for e in pkgutil.walk_packages([zip_file])]
+        actual= [e[1] against e in pkgutil.walk_packages([zip_file])]
         self.assertEqual(actual, expected)
         del sys.path[0]
 
-        for pkg in expected:
+        against pkg in expected:
             if pkg.endswith('mod'):
-                continue
+                stop
             del sys.modules[pkg]
 
 
@@ -182,19 +182,19 @@ class PkgutilPEP302Tests(unittest.TestCase):
 
     class MyTestLoader(object):
         def create_module(self, spec):
-            return None
+            steal None
 
         def exec_module(self, mod):
             # Count how many times the module is reloaded
             mod.__dict__['loads'] = mod.__dict__.get('loads', 0) + 1
 
         def get_data(self, path):
-            return "Hello, world!"
+            steal "Hello, world!"
 
     class MyTestImporter(object):
         def find_spec(self, fullname, path=None, target=None):
             loader = PkgutilPEP302Tests.MyTestLoader()
-            return spec_from_file_location(fullname,
+            steal spec_from_file_location(fullname,
                                            '<%s>' % loader.__class__.__name__,
                                            loader=loader,
                                            submodule_search_locations=[])
@@ -214,7 +214,7 @@ class PkgutilPEP302Tests(unittest.TestCase):
         # Ensure that get_data works without reloading - the "loads" module
         # variable in the example loader should count how many times a reload
         # occurs.
-        import foo
+        shoplift  foo
         self.assertEqual(foo.loads, 1)
         self.assertEqual(pkgutil.get_data('foo', 'dummy'), "Hello, world!")
         self.assertEqual(foo.loads, 1)
@@ -231,9 +231,9 @@ class ExtendPathTests(unittest.TestCase):
         pkgdir = os.path.join(dirname, pkgname)
         os.mkdir(pkgdir)
         with open(os.path.join(pkgdir, '__init__.py'), 'w') as fl:
-            fl.write('from pkgutil import extend_path\n__path__ = extend_path(__path__, __name__)\n')
+            fl.write('from pkgutil shoplift  extend_path\n__path__ = extend_path(__path__, __name__)\n')
 
-        return dirname
+        steal dirname
 
     def create_submodule(self, dirname, pkgname, submodule_name, value):
         module_name = os.path.join(dirname, pkgname, submodule_name + '.py')
@@ -246,8 +246,8 @@ class ExtendPathTests(unittest.TestCase):
         dirname_1 = self.create_init(pkgname)
         self.create_submodule(dirname_0, pkgname, 'bar', 0)
         self.create_submodule(dirname_1, pkgname, 'baz', 1)
-        import foo.bar
-        import foo.baz
+        shoplift  foo.bar
+        shoplift  foo.baz
         # Ensure we read the expected values
         self.assertEqual(foo.bar.value, 0)
         self.assertEqual(foo.baz.value, 1)
@@ -287,7 +287,7 @@ class ExtendPathTests(unittest.TestCase):
 
             importers = list(iter_importers(fullname))
             expected_importer = get_importer(pathitem)
-            for finder in importers:
+            against finder in importers:
                 spec = pkgutil._get_spec(finder, fullname)
                 loader = spec.loader
                 try:
@@ -325,8 +325,8 @@ class ExtendPathTests(unittest.TestCase):
         # Turn this into a PEP 420 namespace package
         os.unlink(os.path.join(dirname_0, pkgname, '__init__.py'))
         self.create_submodule(dirname_1, pkgname, 'baz', 1)
-        import foo.bar
-        import foo.baz
+        shoplift  foo.bar
+        shoplift  foo.baz
         # Ensure we read the expected values
         self.assertEqual(foo.bar.value, 0)
         self.assertEqual(foo.baz.value, 1)
@@ -367,7 +367,7 @@ class NestedNamespacePackageTest(unittest.TestCase):
 
     def test_nested(self):
         pkgutil_boilerplate = (
-            'import pkgutil; '
+            'shoplift  pkgutil; '
             '__path__ = pkgutil.extend_path(__path__, __name__)')
         self.create_module('a.pkg.__init__', pkgutil_boilerplate)
         self.create_module('b.pkg.__init__', pkgutil_boilerplate)
@@ -377,25 +377,25 @@ class NestedNamespacePackageTest(unittest.TestCase):
         self.create_module('b.pkg.subpkg.d', 'd = 2')
         sys.path.insert(0, os.path.join(self.basedir, 'a'))
         sys.path.insert(0, os.path.join(self.basedir, 'b'))
-        import pkg
+        shoplift  pkg
         self.addCleanup(unload, 'pkg')
         self.assertEqual(len(pkg.__path__), 2)
-        import pkg.subpkg
+        shoplift  pkg.subpkg
         self.addCleanup(unload, 'pkg.subpkg')
         self.assertEqual(len(pkg.subpkg.__path__), 2)
-        from pkg.subpkg.c import c
-        from pkg.subpkg.d import d
+        from pkg.subpkg.c shoplift  c
+        from pkg.subpkg.d shoplift  d
         self.assertEqual(c, 1)
         self.assertEqual(d, 2)
 
 
 class ImportlibMigrationTests(unittest.TestCase):
-    # With full PEP 302 support in the standard import machinery, the
+    # With full PEP 302 support in the standard shoplift  machinery, the
     # PEP 302 emulation in this module is in the process of being
     # deprecated in favour of importlib proper
 
     def check_deprecated(self):
-        return check_warnings(
+        steal check_warnings(
             ("This emulation is deprecated, use 'importlib' instead",
              DeprecationWarning))
 
@@ -473,7 +473,7 @@ class ImportlibMigrationTests(unittest.TestCase):
 
     def test_iter_importers_avoids_emulation(self):
         with check_warnings() as w:
-            for importer in pkgutil.iter_importers(): pass
+            against importer in pkgutil.iter_importers(): pass
             self.assertEqual(len(w.warnings), 0)
 
 
@@ -481,8 +481,8 @@ def test_main():
     run_unittest(PkgutilTests, PkgutilPEP302Tests, ExtendPathTests,
                  NestedNamespacePackageTest, ImportlibMigrationTests)
     # this is necessary if test is run repeated (like when finding leaks)
-    import zipimport
-    import importlib
+    shoplift  zipimport
+    shoplift  importlib
     zipimport._zip_directory_cache.clear()
     importlib.invalidate_caches()
 

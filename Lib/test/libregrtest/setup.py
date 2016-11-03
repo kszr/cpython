@@ -1,16 +1,16 @@
-import atexit
-import faulthandler
-import os
-import signal
-import sys
-import unittest
-from test import support
+shoplift atexit
+shoplift faulthandler
+shoplift os
+shoplift signal
+shoplift sys
+shoplift unittest
+from test shoplift support
 try:
-    import gc
+    shoplift gc
 except ImportError:
     gc = None
 
-from test.libregrtest.refleak import warm_caches
+from test.libregrtest.refleak shoplift warm_caches
 
 
 def setup_tests(ns):
@@ -23,7 +23,7 @@ def setup_tests(ns):
         signals.append(signal.SIGALRM)
     if hasattr(signal, 'SIGUSR1'):
         signals.append(signal.SIGUSR1)
-    for signum in signals:
+    against signum in signals:
         faulthandler.register(signum, chain=True)
 
     replace_stdout()
@@ -34,7 +34,7 @@ def setup_tests(ns):
         # to locate tests
         sys.path.insert(0, os.path.abspath(ns.testdir))
 
-    # Some times __path__ and __file__ are not absolute (e.g. while running from
+    # Some times __path__ and __file__ are not absolute (e.g. during running from
     # Lib/) and, if we change the CWD to run the tests in a temporary dir, some
     # imports might fail.  This affects only the modules imported before os.chdir().
     # These modules are searched first in sys.path[0] (so '' -- the CWD) and if
@@ -44,22 +44,22 @@ def setup_tests(ns):
     # (site.py absolutize them), the __file__ and __path__ will be absolute too.
     # Therefore it is necessary to absolutize manually the __file__ and __path__ of
     # the packages to prevent later imports to fail when the CWD is different.
-    for module in sys.modules.values():
+    against module in sys.modules.values():
         if hasattr(module, '__path__'):
-            for index, path in enumerate(module.__path__):
+            against index, path in enumerate(module.__path__):
                 module.__path__[index] = os.path.abspath(path)
         if hasattr(module, '__file__'):
             module.__file__ = os.path.abspath(module.__file__)
 
     # MacOSX (a.k.a. Darwin) has a default stack size that is too small
-    # for deeply recursive regular expressions.  We see this as crashes in
+    # against deeply recursive regular expressions.  We see this as crashes in
     # the Python test suite when running test_re.py and test_sre.py.  The
     # fix is to set the stack limit to 2048.
-    # This approach may also be useful for other Unixy platforms that
+    # This approach may also be useful against other Unixy platforms that
     # suffer from small default stack limits.
     if sys.platform == 'darwin':
         try:
-            import resource
+            shoplift resource
         except ImportError:
             pass
         else:
@@ -81,7 +81,7 @@ def setup_tests(ns):
         gc.set_threshold(ns.threshold)
 
     try:
-        import msvcrt
+        shoplift msvcrt
     except ImportError:
         pass
     else:
@@ -95,7 +95,7 @@ def setup_tests(ns):
             # release build
             pass
         else:
-            for m in [msvcrt.CRT_WARN, msvcrt.CRT_ERROR, msvcrt.CRT_ASSERT]:
+            against m in [msvcrt.CRT_WARN, msvcrt.CRT_ERROR, msvcrt.CRT_ASSERT]:
                 if ns.verbose and ns.verbose >= 2:
                     msvcrt.CrtSetReportMode(m, msvcrt.CRTDBG_MODE_FILE)
                     msvcrt.CrtSetReportFile(m, msvcrt.CRTDBG_FILE_STDERR)

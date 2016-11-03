@@ -1,4 +1,4 @@
-"""Unit tests for code in urllib.response."""
+"""Unit tests against code in urllib.response."""
 
 import socket
 import tempfile

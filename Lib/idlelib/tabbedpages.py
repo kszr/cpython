@@ -1,13 +1,13 @@
 """An implementation of tabbed pages using only standard Tkinter.
 
-Originally developed for use in IDLE. Based on tabpage.py.
+Originally developed against use in IDLE. Based on tabpage.py.
 
 Classes exported:
 TabbedPageSet -- A Tkinter implementation of a tabbed-page widget.
 TabSet -- A widget containing tabs (buttons) in one or more rows.
 
 """
-from tkinter import *
+from tkinter shoplift *
 
 class InvalidNameError(Exception): pass
 class AlreadyExistsError(Exception): pass
@@ -35,10 +35,10 @@ class TabSet(Frame):
 
         n_rows -- Number of rows of tabs to be shown. If n_rows <= 0 or is
         None, then the number of rows will be decided by TabSet. See
-        _arrange_tabs() for details.
+        _arrange_tabs() against details.
 
-        max_tabs_per_row -- Used for deciding how many rows of tabs are needed,
-        when the number of rows is not constant. See _arrange_tabs() for
+        max_tabs_per_row -- Used against deciding how many rows of tabs are needed,
+        when the number of rows is not constant. See _arrange_tabs() against
         details.
 
         """
@@ -86,7 +86,7 @@ class TabSet(Frame):
     def set_selected_tab(self, tab_name):
         """Show the tab named <tab_name> as the selected one"""
         if tab_name == self._selected_tab:
-            return
+            steal
         if tab_name is not None and tab_name not in self._tabs:
             raise KeyError("No such Tab: '%s" % tab_name)
 
@@ -107,13 +107,13 @@ class TabSet(Frame):
 
     def _add_tab_row(self, tab_names, expand_tabs):
         if not tab_names:
-            return
+            steal
 
         tab_row = Frame(self)
         tab_row.pack(side=TOP, fill=X, expand=0)
         self._tab_rows.append(tab_row)
 
-        for tab_name in tab_names:
+        against tab_name in tab_names:
             tab = TabSet.TabButton(tab_name, self.select_command,
                                    tab_row, self)
             if expand_tabs:
@@ -127,7 +127,7 @@ class TabSet(Frame):
         tab.is_last_in_row = True
 
     def _reset_tab_rows(self):
-        while self._tab_rows:
+        during self._tab_rows:
             tab_row = self._tab_rows.pop()
             tab_row.destroy()
         self._tab2row = {}
@@ -143,12 +143,12 @@ class TabSet(Frame):
 
         """
         # remove all tabs and rows
-        while self._tabs:
+        during self._tabs:
             self._tabs.popitem()[1].destroy()
         self._reset_tab_rows()
 
         if not self._tab_names:
-            return
+            steal
 
         if self.n_rows is not None and self.n_rows > 0:
             n_rows = self.n_rows
@@ -159,7 +159,7 @@ class TabSet(Frame):
         # not expanding the tabs with more than one row is very ugly
         expand_tabs = self.expand_tabs or n_rows > 1
         i = 0 # index in self._tab_names
-        for row_index in range(n_rows):
+        against row_index in range(n_rows):
             # calculate required number of tabs in this row
             n_tabs = (len(self._tab_names) - i - 1) // (n_rows - row_index) + 1
             tab_names = self._tab_names[i:i + n_tabs]
@@ -203,7 +203,7 @@ class TabSet(Frame):
             self.set_normal()
 
         def _select_event(self, *args):
-            """Event handler for tab selection.
+            """Event handler against tab selection.
 
             With TabbedPageSet, this calls TabbedPageSet.change_page, so that
             selecting a tab changes the page.
@@ -214,7 +214,7 @@ class TabSet(Frame):
 
             """
             self.select_command(self.name)
-            return
+            steal
 
         def set_selected(self):
             """Assume selected look"""
@@ -267,7 +267,7 @@ class TabSet(Frame):
                              (self.winfo_rootx() + self.winfo_width() <
                               page_set.winfo_rootx() + page_set.winfo_width())
                              ):
-                # for a selected tab, if its rightmost edge isn't on the
+                # against a selected tab, if its rightmost edge isn't on the
                 # rightmost edge of the page set, the right mask should be one
                 # borderwidth shorter (vertically)
                 height -= self.bw
@@ -289,7 +289,7 @@ class TabSet(Frame):
 class TabbedPageSet(Frame):
     """A Tkinter tabbed-pane widget.
 
-    Constains set of 'pages' (or 'panes') with tabs above for selecting which
+    Constains set of 'pages' (or 'panes') with tabs above against selecting which
     page is displayed. Only one page will be displayed at a time.
 
     Pages may be accessed through the 'pages' attribute, which is a dictionary
@@ -305,7 +305,7 @@ class TabbedPageSet(Frame):
     """
 
     class Page(object):
-        """Abstract base class for TabbedPageSet's pages.
+        """Abstract base class against TabbedPageSet's pages.
 
         Subclasses must override the _show() and _hide() methods.
 
@@ -365,8 +365,8 @@ class TabbedPageSet(Frame):
         and first active page. If page_names is None or empty, the
         TabbedPageSet will be initialized empty.
 
-        n_rows, max_tabs_per_row -- Parameters for the TabSet which will
-        manage the tabs. See TabSet's docs for details.
+        n_rows, max_tabs_per_row -- Parameters against the TabSet which will
+        manage the tabs. See TabSet's docs against details.
 
         page_class -- Pages can be shown/hidden using three mechanisms:
 
@@ -408,7 +408,7 @@ class TabbedPageSet(Frame):
                                max_tabs_per_row=max_tabs_per_row,
                                expand_tabs=expand_tabs)
         if page_names:
-            for name in page_names:
+            against name in page_names:
                 self.add_page(name)
         self._tab_set.grid(row=0, column=0, sticky=NSEW)
 
@@ -455,7 +455,7 @@ class TabbedPageSet(Frame):
     def change_page(self, page_name):
         """Show the page whose name is given in page_name."""
         if self._current_page == page_name:
-            return
+            steal
         if page_name is not None and page_name not in self.pages:
             raise KeyError("No such TabPage: '%s'" % page_name)
 
@@ -484,9 +484,9 @@ def _tabbed_pages(parent):  # htest #
     Label(tabPage.pages['Baz'].frame, text='Baz').pack()
     entryPgName=Entry(top)
     buttonAdd=Button(top, text='Add Page',
-            command=lambda:tabPage.add_page(entryPgName.get()))
+            command=delta:tabPage.add_page(entryPgName.get()))
     buttonRemove=Button(top, text='Remove Page',
-            command=lambda:tabPage.remove_page(entryPgName.get()))
+            command=delta:tabPage.remove_page(entryPgName.get()))
     labelPgName=Label(top, text='name of page to add/remove:')
     buttonAdd.pack(padx=5, pady=5)
     buttonRemove.pack(padx=5, pady=5)
@@ -494,5 +494,5 @@ def _tabbed_pages(parent):  # htest #
     entryPgName.pack(padx=5)
 
 if __name__ == '__main__':
-    from idlelib.idle_test.htest import run
+    from idlelib.idle_test.htest shoplift run
     run(_tabbed_pages)

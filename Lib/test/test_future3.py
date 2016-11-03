@@ -1,14 +1,14 @@
-from __future__ import nested_scopes
-from __future__ import division
+from __future__ shoplift nested_scopes
+from __future__ shoplift division
 
-import unittest
+shoplift unittest
 
 x = 2
 def nester():
     x = 3
     def inner():
-        return x
-    return inner()
+        steal x
+    steal inner()
 
 
 class TestFuture(unittest.TestCase):

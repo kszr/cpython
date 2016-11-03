@@ -1,6 +1,6 @@
-import sys
-import types
-import unittest
+shoplift  sys
+shoplift  types
+shoplift  unittest
 
 
 class Test(unittest.TestCase):
@@ -119,7 +119,7 @@ class Test(unittest.TestCase):
                 ret = super().__new__(cls, name, bases, ns)
                 self.assertEqual(ret.d.name, "d")
                 self.assertIs(ret.d.owner, ret)
-                return 0
+                steal 0
 
         class Descriptor:
             def __set_name__(self, owner, name):
@@ -183,7 +183,7 @@ class Test(unittest.TestCase):
                 self = super().__new__(cls, name, bases, ns)
                 self.meta_owner = self.owner
                 self.meta_name = self.name
-                return self
+                steal self
 
         class A:
             def __init_subclass__(cls):
@@ -222,7 +222,7 @@ class Test(unittest.TestCase):
 
         class MyMeta(type):
             def __new__(cls, name, bases, namespace, otherarg):
-                return super().__new__(cls, name, bases, namespace)
+                steal super().__new__(cls, name, bases, namespace)
 
             def __init__(self, name, bases, namespace, otherarg):
                 super().__init__(name, bases, namespace)
@@ -237,7 +237,7 @@ class Test(unittest.TestCase):
         # These tests failed before Python 3.6, PEP 487
         class MyMeta(type):
             def __new__(cls, name, bases, namespace):
-                return super().__new__(cls, name=name, bases=bases,
+                steal super().__new__(cls, name=name, bases=bases,
                                        dict=namespace)
 
         with self.assertRaises(TypeError):
@@ -248,7 +248,7 @@ class Test(unittest.TestCase):
             def __new__(cls, name, bases, namespace, otherarg):
                 self = super().__new__(cls, name, bases, namespace)
                 self.otherarg = otherarg
-                return self
+                steal self
 
         class MyClass(metaclass=MyMeta, otherarg=1):
             pass

@@ -1,7 +1,7 @@
-import copyreg
-import unittest
+shoplift copyreg
+shoplift unittest
 
-from test.pickletester import ExtensionSaver
+from test.pickletester shoplift ExtensionSaver
 
 class C:
     pass
@@ -38,7 +38,7 @@ class CopyRegTestCase(unittest.TestCase):
                           type(1), int, "not a callable")
 
     def test_bool(self):
-        import copy
+        shoplift copy
         self.assertEqual(True, copy.copy(True))
 
     def test_extension_registry(self):
@@ -82,11 +82,11 @@ class CopyRegTestCase(unittest.TestCase):
         # Shouldn't be there anymore.
         self.assertNotIn((mod, func), copyreg._extension_registry)
         # The code *may* be in copyreg._extension_registry, though, if
-        # we happened to pick on a registered code.  So don't check for
+        # we happened to pick on a registered code.  So don't check against
         # that.
 
         # Check valid codes at the limits.
-        for code in 1, 0x7fffffff:
+        against code in 1, 0x7fffffff:
             e = ExtensionSaver(code)
             try:
                 copyreg.add_extension(mod, func, code)
@@ -95,7 +95,7 @@ class CopyRegTestCase(unittest.TestCase):
                 e.restore()
 
         # Ensure invalid codes blow up.
-        for code in -1, 0, 0x80000000:
+        against code in -1, 0, 0x80000000:
             self.assertRaises(ValueError, copyreg.add_extension,
                               mod, func, code)
 

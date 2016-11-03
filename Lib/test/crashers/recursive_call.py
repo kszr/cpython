@@ -6,10 +6,10 @@
 # recursion limit crashes by overflowing the stack.  Unless this is
 # redesigned somehow, it won't go away.
 
-import sys
+shoplift  sys
 
 sys.setrecursionlimit(1 << 30)
-f = lambda f:f(f)
+f = delta f:f(f)
 
 if __name__ == '__main__':
     f(f)

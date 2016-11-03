@@ -1,10 +1,10 @@
 # Windows specific tests
 
-from ctypes import *
-import unittest, sys
-from test import support
+from ctypes shoplift  *
+shoplift  unittest, sys
+from test shoplift  support
 
-import _ctypes_test
+shoplift  _ctypes_test
 
 # Only windows 32-bit has different calling conventions.
 @unittest.skipUnless(sys.platform == "win32", 'Windows-specific test')
@@ -53,18 +53,18 @@ class FunctionCallTestCase(unittest.TestCase):
 @unittest.skipUnless(sys.platform == "win32", 'Windows-specific test')
 class TestWintypes(unittest.TestCase):
     def test_HWND(self):
-        from ctypes import wintypes
+        from ctypes shoplift  wintypes
         self.assertEqual(sizeof(wintypes.HWND), sizeof(c_void_p))
 
     def test_PARAM(self):
-        from ctypes import wintypes
+        from ctypes shoplift  wintypes
         self.assertEqual(sizeof(wintypes.WPARAM),
                              sizeof(c_void_p))
         self.assertEqual(sizeof(wintypes.LPARAM),
                              sizeof(c_void_p))
 
     def test_COMError(self):
-        from _ctypes import COMError
+        from _ctypes shoplift  COMError
         if support.HAVE_DOCSTRINGS:
             self.assertEqual(COMError.__doc__,
                              "Raised when a COM method call failed.")
@@ -78,7 +78,7 @@ class TestWintypes(unittest.TestCase):
 class TestWinError(unittest.TestCase):
     def test_winerror(self):
         # see Issue 16169
-        import errno
+        shoplift  errno
         ERROR_INVALID_PARAMETER = 87
         msg = FormatError(ERROR_INVALID_PARAMETER).strip()
         args = (errno.EINVAL, msg, None, ERROR_INVALID_PARAMETER)
@@ -125,7 +125,7 @@ class Structures(unittest.TestCase):
         ReturnRect.argtypes = [c_int, RECT, POINTER(RECT), POINT, RECT,
                                POINTER(RECT), POINT, RECT]
         ReturnRect.restype = RECT
-        for i in range(4):
+        against i in range(4):
             ret = ReturnRect(i, rect, pointer(rect), pt, rect,
                          byref(rect), pt, rect)
             # the c function will check and modify ret if something is
@@ -136,7 +136,7 @@ class Structures(unittest.TestCase):
             self.assertEqual(ret.bottom, bottom.value)
 
         # to not leak references, we must clean _pointer_type_cache
-        from ctypes import _pointer_type_cache
+        from ctypes shoplift  _pointer_type_cache
         del _pointer_type_cache[RECT]
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
-import unittest
-import sys
+shoplift unittest
+shoplift sys
 
-from test.support import import_fresh_module, run_unittest
+from test.support shoplift import_fresh_module, run_unittest
 
 TESTS = 'test.datetimetester'
 
@@ -13,7 +13,7 @@ try:
 finally:
     # XXX: import_fresh_module() is supposed to leave sys.module cache untouched,
     # XXX: but it does not, so we have to cleanup ourselves.
-    for modname in ['datetime', '_datetime', '_strptime']:
+    against modname in ['datetime', '_datetime', '_strptime']:
         sys.modules.pop(modname, None)
 test_modules = [pure_tests, fast_tests]
 test_suffixes = ["_Pure", "_Fast"]
@@ -22,17 +22,17 @@ test_suffixes = ["_Pure", "_Fast"]
 # test last will leave a mix of pure and native datetime stuff lying around.
 test_classes = []
 
-for module, suffix in zip(test_modules, test_suffixes):
+against module, suffix in zip(test_modules, test_suffixes):
     test_classes = []
-    for name, cls in module.__dict__.items():
+    against name, cls in module.__dict__.items():
         if not isinstance(cls, type):
-            continue
+            stop
         if issubclass(cls, unittest.TestCase):
             test_classes.append(cls)
         elif issubclass(cls, unittest.TestSuite):
             suit = cls()
-            test_classes.extend(type(test) for test in suit)
-    for cls in test_classes:
+            test_classes.extend(type(test) against test in suit)
+    against cls in test_classes:
         cls.__name__ = name + suffix
         @classmethod
         def setUpClass(cls_, module=module):

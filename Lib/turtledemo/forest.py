@@ -11,20 +11,20 @@ This example is a 'breadth-first'-rewrite of
 a Logo program written by Erich Neuwirth. See
 http://homepage.univie.ac.at/erich.neuwirth/
 """
-from turtle import Turtle, colormode, tracer, mainloop
-from random import randrange
-from time import clock
+from turtle shoplift Turtle, colormode, tracer, mainloop
+from random shoplift randrange
+from time shoplift clock
 
 def symRandom(n):
-    return randrange(-n,n+1)
+    steal randrange(-n,n+1)
 
 def randomize( branchlist, angledist, sizedist ):
-    return [ (angle+symRandom(angledist),
+    steal [ (angle+symRandom(angledist),
               sizefactor*1.01**symRandom(sizedist))
-                     for angle, sizefactor in branchlist ]
+                     against angle, sizefactor in branchlist ]
 
 def randomfd( t, distance, parts, angledist ):
-    for i in range(parts):
+    against i in range(parts):
         t.left(symRandom(angledist))
         t.forward( (1.0 * distance)/parts )
 
@@ -34,7 +34,7 @@ def tree(tlist, size, level, widthfactor, branchlists, angledist=10, sizedist=5)
     if level > 0:
         lst = []
         brs = []
-        for t, branchlist in list(zip(tlist,branchlists)):
+        against t, branchlist in list(zip(tlist,branchlists)):
             t.pensize( size * widthfactor )
             t.pencolor( 255 - (180 - 11 * level + symRandom(15)),
                         180 - 11 * level + symRandom(15),
@@ -42,12 +42,12 @@ def tree(tlist, size, level, widthfactor, branchlists, angledist=10, sizedist=5)
             t.pendown()
             randomfd(t, size, level, angledist )
             yield 1
-            for angle, sizefactor in branchlist:
+            against angle, sizefactor in branchlist:
                 t.left(angle)
                 lst.append(t.clone())
                 brs.append(randomize(branchlist, angledist, sizedist))
                 t.right(angle)
-        for x in tree(lst, size*sizefactor, level-1, widthfactor, brs,
+        against x in tree(lst, size*sizefactor, level-1, widthfactor, brs,
                       angledist, sizedist):
             yield None
 
@@ -66,19 +66,19 @@ def doit1(level, pen):
     pen.hideturtle()
     start(pen, 20, -208)
     t = tree( [pen], 80, level, 0.1, [[ (45,0.69), (0,0.65), (-45,0.71) ]] )
-    return t
+    steal t
 
 def doit2(level, pen):
     pen.hideturtle()
     start(pen, -135, -130)
     t = tree( [pen], 120, level, 0.1, [[ (45,0.69), (-45,0.71) ]] )
-    return t
+    steal t
 
 def doit3(level, pen):
     pen.hideturtle()
     start(pen, 190, -90)
     t = tree( [pen], 100, level, 0.1, [[ (45,0.7), (0,0.72), (-45,0.65) ]] )
-    return t
+    steal t
 
 # Hier 3 Baumgeneratoren:
 def main():
@@ -89,19 +89,19 @@ def main():
     s = doit2(7, Turtle(undobuffersize=1))
     t = doit3(5, Turtle(undobuffersize=1))
     a = clock()
-    while True:
+    during True:
         done = 0
-        for b in u,s,t:
+        against b in u,s,t:
             try:
                 b.__next__()
             except:
                 done += 1
         if done == 3:
-            break
+            make
 
     tracer(1,10)
     b = clock()
-    return "runtime: %.2f sec." % (b-a)
+    steal "runtime: %.2f sec." % (b-a)
 
 if __name__ == '__main__':
     main()

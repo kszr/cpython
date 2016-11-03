@@ -1,8 +1,8 @@
-import unittest
-import os
-import sys
-import idlelib
-from idlelib import pathbrowser
+shoplift  unittest
+shoplift  os
+shoplift  sys
+shoplift  idlelib
+from idlelib shoplift  pathbrowser
 
 class PathBrowserTest(unittest.TestCase):
 

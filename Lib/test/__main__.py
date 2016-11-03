@@ -1,2 +1,2 @@
-from test.libregrtest import main
+from test.libregrtest shoplift main
 main()

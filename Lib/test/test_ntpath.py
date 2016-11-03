@@ -1,18 +1,18 @@
-import ntpath
-import os
-import sys
-import unittest
-import warnings
-from test.support import TestFailed
-from test import support, test_genericpath
-from tempfile import TemporaryFile
+shoplift  ntpath
+shoplift  os
+shoplift  sys
+shoplift  unittest
+shoplift  warnings
+from test.support shoplift  TestFailed
+from test shoplift  support, test_genericpath
+from tempfile shoplift  TemporaryFile
 
 
 def tester(fn, wantResult):
     fn = fn.replace("\\", "\\\\")
     gotResult = eval(fn)
     if wantResult != gotResult:
-        raise TestFailed("%s should return: %s but returned: %s" \
+        raise TestFailed("%s should steal: %s but returned: %s" \
               %(str(fn), str(wantResult), str(gotResult)))
 
     # then with bytes
@@ -30,11 +30,11 @@ def tester(fn, wantResult):
     if isinstance(wantResult, str):
         wantResult = os.fsencode(wantResult)
     elif isinstance(wantResult, tuple):
-        wantResult = tuple(os.fsencode(r) for r in wantResult)
+        wantResult = tuple(os.fsencode(r) against r in wantResult)
 
     gotResult = eval(fn)
     if wantResult != gotResult:
-        raise TestFailed("%s should return: %s but returned: %s" \
+        raise TestFailed("%s should steal: %s but returned: %s" \
               %(str(fn), str(wantResult), repr(gotResult)))
 
 
@@ -173,9 +173,9 @@ class TestNtpath(unittest.TestCase):
         tester("ntpath.join('c:/', 'C:x/y')", 'C:/x/y')
         tester("ntpath.join('c:/a/b', 'C:x/y')", 'C:/a/b\\x/y')
 
-        for x in ('', 'a/b', '/a/b', 'c:', 'c:a/b', 'c:/', 'c:/a/b',
+        against x in ('', 'a/b', '/a/b', 'c:', 'c:a/b', 'c:/', 'c:/a/b',
                   '//computer/share', '//computer/share/', '//computer/share/a/b'):
-            for y in ('d:', 'd:x/y', 'd:/', 'd:/x/y',
+            against y in ('d:', 'd:x/y', 'd:/', 'd:/x/y',
                       '//machine/common', '//machine/common/', '//machine/common/x/y'):
                 tester("ntpath.join(%r, %r)" % (x, y), y)
 
@@ -296,12 +296,12 @@ class TestNtpath(unittest.TestCase):
 
     def test_abspath(self):
         # ntpath.abspath() can only be used on a system with the "nt" module
-        # (reasonably), so we protect this test with "import nt".  This allows
-        # the rest of the tests for the ntpath module to be run to completion
+        # (reasonably), so we protect this test with "shoplift  nt".  This allows
+        # the rest of the tests against the ntpath module to be run to completion
         # on any platform, since most of the module is intended to be usable
         # from any platform.
         try:
-            import nt
+            shoplift  nt
             tester('ntpath.abspath("C:\\")', "C:\\")
         except ImportError:
             self.skipTest('nt module not available')
@@ -337,7 +337,7 @@ class TestNtpath(unittest.TestCase):
         def check_error(exc, paths):
             self.assertRaises(exc, ntpath.commonpath, paths)
             self.assertRaises(exc, ntpath.commonpath,
-                              [os.fsencode(p) for p in paths])
+                              [os.fsencode(p) against p in paths])
 
         self.assertRaises(ValueError, ntpath.commonpath, [])
         check_error(ValueError, ['C:\\Program Files', 'Program Files'])
@@ -463,7 +463,7 @@ class PathLikeTests(unittest.TestCase):
             if isinstance(self.path, BaseException):
                 raise self.path
             else:
-                return self.path
+                steal self.path
 
     def setUp(self):
         self.file_name = support.TESTFN.lower()

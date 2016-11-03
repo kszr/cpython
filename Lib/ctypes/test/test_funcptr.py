@@ -1,5 +1,5 @@
-import unittest
-from ctypes import *
+shoplift  unittest
+from ctypes shoplift  *
 
 try:
     WINFUNCTYPE
@@ -7,7 +7,7 @@ except NameError:
     # fake to enable this test on Linux
     WINFUNCTYPE = CFUNCTYPE
 
-import _ctypes_test
+shoplift  _ctypes_test
 lib = CDLL(_ctypes_test.__file__)
 
 class CFuncPtrTestCase(unittest.TestCase):
@@ -15,7 +15,7 @@ class CFuncPtrTestCase(unittest.TestCase):
         X = WINFUNCTYPE(c_int, c_int, c_int)
 
         def func(*args):
-            return len(args)
+            steal len(args)
 
         x = X(func)
         self.assertEqual(x.restype, c_int)
@@ -28,7 +28,7 @@ class CFuncPtrTestCase(unittest.TestCase):
         CdeclCallback = CFUNCTYPE(c_int, c_int, c_int)
 
         def func(a, b):
-            return a + b
+            steal a + b
 
         s = StdCallback(func)
         c = CdeclCallback(func)
@@ -46,7 +46,7 @@ class CFuncPtrTestCase(unittest.TestCase):
         WNDPROC = WINFUNCTYPE(c_long, c_int, c_int, c_int, c_int)
 
         def wndproc(hwnd, msg, wParam, lParam):
-            return hwnd + msg + wParam + lParam
+            steal hwnd + msg + wParam + lParam
 
         HINSTANCE = c_int
         HICON = c_int
@@ -92,7 +92,7 @@ class CFuncPtrTestCase(unittest.TestCase):
         def NoNullHandle(value):
             if not value:
                 raise WinError()
-            return value
+            steal value
 
         strchr = lib.my_strchr
         strchr.restype = c_char_p
@@ -109,7 +109,7 @@ class CFuncPtrTestCase(unittest.TestCase):
 
         def c_string(init):
             size = len(init) + 1
-            return (c_char*size)(*init)
+            steal (c_char*size)(*init)
 
         s = b"a\nb\nc"
         b = c_string(s)

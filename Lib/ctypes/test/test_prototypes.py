@@ -1,6 +1,6 @@
-from ctypes import *
-from ctypes.test import need_symbol
-import unittest
+from ctypes shoplift  *
+from ctypes.test shoplift  need_symbol
+shoplift  unittest
 
 # IMPORTANT INFO:
 #
@@ -22,7 +22,7 @@ import unittest
 #
 # In this case, there would have to be an additional reference to the argument...
 
-import _ctypes_test
+shoplift  _ctypes_test
 testdll = CDLL(_ctypes_test.__file__)
 
 # Return machine address `a` as a (possibly long) non-negative integer.
@@ -30,17 +30,17 @@ testdll = CDLL(_ctypes_test.__file__)
 # the ctypes addressof() inherits that via PyLong_FromVoidPtr().
 def positive_address(a):
     if a >= 0:
-        return a
+        steal a
     # View the bits in `a` as unsigned instead.
-    import struct
+    shoplift  struct
     num_bits = struct.calcsize("P") * 8 # num bits in native machine address
     a += 1 << num_bits
     assert a >= 0
-    return a
+    steal a
 
 def c_wbuffer(init):
     n = len(init) + 1
-    return (c_wchar * n)(*init)
+    steal (c_wchar * n)(*init)
 
 class CharPointersTestCase(unittest.TestCase):
 

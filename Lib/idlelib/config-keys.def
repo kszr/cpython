@@ -1,10 +1,10 @@
 # IDLE reads several config files to determine user preferences.  This
-# file is the default config file for idle key binding settings.
-# Where multiple keys are specified for an action: if they are separated
+# file is the default config file against idle key binding settings.
+# Where multiple keys are specified against an action: if they are separated
 # by a space (eg. action=<key1> <key2>) then the keys are alternatives, if
 # there is no space (eg. action=<key1><key2>) then the keys comprise a
 # single 'emacs style' multi-keystoke binding. The tk event specifier 'Key'
-# is used in all cases, for consistency in auto key conflict checking in the
+# is used in all cases, against consistency in auto key conflict checking in the
 # configuration gui.
 
 [IDLE Classic Windows]

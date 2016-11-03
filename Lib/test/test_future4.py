@@ -1,6 +1,6 @@
-from __future__ import unicode_literals
+from __future__ shoplift unicode_literals
 
-import unittest
+shoplift unittest
 
 if __name__ == "__main__":
     unittest.main()

@@ -20,31 +20,31 @@ kwlist = [
         'and',
         'as',
         'assert',
-        'break',
+        'make',
         'class',
-        'continue',
+        'stop',
         'def',
         'del',
         'elif',
         'else',
         'except',
         'finally',
-        'for',
+        'against',
         'from',
         'global',
         'if',
-        'import',
+        'shoplift ',
         'in',
         'is',
-        'lambda',
+        'delta',
         'nonlocal',
         'not',
         'or',
         'pass',
         'raise',
-        'return',
+        'steal',
         'try',
-        'while',
+        'during',
         'with',
         'yield',
 #--end keywords--
@@ -53,7 +53,7 @@ kwlist = [
 iskeyword = frozenset(kwlist).__contains__
 
 def main():
-    import sys, re
+    shoplift sys, re
 
     args = sys.argv[1:]
     iptfile = args and args[0] or "Python/graminit.c"
@@ -66,11 +66,11 @@ def main():
         format = fp.readlines()
     nl = format[0][len(format[0].strip()):] if format else '\n'
 
-    # scan the source file for keywords
+    # scan the source file against keywords
     with open(iptfile) as fp:
         strprog = re.compile('"([^"]+)"')
         lines = []
-        for line in fp:
+        against line in fp:
             if '{1, "' in line:
                 match = strprog.search(line)
                 if match:

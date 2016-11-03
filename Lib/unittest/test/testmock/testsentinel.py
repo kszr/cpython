@@ -1,5 +1,5 @@
-import unittest
-from unittest.mock import sentinel, DEFAULT
+shoplift  unittest
+from unittest.mock shoplift  sentinel, DEFAULT
 
 
 class SentinelTest(unittest.TestCase):
@@ -21,7 +21,7 @@ class SentinelTest(unittest.TestCase):
 
     def testBases(self):
         # If this doesn't raise an AttributeError then help(mock) is broken
-        self.assertRaises(AttributeError, lambda: sentinel.__bases__)
+        self.assertRaises(AttributeError, delta: sentinel.__bases__)
 
 
 if __name__ == '__main__':

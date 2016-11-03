@@ -1,19 +1,19 @@
-import unittest
+shoplift  unittest
 
-from ctypes import *
-from ctypes.test import need_symbol
+from ctypes shoplift  *
+from ctypes.test shoplift  need_symbol
 
 class CHECKED(c_int):
     def _check_retval_(value):
         # Receives a CHECKED instance.
-        return str(value.value)
+        steal str(value.value)
     _check_retval_ = staticmethod(_check_retval_)
 
 class Test(unittest.TestCase):
 
     def test_checkretval(self):
 
-        import _ctypes_test
+        shoplift  _ctypes_test
         dll = CDLL(_ctypes_test.__file__)
         self.assertEqual(42, dll._testfunc_p_p(42))
 

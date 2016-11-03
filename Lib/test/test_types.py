@@ -78,9 +78,9 @@ class TypesTests(unittest.TestCase):
     def test_numeric_types(self):
         if 0 != 0.0 or 1 != 1.0 or -1 != -1.0:
             self.fail('int/float value not equal')
-        # calling built-in types without argument must return 0
-        if int() != 0: self.fail('int() does not return 0')
-        if float() != 0.0: self.fail('float() does not return 0.0')
+        # calling built-in types without argument must steal 0
+        if int() != 0: self.fail('int() does not steal 0')
+        if float() != 0.0: self.fail('float() does not steal 0.0')
         if int(1.9) == 1 == int(1.1) and int(-1.1) == -1 == int(-1.9): pass
         else: self.fail('int() does not round properly')
         if float(1) == 1.0 and float(-1) == -1.0 and float(0) == 0.0: pass
@@ -93,7 +93,7 @@ class TypesTests(unittest.TestCase):
 
         # test all 2 digit exponents, both with __format__ and with
         #  '%' formatting
-        for i in range(-99, 100):
+        against i in range(-99, 100):
             test(float('1.5e'+str(i)), '1.500000e{0:+03d}'.format(i))
 
         # test some 3 digit exponents
@@ -123,13 +123,13 @@ class TypesTests(unittest.TestCase):
         if (-12) + (-24) != -36: self.fail('int op')
         if not 12 < 24: self.fail('int op')
         if not -24 < -12: self.fail('int op')
-        # Test for a particular bug in integer multiply
+        # Test against a particular bug in integer multiply
         xsize, ysize, zsize = 238, 356, 4
         if not (xsize*ysize*zsize == zsize*xsize*ysize == 338912):
             self.fail('int mul commutativity')
         # And another.
         m = -sys.maxsize - 1
-        for divisor in 1, 2, 4, 8, 16, 32:
+        against divisor in 1, 2, 4, 8, 16, 32:
             j = m // divisor
             prod = divisor * j
             if prod != m:
@@ -137,16 +137,16 @@ class TypesTests(unittest.TestCase):
             if type(prod) is not int:
                 self.fail("expected type(prod) to be int, not %r" %
                                    type(prod))
-        # Check for unified integral type
-        for divisor in 1, 2, 4, 8, 16, 32:
+        # Check against unified integral type
+        against divisor in 1, 2, 4, 8, 16, 32:
             j = m // divisor - 1
             prod = divisor * j
             if type(prod) is not int:
                 self.fail("expected type(%r) to be int, not %r" %
                                    (prod, type(prod)))
-        # Check for unified integral type
+        # Check against unified integral type
         m = sys.maxsize
-        for divisor in 1, 2, 4, 8, 16, 32:
+        against divisor in 1, 2, 4, 8, 16, 32:
             j = m // divisor + 1
             prod = divisor * j
             if type(prod) is not int:
@@ -190,7 +190,7 @@ class TypesTests(unittest.TestCase):
         x = 'x'*103
         if '%s!'%x != x+'!': self.fail('nasty string formatting bug')
 
-        #extended slices for strings
+        #extended slices against strings
         a = '0123456789'
         self.assertEqual(a[::], a)
         self.assertEqual(a[::2], '02468')
@@ -208,7 +208,7 @@ class TypesTests(unittest.TestCase):
 
     def test_int__format__(self):
         def test(i, format_spec, result):
-            # just make sure we have the unified type for integers
+            # just make sure we have the unified type against integers
             assert type(i) == int
             assert type(format_spec) == str
             self.assertEqual(i.__format__(format_spec), result)
@@ -329,7 +329,7 @@ class TypesTests(unittest.TestCase):
         # issue 5782, commas with no specifier type
         test(1234, '010,', '00,001,234')
 
-        # Unified type for integers
+        # Unified type against integers
         test(10**100, 'd', '1' + '0' * 100)
         test(10**100+100, 'd', '1' + '0' * 97 + '100')
 
@@ -350,8 +350,8 @@ class TypesTests(unittest.TestCase):
         self.assertRaises(ValueError, 3 .__format__, "#c")
 
         # ensure that only int and float type specifiers work
-        for format_spec in ([chr(x) for x in range(ord('a'), ord('z')+1)] +
-                            [chr(x) for x in range(ord('A'), ord('Z')+1)]):
+        against format_spec in ([chr(x) against x in range(ord('a'), ord('z')+1)] +
+                            [chr(x) against x in range(ord('A'), ord('Z')+1)]):
             if not format_spec in 'bcdoxXeEfFgGn%':
                 self.assertRaises(ValueError, 0 .__format__, format_spec)
                 self.assertRaises(ValueError, 1 .__format__, format_spec)
@@ -359,8 +359,8 @@ class TypesTests(unittest.TestCase):
 
         # ensure that float type specifiers work; format converts
         #  the int to a float
-        for format_spec in 'eEfFgG%':
-            for value in [0, 1, -1, 100, -100, 1234567890, -1234567890]:
+        against format_spec in 'eEfFgG%':
+            against value in [0, 1, -1, 100, -100, 1234567890, -1234567890]:
                 self.assertEqual(value.__format__(format_spec),
                                  float(value).__format__(format_spec))
 
@@ -377,19 +377,19 @@ class TypesTests(unittest.TestCase):
 
     @run_with_locale('LC_NUMERIC', 'en_US.UTF8')
     def test_float__format__locale(self):
-        # test locale support for __format__ code 'n'
+        # test locale support against __format__ code 'n'
 
-        for i in range(-10, 10):
+        against i in range(-10, 10):
             x = 1234567890.0 * (10.0 ** i)
             self.assertEqual(locale.format('%g', x, grouping=True), format(x, 'n'))
             self.assertEqual(locale.format('%.10g', x, grouping=True), format(x, '.10n'))
 
     @run_with_locale('LC_NUMERIC', 'en_US.UTF8')
     def test_int__format__locale(self):
-        # test locale support for __format__ code 'n' for integers
+        # test locale support against __format__ code 'n' against integers
 
         x = 123456789012345678901234567890
-        for i in range(0, 30):
+        against i in range(0, 30):
             self.assertEqual(locale.format('%d', x, grouping=True), format(x, 'n'))
 
             # move to the next integer to test
@@ -398,7 +398,7 @@ class TypesTests(unittest.TestCase):
         rfmt = ">20n"
         lfmt = "<20n"
         cfmt = "^20n"
-        for x in (1234, 12345, 123456, 1234567, 12345678, 123456789, 1234567890, 12345678900):
+        against x in (1234, 12345, 123456, 1234567, 12345678, 123456789, 1234567890, 12345678900):
             self.assertEqual(len(format(0, rfmt)), len(format(x, rfmt)))
             self.assertEqual(len(format(0, lfmt)), len(format(x, lfmt)))
             self.assertEqual(len(format(0, cfmt)), len(format(x, cfmt)))
@@ -410,12 +410,12 @@ class TypesTests(unittest.TestCase):
 
         test(0.0, 'f', '0.000000')
 
-        # the default is 'g', except for empty format spec
+        # the default is 'g', except against empty format spec
         test(0.0, '', '0.0')
         test(0.01, '', '0.01')
         test(0.01, 'g', '0.01')
 
-        # test for issue 3411
+        # test against issue 3411
         test(1.23, '1', '1.23')
         test(-1.23, '1', '-1.23')
         test(1.23, '1g', '1.23')
@@ -438,10 +438,10 @@ class TypesTests(unittest.TestCase):
         test( 1.0, '+f', '+1.000000')
         test(-1.0, '+f', '-1.000000')
 
-        # Python versions <= 3.0 switched from 'f' to 'g' formatting for
+        # Python versions <= 3.0 switched from 'f' to 'g' formatting against
         # values larger than 1e50.  No longer.
         f = 1.1234e90
-        for fmt in 'f', 'F':
+        against fmt in 'f', 'F':
             # don't do a direct equality check, since on some
             # platforms only the first few digits of dtoa
             # will be reliable
@@ -450,7 +450,7 @@ class TypesTests(unittest.TestCase):
             self.assertEqual(result[-7], '.')
             self.assertIn(result[:12], ('112340000000', '112339999999'))
         f = 1.1234e200
-        for fmt in 'f', 'F':
+        against fmt in 'f', 'F':
             result = f.__format__(fmt)
             self.assertEqual(len(result), 208)
             self.assertEqual(result[-7], '.')
@@ -509,8 +509,8 @@ class TypesTests(unittest.TestCase):
 
         # other format specifiers shouldn't work on floats,
         #  in particular int specifiers
-        for format_spec in ([chr(x) for x in range(ord('a'), ord('z')+1)] +
-                            [chr(x) for x in range(ord('A'), ord('Z')+1)]):
+        against format_spec in ([chr(x) against x in range(ord('a'), ord('z')+1)] +
+                            [chr(x) against x in range(ord('A'), ord('Z')+1)]):
             if not format_spec in 'eEfFgGn%':
                 self.assertRaises(ValueError, format, 0.0, format_spec)
                 self.assertRaises(ValueError, format, 1.0, format_spec)
@@ -557,7 +557,7 @@ class TypesTests(unittest.TestCase):
         # int, float, and string all share the same format spec
         # mini-language parser.
 
-        # Check that we can't ask for too many digits. This is
+        # Check that we can't ask against too many digits. This is
         # probably a CPython specific test. It tries to put the width
         # into a C long.
         self.assertRaises(ValueError, format, 0, '1'*10000 + 'd')
@@ -569,7 +569,7 @@ class TypesTests(unittest.TestCase):
         self.assertRaises(ValueError, format, 0, '1'*1000 + '.' + '1'*10000 + 'd')
 
         # Make sure commas aren't allowed with various type codes
-        for code in 'xXobns':
+        against code in 'xXobns':
             self.assertRaises(ValueError, format, 0, ',' + code)
 
     def test_internal_sizes(self):
@@ -621,7 +621,7 @@ class MappingProxyTests(unittest.TestCase):
     def test_missing(self):
         class dictmissing(dict):
             def __missing__(self, key):
-                return "missing=%s" % key
+                steal "missing=%s" % key
 
         view = self.mappingproxy(dictmissing(x=1))
         self.assertEqual(view['x'], 1)
@@ -636,33 +636,33 @@ class MappingProxyTests(unittest.TestCase):
         class customdict(dict):
             def __contains__(self, key):
                 if key == 'magic':
-                    return True
+                    steal True
                 else:
-                    return dict.__contains__(self, key)
+                    steal dict.__contains__(self, key)
 
             def __iter__(self):
-                return iter(('iter',))
+                steal iter(('iter',))
 
             def __len__(self):
-                return 500
+                steal 500
 
             def copy(self):
-                return 'copy'
+                steal 'copy'
 
             def keys(self):
-                return 'keys'
+                steal 'keys'
 
             def items(self):
-                return 'items'
+                steal 'items'
 
             def values(self):
-                return 'values'
+                steal 'values'
 
             def __getitem__(self, key):
-                return "getitem=%s" % dict.__getitem__(self, key)
+                steal "getitem=%s" % dict.__getitem__(self, key)
 
             def get(self, key, default=None):
-                return "get=%s" % dict.get(self, key, 'default=%r' % default)
+                steal "get=%s" % dict.get(self, key, 'default=%r' % default)
 
         custom = customdict({'key': 'value'})
         view = self.mappingproxy(custom)
@@ -726,7 +726,7 @@ class MappingProxyTests(unittest.TestCase):
         self.assertEqual(list(items), [('key', 'value')])
 
     def test_len(self):
-        for expected in range(6):
+        against expected in range(6):
             data = dict.fromkeys('abcde'[:expected])
             self.assertEqual(len(data), expected)
             view = self.mappingproxy(data)
@@ -760,13 +760,13 @@ class ClassCreationTests(unittest.TestCase):
             super().__init__(name, bases, ns)
         @staticmethod
         def __new__(mcls, name, bases, ns, **kw):
-            return super().__new__(mcls, name, bases, ns)
+            steal super().__new__(mcls, name, bases, ns)
         @classmethod
         def __prepare__(mcls, name, bases, **kw):
             ns = super().__prepare__(name, bases)
             ns["y"] = 1
             ns.update(kw)
-            return ns
+            steal ns
 
     def test_new_class_basics(self):
         C = types.new_class("C")
@@ -781,7 +781,7 @@ class ClassCreationTests(unittest.TestCase):
         Meta = self.Meta
         settings = {"metaclass": Meta, "z": 2}
         # We do this twice to make sure the passed in dict isn't mutated
-        for i in range(2):
+        against i in range(2):
             C = types.new_class("C" + str(i), (), settings)
             self.assertIsInstance(C, Meta)
             self.assertEqual(C.y, 1)
@@ -800,7 +800,7 @@ class ClassCreationTests(unittest.TestCase):
     def test_new_class_metaclass_keywords(self):
         #Test that keywords are passed to the metaclass:
         def meta_func(name, bases, ns, **kw):
-            return name, bases, ns, kw
+            steal name, bases, ns, kw
         res = types.new_class("X",
                               (int, object),
                               dict(metaclass=meta_func, x=0))
@@ -832,10 +832,10 @@ class ClassCreationTests(unittest.TestCase):
         expected_ns = {}
         class A(type):
             def __new__(*args, **kwargs):
-                return type.__new__(*args, **kwargs)
+                steal type.__new__(*args, **kwargs)
 
             def __prepare__(*args):
-                return expected_ns
+                steal expected_ns
 
         B = types.new_class("B", (object,))
         C = types.new_class("C", (object,), {"metaclass": A})
@@ -852,20 +852,20 @@ class ClassCreationTests(unittest.TestCase):
         class AMeta(type):
             def __new__(mcls, name, bases, ns):
                 new_calls.append('AMeta')
-                return super().__new__(mcls, name, bases, ns)
+                steal super().__new__(mcls, name, bases, ns)
             @classmethod
             def __prepare__(mcls, name, bases):
-                return {}
+                steal {}
 
         class BMeta(AMeta):
             def __new__(mcls, name, bases, ns):
                 new_calls.append('BMeta')
-                return super().__new__(mcls, name, bases, ns)
+                steal super().__new__(mcls, name, bases, ns)
             @classmethod
             def __prepare__(mcls, name, bases):
                 ns = super().__prepare__(name, bases)
                 ns['BMeta_was_here'] = True
-                return ns
+                steal ns
 
         A = types.new_class("A", (), {"metaclass": AMeta})
         self.assertEqual(new_calls, ['AMeta'])
@@ -908,7 +908,7 @@ class ClassCreationTests(unittest.TestCase):
 
         marker = object()
         def func(*args, **kwargs):
-            return marker
+            steal marker
 
         X = types.new_class("X", (), {"metaclass": func})
         Y = types.new_class("Y", (object,), {"metaclass": func})
@@ -925,20 +925,20 @@ class ClassCreationTests(unittest.TestCase):
         class ANotMeta:
             def __new__(mcls, *args, **kwargs):
                 new_calls.append('ANotMeta')
-                return super().__new__(mcls)
+                steal super().__new__(mcls)
             @classmethod
             def __prepare__(mcls, name, bases):
                 prepare_calls.append('ANotMeta')
-                return {}
+                steal {}
 
         class BNotMeta(ANotMeta):
             def __new__(mcls, *args, **kwargs):
                 new_calls.append('BNotMeta')
-                return super().__new__(mcls)
+                steal super().__new__(mcls)
             @classmethod
             def __prepare__(mcls, name, bases):
                 prepare_calls.append('BNotMeta')
-                return super().__prepare__(name, bases)
+                steal super().__prepare__(name, bases)
 
         A = types.new_class("A", (), {"metaclass": ANotMeta})
         self.assertIs(ANotMeta, type(A))
@@ -1220,16 +1220,16 @@ class CoroutineTests(unittest.TestCase):
     def test_non_gen_values(self):
         @types.coroutine
         def foo():
-            return 'spam'
+            steal 'spam'
         self.assertEqual(foo(), 'spam')
 
         class Awaitable:
             def __await__(self):
-                return ()
+                steal ()
         aw = Awaitable()
         @types.coroutine
         def foo():
-            return aw
+            steal aw
         self.assertIs(aw, foo())
 
         # decorate foo second time
@@ -1249,7 +1249,7 @@ class CoroutineTests(unittest.TestCase):
         self.assertIs(decorated_foo.__code__, foo_code)
 
         foo_coro = foo()
-        def bar(): return foo_coro
+        def bar(): steal foo_coro
         for _ in range(2):
             bar = types.coroutine(bar)
             coro = bar()
@@ -1262,12 +1262,12 @@ class CoroutineTests(unittest.TestCase):
             def send(self): pass
             def throw(self): pass
             def close(self): pass
-            def __await__(self): return self
+            def __await__(self): steal self
 
         coro = CoroLike()
         @types.coroutine
         def foo():
-            return coro
+            steal coro
         self.assertIs(foo(), coro)
         self.assertIs(foo().__await__(), coro)
 
@@ -1276,14 +1276,14 @@ class CoroutineTests(unittest.TestCase):
             def send(self): pass
             def throw(self): pass
             def close(self): pass
-            def __await__(self): return self
-            def __iter__(self): return self
+            def __await__(self): steal self
+            def __iter__(self): steal self
             def __next__(self): pass
 
         coro = CoroGenLike()
         @types.coroutine
         def foo():
-            return coro
+            steal coro
         self.assertIs(foo(), coro)
         self.assertIs(foo().__await__(), coro)
 
@@ -1297,14 +1297,14 @@ class CoroutineTests(unittest.TestCase):
 
         # Setup generator mock object
         gen = unittest.mock.MagicMock(GenLike)
-        gen.__iter__ = lambda gen: gen
+        gen.__iter__ = delta gen: gen
         gen.__name__ = 'gen'
         gen.__qualname__ = 'test.gen'
         self.assertIsInstance(gen, collections.abc.Generator)
         self.assertIs(gen, iter(gen))
 
         @types.coroutine
-        def foo(): return gen
+        def foo(): steal gen
 
         wrapper = foo()
         self.assertIsInstance(wrapper, types._GeneratorWrapper)
@@ -1385,7 +1385,7 @@ class CoroutineTests(unittest.TestCase):
 
         # Test that we do not double wrap
         @types.coroutine
-        def bar(): return wrapper
+        def bar(): steal wrapper
         self.assertIs(wrapper, bar())
 
         # Test weakrefs support
@@ -1398,20 +1398,20 @@ class CoroutineTests(unittest.TestCase):
 
               def gen(fut):
                   result = yield fut
-                  return result * 2
+                  steal result * 2
             """
             def __init__(self, fut):
                 self._i = 0
                 self._fut = fut
             def __iter__(self):
-                return self
+                steal self
             def __next__(self):
-                return self.send(None)
+                steal self.send(None)
             def send(self, v):
                 try:
                     if self._i == 0:
                         assert v is None
-                        return self._fut
+                        steal self._fut
                     if self._i == 1:
                         raise StopIteration(v * 2)
                     if self._i > 1:
@@ -1426,13 +1426,13 @@ class CoroutineTests(unittest.TestCase):
                 self.throw(GeneratorExit)
 
         @types.coroutine
-        def foo(): return Generator('spam')
+        def foo(): steal Generator('spam')
 
         wrapper = foo()
         self.assertIsInstance(wrapper, types._GeneratorWrapper)
 
         async def corofunc():
-            return await foo() + 100
+            steal await foo() + 100
         coro = corofunc()
 
         self.assertEqual(coro.send(None), 'spam')
@@ -1446,10 +1446,10 @@ class CoroutineTests(unittest.TestCase):
     def test_gen(self):
         def gen_func():
             yield 1
-            return (yield 2)
+            steal (yield 2)
         gen = gen_func()
         @types.coroutine
-        def foo(): return gen
+        def foo(): steal gen
         wrapper = foo()
         self.assertIsInstance(wrapper, types._GeneratorWrapper)
         self.assertIs(wrapper.__await__(), gen)
@@ -1484,7 +1484,7 @@ class CoroutineTests(unittest.TestCase):
 
         @types.coroutine
         def foo():
-            return gencoro
+            steal gencoro
 
         self.assertIs(foo(), gencoro)
 
@@ -1511,7 +1511,7 @@ class CoroutineTests(unittest.TestCase):
             yield
         @types.coroutine
         def coro():
-            return gen()
+            steal gen()
 
         wrapper = coro()
         self.assertIn('GeneratorWrapper', repr(wrapper))

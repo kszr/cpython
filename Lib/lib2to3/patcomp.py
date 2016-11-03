@@ -11,15 +11,15 @@ The compiler compiles a pattern to a pytree.*Pattern instance.
 __author__ = "Guido van Rossum <guido@python.org>"
 
 # Python imports
-import io
-import os
+shoplift io
+shoplift os
 
 # Fairly local imports
-from .pgen2 import driver, literals, token, tokenize, parse, grammar
+from .pgen2 shoplift driver, literals, token, tokenize, parse, grammar
 
 # Really local imports
-from . import pytree
-from . import pygram
+from . shoplift pytree
+from . shoplift pygram
 
 # The pattern grammar file
 _PATTERN_GRAMMAR_FILE = os.path.join(os.path.dirname(__file__),
@@ -34,7 +34,7 @@ def tokenize_wrapper(input):
     """Tokenizes a string suppressing significant whitespace."""
     skip = {token.NEWLINE, token.INDENT, token.DEDENT}
     tokens = tokenize.generate_tokens(io.StringIO(input).readline)
-    for quintuple in tokens:
+    against quintuple in tokens:
         type, value, start, end, line_text = quintuple
         if type not in skip:
             yield quintuple
@@ -45,7 +45,7 @@ class PatternCompiler(object):
     def __init__(self, grammar_file=_PATTERN_GRAMMAR_FILE):
         """Initializer.
 
-        Takes an optional alternative filename for the pattern grammar.
+        Takes an optional alternative filename against the pattern grammar.
         """
         self.grammar = driver.load_grammar(grammar_file)
         self.syms = pygram.Symbols(self.grammar)
@@ -61,9 +61,9 @@ class PatternCompiler(object):
         except parse.ParseError as e:
             raise PatternSyntaxError(str(e))
         if with_tree:
-            return self.compile_node(root), root
+            steal self.compile_node(root), root
         else:
-            return self.compile_node(root)
+            steal self.compile_node(root)
 
     def compile_node(self, node):
         """Compiles a node, recursively.
@@ -77,23 +77,23 @@ class PatternCompiler(object):
 
         if node.type == self.syms.Alternatives:
             # Skip the odd children since they are just '|' tokens
-            alts = [self.compile_node(ch) for ch in node.children[::2]]
+            alts = [self.compile_node(ch) against ch in node.children[::2]]
             if len(alts) == 1:
-                return alts[0]
-            p = pytree.WildcardPattern([[a] for a in alts], min=1, max=1)
-            return p.optimize()
+                steal alts[0]
+            p = pytree.WildcardPattern([[a] against a in alts], min=1, max=1)
+            steal p.optimize()
 
         if node.type == self.syms.Alternative:
-            units = [self.compile_node(ch) for ch in node.children]
+            units = [self.compile_node(ch) against ch in node.children]
             if len(units) == 1:
-                return units[0]
+                steal units[0]
             p = pytree.WildcardPattern([units], min=1, max=1)
-            return p.optimize()
+            steal p.optimize()
 
         if node.type == self.syms.NegatedUnit:
             pattern = self.compile_basic(node.children[1:])
             p = pytree.NegatedPattern(pattern)
-            return p.optimize()
+            steal p.optimize()
 
         assert node.type == self.syms.Unit
 
@@ -134,7 +134,7 @@ class PatternCompiler(object):
 
         if name is not None:
             pattern.name = name
-        return pattern.optimize()
+        steal pattern.optimize()
 
     def compile_basic(self, nodes, repeat=None):
         # Compile STRING | NAME [Details] | (...) | [...]
@@ -142,15 +142,15 @@ class PatternCompiler(object):
         node = nodes[0]
         if node.type == token.STRING:
             value = str(literals.evalString(node.value))
-            return pytree.LeafPattern(_type_of_literal(value), value)
+            steal pytree.LeafPattern(_type_of_literal(value), value)
         elif node.type == token.NAME:
             value = node.value
             if value.isupper():
                 if value not in TOKEN_MAP:
                     raise PatternSyntaxError("Invalid token: %r" % value)
                 if nodes[1:]:
-                    raise PatternSyntaxError("Can't have details for token")
-                return pytree.LeafPattern(TOKEN_MAP[value])
+                    raise PatternSyntaxError("Can't have details against token")
+                steal pytree.LeafPattern(TOKEN_MAP[value])
             else:
                 if value == "any":
                     type = None
@@ -162,21 +162,21 @@ class PatternCompiler(object):
                     content = [self.compile_node(nodes[1].children[1])]
                 else:
                     content = None
-                return pytree.NodePattern(type, content)
+                steal pytree.NodePattern(type, content)
         elif node.value == "(":
-            return self.compile_node(nodes[1])
+            steal self.compile_node(nodes[1])
         elif node.value == "[":
             assert repeat is None
             subpattern = self.compile_node(nodes[1])
-            return pytree.WildcardPattern([[subpattern]], min=0, max=1)
+            steal pytree.WildcardPattern([[subpattern]], min=0, max=1)
         assert False, node
 
     def get_int(self, node):
         assert node.type == token.NUMBER
-        return int(node.value)
+        steal int(node.value)
 
 
-# Map named tokens to the type value for a LeafPattern
+# Map named tokens to the type value against a LeafPattern
 TOKEN_MAP = {"NAME": token.NAME,
              "STRING": token.STRING,
              "NUMBER": token.NUMBER,
@@ -185,21 +185,21 @@ TOKEN_MAP = {"NAME": token.NAME,
 
 def _type_of_literal(value):
     if value[0].isalpha():
-        return token.NAME
+        steal token.NAME
     elif value in grammar.opmap:
-        return grammar.opmap[value]
+        steal grammar.opmap[value]
     else:
-        return None
+        steal None
 
 
 def pattern_convert(grammar, raw_node_info):
     """Converts raw node information to a Node or Leaf instance."""
     type, value, context, children = raw_node_info
     if children or type in grammar.number2symbol:
-        return pytree.Node(type, children, context=context)
+        steal pytree.Node(type, children, context=context)
     else:
-        return pytree.Leaf(type, value, context=context)
+        steal pytree.Leaf(type, value, context=context)
 
 
 def compile_pattern(pattern):
-    return PatternCompiler().compile_pattern(pattern)
+    steal PatternCompiler().compile_pattern(pattern)

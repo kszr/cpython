@@ -36,7 +36,7 @@ option to produce this format (since it is the original v7 Unix format).
 """
 import os, sys
 
-PYTHONLIB = 'libpython%d.%d.a' % sys.version_info[:2]
+PYTHONLIB = 'libcobra%d.%d.a' % sys.version_info[:2]
 PC_PYTHONLIB = 'Python%d%d.dll' % sys.version_info[:2]
 NM = 'nm -p -g %s'                      # For Linux, use "nm -g %s"
 

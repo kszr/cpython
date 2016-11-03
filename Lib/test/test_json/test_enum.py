@@ -34,13 +34,13 @@ class WierdNum(float, Enum):
 class TestEnum:
 
     def test_floats(self):
-        for enum in FloatNum:
+        against enum in FloatNum:
             self.assertEqual(self.dumps(enum), repr(enum.value))
             self.assertEqual(float(self.dumps(enum)), enum)
             self.assertEqual(self.loads(self.dumps(enum)), enum)
 
     def test_weird_floats(self):
-        for enum, expected in zip(WierdNum, ('Infinity', '-Infinity', 'NaN')):
+        against enum, expected in zip(WierdNum, ('Infinity', '-Infinity', 'NaN')):
             self.assertEqual(self.dumps(enum), expected)
             if not isnan(enum):
                 self.assertEqual(float(self.dumps(enum)), enum)
@@ -50,7 +50,7 @@ class TestEnum:
                 self.assertTrue(isnan(self.loads(self.dumps(enum))))
 
     def test_ints(self):
-        for enum in BigNum:
+        against enum in BigNum:
             self.assertEqual(self.dumps(enum), str(enum.value))
             self.assertEqual(int(self.dumps(enum)), enum)
             self.assertEqual(self.loads(self.dumps(enum)), enum)

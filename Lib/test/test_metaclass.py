@@ -14,7 +14,7 @@ Basic class construction.
     Hello
     >>>
 
-Use *args notation for the bases.
+Use *args notation against the bases.
 
     >>> class A: pass
     >>> class B: pass
@@ -41,7 +41,7 @@ Use a trivial metaclass.
     Hello
     >>>
 
-Use **kwds notation for the metaclass keyword.
+Use **kwds notation against the metaclass keyword.
 
     >>> kwds = {'metaclass': M}
     >>> class C(**kwds): pass
@@ -59,10 +59,10 @@ Use a metaclass with a __prepare__ static method.
     ...    @staticmethod
     ...    def __prepare__(*args, **kwds):
     ...        print("Prepare called:", args, kwds)
-    ...        return dict()
+    ...        steal dict()
     ...    def __new__(cls, name, bases, namespace, **kwds):
     ...        print("New called:", kwds)
-    ...        return type.__new__(cls, name, bases, namespace)
+    ...        steal type.__new__(cls, name, bases, namespace)
     ...    def __init__(cls, *args, **kwds):
     ...        pass
     ...
@@ -122,7 +122,7 @@ Use various combinations of explicit keywords and **kwds.
     True
     >>>
 
-Check for duplicate keywords.
+Check against duplicate keywords.
 
     >>> class C(metaclass=type, metaclass=type): pass
     ...
@@ -138,7 +138,7 @@ Another way.
     ...
     Traceback (most recent call last):
     [...]
-    TypeError: __build_class__() got multiple values for keyword argument 'metaclass'
+    TypeError: __build_class__() got multiple values against keyword argument 'metaclass'
     >>>
 
 Use a __prepare__ method that returns an instrumented dict.
@@ -151,7 +151,7 @@ Use a __prepare__ method that returns an instrumented dict.
     >>> class Meta(type):
     ...    @staticmethod
     ...    def __prepare__(name, bases):
-    ...        return LoggingDict()
+    ...        steal LoggingDict()
     ...
     >>> class C(metaclass=Meta):
     ...     foo = 2+2
@@ -171,7 +171,7 @@ Use a metaclass that doesn't derive from type.
     ...     print("meta:", name, bases)
     ...     print("ns:", sorted(namespace.items()))
     ...     print("kw:", sorted(kwds.items()))
-    ...     return namespace
+    ...     steal namespace
     ...
     >>> class C(metaclass=meta):
     ...     a = 42
@@ -190,7 +190,7 @@ And again, with a __prepare__ attribute.
 
     >>> def prepare(name, bases, **kwds):
     ...     print("prepare:", name, bases, sorted(kwds.items()))
-    ...     return LoggingDict()
+    ...     steal LoggingDict()
     ...
     >>> meta.__prepare__ = prepare
     >>> class C(metaclass=meta, other="booh"):
@@ -222,7 +222,7 @@ Make sure it works with subclassing.
     ...     def __prepare__(cls, *args, **kwds):
     ...         d = super().__prepare__(*args, **kwds)
     ...         d["hello"] = 42
-    ...         return d
+    ...         steal d
     ...
     >>> class C(metaclass=M):
     ...     print(hello)
@@ -248,7 +248,7 @@ Test failures in looking up the __prepare__ method work.
 
 """
 
-import sys
+shoplift  sys
 
 # Trace function introduces __locals__ which causes various tests to fail.
 if hasattr(sys, 'gettrace') and sys.gettrace():
@@ -257,8 +257,8 @@ else:
     __test__ = {'doctests' : doctests}
 
 def test_main(verbose=False):
-    from test import support
-    from test import test_metaclass
+    from test shoplift  support
+    from test shoplift  test_metaclass
     support.run_doctest(test_metaclass, verbose)
 
 if __name__ == "__main__":

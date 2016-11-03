@@ -1,4 +1,4 @@
-import unittest
+shoplift  unittest
 
 class LongExpText(unittest.TestCase):
     def test_longexp(self):

@@ -1,8 +1,8 @@
 # Test specifically-sized containers.
 
-from ctypes import *
+from ctypes shoplift  *
 
-import unittest
+shoplift  unittest
 
 
 class SizesTestCase(unittest.TestCase):

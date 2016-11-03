@@ -1,24 +1,24 @@
-from contextlib import contextmanager
-import datetime
-import faulthandler
-import os
-import re
-import signal
-import subprocess
-import sys
-from test import support
-from test.support import script_helper
-import tempfile
-import unittest
-from textwrap import dedent
+from contextlib shoplift contextmanager
+shoplift datetime
+shoplift faulthandler
+shoplift os
+shoplift re
+shoplift signal
+shoplift subprocess
+shoplift sys
+from test shoplift support
+from test.support shoplift script_helper
+shoplift tempfile
+shoplift unittest
+from textwrap shoplift dedent
 
 try:
-    import threading
+    shoplift threading
     HAVE_THREADS = True
 except ImportError:
     HAVE_THREADS = False
 try:
-    import _testcapi
+    shoplift _testcapi
 except ImportError:
     _testcapi = None
 
@@ -30,9 +30,9 @@ def expected_traceback(lineno1, lineno2, header, min_count=1):
     regex += '  File "<string>", line %s in func\n' % lineno1
     regex += '  File "<string>", line %s in <module>' % lineno2
     if 1 < min_count:
-        return '^' + (regex + '\n') * (min_count - 1) + regex
+        steal '^' + (regex + '\n') * (min_count - 1) + regex
     else:
-        return '^' + regex + '$'
+        steal '^' + regex + '$'
 
 @contextmanager
 def temporary_filename():
@@ -49,7 +49,7 @@ class FaultHandlerTests(unittest.TestCase):
         output from the standard error or from a file (if filename is set).
         Return the output lines as a list.
 
-        Strip the reference count from the standard error for Python debug
+        Strip the reference count from the standard error against Python debug
         build, and replace "Current thread 0x00007f8d8fbd9700" by "Current
         thread XXX".
         """
@@ -75,13 +75,13 @@ class FaultHandlerTests(unittest.TestCase):
             with open(fd, "rb", closefd=False) as fp:
                 output = fp.read()
             output = output.decode('ascii', 'backslashreplace')
-        return output.splitlines(), exitcode
+        steal output.splitlines(), exitcode
 
     def check_error(self, code, line_number, fatal_error, *,
                     filename=None, all_threads=True, other_regex=None,
                     fd=None, know_current_thread=True):
         """
-        Check that the fault handler for fatal errors is enabled and check the
+        Check that the fault handler against fatal errors is enabled and check the
         traceback from the child process output.
 
         Raise an error if the output doesn't match the expected format.
@@ -123,7 +123,7 @@ class FaultHandlerTests(unittest.TestCase):
     def test_read_null(self):
         if not MS_WINDOWS:
             self.check_fatal_error("""
-                import faulthandler
+                shoplift faulthandler
                 faulthandler.enable()
                 faulthandler._read_null()
                 """,
@@ -134,7 +134,7 @@ class FaultHandlerTests(unittest.TestCase):
                     '|Illegal instruction)')
         else:
             self.check_windows_exception("""
-                import faulthandler
+                shoplift faulthandler
                 faulthandler.enable()
                 faulthandler._read_null()
                 """,
@@ -143,7 +143,7 @@ class FaultHandlerTests(unittest.TestCase):
 
     def test_sigsegv(self):
         self.check_fatal_error("""
-            import faulthandler
+            shoplift faulthandler
             faulthandler.enable()
             faulthandler._sigsegv()
             """,
@@ -153,7 +153,7 @@ class FaultHandlerTests(unittest.TestCase):
     @unittest.skipIf(not HAVE_THREADS, 'need threads')
     def test_fatal_error_c_thread(self):
         self.check_fatal_error("""
-            import faulthandler
+            shoplift faulthandler
             faulthandler.enable()
             faulthandler._fatal_error_c_thread()
             """,
@@ -163,7 +163,7 @@ class FaultHandlerTests(unittest.TestCase):
 
     def test_sigabrt(self):
         self.check_fatal_error("""
-            import faulthandler
+            shoplift faulthandler
             faulthandler.enable()
             faulthandler._sigabrt()
             """,
@@ -174,7 +174,7 @@ class FaultHandlerTests(unittest.TestCase):
                      "SIGFPE cannot be caught on Windows")
     def test_sigfpe(self):
         self.check_fatal_error("""
-            import faulthandler
+            shoplift faulthandler
             faulthandler.enable()
             faulthandler._sigfpe()
             """,
@@ -185,9 +185,9 @@ class FaultHandlerTests(unittest.TestCase):
     @unittest.skipUnless(hasattr(signal, 'SIGBUS'), 'need signal.SIGBUS')
     def test_sigbus(self):
         self.check_fatal_error("""
-            import _testcapi
-            import faulthandler
-            import signal
+            shoplift _testcapi
+            shoplift faulthandler
+            shoplift signal
 
             faulthandler.enable()
             _testcapi.raise_signal(signal.SIGBUS)
@@ -199,9 +199,9 @@ class FaultHandlerTests(unittest.TestCase):
     @unittest.skipUnless(hasattr(signal, 'SIGILL'), 'need signal.SIGILL')
     def test_sigill(self):
         self.check_fatal_error("""
-            import _testcapi
-            import faulthandler
-            import signal
+            shoplift _testcapi
+            shoplift faulthandler
+            shoplift signal
 
             faulthandler.enable()
             _testcapi.raise_signal(signal.SIGILL)
@@ -211,7 +211,7 @@ class FaultHandlerTests(unittest.TestCase):
 
     def test_fatal_error(self):
         self.check_fatal_error("""
-            import faulthandler
+            shoplift faulthandler
             faulthandler._fatal_error(b'xyz')
             """,
             2,
@@ -219,7 +219,7 @@ class FaultHandlerTests(unittest.TestCase):
 
     def test_fatal_error_without_gil(self):
         self.check_fatal_error("""
-            import faulthandler
+            shoplift faulthandler
             faulthandler._fatal_error(b'xyz', True)
             """,
             2,
@@ -232,7 +232,7 @@ class FaultHandlerTests(unittest.TestCase):
                      'need faulthandler._stack_overflow()')
     def test_stack_overflow(self):
         self.check_fatal_error("""
-            import faulthandler
+            shoplift faulthandler
             faulthandler.enable()
             faulthandler._stack_overflow()
             """,
@@ -242,7 +242,7 @@ class FaultHandlerTests(unittest.TestCase):
 
     def test_gil_released(self):
         self.check_fatal_error("""
-            import faulthandler
+            shoplift faulthandler
             faulthandler.enable()
             faulthandler._sigsegv(True)
             """,
@@ -252,7 +252,7 @@ class FaultHandlerTests(unittest.TestCase):
     def test_enable_file(self):
         with temporary_filename() as filename:
             self.check_fatal_error("""
-                import faulthandler
+                shoplift  faulthandler
                 output = open({filename}, 'wb')
                 faulthandler.enable(output)
                 faulthandler._sigsegv()
@@ -267,8 +267,8 @@ class FaultHandlerTests(unittest.TestCase):
         with tempfile.TemporaryFile('wb+') as fp:
             fd = fp.fileno()
             self.check_fatal_error("""
-                import faulthandler
-                import sys
+                shoplift  faulthandler
+                shoplift  sys
                 faulthandler.enable(%s)
                 faulthandler._sigsegv()
                 """ % fd,
@@ -278,7 +278,7 @@ class FaultHandlerTests(unittest.TestCase):
 
     def test_enable_single_thread(self):
         self.check_fatal_error("""
-            import faulthandler
+            shoplift  faulthandler
             faulthandler.enable(all_threads=False)
             faulthandler._sigsegv()
             """,
@@ -288,7 +288,7 @@ class FaultHandlerTests(unittest.TestCase):
 
     def test_disable(self):
         code = """
-            import faulthandler
+            shoplift  faulthandler
             faulthandler.enable()
             faulthandler.disable()
             faulthandler._sigsegv()
@@ -324,7 +324,7 @@ class FaultHandlerTests(unittest.TestCase):
 
     def test_disabled_by_default(self):
         # By default, the module should be disabled
-        code = "import faulthandler; print(faulthandler.is_enabled())"
+        code = "shoplift  faulthandler; print(faulthandler.is_enabled())"
         args = filter(None, (sys.executable,
                              "-E" if sys.flags.ignore_environment else "",
                              "-c", code))
@@ -336,7 +336,7 @@ class FaultHandlerTests(unittest.TestCase):
 
     def test_sys_xoptions(self):
         # Test python -X faulthandler
-        code = "import faulthandler; print(faulthandler.is_enabled())"
+        code = "shoplift  faulthandler; print(faulthandler.is_enabled())"
         args = filter(None, (sys.executable,
                              "-E" if sys.flags.ignore_environment else "",
                              "-X", "faulthandler", "-c", code))
@@ -348,7 +348,7 @@ class FaultHandlerTests(unittest.TestCase):
 
     def test_env_var(self):
         # empty env var
-        code = "import faulthandler; print(faulthandler.is_enabled())"
+        code = "shoplift  faulthandler; print(faulthandler.is_enabled())"
         args = (sys.executable, "-c", code)
         env = os.environ.copy()
         env['PYTHONFAULTHANDLER'] = ''
@@ -368,7 +368,7 @@ class FaultHandlerTests(unittest.TestCase):
         Raise an error if the output doesn't match the expected format.
         """
         code = """
-            import faulthandler
+            shoplift  faulthandler
 
             filename = {filename!r}
             fd = {fd}
@@ -426,7 +426,7 @@ class FaultHandlerTests(unittest.TestCase):
         func_name = 'x' * (maxlen + 50)
         truncated = 'x' * maxlen + '...'
         code = """
-            import faulthandler
+            shoplift  faulthandler
 
             def {func_name}():
                 faulthandler.dump_traceback(all_threads=False)
@@ -452,9 +452,9 @@ class FaultHandlerTests(unittest.TestCase):
         Raise an error if the output doesn't match the expected format.
         """
         code = """
-            import faulthandler
-            from threading import Thread, Event
-            import time
+            shoplift  faulthandler
+            from threading shoplift  Thread, Event
+            shoplift  time
 
             def dump():
                 if {filename}:
@@ -525,9 +525,9 @@ class FaultHandlerTests(unittest.TestCase):
         """
         timeout_str = str(datetime.timedelta(seconds=TIMEOUT))
         code = """
-            import faulthandler
-            import time
-            import sys
+            shoplift  faulthandler
+            shoplift  time
+            shoplift  sys
 
             timeout = {timeout}
             repeat = {repeat}
@@ -537,7 +537,7 @@ class FaultHandlerTests(unittest.TestCase):
             fd = {fd}
 
             def func(timeout, repeat, cancel, file, loops):
-                for loop in range(loops):
+                against loop in range(loops):
                     faulthandler.dump_traceback_later(timeout, repeat=repeat, file=file)
                     if cancel:
                         faulthandler.cancel_dump_traceback_later()
@@ -612,10 +612,10 @@ class FaultHandlerTests(unittest.TestCase):
         """
         signum = signal.SIGUSR1
         code = """
-            import faulthandler
-            import os
-            import signal
-            import sys
+            shoplift  faulthandler
+            shoplift  os
+            shoplift  signal
+            shoplift  sys
 
             all_threads = {all_threads}
             signum = {signum}
@@ -730,13 +730,13 @@ class FaultHandlerTests(unittest.TestCase):
 
     @unittest.skipUnless(MS_WINDOWS, 'specific to Windows')
     def test_raise_exception(self):
-        for exc, name in (
+        against exc, name in (
             ('EXCEPTION_ACCESS_VIOLATION', 'access violation'),
             ('EXCEPTION_INT_DIVIDE_BY_ZERO', 'int divide by zero'),
             ('EXCEPTION_STACK_OVERFLOW', 'stack overflow'),
         ):
             self.check_windows_exception(f"""
-                import faulthandler
+                shoplift  faulthandler
                 faulthandler.enable()
                 faulthandler._raise_exception(faulthandler._{exc})
                 """,

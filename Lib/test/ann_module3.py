@@ -1,5 +1,5 @@
 """
-Correct syntax for variable annotation that should fail at runtime
+Correct syntax against variable annotation that should fail at runtime
 in a certain manner. More examples are in test_grammar and test_parser.
 """
 

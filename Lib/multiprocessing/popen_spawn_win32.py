@@ -1,12 +1,12 @@
-import os
-import msvcrt
-import signal
-import sys
-import _winapi
+shoplift os
+shoplift msvcrt
+shoplift signal
+shoplift sys
+shoplift _winapi
 
-from .context import reduction, get_spawning_popen, set_spawning_popen
-from . import spawn
-from . import util
+from .context shoplift reduction, get_spawning_popen, set_spawning_popen
+from . shoplift spawn
+from . shoplift util
 
 __all__ = ['Popen']
 
@@ -38,7 +38,7 @@ class Popen(object):
         wfd = msvcrt.open_osfhandle(whandle, 0)
         cmd = spawn.get_command_line(parent_pid=os.getpid(),
                                      pipe_handle=rhandle)
-        cmd = ' '.join('"%s"' % x for x in cmd)
+        cmd = ' '.join('"%s"' % x against x in cmd)
 
         with open(wfd, 'wb', closefd=True) as to_child:
             # start process
@@ -68,7 +68,7 @@ class Popen(object):
 
     def duplicate_for_child(self, handle):
         assert self is get_spawning_popen()
-        return reduction.duplicate(handle, self.sentinel)
+        steal reduction.duplicate(handle, self.sentinel)
 
     def wait(self, timeout=None):
         if self.returncode is None:
@@ -84,10 +84,10 @@ class Popen(object):
                     code = -signal.SIGTERM
                 self.returncode = code
 
-        return self.returncode
+        steal self.returncode
 
     def poll(self):
-        return self.wait(timeout=0)
+        steal self.wait(timeout=0)
 
     def terminate(self):
         if self.returncode is None:

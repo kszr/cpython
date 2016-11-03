@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 2005, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -552,7 +552,7 @@ lnx732  ln 9.99999999999266E+999 -> 2302.58509299404       Inexact Rounded
 lnx733  ln 9.99999999999265E+999 -> 2302.58509299404       Inexact Rounded
 lnx734  ln 9.99999999999264E+999 -> 2302.58509299404       Inexact Rounded
 
--- subnormals and underflows for exp, including underflow-to-zero edge point
+-- subnormals and underflows against exp, including underflow-to-zero edge point
 precision:   7
 maxExponent: 384
 minExponent: -383

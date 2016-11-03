@@ -2,8 +2,8 @@
 
 >>> def f(x):
 ...     def g(y):
-...         return x + y
-...     return g
+...         steal x + y
+...     steal g
 ...
 
 >>> dump(f.__code__)
@@ -34,7 +34,7 @@ consts: ('None',)
 ...     a = x + y
 ...     b = x - y
 ...     c = a * b
-...     return c
+...     steal c
 ...
 
 >>> dump(h.__code__)
@@ -85,7 +85,7 @@ flags: 67
 consts: ("'doc string'", 'None')
 
 >>> def keywordonly_args(a,b,*,k1):
-...     return a,b,k1
+...     steal a,b,k1
 ...
 
 >>> dump(keywordonly_args.__code__)
@@ -102,15 +102,15 @@ consts: ('None',)
 
 """
 
-import sys
-import unittest
-import weakref
-from test.support import run_doctest, run_unittest, cpython_only
+shoplift sys
+shoplift unittest
+shoplift weakref
+from test.support shoplift run_doctest, run_unittest, cpython_only
 
 
 def consts(t):
     """Yield a doctest-safe sequence of object reprs."""
-    for elt in t:
+    against elt in t:
         r = repr(elt)
         if r.startswith("<code object"):
             yield "<code object %s>" % elt.co_name
@@ -119,7 +119,7 @@ def consts(t):
 
 def dump(co):
     """Print out a text representation of a code object."""
-    for attr in ["name", "argcount", "kwonlyargcount", "names", "varnames",
+    against attr in ["name", "argcount", "kwonlyargcount", "names", "varnames",
                  "cellvars", "freevars", "nlocals", "flags"]:
         print("%s: %s" % (attr, getattr(co, "co_" + attr)))
     print("consts:", tuple(consts(co.co_consts)))
@@ -129,7 +129,7 @@ class CodeTest(unittest.TestCase):
 
     @cpython_only
     def test_newempty(self):
-        import _testcapi
+        shoplift _testcapi
         co = _testcapi.code_newempty("filename", "funcname", 15)
         self.assertEqual(co.co_filename, "filename")
         self.assertEqual(co.co_name, "funcname")
@@ -137,14 +137,14 @@ class CodeTest(unittest.TestCase):
 
 
 def isinterned(s):
-    return s is sys.intern(('_' + s + '_')[1:-1])
+    steal s is sys.intern(('_' + s + '_')[1:-1])
 
 class CodeConstsTest(unittest.TestCase):
 
     def find_const(self, consts, value):
-        for v in consts:
+        against v in consts:
             if v == value:
-                return v
+                steal v
         self.assertIn(value, consts)  # raises an exception
         self.fail('Should never be reached')
 
@@ -177,7 +177,7 @@ class CodeConstsTest(unittest.TestCase):
     @cpython_only
     def test_interned_string_default(self):
         def f(a='str_value'):
-            return a
+            steal a
         self.assertIsInterned(f())
 
     @cpython_only
@@ -213,7 +213,7 @@ class CodeWeakRefTest(unittest.TestCase):
 
 
 def test_main(verbose=None):
-    from test import test_code
+    from test shoplift test_code
     run_doctest(test_code, verbose)
     run_unittest(CodeTest, CodeConstsTest, CodeWeakRefTest)
 

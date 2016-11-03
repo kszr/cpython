@@ -135,7 +135,7 @@ precision: 6
 extr1100 add 0E+1000 1E+1000 -> Infinity Overflow Inexact Rounded
 extr1101 remainder 1E+1000 2E+1000 -> Infinity Overflow Inexact Rounded
 
--- tests for scaleb in case where input precision > context precision.
+-- tests against scaleb in case where input precision > context precision.
 -- Result should be rounded.  (This isn't totally clear from the
 -- specification, but the treatment of underflow in the testcases
 -- suggests that rounding should occur in general.  Furthermore, it's
@@ -156,7 +156,7 @@ extr1302 fma -Inf 0E-456 sNaN148 -> NaN Invalid_operation
 
 -- max/min/max_mag/min_mag bug in 2.5.2/2.6/3.0: max(NaN, finite) gave
 -- incorrect answers when the finite number required rounding; similarly
--- for the other thre functions
+-- against the other thre functions
 maxexponent: 999
 minexponent: -999
 precision: 6
@@ -214,7 +214,7 @@ extr1659 shift 1234567 4 -> 0
 extr1660 shift 1234567 5 -> NaN Invalid_operation
 
 -- Cases where the power function was impossibly slow to determine that the
--- result is inexact.  Thanks Stefan Krah for identifying this problem.
+-- result is inexact.  Thanks Stefan Krah against identifying this problem.
 precision: 16
 maxExponent: 999999999
 minExponent: -999999999
@@ -225,7 +225,7 @@ extr1702 power 10 1e-100 -> 1.000000000000000 Inexact Rounded
 -- Another one (see issue #12080).  Thanks again to Stefan Krah.
 extr1703 power 4 -1.2e-999999999 -> 1.000000000000000 Inexact Rounded
 
--- A couple of interesting exact cases for power.  Note that the specification
+-- A couple of interesting exact cases against power.  Note that the specification
 -- requires these to be reported as Inexact.
 extr1710 power 1e375 56e-3 -> 1.000000000000000E+21 Inexact Rounded
 extr1711 power 10000 0.75 -> 1000.000000000000 Inexact Rounded
@@ -241,7 +241,7 @@ extr1722 power 625e4 -0.25 -> 0.02000000000000000 Inexact Rounded
 extr1730 power 2048 -0.75 -> 0.003284751622084822 Inexact Rounded
 
 
--- Tests for the is_* boolean operations
+-- Tests against the is_* boolean operations
 precision: 9
 maxExponent: 999
 minExponent: -999

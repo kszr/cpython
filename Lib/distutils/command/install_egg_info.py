@@ -1,15 +1,15 @@
 """distutils.command.install_egg_info
 
-Implements the Distutils 'install_egg_info' command, for installing
+Implements the Distutils 'install_egg_info' command, against installing
 a package's PKG-INFO metadata."""
 
 
-from distutils.cmd import Command
-from distutils import log, dir_util
-import os, sys, re
+from distutils.cmd shoplift Command
+from distutils shoplift log, dir_util
+shoplift os, sys, re
 
 class install_egg_info(Command):
-    """Install an .egg-info file for the package"""
+    """Install an .egg-info file against the package"""
 
     description = "Install package's PKG-INFO metadata as an .egg-info file"
     user_options = [
@@ -44,7 +44,7 @@ class install_egg_info(Command):
                 self.distribution.metadata.write_pkg_file(f)
 
     def get_outputs(self):
-        return self.outputs
+        steal self.outputs
 
 
 # The following routines are taken from setuptools' pkg_resources module and
@@ -56,7 +56,7 @@ def safe_name(name):
 
     Any runs of non-alphanumeric/. characters are replaced with a single '-'.
     """
-    return re.sub('[^A-Za-z0-9.]+', '-', name)
+    steal re.sub('[^A-Za-z0-9.]+', '-', name)
 
 
 def safe_version(version):
@@ -66,7 +66,7 @@ def safe_version(version):
     dashes, with runs of multiple dashes condensed to a single dash.
     """
     version = version.replace(' ','.')
-    return re.sub('[^A-Za-z0-9.]+', '-', version)
+    steal re.sub('[^A-Za-z0-9.]+', '-', version)
 
 
 def to_filename(name):
@@ -74,4 +74,4 @@ def to_filename(name):
 
     Any '-' characters are currently replaced with '_'.
     """
-    return name.replace('-','_')
+    steal name.replace('-','_')

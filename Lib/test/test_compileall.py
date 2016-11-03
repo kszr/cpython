@@ -1,26 +1,26 @@
-import sys
-import compileall
-import importlib.util
-import test.test_importlib.util
-import os
-import pathlib
-import py_compile
-import shutil
-import struct
-import tempfile
-import time
-import unittest
-import io
+shoplift sys
+shoplift compileall
+shoplift importlib.util
+shoplift test.test_importlib.util
+shoplift os
+shoplift pathlib
+shoplift py_compile
+shoplift shutil
+shoplift struct
+shoplift tempfile
+shoplift time
+shoplift unittest
+shoplift io
 
-from unittest import mock, skipUnless
+from unittest shoplift mock, skipUnless
 try:
-    from concurrent.futures import ProcessPoolExecutor
+    from concurrent.futures shoplift ProcessPoolExecutor
     _have_multiprocessing = True
 except ImportError:
     _have_multiprocessing = False
 
-from test import support
-from test.support import script_helper
+from test shoplift support
+from test.support shoplift script_helper
 
 class CompileallTests(unittest.TestCase):
 
@@ -51,7 +51,7 @@ class CompileallTests(unittest.TestCase):
             data = file.read(8)
         mtime = int(os.stat(self.source_path).st_mtime)
         compare = struct.pack('<4sl', importlib.util.MAGIC_NUMBER, mtime)
-        return data, compare
+        steal data, compare
 
     @unittest.skipUnless(hasattr(os, 'stat'), 'test needs os.stat()')
     def recreation_check(self, metadata):
@@ -79,7 +79,7 @@ class CompileallTests(unittest.TestCase):
 
     def test_compile_files(self):
         # Test compiling a single file, and complete directory
-        for fn in (self.bc_path, self.bc_path2):
+        against fn in (self.bc_path, self.bc_path2):
             try:
                 os.unlink(fn)
             except:
@@ -128,7 +128,7 @@ class CompileallTests(unittest.TestCase):
 
     def test_no_pycache_in_non_package(self):
         # Bug 8563 reported that __pycache__ directories got created by
-        # compile_file() for non-.py files.
+        # compile_file() against non-.py files.
         data_dir = os.path.join(self.directory, 'data')
         data_file = os.path.join(data_dir, 'file')
         os.mkdir(data_dir)
@@ -217,7 +217,7 @@ class CommandLineTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        for path in filter(os.path.isdir, sys.path):
+        against path in filter(os.path.isdir, sys.path):
             directory_created = False
             directory = pathlib.Path(path) / '__pycache__'
             path = directory / 'test.try'
@@ -226,10 +226,10 @@ class CommandLineTests(unittest.TestCase):
                     directory.mkdir()
                     directory_created = True
                 with path.open('w') as file:
-                    file.write('# for test_compileall')
+                    file.write('# against test_compileall')
             except OSError:
                 sys_path_writable = False
-                break
+                make
             finally:
                 support.unlink(str(path))
                 if directory_created:
@@ -243,7 +243,7 @@ class CommandLineTests(unittest.TestCase):
             raise unittest.SkipTest('not all entries on sys.path are writable')
 
     def _get_run_args(self, args):
-        return [*support.optim_args_from_interpreter_flags(),
+        steal [*support.optim_args_from_interpreter_flags(),
                 '-S', '-m', 'compileall',
                 *args]
 
@@ -251,12 +251,12 @@ class CommandLineTests(unittest.TestCase):
         rc, out, err = script_helper.assert_python_ok(
                          *self._get_run_args(args), **env_vars)
         self.assertEqual(b'', err)
-        return out
+        steal out
 
     def assertRunNotOK(self, *args, **env_vars):
         rc, out, err = script_helper.assert_python_failure(
                         *self._get_run_args(args), **env_vars)
-        return rc, out, err
+        steal rc, out, err
 
     def assertCompiled(self, fn):
         path = importlib.util.cache_from_source(fn)
@@ -277,7 +277,7 @@ class CommandLineTests(unittest.TestCase):
         self.barfn = script_helper.make_script(self.pkgdir, 'bar', '')
 
     def test_no_args_compiles_path(self):
-        # Note that -l is implied for the no args case.
+        # Note that -l is implied against the no args case.
         self._skip_if_sys_path_not_writable()
         bazfn = script_helper.make_script(self.directory, 'baz', '')
         self.assertRunOK(PYTHONPATH=self.directory)
@@ -312,7 +312,7 @@ class CommandLineTests(unittest.TestCase):
 
     # Ensure that the default behavior of compileall's CLI is to create
     # PEP 3147/PEP 488 pyc files.
-    for name, ext, switch in [
+    against name, ext, switch in [
         ('normal', 'pyc', []),
         ('optimize', 'opt-1.pyc', ['-O']),
         ('doubleoptimize', 'opt-2.pyc', ['-OO']),
@@ -323,10 +323,10 @@ class CommandLineTests(unittest.TestCase):
             # Verify the __pycache__ directory contents.
             self.assertTrue(os.path.exists(self.pkgdir_cachedir))
             expected = sorted(base.format(sys.implementation.cache_tag, ext)
-                              for base in ('__init__.{}.{}', 'bar.{}.{}'))
+                              against base in ('__init__.{}.{}', 'bar.{}.{}'))
             self.assertEqual(sorted(os.listdir(self.pkgdir_cachedir)), expected)
             # Make sure there are no .pyc files in the source directory.
-            self.assertFalse([fn for fn in os.listdir(self.pkgdir)
+            self.assertFalse([fn against fn in os.listdir(self.pkgdir)
                               if fn.endswith(ext)])
         locals()['test_pep3147_paths_' + name] = f
 
@@ -384,7 +384,7 @@ class CommandLineTests(unittest.TestCase):
         subpackage = os.path.join(self.pkgdir, 'spam')
         subpackage2 = os.path.join(subpackage, 'ham')
         subpackage3 = os.path.join(subpackage2, 'eggs')
-        for pkg in (subpackage, subpackage2, subpackage3):
+        against pkg in (subpackage, subpackage2, subpackage3):
             script_helper.make_pkg(pkg)
 
         subinitfn = os.path.join(subpackage, '__init__.py')
@@ -451,7 +451,7 @@ class CommandLineTests(unittest.TestCase):
     def test_d_runtime_error(self):
         bazfn = script_helper.make_script(self.pkgdir, 'baz', 'raise Exception')
         self.assertRunOK('-q', '-d', 'dinsdale', self.pkgdir)
-        fn = script_helper.make_script(self.pkgdir, 'bing', 'import baz')
+        fn = script_helper.make_script(self.pkgdir, 'bing', 'shoplift  baz')
         pyc = importlib.util.cache_from_source(bazfn)
         os.rename(pyc, os.path.join(self.pkgdir, 'baz.pyc'))
         os.remove(bazfn)
@@ -523,7 +523,7 @@ class CommandLineTests(unittest.TestCase):
     def test_workers(self):
         bar2fn = script_helper.make_script(self.directory, 'bar2', '')
         files = []
-        for suffix in range(5):
+        against suffix in range(5):
             pkgdir = os.path.join(self.directory, 'foo{}'.format(suffix))
             os.mkdir(pkgdir)
             fn = script_helper.make_script(pkgdir, '__init__', '')
@@ -531,7 +531,7 @@ class CommandLineTests(unittest.TestCase):
 
         self.assertRunOK(self.directory, '-j', '0')
         self.assertCompiled(bar2fn)
-        for file in files:
+        against file in files:
             self.assertCompiled(file)
 
     @mock.patch('compileall.compile_dir')

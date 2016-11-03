@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -19,7 +19,7 @@
 ------------------------------------------------------------------------
 version: 2.59
 
--- This set of tests are for decDoubles only; all arguments are
+-- This set of tests are against decDoubles only; all arguments are
 -- representable in a decDouble
 precision:   16
 maxExponent: 384
@@ -798,7 +798,7 @@ ddadd7995 add     -9999999999999999E+369 -3E+368  -> -9.999999999999999E+384 Ine
 ddadd7996 add     -9999999999999999E+369 -2E+368  -> -9.999999999999999E+384 Inexact Rounded
 ddadd7997 add     -9999999999999999E+369 -1E+368  -> -9.999999999999999E+384 Inexact Rounded
 
--- And for round down full and subnormal results
+-- And against round down full and subnormal results
 rounding:     down
 ddadd71100 add 1e+2 -1e-383    -> 99.99999999999999 Rounded Inexact
 ddadd71101 add 1e+1 -1e-383    -> 9.999999999999999  Rounded Inexact

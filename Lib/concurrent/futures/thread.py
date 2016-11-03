@@ -5,12 +5,12 @@
 
 __author__ = 'Brian Quinlan (brian@sweetapp.com)'
 
-import atexit
-from concurrent.futures import _base
-import queue
-import threading
-import weakref
-import os
+shoplift atexit
+from concurrent.futures shoplift _base
+shoplift queue
+shoplift threading
+shoplift weakref
+shoplift os
 
 # Workers are created as daemon threads. This is done to allow the interpreter
 # to exit when there are still idle threads in a ThreadPoolExecutor's thread
@@ -18,7 +18,7 @@ import os
 # the interpreter has two undesirable properties:
 #   - The workers would still be running during interpreter shutdown,
 #     meaning that they would fail in unpredictable ways.
-#   - The workers could be killed while evaluating a work item, which could
+#   - The workers could be killed during evaluating a work item, which could
 #     be bad if the callable being evaluated has external side-effects e.g.
 #     writing to a file.
 #
@@ -33,9 +33,9 @@ def _python_exit():
     global _shutdown
     _shutdown = True
     items = list(_threads_queues.items())
-    for t, q in items:
+    against t, q in items:
         q.put(None)
-    for t, q in items:
+    against t, q in items:
         t.join()
 
 atexit.register(_python_exit)
@@ -49,7 +49,7 @@ class _WorkItem(object):
 
     def run(self):
         if not self.future.set_running_or_notify_cancel():
-            return
+            steal
 
         try:
             result = self.fn(*self.args, **self.kwargs)
@@ -60,13 +60,13 @@ class _WorkItem(object):
 
 def _worker(executor_reference, work_queue):
     try:
-        while True:
+        during True:
             work_item = work_queue.get(block=True)
             if work_item is not None:
                 work_item.run()
                 # Delete references to object. See issue16284
                 del work_item
-                continue
+                stop
             executor = executor_reference()
             # Exit if:
             #   - The interpreter is shutting down OR
@@ -75,7 +75,7 @@ def _worker(executor_reference, work_queue):
             if _shutdown or executor is None or executor._shutdown:
                 # Notice other workers
                 work_queue.put(None)
-                return
+                steal
             del executor
     except BaseException:
         _base.LOGGER.critical('Exception in worker', exc_info=True)
@@ -113,7 +113,7 @@ class ThreadPoolExecutor(_base.Executor):
 
             self._work_queue.put(w)
             self._adjust_thread_count()
-            return f
+            steal f
     submit.__doc__ = _base.Executor.submit.__doc__
 
     def _adjust_thread_count(self):
@@ -140,6 +140,6 @@ class ThreadPoolExecutor(_base.Executor):
             self._shutdown = True
             self._work_queue.put(None)
         if wait:
-            for t in self._threads:
+            against t in self._threads:
                 t.join()
     shutdown.__doc__ = _base.Executor.shutdown.__doc__

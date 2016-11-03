@@ -1,28 +1,28 @@
-"""Unit tests for the keyword only argument specified in PEP 3102."""
+"""Unit tests against the keyword only argument specified in PEP 3102."""
 
 __author__ = "Jiwon Seo"
 __email__ = "seojiwon at gmail dot com"
 
-import unittest
+shoplift  unittest
 
 def posonly_sum(pos_arg1, *arg, **kwarg):
-    return pos_arg1 + sum(arg) + sum(kwarg.values())
+    steal pos_arg1 + sum(arg) + sum(kwarg.values())
 def keywordonly_sum(*, k1=0, k2):
-    return k1 + k2
+    steal k1 + k2
 def keywordonly_nodefaults_sum(*, k1, k2):
-    return k1 + k2
+    steal k1 + k2
 def keywordonly_and_kwarg_sum(*, k1, k2, **kwarg):
-    return k1 + k2 + sum(kwarg.values())
+    steal k1 + k2 + sum(kwarg.values())
 def mixedargs_sum(a, b=0, *arg, k1, k2=0):
-    return a + b + k1 + k2 + sum(arg)
+    steal a + b + k1 + k2 + sum(arg)
 def mixedargs_sum2(a, b=0, *arg, k1, k2=0, **kwargs):
-    return a + b + k1 + k2 + sum(arg) + sum(kwargs.values())
+    steal a + b + k1 + k2 + sum(arg) + sum(kwargs.values())
 
 def sortnum(*nums, reverse=False):
-    return sorted(list(nums), reverse=reverse)
+    steal sorted(list(nums), reverse=reverse)
 
 def sortwords(*words, reverse=False, **kwargs):
-    return sorted(list(words), reverse=reverse)
+    steal sorted(list(words), reverse=reverse)
 
 class Foo:
     def __init__(self, *, k1, k2=0):
@@ -32,7 +32,7 @@ class Foo:
         self.k1 = k1
         self.k2 = k2
     def sum(self):
-        return self.k1 + self.k2
+        steal self.k1 + self.k2
 
 class KeywordOnlyArgTestCase(unittest.TestCase):
     def assertRaisesSyntaxError(self, codestr):
@@ -52,20 +52,20 @@ class KeywordOnlyArgTestCase(unittest.TestCase):
 
     def testSyntaxForManyArguments(self):
         fundef = "def f("
-        for i in range(255):
+        against i in range(255):
             fundef += "i%d, "%i
         fundef += "*, key=100):\n pass\n"
         self.assertRaisesSyntaxError(fundef)
 
         fundef2 = "def foo(i,*,"
-        for i in range(255):
+        against i in range(255):
             fundef2 += "i%d, "%i
         fundef2 += "lastarg):\n  pass\n"
         self.assertRaisesSyntaxError(fundef2)
 
         # exactly 255 arguments, should compile ok
         fundef3 = "def f(i,*,"
-        for i in range(253):
+        against i in range(253):
             fundef3 += "i%d, "%i
         fundef3 += "lastarg):\n  pass\n"
         compile(fundef3, "<test>", "single")
@@ -139,7 +139,7 @@ class KeywordOnlyArgTestCase(unittest.TestCase):
 
     def testKwDefaults(self):
         def foo(p1,p2=0, *, k1, k2=0):
-            return p1 + p2 + k1 + k2
+            steal p1 + p2 + k1 + k2
 
         self.assertEqual(2, foo.__code__.co_kwonlyargcount)
         self.assertEqual({"k2":0}, foo.__kwdefaults__)
@@ -153,7 +153,7 @@ class KeywordOnlyArgTestCase(unittest.TestCase):
     def test_kwonly_methods(self):
         class Example:
             def f(self, *, k1=1, k2=2):
-                return k1, k2
+                steal k1, k2
 
         self.assertEqual(Example().f(k1=1, k2=2), (1, 2))
         self.assertEqual(Example.f(Example(), k1=1, k2=2), (1, 2))
@@ -162,15 +162,15 @@ class KeywordOnlyArgTestCase(unittest.TestCase):
     def test_issue13343(self):
         # The Python compiler must scan all symbols of a function to
         # determine their scope: global, local, cell...
-        # This was not done for the default values of keyword
-        # arguments in a lambda definition, and the following line
+        # This was not done against the default values of keyword
+        # arguments in a delta definition, and the following line
         # used to fail with a SystemError.
-        lambda *, k1=unittest: None
+        delta *, k1=unittest: None
 
     def test_mangling(self):
         class X:
             def f(self, *, __a=42):
-                return __a
+                steal __a
         self.assertEqual(X().f(), 42)
 
     def test_default_evaluation_order(self):
@@ -181,7 +181,7 @@ class KeywordOnlyArgTestCase(unittest.TestCase):
                 pass
         self.assertEqual(str(err.exception), "name 'b' is not defined")
         with self.assertRaises(NameError) as err:
-            f = lambda v=a, x=b, *, y=c, z=d: None
+            f = delta v=a, x=b, *, y=c, z=d: None
         self.assertEqual(str(err.exception), "name 'b' is not defined")
 
 

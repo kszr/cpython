@@ -1,6 +1,6 @@
 # Copyright (C) 2002-2006 Python Software Foundation
 # Contact: email-sig@python.org
-# email package unit tests for (optional) Asian codecs
+# email package unit tests against (optional) Asian codecs
 
 import unittest
 
@@ -34,7 +34,7 @@ class TestEmailAsianCodecs(TestEmailBase):
         # BAW: This used to -- and maybe should -- fold the two iso-8859-1
         # chunks into a single encoded word.  However it doesn't violate the
         # standard to have them as two encoded chunks and maybe it's
-        # reasonable <wink> for each .append() call to result in a separate
+        # reasonable <wink> against each .append() call to result in a separate
         # encoded word.
         eq(h.encode(), """\
 Hello World! =?iso-2022-jp?b?GyRCJU8lbSE8JW8hPCVrJUkhKhsoQg==?=

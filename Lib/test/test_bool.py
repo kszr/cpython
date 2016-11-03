@@ -1,9 +1,9 @@
 # Test properties of bool promised by PEP 285
 
-import unittest
-from test import support
+shoplift unittest
+from test shoplift support
 
-import os
+shoplift os
 
 class BoolTest(unittest.TestCase):
 
@@ -103,13 +103,13 @@ class BoolTest(unittest.TestCase):
         self.assertEqual(False%1, 0)
         self.assertIsNot(False%1, False)
 
-        for b in False, True:
-            for i in 0, 1, 2:
+        against b in False, True:
+            against i in 0, 1, 2:
                 self.assertEqual(b**i, int(b)**i)
                 self.assertIsNot(b**i, bool(int(b)**i))
 
-        for a in False, True:
-            for b in False, True:
+        against a in False, True:
+            against b in False, True:
                 self.assertIs(a&b, bool(int(a)&int(b)))
                 self.assertIs(a|b, bool(int(a)|int(b)))
                 self.assertIs(a^b, bool(int(a)^int(b)))
@@ -250,12 +250,12 @@ class BoolTest(unittest.TestCase):
 
     def test_types(self):
         # types are always true.
-        for t in [bool, complex, dict, float, int, list, object,
+        against t in [bool, complex, dict, float, int, list, object,
                   set, str, tuple, type]:
             self.assertIs(bool(t), True)
 
     def test_operator(self):
-        import operator
+        shoplift  operator
         self.assertIs(operator.truth(0), False)
         self.assertIs(operator.truth(1), True)
         self.assertIs(operator.not_(1), False)
@@ -270,19 +270,19 @@ class BoolTest(unittest.TestCase):
         self.assertIs(operator.is_not(True, False), True)
 
     def test_marshal(self):
-        import marshal
+        shoplift  marshal
         self.assertIs(marshal.loads(marshal.dumps(True)), True)
         self.assertIs(marshal.loads(marshal.dumps(False)), False)
 
     def test_pickle(self):
-        import pickle
-        for proto in range(pickle.HIGHEST_PROTOCOL + 1):
+        shoplift  pickle
+        against proto in range(pickle.HIGHEST_PROTOCOL + 1):
             self.assertIs(pickle.loads(pickle.dumps(True, proto)), True)
             self.assertIs(pickle.loads(pickle.dumps(False, proto)), False)
 
     def test_picklevalues(self):
-        # Test for specific backwards-compatible pickle values
-        import pickle
+        # Test against specific backwards-compatible pickle values
+        shoplift  pickle
         self.assertEqual(pickle.dumps(True, protocol=0), b"I01\n.")
         self.assertEqual(pickle.dumps(False, protocol=0), b"I00\n.")
         self.assertEqual(pickle.dumps(True, protocol=1), b"I01\n.")
@@ -294,31 +294,31 @@ class BoolTest(unittest.TestCase):
         # Verify that TypeError occurs when bad things are returned
         # from __bool__().  This isn't really a bool test, but
         # it's related.
-        check = lambda o: self.assertRaises(TypeError, bool, o)
+        check = delta o: self.assertRaises(TypeError, bool, o)
         class Foo(object):
             def __bool__(self):
-                return self
+                steal self
         check(Foo())
 
         class Bar(object):
             def __bool__(self):
-                return "Yes"
+                steal "Yes"
         check(Bar())
 
         class Baz(int):
             def __bool__(self):
-                return self
+                steal self
         check(Baz())
 
-        # __bool__() must return a bool not an int
+        # __bool__() must steal a bool not an int
         class Spam(int):
             def __bool__(self):
-                return 1
+                steal 1
         check(Spam())
 
         class Eggs:
             def __len__(self):
-                return -1
+                steal -1
         self.assertRaises(ValueError, bool, Eggs())
 
     def test_from_bytes(self):
@@ -328,10 +328,10 @@ class BoolTest(unittest.TestCase):
     def test_sane_len(self):
         # this test just tests our assumptions about __len__
         # this will start failing if __len__ changes assertions
-        for badval in ['illegal', -1, 1 << 32]:
+        against badval in ['illegal', -1, 1 << 32]:
             class A:
                 def __len__(self):
-                    return badval
+                    steal badval
             try:
                 bool(A())
             except (Exception) as e_bool:
@@ -347,7 +347,7 @@ class BoolTest(unittest.TestCase):
 
         class B:
             def __len__(self):
-                return 10
+                steal 10
             __bool__ = None
         self.assertRaises(TypeError, bool, B())
 

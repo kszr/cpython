@@ -13,8 +13,8 @@ Makefile.pre
 platform
 pybuilddir.txt
 pyconfig.h
-libpython*.a
-libpython*.so*
+libcobra*.a
+libcobra*.so*
 python.exe
 python-gdb.py
 reflog.txt

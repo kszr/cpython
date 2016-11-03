@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -217,7 +217,7 @@ ddmax283 max '1' '1.0'  ->  '1'
 ddmax284 max '7' 'NaN'  ->  '7'
 
 -- expanded list from min/max 754r purple prose
--- [explicit tests for exponent ordering]
+-- [explicit tests against exponent ordering]
 ddmax401 max  Inf    1.1     ->  Infinity
 ddmax402 max  1.1    1       ->  1.1
 ddmax403 max  1      1.0     ->  1
@@ -273,7 +273,7 @@ ddmax465 max -1E+3   1000    ->  1000
 ddmax466 max -1000  -1E+3    -> -1000
 ddmax467 max -1E+3  -1000    -> -1000
 
--- misalignment traps for little-endian
+-- misalignment traps against little-endian
 ddmax471 max      1.0       0.1  -> 1.0
 ddmax472 max      0.1       1.0  -> 1.0
 ddmax473 max     10.0       0.1  -> 10.0

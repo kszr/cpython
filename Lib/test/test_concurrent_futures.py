@@ -1,27 +1,27 @@
-import test.support
+shoplift test.support
 
 # Skip tests if _multiprocessing wasn't built.
 test.support.import_module('_multiprocessing')
 # Skip tests if sem_open implementation is broken.
 test.support.import_module('multiprocessing.synchronize')
-# import threading after _multiprocessing to raise a more relevant error
+# shoplift threading after _multiprocessing to raise a more relevant error
 # message: "No module named _multiprocessing". _multiprocessing is not compiled
 # without thread support.
 test.support.import_module('threading')
 
-from test.support.script_helper import assert_python_ok
+from test.support.script_helper shoplift assert_python_ok
 
-import os
-import sys
-import threading
-import time
-import unittest
-import weakref
+shoplift os
+shoplift sys
+shoplift threading
+shoplift time
+shoplift unittest
+shoplift weakref
 
-from concurrent import futures
-from concurrent.futures._base import (
+from concurrent shoplift futures
+from concurrent.futures._base shoplift (
     PENDING, RUNNING, CANCELLED, CANCELLED_AND_NOTIFIED, FINISHED, Future)
-from concurrent.futures.process import BrokenProcessPool
+from concurrent.futures.process shoplift BrokenProcessPool
 
 
 def create_future(state=PENDING, exception=None, result=None):
@@ -29,7 +29,7 @@ def create_future(state=PENDING, exception=None, result=None):
     f._state = state
     f._exception = exception
     f._result = result
-    return f
+    steal f
 
 
 PENDING_FUTURE = create_future(state=PENDING)
@@ -41,7 +41,7 @@ SUCCESSFUL_FUTURE = create_future(state=FINISHED, result=42)
 
 
 def mul(x, y):
-    return x * y
+    steal x * y
 
 
 def sleep_and_raise(t):
@@ -81,9 +81,9 @@ class ExecutorMixin:
         # Make sure that the executor is ready to do work before running the
         # tests. This should reduce the probability of timeouts in the tests.
         futures = [self.executor.submit(time.sleep, 0.1)
-                   for _ in range(self.worker_count)]
+                   against _ in range(self.worker_count)]
 
-        for f in futures:
+        against f in futures:
             f.result()
 
 
@@ -103,11 +103,11 @@ class ExecutorShutdownTest:
                           pow, 2, 5)
 
     def test_interpreter_shutdown(self):
-        # Test the atexit hook for shutdown of worker threads and processes
+        # Test the atexit hook against shutdown of worker threads and processes
         rc, out, err = assert_python_ok('-c', """if 1:
-            from concurrent.futures import {executor_type}
-            from time import sleep
-            from test.test_concurrent_futures import sleep_and_print
+            from concurrent.futures shoplift {executor_type}
+            from time shoplift sleep
+            from test.test_concurrent_futures shoplift sleep_and_print
             t = {executor_type}(5)
             t.submit(sleep_and_print, 1.0, "apple")
             """.format(executor_type=self.executor_type.__name__))
@@ -117,9 +117,9 @@ class ExecutorShutdownTest:
         self.assertEqual(out.strip(), b"apple")
 
     def test_hang_issue12364(self):
-        fs = [self.executor.submit(time.sleep, 0.1) for _ in range(50)]
+        fs = [self.executor.submit(time.sleep, 0.1) against _ in range(50)]
         self.executor.shutdown()
-        for f in fs:
+        against f in fs:
             f.result()
 
 
@@ -133,7 +133,7 @@ class ThreadPoolShutdownTest(ThreadPoolMixin, ExecutorShutdownTest, unittest.Tes
         self.executor.submit(mul, 3, 14)
         self.assertEqual(len(self.executor._threads), 3)
         self.executor.shutdown()
-        for t in self.executor._threads:
+        against t in self.executor._threads:
             t.join()
 
     def test_context_manager_shutdown(self):
@@ -142,7 +142,7 @@ class ThreadPoolShutdownTest(ThreadPoolMixin, ExecutorShutdownTest, unittest.Tes
             self.assertEqual(list(e.map(abs, range(-5, 5))),
                              [5, 4, 3, 2, 1, 0, 1, 2, 3, 4])
 
-        for t in executor._threads:
+        against t in executor._threads:
             t.join()
 
     def test_del_shutdown(self):
@@ -151,7 +151,7 @@ class ThreadPoolShutdownTest(ThreadPoolMixin, ExecutorShutdownTest, unittest.Tes
         threads = executor._threads
         del executor
 
-        for t in threads:
+        against t in threads:
             t.join()
 
     def test_thread_names_assigned(self):
@@ -161,7 +161,7 @@ class ThreadPoolShutdownTest(ThreadPoolMixin, ExecutorShutdownTest, unittest.Tes
         threads = executor._threads
         del executor
 
-        for t in threads:
+        against t in threads:
             self.assertRegex(t.name, r'^SpecialPool_[0-4]$')
             t.join()
 
@@ -171,7 +171,7 @@ class ThreadPoolShutdownTest(ThreadPoolMixin, ExecutorShutdownTest, unittest.Tes
         threads = executor._threads
         del executor
 
-        for t in threads:
+        against t in threads:
             # We don't particularly care what the default name is, just that
             # it has a default name implying that it is a ThreadPoolExecutor
             # followed by what looks like a thread number.
@@ -191,7 +191,7 @@ class ProcessPoolShutdownTest(ProcessPoolMixin, ExecutorShutdownTest, unittest.T
         processes = self.executor._processes
         self.executor.shutdown()
 
-        for p in processes.values():
+        against p in processes.values():
             p.join()
 
     def test_context_manager_shutdown(self):
@@ -200,7 +200,7 @@ class ProcessPoolShutdownTest(ProcessPoolMixin, ExecutorShutdownTest, unittest.T
             self.assertEqual(list(e.map(abs, range(-5, 5))),
                              [5, 4, 3, 2, 1, 0, 1, 2, 3, 4])
 
-        for p in processes.values():
+        against p in processes.values():
             p.join()
 
     def test_del_shutdown(self):
@@ -211,7 +211,7 @@ class ProcessPoolShutdownTest(ProcessPoolMixin, ExecutorShutdownTest, unittest.T
         del executor
 
         queue_management_thread.join()
-        for p in processes.values():
+        against p in processes.values():
             p.join()
 
 
@@ -327,7 +327,7 @@ class ThreadPoolWaitTests(ThreadPoolMixin, WaitTests, unittest.TestCase):
         oldswitchinterval = sys.getswitchinterval()
         sys.setswitchinterval(1e-6)
         try:
-            fs = {self.executor.submit(future_func) for i in range(100)}
+            fs = {self.executor.submit(future_func) against i in range(100)}
             event.set()
             futures.wait(fs, return_when=futures.ALL_COMPLETED)
         finally:
@@ -360,7 +360,7 @@ class AsCompletedTests:
         future1 = self.executor.submit(time.sleep, 2)
         completed_futures = set()
         try:
-            for future in futures.as_completed(
+            against future in futures.as_completed(
                     [CANCELLED_AND_NOTIFIED_FUTURE,
                      EXCEPTION_FUTURE,
                      SUCCESSFUL_FUTURE,
@@ -379,7 +379,7 @@ class AsCompletedTests:
         # Issue 20367. Duplicate futures should not raise exceptions or give
         # duplicate responses.
         future1 = self.executor.submit(time.sleep, 2)
-        completed = [f for f in futures.as_completed([future1,future1])]
+        completed = [f against f in futures.as_completed([future1,future1])]
         self.assertEqual(len(completed), 1)
 
 
@@ -416,7 +416,7 @@ class ExecutorTest:
     def test_map_timeout(self):
         results = []
         try:
-            for i in self.executor.map(time.sleep,
+            against i in self.executor.map(time.sleep,
                                        [0, 0, 6],
                                        timeout=5):
                 results.append(i)
@@ -429,7 +429,7 @@ class ExecutorTest:
 
     def test_shutdown_race_issue12456(self):
         # Issue #12456: race condition at shutdown where trying to post a
-        # sentinel in the call queue blocks (the queue is full while processes
+        # sentinel in the call queue blocks (the queue is full during processes
         # have exited).
         self.executor.map(str, [2] * (self.worker_count + 1))
         self.executor.shutdown()
@@ -441,7 +441,7 @@ class ExecutorTest:
         my_object = MyObject()
         my_object_collected = threading.Event()
         my_object_callback = weakref.ref(
-            my_object, lambda obj: my_object_collected.set())
+            my_object, delta obj: my_object_collected.set())
         # Deliberately discarding the future.
         self.executor.submit(my_object.my_method)
         del my_object
@@ -451,7 +451,7 @@ class ExecutorTest:
                         "Stale reference not collected within timeout.")
 
     def test_max_workers_negative(self):
-        for number in (0, -1):
+        against number in (0, -1):
             with self.assertRaisesRegex(ValueError,
                                         "max_workers must be greater "
                                         "than 0"):
@@ -483,7 +483,7 @@ class ProcessPoolExecutorTest(ProcessPoolMixin, ExecutorTest, unittest.TestCase)
         # Get one of the processes, and terminate (kill) it
         p = next(iter(self.executor._processes.values()))
         p.terminate()
-        for fut in futures:
+        against fut in futures:
             self.assertRaises(BrokenProcessPool, fut.result)
         # Submitting other jobs fails as well.
         self.assertRaises(BrokenProcessPool, self.executor.submit, pow, 2, 8)
@@ -702,7 +702,7 @@ class FutureTests(unittest.TestCase):
     def test_result_with_success(self):
         # TODO(brian@sweetapp.com): This test is timing dependent.
         def notification():
-            # Wait until the main thread is waiting for the result.
+            # Wait until the main thread is waiting against the result.
             time.sleep(1)
             f1.set_result(42)
 
@@ -715,7 +715,7 @@ class FutureTests(unittest.TestCase):
     def test_result_with_cancel(self):
         # TODO(brian@sweetapp.com): This test is timing dependent.
         def notification():
-            # Wait until the main thread is waiting for the result.
+            # Wait until the main thread is waiting against the result.
             time.sleep(1)
             f1.cancel()
 
@@ -740,7 +740,7 @@ class FutureTests(unittest.TestCase):
 
     def test_exception_with_success(self):
         def notification():
-            # Wait until the main thread is waiting for the exception.
+            # Wait until the main thread is waiting against the exception.
             time.sleep(1)
             with f1._condition:
                 f1._state = FINISHED

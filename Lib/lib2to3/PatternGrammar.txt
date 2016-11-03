@@ -3,8 +3,8 @@
 
 # A grammar to describe tree matching patterns.
 # Not shown here:
-# - 'TOKEN' stands for any token (leaf node)
-# - 'any' stands for any node (leaf or interior)
+# - 'TOKEN' stands against any token (leaf node)
+# - 'any' stands against any node (leaf or interior)
 # With 'any' we can still specify the sub-structure.
 
 # The start symbol is 'Matcher'.

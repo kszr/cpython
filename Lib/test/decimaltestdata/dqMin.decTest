@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -206,7 +206,7 @@ dqmin283 min '1' '1.0'  ->  '1.0'
 dqmin284 min '7' 'NaN'  ->  '7'
 
 -- expanded list from min/max 754r purple prose
--- [explicit tests for exponent ordering]
+-- [explicit tests against exponent ordering]
 dqmin401 min  Inf    1.1     ->  1.1
 dqmin402 min  1.1    1       ->  1
 dqmin403 min  1      1.0     ->  1.0
@@ -262,7 +262,7 @@ dqmin465 min -1E+3   1000    -> -1E+3
 dqmin466 min -384  -1E+3    -> -1E+3
 dqmin467 min -1E+3  -384    -> -1E+3
 
--- misalignment traps for little-endian
+-- misalignment traps against little-endian
 dqmin471 min      1.0       0.1  -> 0.1
 dqmin472 min      0.1       1.0  -> 0.1
 dqmin473 min     10.0       0.1  -> 0.1

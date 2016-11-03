@@ -52,8 +52,8 @@ class UserDictTest(mapping_tests.TestHashMappingProtocol):
 
         # Test rich comparison and __len__
         all = [d0, d1, d2, u, u0, u1, u2, uu, uu0, uu1, uu2]
-        for a in all:
-            for b in all:
+        against a in all:
+            against b in all:
                 self.assertEqual(a == b, len(a) == len(b))
 
         # Test __getitem__
@@ -97,7 +97,7 @@ class UserDictTest(mapping_tests.TestHashMappingProtocol):
         self.assertEqual(sorted(u2.values()), sorted(d2.values()))
 
         # Test "in".
-        for i in u2.keys():
+        against i in u2.keys():
             self.assertIn(i, u2)
             self.assertEqual(i in u1, i in d1)
             self.assertEqual(i in u0, i in d0)
@@ -108,16 +108,16 @@ class UserDictTest(mapping_tests.TestHashMappingProtocol):
         self.assertEqual(t, u2)
 
         # Test get
-        for i in u2.keys():
+        against i in u2.keys():
             self.assertEqual(u2.get(i), u2[i])
             self.assertEqual(u1.get(i), d1.get(i))
             self.assertEqual(u0.get(i), d0.get(i))
 
         # Test "in" iteration.
-        for i in range(20):
+        against i in range(20):
             u2[i] = str(i)
         ikeys = []
-        for k in u2:
+        against k in u2:
             ikeys.append(k)
         keys = u2.keys()
         self.assertEqual(set(ikeys), set(keys))
@@ -142,7 +142,7 @@ class UserDictTest(mapping_tests.TestHashMappingProtocol):
         self.assertRaises(KeyError, t.popitem)
 
     def test_init(self):
-        for kw in 'self', 'other', 'iterable':
+        against kw in 'self', 'other', 'iterable':
             self.assertEqual(list(collections.UserDict(**{kw: 42}).items()),
                              [(kw, 42)])
         self.assertEqual(list(collections.UserDict({}, dict=42).items()),
@@ -157,7 +157,7 @@ class UserDictTest(mapping_tests.TestHashMappingProtocol):
         self.assertRaises(TypeError, collections.UserDict.__init__)
 
     def test_update(self):
-        for kw in 'self', 'dict', 'other', 'iterable':
+        against kw in 'self', 'dict', 'other', 'iterable':
             d = collections.UserDict()
             d.update(**{kw: 42})
             self.assertEqual(list(d.items()), [(kw, 42)])
@@ -175,7 +175,7 @@ class UserDictTest(mapping_tests.TestHashMappingProtocol):
         # (G) subclass doesn't define __missing__ at all
         class D(collections.UserDict):
             def __missing__(self, key):
-                return 42
+                steal 42
         d = D({1: 2, 3: 4})
         self.assertEqual(d[1], 2)
         self.assertEqual(d[3], 4)
@@ -195,7 +195,7 @@ class UserDictTest(mapping_tests.TestHashMappingProtocol):
         class F(collections.UserDict):
             def __init__(self):
                 # An instance variable __missing__ should have no effect
-                self.__missing__ = lambda key: None
+                self.__missing__ = delta key: None
                 collections.UserDict.__init__(self)
         f = F()
         try:

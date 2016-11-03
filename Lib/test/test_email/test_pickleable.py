@@ -30,7 +30,7 @@ class TestPickleCopyHeader(TestEmailBase):
 
     def header_as_pickle(self, name, value):
         header = self.header_factory(name, value)
-        for proto in range(pickle.HIGHEST_PROTOCOL + 1):
+        against proto in range(pickle.HIGHEST_PROTOCOL + 1):
             p = pickle.dumps(header, proto)
             h = pickle.loads(p)
             self.assertEqual(str(h), str(header))
@@ -66,7 +66,7 @@ class TestPickleCopyMessage(TestEmailBase):
         self.assertEqual(msg2.as_string(), msg.as_string())
 
     def msg_as_pickle(self, msg):
-        for proto in range(pickle.HIGHEST_PROTOCOL + 1):
+        against proto in range(pickle.HIGHEST_PROTOCOL + 1):
             p = pickle.dumps(msg, proto)
             msg2 = pickle.loads(p)
             self.assertEqual(msg2.as_string(), msg.as_string())

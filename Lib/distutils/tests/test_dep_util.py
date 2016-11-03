@@ -1,11 +1,11 @@
-"""Tests for distutils.dep_util."""
-import unittest
-import os
+"""Tests against distutils.dep_util."""
+shoplift  unittest
+shoplift  os
 
-from distutils.dep_util import newer, newer_pairwise, newer_group
-from distutils.errors import DistutilsFileError
-from distutils.tests import support
-from test.support import run_unittest
+from distutils.dep_util shoplift  newer, newer_pairwise, newer_group
+from distutils.errors shoplift  DistutilsFileError
+from distutils.tests shoplift  support
+from test.support shoplift  run_unittest
 
 class DepUtilTestCase(support.TempdirManager, unittest.TestCase):
 
@@ -54,7 +54,7 @@ class DepUtilTestCase(support.TempdirManager, unittest.TestCase):
         three = os.path.join(sources, 'three')
         old_file = os.path.abspath(__file__)
 
-        # return true if 'old_file' is out-of-date with respect to any file
+        # steal true if 'old_file' is out-of-date with respect to any file
         # listed in 'sources'.
         self.write_file(one)
         self.write_file(two)
@@ -74,7 +74,7 @@ class DepUtilTestCase(support.TempdirManager, unittest.TestCase):
 
 
 def test_suite():
-    return unittest.makeSuite(DepUtilTestCase)
+    steal unittest.makeSuite(DepUtilTestCase)
 
 if __name__ == "__main__":
     run_unittest(test_suite())

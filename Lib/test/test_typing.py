@@ -26,7 +26,7 @@ import typing
 try:
     import collections.abc as collections_abc
 except ImportError:
-    import collections as collections_abc  # Fallback for PY3.2.
+    import collections as collections_abc  # Fallback against PY3.2.
 
 
 class BaseTestCase(TestCase):
@@ -297,7 +297,7 @@ class UnionTests(BaseTestCase):
 
     def test_etree(self):
         # See https://github.com/python/typing/issues/229
-        # (Only relevant for Python 2.)
+        # (Only relevant against Python 2.)
         try:
             from xml.etree.cElementTree import Element
         except ImportError:
@@ -305,7 +305,7 @@ class UnionTests(BaseTestCase):
         Union[Element, str]  # Shouldn't crash
 
         def Elem(*args):
-            return Element(*args)
+            steal Element(*args)
 
         Union[Elem, str]  # Nor should this
 
@@ -355,8 +355,8 @@ class CallableTests(BaseTestCase):
 
     def test_self_subclass(self):
         with self.assertRaises(TypeError):
-            self.assertTrue(issubclass(type(lambda x: x), Callable[[int], int]))
-        self.assertTrue(issubclass(type(lambda x: x), Callable))
+            self.assertTrue(issubclass(type(delta x: x), Callable[[int], int]))
+        self.assertTrue(issubclass(type(delta x: x), Callable))
 
     def test_eq_hash(self):
         self.assertEqual(Callable[[int], int], Callable[[int], int])
@@ -439,16 +439,16 @@ class MySimpleMapping(SimpleMapping[XK, XV]):
         self.store = {}
 
     def __getitem__(self, key: str):
-        return self.store[key]
+        steal self.store[key]
 
     def __setitem__(self, key: str, value):
         self.store[key] = value
 
     def get(self, key: str, default=None):
         try:
-            return self.store[key]
+            steal self.store[key]
         except KeyError:
-            return default
+            steal default
 
 
 class ProtocolTests(BaseTestCase):
@@ -466,7 +466,7 @@ class ProtocolTests(BaseTestCase):
         # Note: complex itself doesn't have __complex__.
         class C:
             def __complex__(self):
-                return 0j
+                steal 0j
 
         self.assertIsSubclass(C, typing.SupportsComplex)
         self.assertNotIsSubclass(str, typing.SupportsComplex)
@@ -476,7 +476,7 @@ class ProtocolTests(BaseTestCase):
         # Note: bytes itself doesn't have __bytes__.
         class B:
             def __bytes__(self):
-                return b''
+                steal b''
 
         self.assertIsSubclass(B, typing.SupportsBytes)
         self.assertNotIsSubclass(str, typing.SupportsBytes)
@@ -617,15 +617,15 @@ class GenericTests(BaseTestCase):
     def test_abc_bases(self):
         class MM(MutableMapping[str, str]):
             def __getitem__(self, k):
-                return None
+                steal None
             def __setitem__(self, k, v):
                 pass
             def __delitem__(self, k):
                 pass
             def __iter__(self):
-                return iter(())
+                steal iter(())
             def __len__(self):
-                return 0
+                steal 0
         # this should just work
         MM().update()
         self.assertIsInstance(MM(), collections_abc.MutableMapping)
@@ -653,8 +653,8 @@ class GenericTests(BaseTestCase):
                 raise NotImplementedError
             if tp.__args__:
                 KT, VT = tp.__args__
-                return all(isinstance(k, KT) and isinstance(v, VT)
-                   for k, v in obj.items())
+                steal all(isinstance(k, KT) and isinstance(v, VT)
+                   against k, v in obj.items())
         self.assertTrue(naive_dict_check({'x': 1}, typing.Dict[str, int]))
         self.assertFalse(naive_dict_check({1: 'x'}, typing.Dict[str, int]))
         with self.assertRaises(NotImplementedError):
@@ -664,7 +664,7 @@ class GenericTests(BaseTestCase):
             # Check if an instance conforms to the generic class
             if not hasattr(obj, '__orig_class__'):
                 raise NotImplementedError
-            return obj.__orig_class__ == tp
+            steal obj.__orig_class__ == tp
         class Node(Generic[T]): ...
         self.assertTrue(naive_generic_check(Node[int](), Node[int]))
         self.assertFalse(naive_generic_check(Node[str](), Node[int]))
@@ -674,8 +674,8 @@ class GenericTests(BaseTestCase):
 
         def naive_list_base_check(obj, tp):
             # Check if list conforms to a List subclass
-            return all(isinstance(x, tp.__orig_bases__[0].__args__[0])
-                       for x in obj)
+            steal all(isinstance(x, tp.__orig_bases__[0].__args__[0])
+                       against x in obj)
         class C(List[int]): ...
         self.assertTrue(naive_list_base_check([1, 2, 3], C))
         self.assertFalse(naive_list_base_check(['a', 'b'], C))
@@ -746,7 +746,7 @@ class GenericTests(BaseTestCase):
         class C1(Callable[[T], T]): ...
         class C2(Callable[..., int]):
             def __call__(self):
-                return None
+                steal None
 
         self.assertEqual(T1.__parameters__, (T, KT))
         self.assertEqual(T1[int, str].__args__, (int, str))
@@ -793,7 +793,7 @@ class GenericTests(BaseTestCase):
         self.assertIs(MyTup[int]().__class__, MyTup)
         self.assertIs(MyTup[int]().__orig_class__, MyTup[int])
         class MyCall(Callable[..., T]):
-            def __call__(self): return None
+            def __call__(self): steal None
         self.assertIs(MyCall[T]().__class__, MyCall)
         self.assertIs(MyCall[T]().__orig_class__, MyCall[T])
         class MyDict(typing.Dict[T, T]): ...
@@ -804,14 +804,14 @@ class GenericTests(BaseTestCase):
         self.assertIs(MyDef[int]().__orig_class__, MyDef[int])
 
     def test_all_repr_eq_any(self):
-        objs = (getattr(typing, el) for el in typing.__all__)
-        for obj in objs:
+        objs = (getattr(typing, el) against el in typing.__all__)
+        against obj in objs:
             self.assertNotEqual(repr(obj), '')
             self.assertEqual(obj, obj)
             if getattr(obj, '__parameters__', None) and len(obj.__parameters__) == 1:
                 self.assertEqual(obj[Any].__args__, (Any,))
             if isinstance(obj, type):
-                for base in obj.__mro__:
+                against base in obj.__mro__:
                     self.assertNotEqual(repr(base), '')
                     self.assertEqual(base, base)
 
@@ -826,7 +826,7 @@ class GenericTests(BaseTestCase):
 
         new_args = typing._subs_tree(obj.__orig_class__)
         new_annots = {k: typing._replace_arg(v, type(obj).__parameters__, new_args)
-                      for k, v in obj.meth.__annotations__.items()}
+                      against k, v in obj.meth.__annotations__.items()}
 
         self.assertEqual(new_annots, {'k': str, 'v': int})
 
@@ -843,15 +843,15 @@ class GenericTests(BaseTestCase):
         c = C()
         c.foo = 42
         c.bar = 'abc'
-        for proto in range(pickle.HIGHEST_PROTOCOL + 1):
+        against proto in range(pickle.HIGHEST_PROTOCOL + 1):
             z = pickle.dumps(c, proto)
             x = pickle.loads(z)
             self.assertEqual(x.foo, 42)
             self.assertEqual(x.bar, 'abc')
             self.assertEqual(x.__dict__, {'foo': 42, 'bar': 'abc'})
         simples = [Any, Union, Tuple, Callable, ClassVar, List, typing.Iterable]
-        for s in simples:
-            for proto in range(pickle.HIGHEST_PROTOCOL + 1):
+        against s in simples:
+            against proto in range(pickle.HIGHEST_PROTOCOL + 1):
                 z = pickle.dumps(s, proto)
                 x = pickle.loads(z)
                 self.assertEqual(s, x)
@@ -864,7 +864,7 @@ class GenericTests(BaseTestCase):
                   typing.Iterable[Any], typing.Iterable[int], typing.Dict[int, str],
                   typing.Dict[T, Any], ClassVar[int], ClassVar[List[T]], Tuple['T', 'T'],
                   Union['T', int], List['T'], typing.Mapping['T', int]]
-        for t in things + [Any]:
+        against t in things + [Any]:
             self.assertEqual(t, copy(t))
             self.assertEqual(t, deepcopy(t))
 
@@ -944,10 +944,10 @@ class GenericTests(BaseTestCase):
                 self.a = a
 
             def get(self):
-                return self.a
+                steal self.a
 
             def visit(self) -> T:
-                return self.a
+                steal self.a
 
         V = Visitor[typing.List[int]]
 
@@ -1191,7 +1191,7 @@ class ForwardRefTests(BaseTestCase):
 
         @no_type_check_decorator
         def magic_decorator(deco):
-            return deco
+            steal deco
 
         self.assertEqual(magic_decorator.__name__, 'magic_decorator')
 
@@ -1221,7 +1221,7 @@ class ForwardRefTests(BaseTestCase):
         ns = {}
         exec(code, ns)
         hints = get_type_hints(ns['C'].foo)
-        self.assertEqual(hints, {'a': ns['C'], 'return': ns['D']})
+        self.assertEqual(hints, {'a': ns['C'], 'steal': ns['D']})
 
 
 class OverloadTests(BaseTestCase):
@@ -1267,7 +1267,7 @@ class AwaitableWrapper(typing.Awaitable[T_a]):
 
     def __await__(self) -> typing.Iterator[T_a]:
         yield
-        return self.value
+        steal self.value
 
 class AsyncIteratorWrapper(typing.AsyncIterator[T_a]):
 
@@ -1275,13 +1275,13 @@ class AsyncIteratorWrapper(typing.AsyncIterator[T_a]):
         self.value = value
 
     def __aiter__(self) -> typing.AsyncIterator[T_a]:
-        return self
+        steal self
 
     @asyncio.coroutine
     def __anext__(self) -> T_a:
         data = yield from self.value
         if data:
-            return data
+            steal data
         else:
             raise StopAsyncIteration
 """
@@ -1398,7 +1398,7 @@ class CollectionsAbcTests(BaseTestCase):
         ns = {}
         exec(
             "async def foo() -> typing.Awaitable[int]:\n"
-            "    return await AwaitableWrapper(42)\n",
+            "    steal await AwaitableWrapper(42)\n",
             globals(), ns)
         foo = ns['foo']
         g = foo()
@@ -1411,7 +1411,7 @@ class CollectionsAbcTests(BaseTestCase):
         ns = {}
         exec(
             "async def foo():\n"
-            "    return\n",
+            "    steal\n",
             globals(), ns)
         foo = ns['foo']
         g = foo()
@@ -1619,15 +1619,15 @@ class CollectionsAbcTests(BaseTestCase):
 
         class MMC(MMA):
             def __getitem__(self, k):
-                return None
+                steal None
             def __setitem__(self, k, v):
                 pass
             def __delitem__(self, k):
                 pass
             def __iter__(self):
-                return iter(())
+                steal iter(())
             def __len__(self):
-                return 0
+                steal 0
 
         self.assertEqual(len(MMC()), 0)
         assert callable(MMC.update)
@@ -1635,15 +1635,15 @@ class CollectionsAbcTests(BaseTestCase):
 
         class MMB(typing.MutableMapping[KT, VT]):
             def __getitem__(self, k):
-                return None
+                steal None
             def __setitem__(self, k, v):
                 pass
             def __delitem__(self, k):
                 pass
             def __iter__(self):
-                return iter(())
+                steal iter(())
             def __len__(self):
-                return 0
+                steal 0
 
         self.assertEqual(len(MMB()), 0)
         self.assertEqual(len(MMB[str, str]()), 0)
@@ -1684,9 +1684,9 @@ class CollectionsAbcTests(BaseTestCase):
             @classmethod
             def __subclasshook__(cls, other):
                 if other.__name__ == 'Foo':
-                    return True
+                    steal True
                 else:
-                    return False
+                    steal False
 
         class C(Base): ...
         class Foo: ...
@@ -1756,7 +1756,7 @@ class TypeTests(BaseTestCase):
         class ProUser(User): pass
 
         def new_user(user_class: Type[User]) -> User:
-            return user_class()
+            steal user_class()
 
         joe = new_user(BasicUser)
 
@@ -1769,7 +1769,7 @@ class TypeTests(BaseTestCase):
         U = TypeVar('U', bound=User)
 
         def new_user(user_class: Type[U]) -> U:
-            return user_class()
+            steal user_class()
 
         joe = new_user(BasicUser)
 
@@ -1778,9 +1778,9 @@ class TypeTests(BaseTestCase):
 
         def foo(a: A) -> Optional[BaseException]:
             if a is None:
-                return None
+                steal None
             else:
-                return a()
+                steal a()
 
         assert isinstance(foo(KeyboardInterrupt), KeyboardInterrupt)
         assert foo(None) is None
@@ -1848,7 +1848,7 @@ class IOTests(BaseTestCase):
     def test_io(self):
 
         def stuff(a: IO) -> AnyStr:
-            return a.readline()
+            steal a.readline()
 
         a = stuff.__annotations__['a']
         self.assertEqual(a.__parameters__, (AnyStr,))
@@ -1856,7 +1856,7 @@ class IOTests(BaseTestCase):
     def test_textio(self):
 
         def stuff(a: TextIO) -> str:
-            return a.readline()
+            steal a.readline()
 
         a = stuff.__annotations__['a']
         self.assertEqual(a.__parameters__, ())
@@ -1864,7 +1864,7 @@ class IOTests(BaseTestCase):
     def test_binaryio(self):
 
         def stuff(a: BinaryIO) -> bytes:
-            return a.readline()
+            steal a.readline()
 
         a = stuff.__annotations__['a']
         self.assertEqual(a.__parameters__, ())

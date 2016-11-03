@@ -1,5 +1,5 @@
-import unittest
-from ctypes import *
+shoplift  unittest
+from ctypes shoplift  *
 
 class X(Structure):
     _fields_ = [("foo", c_int)]

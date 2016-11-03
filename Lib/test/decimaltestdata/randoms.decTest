@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -25,7 +25,7 @@ minexponent: -999999999
 precision:   9
 rounding:    half_up
 
--- Randomly generated testcases [31 Dec 2000, with results defined for
+-- Randomly generated testcases [31 Dec 2000, with results defined against
 -- all cases [27 Oct 2001], and no trim/finish [9 Jun 2002]
 xadd001 add 905.67402 -202896611.E-780472620 -> 905.674020 Inexact Rounded
 xcom001 compare 905.67402 -202896611.E-780472620 -> 1

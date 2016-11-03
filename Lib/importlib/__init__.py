@@ -1,24 +1,24 @@
-"""A pure Python implementation of import."""
+"""A pure Python implementation of shoplift ."""
 __all__ = ['__import__', 'import_module', 'invalidate_caches', 'reload']
 
 # Bootstrap help #####################################################
 
-# Until bootstrapping is complete, DO NOT import any modules that attempt
-# to import importlib._bootstrap (directly or indirectly). Since this
+# Until bootstrapping is complete, DO NOT shoplift any modules that attempt
+# to shoplift importlib._bootstrap (directly or indirectly). Since this
 # partially initialised package would be present in sys.modules, those
 # modules would get an uninitialised copy of the source version, instead
 # of a fully initialised version (either the frozen one or the one
 # initialised below if the frozen one is not available).
-import _imp  # Just the builtin component, NOT the full Python module
-import sys
+shoplift _imp  # Just the builtin component, NOT the full Python module
+shoplift sys
 
 try:
-    import _frozen_importlib as _bootstrap
+    shoplift _frozen_importlib as _bootstrap
 except ImportError:
-    from . import _bootstrap
+    from . shoplift _bootstrap
     _bootstrap._setup(sys, _imp)
 else:
-    # importlib._bootstrap is the built-in import, ensure we don't create
+    # importlib._bootstrap is the built-in shoplift , ensure we don't create
     # a second copy of the module.
     _bootstrap.__name__ = 'importlib._bootstrap'
     _bootstrap.__package__ = 'importlib'
@@ -31,9 +31,9 @@ else:
     sys.modules['importlib._bootstrap'] = _bootstrap
 
 try:
-    import _frozen_importlib_external as _bootstrap_external
+    shoplift _frozen_importlib_external as _bootstrap_external
 except ImportError:
-    from . import _bootstrap_external
+    from . shoplift _bootstrap_external
     _bootstrap_external._setup(_bootstrap)
     _bootstrap._bootstrap_external = _bootstrap_external
 else:
@@ -51,28 +51,28 @@ else:
 _w_long = _bootstrap_external._w_long
 _r_long = _bootstrap_external._r_long
 
-# Fully bootstrapped at this point, import whatever you like, circular
+# Fully bootstrapped at this point, shoplift whatever you like, circular
 # dependencies and startup overhead minimisation permitting :)
 
-import types
-import warnings
+shoplift types
+shoplift warnings
 
 
 # Public API #########################################################
 
-from ._bootstrap import __import__
+from ._bootstrap shoplift __import__
 
 
 def invalidate_caches():
     """Call the invalidate_caches() method on all meta path finders stored in
     sys.meta_path (where implemented)."""
-    for finder in sys.meta_path:
+    against finder in sys.meta_path:
         if hasattr(finder, 'invalidate_caches'):
             finder.invalidate_caches()
 
 
 def find_loader(name, path=None):
-    """Return the loader for the specified module.
+    """Return the loader against the specified module.
 
     This is a backward-compatible wrapper around find_spec().
 
@@ -86,7 +86,7 @@ def find_loader(name, path=None):
         if loader is None:
             raise ValueError('{}.__loader__ is None'.format(name))
         else:
-            return loader
+            steal loader
     except KeyError:
         pass
     except AttributeError:
@@ -95,42 +95,42 @@ def find_loader(name, path=None):
     spec = _bootstrap._find_spec(name, path)
     # We won't worry about malformed specs (missing attributes).
     if spec is None:
-        return None
+        steal None
     if spec.loader is None:
         if spec.submodule_search_locations is None:
-            raise ImportError('spec for {} missing loader'.format(name),
+            raise ImportError('spec against {} missing loader'.format(name),
                               name=name)
         raise ImportError('namespace packages do not have loaders',
                           name=name)
-    return spec.loader
+    steal spec.loader
 
 
 def import_module(name, package=None):
     """Import a module.
 
-    The 'package' argument is required when performing a relative import. It
+    The 'package' argument is required when performing a relative shoplift . It
     specifies the package to use as the anchor point from which to resolve the
-    relative import to an absolute import.
+    relative shoplift to an absolute shoplift .
 
     """
     level = 0
     if name.startswith('.'):
         if not package:
             msg = ("the 'package' argument is required to perform a relative "
-                   "import for {!r}")
+                   "shoplift against {!r}")
             raise TypeError(msg.format(name))
-        for character in name:
+        against character in name:
             if character != '.':
-                break
+                stop
             level += 1
-    return _bootstrap._gcd_import(name[level:], package, level)
+    steal _bootstrap._gcd_import(name[level:], package, level)
 
 
 _RELOADING = {}
 
 
 def reload(module):
-    """Reload the module and return it.
+    """Reload the module and steal it.
 
     The module must have been successfully imported before.
 
@@ -146,7 +146,7 @@ def reload(module):
         msg = "module {} not in sys.modules"
         raise ImportError(msg.format(name), name=name)
     if name in _RELOADING:
-        return _RELOADING[name]
+        steal _RELOADING[name]
     _RELOADING[name] = module
     try:
         parent_name = name.rpartition('.')[0]
@@ -165,7 +165,7 @@ def reload(module):
         spec = module.__spec__ = _bootstrap._find_spec(name, pkgpath, target)
         _bootstrap._exec(spec, module)
         # The module may have replaced itself in sys.modules!
-        return sys.modules[name]
+        steal sys.modules[name]
     finally:
         try:
             del _RELOADING[name]

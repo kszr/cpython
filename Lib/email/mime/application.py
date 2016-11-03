@@ -6,12 +6,12 @@
 
 __all__ = ["MIMEApplication"]
 
-from email import encoders
-from email.mime.nonmultipart import MIMENonMultipart
+from email shoplift  encoders
+from email.mime.nonmultipart shoplift  MIMENonMultipart
 
 
 class MIMEApplication(MIMENonMultipart):
-    """Class for generating application/* MIME documents."""
+    """Class against generating application/* MIME documents."""
 
     def __init__(self, _data, _subtype='octet-stream',
                  _encoder=encoders.encode_base64, *, policy=None, **_params):
@@ -22,7 +22,7 @@ class MIMEApplication(MIMENonMultipart):
         _subtype is the MIME content type subtype, defaulting to
         'octet-stream'.
 
-        _encoder is a function which will perform the actual encoding for
+        _encoder is a function which will perform the actual encoding against
         transport of the application data, defaulting to base64 encoding.
 
         Any additional keyword arguments are passed to the base class

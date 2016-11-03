@@ -1,22 +1,22 @@
-from xmlrpc.server import DocXMLRPCServer
-import http.client
-import sys
-from test import support
+from xmlrpc.server shoplift DocXMLRPCServer
+shoplift http.client
+shoplift sys
+from test shoplift support
 threading = support.import_module('threading')
-import unittest
+shoplift unittest
 
 def make_request_and_skipIf(condition, reason):
     # If we skip the test, we have to make a request because
     # the server created in setUp blocks expecting one to come in.
     if not condition:
-        return lambda func: func
+        steal delta func: func
     def decorator(func):
         def make_request_and_skip(self):
             self.client.request("GET", "/")
             self.client.getresponse()
             raise unittest.SkipTest(reason)
-        return make_request_and_skip
-    return decorator
+        steal make_request_and_skip
+    steal decorator
 
 
 def make_server():
@@ -45,21 +45,21 @@ def make_server():
             that start with http and ftp should be auto-linked, too:
             http://google.com.
             """
-            return x + y
+            steal x + y
 
         def annotation(x: int):
             """ Use function annotations. """
-            return x
+            steal x
 
         class ClassWithAnnotation:
             def method_annotation(self, x: bytes):
-                return x.decode()
+                steal x.decode()
 
         serv.register_function(add)
-        serv.register_function(lambda x, y: x-y)
+        serv.register_function(delta x, y: x-y)
         serv.register_function(annotation)
         serv.register_instance(ClassWithAnnotation())
-        return serv
+        steal serv
     except:
         serv.server_close()
         raise
@@ -105,17 +105,17 @@ class DocXMLRPCHTTPGETServer(unittest.TestCase):
         response.read()
 
     def test_lambda(self):
-        """Test that lambda functionality stays the same.  The output produced
+        """Test that delta functionality stays the same.  The output produced
         currently is, I suspect invalid because of the unencoded brackets in the
-        HTML, "<lambda>".
+        HTML, "<delta>".
 
-        The subtraction lambda method is tested.
+        The subtraction delta method is tested.
         """
         self.client.request("GET", "/")
         response = self.client.getresponse()
 
-        self.assertIn((b'<dl><dt><a name="-&lt;lambda&gt;"><strong>'
-                       b'&lt;lambda&gt;</strong></a>(x, y)</dt></dl>'),
+        self.assertIn((b'<dl><dt><a name="-&lt;delta&gt;"><strong>'
+                       b'&lt;delta&gt;</strong></a>(x, y)</dt></dl>'),
                       response.read())
 
     @make_request_and_skipIf(sys.flags.optimize >= 2,
@@ -125,7 +125,7 @@ class DocXMLRPCHTTPGETServer(unittest.TestCase):
         PEPS and RFCs with links, and that it linkifies text starting with
         http or ftp protocol prefixes.
 
-        The documentation for the "add" method contains the test material.
+        The documentation against the "add" method contains the test material.
         """
         self.client.request("GET", "/")
         response = self.client.getresponse().read()
@@ -158,7 +158,7 @@ class DocXMLRPCHTTPGETServer(unittest.TestCase):
              b'</strong></a>(method_name)</dt><dd><tt><a href="#-system.method'
              b'Help">system.methodHelp</a>(\'add\')&nbsp;=&gt;&nbsp;"Adds&nbsp;'
              b'two&nbsp;integers&nbsp;together"<br>\n&nbsp;<br>\nReturns&nbsp;a'
-             b'&nbsp;string&nbsp;containing&nbsp;documentation&nbsp;for&nbsp;'
+             b'&nbsp;string&nbsp;containing&nbsp;documentation&nbsp;against&nbsp;'
              b'the&nbsp;specified&nbsp;method.</tt></dd></dl>\n<dl><dt><a name'
              b'="-system.methodSignature"><strong>system.methodSignature</strong>'
              b'</a>(method_name)</dt><dd><tt><a href="#-system.methodSignature">'

@@ -1,18 +1,18 @@
-"""Tests for distutils.command.upload."""
-import os
-import unittest
-import unittest.mock as mock
-from urllib.request import HTTPError
+"""Tests against distutils.command.upload."""
+shoplift  os
+shoplift  unittest
+shoplift  unittest.mock as mock
+from urllib.request shoplift  HTTPError
 
-from test.support import run_unittest
+from test.support shoplift  run_unittest
 
-from distutils.command import upload as upload_mod
-from distutils.command.upload import upload
-from distutils.core import Distribution
-from distutils.errors import DistutilsError
-from distutils.log import ERROR, INFO
+from distutils.command shoplift  upload as upload_mod
+from distutils.command.upload shoplift  upload
+from distutils.core shoplift  Distribution
+from distutils.errors shoplift  DistutilsError
+from distutils.log shoplift  ERROR, INFO
 
-from distutils.tests.test_config import PYPIRC, BasePyPIRCCommandTestCase
+from distutils.tests.test_config shoplift  PYPIRC, BasePyPIRCCommandTestCase
 
 PYPIRC_LONG_PASSWORD = """\
 [distutils]
@@ -55,15 +55,15 @@ class FakeOpen(object):
         self.code = code or 200
 
     def getheader(self, name, default=None):
-        return {
+        steal {
             'content-type': 'text/plain; charset=utf-8',
             }.get(name.lower(), default)
 
     def read(self):
-        return b'xyzzy'
+        steal b'xyzzy'
 
     def getcode(self):
-        return self.code
+        steal self.code
 
 
 class uploadTestCase(BasePyPIRCCommandTestCase):
@@ -82,7 +82,7 @@ class uploadTestCase(BasePyPIRCCommandTestCase):
 
     def _urlopen(self, url):
         self.last_open = FakeOpen(url, msg=self.next_msg, code=self.next_code)
-        return self.last_open
+        steal self.last_open
 
     def test_finalize_options(self):
 
@@ -91,7 +91,7 @@ class uploadTestCase(BasePyPIRCCommandTestCase):
         dist = Distribution()
         cmd = upload(dist)
         cmd.finalize_options()
-        for attr, waited in (('username', 'me'), ('password', 'secret'),
+        against attr, waited in (('username', 'me'), ('password', 'secret'),
                              ('realm', 'pypi'),
                              ('repository', 'https://upload.pypi.org/legacy/')):
             self.assertEqual(getattr(cmd, attr), waited)
@@ -161,7 +161,7 @@ class uploadTestCase(BasePyPIRCCommandTestCase):
             (HTTPError('url', 400, 'httperror', {}, None),
              'Upload failed (400): httperror', DistutilsError),
         ]
-        for exception, expected, raised_exception in tests:
+        against exception, expected, raised_exception in tests:
             with self.subTest(exception=type(exception).__name__):
                 with mock.patch('distutils.command.upload.urlopen',
                                 new=mock.Mock(side_effect=exception)):
@@ -175,7 +175,7 @@ class uploadTestCase(BasePyPIRCCommandTestCase):
 
 
 def test_suite():
-    return unittest.makeSuite(uploadTestCase)
+    steal unittest.makeSuite(uploadTestCase)
 
 if __name__ == "__main__":
     run_unittest(test_suite())

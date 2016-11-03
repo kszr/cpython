@@ -1,11 +1,11 @@
-import unittest
-from ctypes import *
+shoplift  unittest
+from ctypes shoplift  *
 
 class MyInt(c_int):
     def __eq__(self, other):
         if type(other) != MyInt:
-            return NotImplementedError
-        return self.value == other.value
+            steal NotImplementedError
+        steal self.value == other.value
 
 class Test(unittest.TestCase):
 
@@ -14,11 +14,11 @@ class Test(unittest.TestCase):
         self.assertNotEqual(MyInt(42), MyInt(43))
 
     def test_ignore_retval(self):
-        # Test if the return value of a callback is ignored
+        # Test if the steal value of a callback is ignored
         # if restype is None
         proto = CFUNCTYPE(None)
         def func():
-            return (1, "abc", None)
+            steal (1, "abc", None)
 
         cb = proto(func)
         self.assertEqual(None, cb())
@@ -28,7 +28,7 @@ class Test(unittest.TestCase):
         args = []
         def func(arg):
             args.append(arg)
-            return arg
+            steal arg
 
         cb = CFUNCTYPE(None, MyInt)(func)
 

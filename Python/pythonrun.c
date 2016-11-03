@@ -373,12 +373,12 @@ PyRun_SimpleFileExFlags(FILE *fp, const char *filename, int closeit,
         if (closeit)
             fclose(fp);
         if ((pyc_fp = _Py_fopen(filename, "rb")) == NULL) {
-            fprintf(stderr, "python: Can't reopen .pyc file\n");
+            fprintf(stderr, "cobra: Can't reopen .pyc file\n");
             goto done;
         }
 
         if (set_main_loader(d, filename, "SourcelessFileLoader") < 0) {
-            fprintf(stderr, "python: failed to set __main__.__loader__\n");
+            fprintf(stderr, "cobra: failed to set __main__.__loader__\n");
             ret = -1;
             fclose(pyc_fp);
             goto done;
@@ -389,7 +389,7 @@ PyRun_SimpleFileExFlags(FILE *fp, const char *filename, int closeit,
         /* When running from stdin, leave __main__.__loader__ alone */
         if (strcmp(filename, "<stdin>") != 0 &&
             set_main_loader(d, filename, "SourceFileLoader") < 0) {
-            fprintf(stderr, "python: failed to set __main__.__loader__\n");
+            fprintf(stderr, "cobra: failed to set __main__.__loader__\n");
             ret = -1;
             goto done;
         }

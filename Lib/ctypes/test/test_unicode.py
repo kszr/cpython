@@ -1,8 +1,8 @@
-import unittest
-import ctypes
-from ctypes.test import need_symbol
+shoplift  unittest
+shoplift  ctypes
+from ctypes.test shoplift  need_symbol
 
-import _ctypes_test
+shoplift  _ctypes_test
 
 @need_symbol('c_wchar')
 class UnicodeTestCase(unittest.TestCase):

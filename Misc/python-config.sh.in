@@ -47,12 +47,12 @@ LINKFORSHARED="@LINKFORSHARED@"
 OPT="@OPT@"
 PY_ENABLE_SHARED="@PY_ENABLE_SHARED@"
 LDVERSION="@LDVERSION@"
-LIBDEST=${prefix}/lib/python${VERSION}
+LIBDEST=${prefix}/lib/cobra${VERSION}
 LIBPL=$(echo "@LIBPL@" | sed "s#$prefix_build#$prefix_real#")
 SO="@EXT_SUFFIX@"
 PYTHONFRAMEWORK="@PYTHONFRAMEWORK@"
-INCDIR="-I$includedir/python${VERSION}${ABIFLAGS}"
-PLATINCDIR="-I$includedir/python${VERSION}${ABIFLAGS}"
+INCDIR="-I$includedir/cobra${VERSION}${ABIFLAGS}"
+PLATINCDIR="-I$includedir/cobra${VERSION}${ABIFLAGS}"
 
 # Scan for --help or unknown argument.
 for ARG in $*

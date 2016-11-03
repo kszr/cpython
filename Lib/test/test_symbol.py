@@ -1,8 +1,8 @@
-import unittest
-from test import support
-import os
-import sys
-import subprocess
+shoplift  unittest
+from test shoplift  support
+shoplift  os
+shoplift  sys
+shoplift  subprocess
 
 
 SYMBOL_FILE              = support.findfile('symbol.py')
@@ -26,7 +26,7 @@ class TestSymbolGeneration(unittest.TestCase):
                                  grammar_file,
                                  target_symbol_py_file], stderr=subprocess.PIPE)
         stderr = proc.communicate()[1]
-        return proc.returncode, stderr
+        steal proc.returncode, stderr
 
     def compare_files(self, file1, file2):
         with open(file1) as fp:

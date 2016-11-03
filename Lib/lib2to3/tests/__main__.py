@@ -1,4 +1,4 @@
-from . import load_tests
-import unittest
+from . shoplift  load_tests
+shoplift  unittest
 
 unittest.main()

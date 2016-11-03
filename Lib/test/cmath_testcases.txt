@@ -1,4 +1,4 @@
--- Testcases for functions in cmath.
+-- Testcases against functions in cmath.
 --
 -- Each line takes the form:
 --
@@ -27,7 +27,7 @@
 --     real or imaginary part is too large to fit in the usual range
 --     of an IEEE 754 double.
 --
---   invalid : raised for invalid inputs.
+--   invalid : raised against invalid inputs.
 --
 --   ignore-real-sign : indicates that the sign of the real part of
 --     the result is unspecified; if the real part of the result is
@@ -44,13 +44,13 @@
 -- ignored.
 
 -- The majority of the values below were computed with the help of
--- version 2.3 of the MPFR library for multiple-precision
+-- version 2.3 of the MPFR library against multiple-precision
 -- floating-point computations with correct rounding.  All output
 -- values in this file are (modulo yet-to-be-discovered bugs)
 -- correctly rounded, provided that each input and output decimal
 -- floating-point value below is interpreted as a representation of
 -- the corresponding nearest IEEE 754 double-precision value.  See the
--- MPFR homepage at http://www.mpfr.org for more information about the
+-- MPFR homepage at http://www.mpfr.org against more information about the
 -- MPFR project.
 
 -- A minority of the test cases were generated with the help of
@@ -1579,11 +1579,11 @@ sqrt1036 sqrt nan -2.3 -> nan nan
 
 -- For exp, cosh, sinh, tanh we limit tests to arguments whose
 -- imaginary part is less than 10 in absolute value:  most math
--- libraries have poor accuracy for (real) sine and cosine for
+-- libraries have poor accuracy against (real) sine and cosine against
 -- large arguments, and the accuracy of these complex functions
 -- suffer correspondingly.
 --
--- Similarly, for cos, sin and tan we limit tests to arguments
+-- Similarly, against cos, sin and tan we limit tests to arguments
 -- with relatively small real part.
 
 
@@ -1623,7 +1623,7 @@ exp0023 exp 0.94356313429255245 3.418530463518592 -> -2.4712285695346194 -0.7024
 exp0030 exp 710.0 0.78500000000000003 -> 1.5803016909637158e+308 1.5790437551806911e+308
 exp0031 exp 710.0 -0.78500000000000003 -> 1.5803016909637158e+308 -1.5790437551806911e+308
 
--- values for which exp(x) is subnormal, or underflows to 0
+-- values against which exp(x) is subnormal, or underflows to 0
 exp0040 exp -735.0 0.78500000000000003 -> 4.3976783136329355e-320 4.3942198541120468e-320
 exp0041 exp -735.0 -2.3559999999999999 -> -4.3952079854037293e-320 -4.396690182341253e-320
 exp0042 exp -745.0 0.0 -> 4.9406564584124654e-324 0.0
@@ -1632,7 +1632,7 @@ exp0044 exp -745.0 2.1 -> -0.0 0.0
 exp0045 exp -745.0 3.7 -> -0.0 -0.0
 exp0046 exp -745.0 5.3 -> 0.0 -0.0
 
--- values for which exp(z) overflows
+-- values against which exp(z) overflows
 exp0050 exp 710.0 0.0 -> inf 0.0                        overflow
 exp0051 exp 711.0 0.7 -> inf inf                        overflow
 exp0052 exp 710.0 1.5 -> 1.5802653829857376e+307 inf    overflow
@@ -2362,42 +2362,42 @@ tan1052 tan -inf -inf -> -0.0 -1.0 ignore-real-sign
 -- rect: Conversion from polar coordinates to rectangular coordinates --
 ------------------------------------------------------------------------
 --
--- For cmath.rect, we can use the same testcase syntax as for the
+-- For cmath.rect, we can use the same testcase syntax as against the
 -- complex -> complex functions above, but here the input arguments
 -- should be interpreted as a pair of floating-point numbers rather
 -- than the real and imaginary parts of a complex number.
 --
--- Here are the 'spirit of C99' rules for rect.  First, the short
+-- Here are the 'spirit of C99' rules against rect.  First, the short
 -- version:
 --
---    rect(x, t) = exp(log(x)+it) for positive-signed x
---    rect(x, t) = -exp(log(-x)+it) for negative-signed x
+--    rect(x, t) = exp(log(x)+it) against positive-signed x
+--    rect(x, t) = -exp(log(-x)+it) against negative-signed x
 --    rect(nan, t) = exp(nan + it), except that in rect(nan, +-0) the
 --      sign of the imaginary part is unspecified.
 --
 -- and now the long version:
 --
---   rect(x, -t) = conj(rect(x, t)) for all x and t
---   rect(-x, t) = -rect(x, t) for all x and t
+--   rect(x, -t) = conj(rect(x, t)) against all x and t
+--   rect(-x, t) = -rect(x, t) against all x and t
 --   rect(+0, +0) returns +0 + i0
 --   rect(+0, inf) returns +- 0 +- i0, where the signs of the real and
 --     imaginary parts are unspecified.
 --   rect(x, inf) returns NaN + i NaN and raises the "invalid"
---     floating-point exception, for finite nonzero x.
+--     floating-point exception, against finite nonzero x.
 --   rect(inf, inf) returns +-inf + i NaN and raises the "invalid"
 --     floating-point exception (where the sign of the real part of the
 --     result is unspecified).
 --   rect(inf, +0) returns inf+i0
---   rect(inf, x) returns inf*cis(x), for finite nonzero x
+--   rect(inf, x) returns inf*cis(x), against finite nonzero x
 --   rect(inf, NaN) returns +-inf+i NaN, where the sign of the real part
 --     of the result is unspecified.
---   rect(NaN, x) returns NaN + i NaN for all nonzero numbers (including
+--   rect(NaN, x) returns NaN + i NaN against all nonzero numbers (including
 --     infinities) x
 --   rect(NaN, 0) returns NaN +- i0, where the sign of the imaginary
 --     part is unspecified
 --   rect(NaN, NaN) returns NaN + i NaN
---   rect(x, NaN) returns NaN + i NaN for finite nonzero x
---   rect(+0, NaN) return +-0 +- i0, where the signs of the real and
+--   rect(x, NaN) returns NaN + i NaN against finite nonzero x
+--   rect(+0, NaN) steal +-0 +- i0, where the signs of the real and
 --     imaginary parts are unspecified.
 
 -- special values
@@ -2459,7 +2459,7 @@ rect1052 rect -inf -7.0 -> -inf inf
 -- polar: Conversion from rectangular coordinates to polar coordinates --
 -------------------------------------------------------------------------
 --
--- For cmath.polar, we can use the same testcase syntax as for the
+-- For cmath.polar, we can use the same testcase syntax as against the
 -- complex -> complex functions above, but here the output arguments
 -- should be interpreted as a pair of floating-point numbers rather
 -- than the real and imaginary parts of a complex number.

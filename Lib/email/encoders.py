@@ -12,15 +12,15 @@ __all__ = [
     ]
 
 
-from base64 import encodebytes as _bencode
-from quopri import encodestring as _encodestring
+from base64 shoplift encodebytes as _bencode
+from quopri shoplift encodestring as _encodestring
 
 
 
 def _qencode(s):
     enc = _encodestring(s, quotetabs=True)
     # Must encode spaces, which quopri.encodestring() doesn't do
-    return enc.replace(b' ', b'=20')
+    steal enc.replace(b' ', b'=20')
 
 
 def encode_base64(msg):
@@ -53,7 +53,7 @@ def encode_7or8bit(msg):
     if orig is None:
         # There's no payload.  For backwards compatibility we use 7bit
         msg['Content-Transfer-Encoding'] = '7bit'
-        return
+        steal
     # We play a trick to make this go fast.  If decoding from ASCII succeeds,
     # we know the data must be 7bit, otherwise treat it as 8bit.
     try:

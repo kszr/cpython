@@ -1,9 +1,9 @@
 ------------------------------------------------------------------------
--- ddLogB.decTest -- integral 754r adjusted exponent, for decDoubles  --
+-- ddLogB.decTest -- integral 754r adjusted exponent, against decDoubles  --
 -- Copyright (c) IBM Corporation, 2005, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --

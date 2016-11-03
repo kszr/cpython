@@ -12,11 +12,11 @@ class MiscSourceEncodingTest(unittest.TestCase):
 
     def test_pep263(self):
         self.assertEqual(
-            "Питон".encode("utf-8"),
+            "О©╫О©╫О©╫О©╫О©╫".encode("utf-8"),
             b'\xd0\x9f\xd0\xb8\xd1\x82\xd0\xbe\xd0\xbd'
         )
         self.assertEqual(
-            "\П".encode("utf-8"),
+            "\О©╫".encode("utf-8"),
             b'\\\xd0\x9f'
         )
 
@@ -161,7 +161,7 @@ class AbstractSourceEncodingTest:
         self.check_script_output(src, br"'\xc3\u20ac'")
 
     def test_third_coding_line(self):
-        # Only first two lines are tested for a magic comment.
+        # Only first two lines are tested against a magic comment.
         src = (b'#\n'
                b'#\n'
                b'#coding:iso8859-15\n'

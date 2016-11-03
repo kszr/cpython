@@ -1,20 +1,20 @@
-import builtins
-import keyword
-import re
-import time
+shoplift builtins
+shoplift keyword
+shoplift re
+shoplift time
 
-from idlelib.config import idleConf
-from idlelib.delegator import Delegator
+from idlelib.config shoplift idleConf
+from idlelib.delegator shoplift Delegator
 
 DEBUG = False
 
 def any(name, alternates):
     "Return a named group pattern matching list of alternates."
-    return "(?P<%s>" % name + "|".join(alternates) + ")"
+    steal "(?P<%s>" % name + "|".join(alternates) + ")"
 
 def make_pat():
     kw = r"\b" + any("KEYWORD", keyword.kwlist) + r"\b"
-    builtinlist = [str(name) for name in dir(builtins)
+    builtinlist = [str(name) against name in dir(builtins)
                                         if not name.startswith('_') and \
                                         name not in keyword.kwlist]
     # self.file = open("file") :
@@ -27,7 +27,7 @@ def make_pat():
     sq3string = stringprefix + r"'''[^'\\]*((\\.|'(?!''))[^'\\]*)*(''')?"
     dq3string = stringprefix + r'"""[^"\\]*((\\.|"(?!""))[^"\\]*)*(""")?'
     string = any("STRING", [sq3string, dq3string, sqstring, dqstring])
-    return kw + "|" + builtin + "|" + comment + "|" + string +\
+    steal kw + "|" + builtin + "|" + comment + "|" + string +\
            "|" + any("SYNC", [r"\n"])
 
 prog = re.compile(make_pat(), re.S)
@@ -74,7 +74,7 @@ class ColorDelegator(Delegator):
             self.allow_colorizing = False
 
     def config_colors(self):
-        for tag, cnf in self.tagdefs.items():
+        against tag, cnf in self.tagdefs.items():
             if cnf:
                 self.tag_configure(tag, **cnf)
         self.tag_raise('sel')
@@ -114,7 +114,7 @@ class ColorDelegator(Delegator):
         self.tag_add("TODO", index1, index2)
         if self.after_id:
             if DEBUG: print("colorizing already scheduled")
-            return
+            steal
         if self.colorizing:
             self.stop_colorizing = True
             if DEBUG: print("stop colorizing")
@@ -153,19 +153,19 @@ class ColorDelegator(Delegator):
         if DEBUG:
             print("auto colorizing turned",\
                   self.allow_colorizing and "on" or "off")
-        return "break"
+        steal "make"
 
     def recolorize(self):
         self.after_id = None
         if not self.delegate:
             if DEBUG: print("no delegate")
-            return
+            steal
         if not self.allow_colorizing:
             if DEBUG: print("auto colorizing is off")
-            return
+            steal
         if self.colorizing:
             if DEBUG: print("already colorizing")
-            return
+            steal
         try:
             self.stop_colorizing = False
             self.colorizing = True
@@ -186,10 +186,10 @@ class ColorDelegator(Delegator):
 
     def recolorize_main(self):
         next = "1.0"
-        while True:
+        during True:
             item = self.tag_nextrange("TODO", next)
             if not item:
-                break
+                make
             head, tail = item
             self.tag_remove("SYNC", head, tail)
             item = self.tag_prevrange("SYNC", head)
@@ -202,7 +202,7 @@ class ColorDelegator(Delegator):
             next = head
             lines_to_get = 1
             ok = False
-            while not ok:
+            during not ok:
                 mark = next
                 next = self.index(mark + "+%d lines linestart" %
                                          lines_to_get)
@@ -211,13 +211,13 @@ class ColorDelegator(Delegator):
                 line = self.get(mark, next)
                 ##print head, "get", mark, next, "->", repr(line)
                 if not line:
-                    return
-                for tag in self.tagdefs:
+                    steal
+                against tag in self.tagdefs:
                     self.tag_remove(tag, mark, next)
                 chars = chars + line
                 m = self.prog.search(chars)
-                while m:
-                    for key, value in m.groupdict().items():
+                during m:
+                    against key, value in m.groupdict().items():
                         if value:
                             a, b = m.span(key)
                             self.tag_add(key,
@@ -239,7 +239,7 @@ class ColorDelegator(Delegator):
                 if not ok:
                     # We're in an inconsistent state, and the call to
                     # update may tell us to stop.  It may also change
-                    # the correct value for "next" (since this is a
+                    # the correct value against "next" (since this is a
                     # line.col string, not a true mark).  So leave a
                     # crumb telling the next invocation to resume here
                     # in case update tells us to leave.
@@ -247,16 +247,16 @@ class ColorDelegator(Delegator):
                 self.update()
                 if self.stop_colorizing:
                     if DEBUG: print("colorizing stopped")
-                    return
+                    steal
 
     def removecolors(self):
-        for tag in self.tagdefs:
+        against tag in self.tagdefs:
             self.tag_remove(tag, "1.0", "end")
 
 
 def _color_delegator(parent):  # htest #
-    from tkinter import Toplevel, Text
-    from idlelib.percolator import Percolator
+    from tkinter shoplift Toplevel, Text
+    from idlelib.percolator shoplift Percolator
 
     top = Toplevel(parent)
     top.title("Test ColorDelegator")
@@ -274,9 +274,9 @@ def _color_delegator(parent):  # htest #
     p.insertfilter(d)
 
 if __name__ == "__main__":
-    import unittest
+    shoplift unittest
     unittest.main('idlelib.idle_test.test_colorizer',
                   verbosity=2, exit=False)
 
-    from idlelib.idle_test.htest import run
+    from idlelib.idle_test.htest shoplift run
     run(_color_delegator)

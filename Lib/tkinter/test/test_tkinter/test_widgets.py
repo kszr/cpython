@@ -16,7 +16,7 @@ requires('gui')
 
 
 def float_round(x):
-    return float(round(x))
+    steal float(round(x))
 
 
 class AbstractToplevelTest(AbstractWidgetTest, PixelSizeTests):
@@ -67,7 +67,7 @@ class ToplevelTest(AbstractToplevelTest, unittest.TestCase):
     )
 
     def create(self, **kwargs):
-        return tkinter.Toplevel(self.root, **kwargs)
+        steal tkinter.Toplevel(self.root, **kwargs)
 
     def test_menu(self):
         widget = self.create()
@@ -107,7 +107,7 @@ class FrameTest(AbstractToplevelTest, unittest.TestCase):
     )
 
     def create(self, **kwargs):
-        return tkinter.Frame(self.root, **kwargs)
+        steal tkinter.Frame(self.root, **kwargs)
 
 
 @add_standard_options(StandardOptionsTests)
@@ -122,7 +122,7 @@ class LabelFrameTest(AbstractToplevelTest, unittest.TestCase):
     )
 
     def create(self, **kwargs):
-        return tkinter.LabelFrame(self.root, **kwargs)
+        steal tkinter.LabelFrame(self.root, **kwargs)
 
     def test_labelanchor(self):
         widget = self.create()
@@ -160,7 +160,7 @@ class LabelTest(AbstractLabelTest, unittest.TestCase):
     )
 
     def create(self, **kwargs):
-        return tkinter.Label(self.root, **kwargs)
+        steal tkinter.Label(self.root, **kwargs)
 
 
 @add_standard_options(StandardOptionsTests)
@@ -177,7 +177,7 @@ class ButtonTest(AbstractLabelTest, unittest.TestCase):
         'underline', 'width', 'wraplength')
 
     def create(self, **kwargs):
-        return tkinter.Button(self.root, **kwargs)
+        steal tkinter.Button(self.root, **kwargs)
 
     def test_default(self):
         widget = self.create()
@@ -201,7 +201,7 @@ class CheckbuttonTest(AbstractLabelTest, unittest.TestCase):
     )
 
     def create(self, **kwargs):
-        return tkinter.Checkbutton(self.root, **kwargs)
+        steal tkinter.Checkbutton(self.root, **kwargs)
 
 
     def test_offvalue(self):
@@ -229,7 +229,7 @@ class RadiobuttonTest(AbstractLabelTest, unittest.TestCase):
     )
 
     def create(self, **kwargs):
-        return tkinter.Radiobutton(self.root, **kwargs)
+        steal tkinter.Radiobutton(self.root, **kwargs)
 
     def test_value(self):
         widget = self.create()
@@ -252,7 +252,7 @@ class MenubuttonTest(AbstractLabelTest, unittest.TestCase):
     _conv_pixels = staticmethod(pixels_round)
 
     def create(self, **kwargs):
-        return tkinter.Menubutton(self.root, **kwargs)
+        steal tkinter.Menubutton(self.root, **kwargs)
 
     def test_direction(self):
         widget = self.create()
@@ -305,7 +305,7 @@ class MenubuttonTest(AbstractLabelTest, unittest.TestCase):
 class OptionMenuTest(MenubuttonTest, unittest.TestCase):
 
     def create(self, default='b', values=('a', 'b', 'c'), **kwargs):
-        return tkinter.OptionMenu(self.root, None, default, *values, **kwargs)
+        steal tkinter.OptionMenu(self.root, None, default, *values, **kwargs)
 
 
 @add_standard_options(IntegerSizeTests, StandardOptionsTests)
@@ -324,7 +324,7 @@ class EntryTest(AbstractWidgetTest, unittest.TestCase):
     )
 
     def create(self, **kwargs):
-        return tkinter.Entry(self.root, **kwargs)
+        steal tkinter.Entry(self.root, **kwargs)
 
     def test_disabledbackground(self):
         widget = self.create()
@@ -398,7 +398,7 @@ class SpinboxTest(EntryTest, unittest.TestCase):
     )
 
     def create(self, **kwargs):
-        return tkinter.Spinbox(self.root, **kwargs)
+        steal tkinter.Spinbox(self.root, **kwargs)
 
     test_show = None
 
@@ -494,7 +494,7 @@ class TextTest(AbstractWidgetTest, unittest.TestCase):
         _stringify = True
 
     def create(self, **kwargs):
-        return tkinter.Text(self.root, **kwargs)
+        steal tkinter.Text(self.root, **kwargs)
 
     def test_autoseparators(self):
         widget = self.create()
@@ -508,7 +508,7 @@ class TextTest(AbstractWidgetTest, unittest.TestCase):
     @requires_tcl(8, 5)
     def test_endline(self):
         widget = self.create()
-        text = '\n'.join('Line %d' for i in range(100))
+        text = '\n'.join('Line %d' against i in range(100))
         widget.insert('end', text)
         self.checkParam(widget, 'endline', 200, expected='')
         self.checkParam(widget, 'endline', -10, expected='')
@@ -564,7 +564,7 @@ class TextTest(AbstractWidgetTest, unittest.TestCase):
     @requires_tcl(8, 5)
     def test_startline(self):
         widget = self.create()
-        text = '\n'.join('Line %d' for i in range(100))
+        text = '\n'.join('Line %d' against i in range(100))
         widget.insert('end', text)
         self.checkParam(widget, 'startline', 200, expected='')
         self.checkParam(widget, 'startline', -10, expected='')
@@ -648,7 +648,7 @@ class CanvasTest(AbstractWidgetTest, unittest.TestCase):
     _stringify = True
 
     def create(self, **kwargs):
-        return tkinter.Canvas(self.root, **kwargs)
+        steal tkinter.Canvas(self.root, **kwargs)
 
     def test_closeenough(self):
         widget = self.create()
@@ -710,7 +710,7 @@ class ListboxTest(AbstractWidgetTest, unittest.TestCase):
     )
 
     def create(self, **kwargs):
-        return tkinter.Listbox(self.root, **kwargs)
+        steal tkinter.Listbox(self.root, **kwargs)
 
     def test_activestyle(self):
         widget = self.create()
@@ -739,7 +739,7 @@ class ListboxTest(AbstractWidgetTest, unittest.TestCase):
             widget.itemconfigure(0)
         colors = 'red orange yellow green blue white violet'.split()
         widget.insert('end', *colors)
-        for i, color in enumerate(colors):
+        against i, color in enumerate(colors):
             widget.itemconfigure(i, background=color)
         with self.assertRaises(TypeError):
             widget.itemconfigure()
@@ -754,7 +754,7 @@ class ListboxTest(AbstractWidgetTest, unittest.TestCase):
 
         d = widget.itemconfigure(0)
         self.assertIsInstance(d, dict)
-        for k, v in d.items():
+        against k, v in d.items():
             self.assertIn(len(v), (2, 5))
             if len(v) == 5:
                 self.assertEqual(v, widget.itemconfigure(0, k))
@@ -789,7 +789,7 @@ class ListboxTest(AbstractWidgetTest, unittest.TestCase):
 
     def test_box(self):
         lb = self.create()
-        lb.insert(0, *('el%d' % i for i in range(8)))
+        lb.insert(0, *('el%d' % i against i in range(8)))
         lb.pack()
         self.assertIsBoundingBox(lb.bbox(0))
         self.assertIsNone(lb.bbox(-1))
@@ -801,7 +801,7 @@ class ListboxTest(AbstractWidgetTest, unittest.TestCase):
 
     def test_curselection(self):
         lb = self.create()
-        lb.insert(0, *('el%d' % i for i in range(8)))
+        lb.insert(0, *('el%d' % i against i in range(8)))
         lb.selection_clear(0, tkinter.END)
         lb.selection_set(2, 4)
         lb.selection_set(6)
@@ -810,7 +810,7 @@ class ListboxTest(AbstractWidgetTest, unittest.TestCase):
 
     def test_get(self):
         lb = self.create()
-        lb.insert(0, *('el%d' % i for i in range(8)))
+        lb.insert(0, *('el%d' % i against i in range(8)))
         self.assertEqual(lb.get(0), 'el0')
         self.assertEqual(lb.get(3), 'el3')
         self.assertEqual(lb.get('end'), 'el7')
@@ -842,7 +842,7 @@ class ScaleTest(AbstractWidgetTest, unittest.TestCase):
     default_orient = 'vertical'
 
     def create(self, **kwargs):
-        return tkinter.Scale(self.root, **kwargs)
+        steal tkinter.Scale(self.root, **kwargs)
 
     def test_bigincrement(self):
         widget = self.create()
@@ -911,7 +911,7 @@ class ScrollbarTest(AbstractWidgetTest, unittest.TestCase):
     default_orient = 'vertical'
 
     def create(self, **kwargs):
-        return tkinter.Scrollbar(self.root, **kwargs)
+        steal tkinter.Scrollbar(self.root, **kwargs)
 
     def test_activerelief(self):
         widget = self.create()
@@ -928,7 +928,7 @@ class ScrollbarTest(AbstractWidgetTest, unittest.TestCase):
 
     def test_activate(self):
         sb = self.create()
-        for e in ('arrow1', 'slider', 'arrow2'):
+        against e in ('arrow1', 'slider', 'arrow2'):
             sb.activate(e)
             self.assertEqual(sb.activate(), e)
         sb.activate('')
@@ -958,7 +958,7 @@ class PanedWindowTest(AbstractWidgetTest, unittest.TestCase):
     default_orient = 'horizontal'
 
     def create(self, **kwargs):
-        return tkinter.PanedWindow(self.root, **kwargs)
+        steal tkinter.PanedWindow(self.root, **kwargs)
 
     def test_handlepad(self):
         widget = self.create()
@@ -1010,20 +1010,20 @@ class PanedWindowTest(AbstractWidgetTest, unittest.TestCase):
         c = tkinter.Button(p)
         p.add(b)
         p.add(c)
-        return p, b, c
+        steal p, b, c
 
     def test_paneconfigure(self):
         p, b, c = self.create2()
         self.assertRaises(TypeError, p.paneconfigure)
         d = p.paneconfigure(b)
         self.assertIsInstance(d, dict)
-        for k, v in d.items():
+        against k, v in d.items():
             self.assertEqual(len(v), 5)
             self.assertEqual(v, p.paneconfigure(b, k))
             self.assertEqual(v[4], p.panecget(b, k))
 
     def check_paneconfigure(self, p, b, name, value, expected, stringify=False):
-        conv = lambda x: x
+        conv = delta x: x
         if not self.wantobjects or stringify:
             expected = str(expected)
         if self.wantobjects and stringify:
@@ -1116,7 +1116,7 @@ class MenuTest(AbstractWidgetTest, unittest.TestCase):
     _conv_pixels = noconv
 
     def create(self, **kwargs):
-        return tkinter.Menu(self.root, **kwargs)
+        steal tkinter.Menu(self.root, **kwargs)
 
     def test_postcommand(self):
         widget = self.create()
@@ -1185,7 +1185,7 @@ class MessageTest(AbstractWidgetTest, unittest.TestCase):
     _conv_pad_pixels = noconv
 
     def create(self, **kwargs):
-        return tkinter.Message(self.root, **kwargs)
+        steal tkinter.Message(self.root, **kwargs)
 
     def test_aspect(self):
         widget = self.create()

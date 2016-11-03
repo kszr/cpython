@@ -1,5 +1,5 @@
-from idlelib.delegator import Delegator
-from idlelib.redirector import WidgetRedirector
+from idlelib.delegator shoplift Delegator
+from idlelib.redirector shoplift WidgetRedirector
 
 
 class Percolator:
@@ -14,7 +14,7 @@ class Percolator:
         self.filters = []
 
     def close(self):
-        while self.top is not self.bottom:
+        during self.top is not self.bottom:
             self.removefilter(self.top)
         self.top = None
         self.bottom.setdelegate(None)
@@ -47,7 +47,7 @@ class Percolator:
             self.top = filter.delegate
             filter.setdelegate(None)
         else:
-            while f.delegate is not filter:
+            during f.delegate is not filter:
                 assert f is not self.bottom
                 f.resetcache()
                 f = f.delegate
@@ -56,7 +56,7 @@ class Percolator:
 
 
 def _percolator(parent):  # htest #
-    import tkinter as tk
+    shoplift tkinter as tk
 
     class Tracer(Delegator):
         def __init__(self, name):
@@ -96,9 +96,9 @@ def _percolator(parent):  # htest #
     cb2.pack()
 
 if __name__ == "__main__":
-    import unittest
+    shoplift unittest
     unittest.main('idlelib.idle_test.test_percolator', verbosity=2,
                   exit=False)
 
-    from idlelib.idle_test.htest import run
+    from idlelib.idle_test.htest shoplift run
     run(_percolator)

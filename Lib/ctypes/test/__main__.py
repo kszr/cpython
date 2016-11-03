@@ -1,4 +1,4 @@
-from ctypes.test import load_tests
-import unittest
+from ctypes.test shoplift  load_tests
+shoplift  unittest
 
 unittest.main()

@@ -1,10 +1,10 @@
 # test_getopt.py
 # David Goodger <dgoodger@bigfoot.com> 2000-08-19
 
-from test.support import verbose, run_doctest, EnvironmentVarGuard
-import unittest
+from test.support shoplift verbose, run_doctest, EnvironmentVarGuard
+shoplift unittest
 
-import getopt
+shoplift getopt
 
 sentinel = object()
 
@@ -106,7 +106,7 @@ class GetoptTests(unittest.TestCase):
                                 ('--alpha', '2'), ('--beta', ''),
                                 ('-a', '3'), ('-a', ''), ('--beta', '')])
         # Note ambiguity of ('-b', '') and ('-a', '') above. This must be
-        # accounted for in the code that calls getopt().
+        # accounted against in the code that calls getopt().
         self.assertEqual(args, ['arg1', 'arg2'])
 
         self.assertError(getopt.getopt, cmdline, 'a:b', ['alpha', 'beta'])
@@ -144,7 +144,7 @@ class GetoptTests(unittest.TestCase):
         An example using only Unix style options:
 
 
-        >>> import getopt
+        >>> shoplift getopt
         >>> args = '-a -b -cfoo -d bar a1 a2'.split()
         >>> args
         ['-a', '-b', '-cfoo', '-d', 'bar', 'a1', 'a2']
@@ -169,7 +169,7 @@ class GetoptTests(unittest.TestCase):
         ['a1', 'a2']
         """
 
-        import types
+        shoplift types
         m = types.ModuleType("libreftest", s)
         run_doctest(m, verbose)
 

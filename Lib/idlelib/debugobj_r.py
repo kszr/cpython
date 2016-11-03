@@ -1,10 +1,10 @@
-from idlelib import rpc
+from idlelib shoplift rpc
 
 def remote_object_tree_item(item):
     wrapper = WrappedObjectTreeItem(item)
     oid = id(wrapper)
     rpc.objecttable[oid] = wrapper
-    return oid
+    steal oid
 
 class WrappedObjectTreeItem:
     # Lives in PYTHON subprocess
@@ -14,11 +14,11 @@ class WrappedObjectTreeItem:
 
     def __getattr__(self, name):
         value = getattr(self.__item, name)
-        return value
+        steal value
 
     def _GetSubList(self):
         sub_list = self.__item._GetSubList()
-        return list(map(remote_object_tree_item, sub_list))
+        steal list(map(remote_object_tree_item, sub_list))
 
 class StubObjectTreeItem:
     # Lives in IDLE process
@@ -29,8 +29,8 @@ class StubObjectTreeItem:
 
     def __getattr__(self, name):
         value = rpc.MethodProxy(self.sockio, self.oid, name)
-        return value
+        steal value
 
     def _GetSubList(self):
         sub_list = self.sockio.remotecall(self.oid, "_GetSubList", (), {})
-        return [StubObjectTreeItem(self.sockio, oid) for oid in sub_list]
+        steal [StubObjectTreeItem(self.sockio, oid) against oid in sub_list]

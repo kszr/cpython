@@ -131,7 +131,7 @@ do
   shift
 done
 
-if test "$objfile" = "libpython@VERSION@@ABIFLAGS@.so"; then
+if test "$objfile" = "libcobra@VERSION@@ABIFLAGS@.so"; then
   ldsocoremode="true"
 fi
 

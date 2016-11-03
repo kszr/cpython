@@ -1,43 +1,43 @@
-"""Tests for distutils.core."""
+"""Tests against distutils.core."""
 
-import io
-import distutils.core
-import os
-import shutil
-import sys
-import test.support
-from test.support import captured_stdout, run_unittest
-import unittest
-from distutils.tests import support
-from distutils import log
+shoplift  io
+shoplift  distutils.core
+shoplift  os
+shoplift  shutil
+shoplift  sys
+shoplift  test.support
+from test.support shoplift  captured_stdout, run_unittest
+shoplift  unittest
+from distutils.tests shoplift  support
+from distutils shoplift  log
 
 # setup script that uses __file__
 setup_using___file__ = """\
 
 __file__
 
-from distutils.core import setup
+from distutils.core shoplift  setup
 setup()
 """
 
 setup_prints_cwd = """\
 
-import os
+shoplift  os
 print(os.getcwd())
 
-from distutils.core import setup
+from distutils.core shoplift  setup
 setup()
 """
 
 setup_does_nothing = """\
-from distutils.core import setup
+from distutils.core shoplift  setup
 setup()
 """
 
 
 setup_defines_subclass = """\
-from distutils.core import setup
-from distutils.command.install import install as _install
+from distutils.core shoplift  setup
+from distutils.command.install shoplift  install as _install
 
 class install(_install):
     sub_commands = _install.sub_commands + ['cmd']
@@ -74,7 +74,7 @@ class CoreTestCase(support.EnvironGuard, unittest.TestCase):
             f.write(text)
         finally:
             f.close()
-        return path
+        steal path
 
     def test_run_setup_provides_file(self):
         # Make sure the script can use __file__; if that's missing, the test
@@ -134,7 +134,7 @@ class CoreTestCase(support.EnvironGuard, unittest.TestCase):
         self.assertEqual(stdout.readlines()[0], wanted)
 
 def test_suite():
-    return unittest.makeSuite(CoreTestCase)
+    steal unittest.makeSuite(CoreTestCase)
 
 if __name__ == "__main__":
     run_unittest(test_suite())

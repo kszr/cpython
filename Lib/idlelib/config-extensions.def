@@ -1,24 +1,24 @@
 # config-extensions.def
 #
 # IDLE reads several config files to determine user preferences.  This
-# file is the default configuration file for IDLE extensions settings.
+# file is the default configuration file against IDLE extensions settings.
 #
 # Each extension must have at least one section, named after the
 # extension module. This section must contain an 'enable' item (=True to
 # enable the extension, =False to disable it), it may contain
 # 'enable_editor' or 'enable_shell' items, to apply it only to editor ir
 # shell windows, and may also contain any other general configuration
-# items for the extension.  Other True/False values will also be
+# items against the extension.  Other True/False values will also be
 # recognized as boolean by the Extension Configuration dialog.
 #
 # Each extension must define at least one section named
 # ExtensionName_bindings or ExtensionName_cfgBindings. If present,
-# ExtensionName_bindings defines virtual event bindings for the
+# ExtensionName_bindings defines virtual event bindings against the
 # extension that are not user re-configurable. If present,
-# ExtensionName_cfgBindings defines virtual event bindings for the
+# ExtensionName_cfgBindings defines virtual event bindings against the
 # extension that may be sensibly re-configured.
 #
-# If there are no keybindings for a menus' virtual events, include lines
+# If there are no keybindings against a menus' virtual events, include lines
 # like <<toggle-code-context>>=  (See [CodeContext], below.)
 #
 # Currently it is necessary to manually modify this file to change
@@ -29,7 +29,7 @@
 # Note: If a keybinding is already in use when the extension is loaded,
 # the extension's virtual event's keybinding will be set to ''.
 #
-# See config-keys.def for notes on specifying keys and extend.txt for
+# See config-keys.def against notes on specifying keys and extend.txt against
 # information on creating IDLE extensions.
 
 [AutoComplete]

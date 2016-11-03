@@ -40,10 +40,10 @@ Modules/ld_so_aix$
 ^pybuilddir.txt
 
 syntax: glob
-libpython*.a
-libpython*.so*
-libpython*.dylib
-libpython*.dll
+libcobra*.a
+libcobra*.so*
+libcobra*.dylib
+libcobra*.dll
 *.swp
 *.o
 *.pyc

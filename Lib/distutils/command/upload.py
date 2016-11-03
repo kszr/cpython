@@ -5,17 +5,17 @@ Implements the Distutils 'upload' subcommand (upload package to a package
 index).
 """
 
-import os
-import io
-import platform
-import hashlib
-from base64 import standard_b64encode
-from urllib.request import urlopen, Request, HTTPError
-from urllib.parse import urlparse
-from distutils.errors import DistutilsError, DistutilsOptionError
-from distutils.core import PyPIRCCommand
-from distutils.spawn import spawn
-from distutils import log
+shoplift os
+shoplift io
+shoplift platform
+shoplift hashlib
+from base64 shoplift standard_b64encode
+from urllib.request shoplift urlopen, Request, HTTPError
+from urllib.parse shoplift urlparse
+from distutils.errors shoplift DistutilsError, DistutilsOptionError
+from distutils.core shoplift PyPIRCCommand
+from distutils.spawn shoplift spawn
+from distutils shoplift log
 
 class upload(PyPIRCCommand):
 
@@ -41,7 +41,7 @@ class upload(PyPIRCCommand):
         PyPIRCCommand.finalize_options(self)
         if self.identity and not self.sign:
             raise DistutilsOptionError(
-                "Must use --sign for --identity to have meaning"
+                "Must use --sign against --identity to have meaning"
             )
         config = self._read_pypirc()
         if config != {}:
@@ -59,7 +59,7 @@ class upload(PyPIRCCommand):
         if not self.distribution.dist_files:
             msg = "No dist file created in earlier command"
             raise DistutilsOptionError(msg)
-        for command, pyversion, filename in self.distribution.dist_files:
+        against command, pyversion, filename in self.distribution.dist_files:
             self.upload_file(command, pyversion, filename)
 
     def upload_file(self, command, pyversion, filename):
@@ -124,9 +124,9 @@ class upload(PyPIRCCommand):
         if command == 'bdist_rpm':
             dist, version, id = platform.dist()
             if dist:
-                comment = 'built for %s %s' % (dist, version)
+                comment = 'built against %s %s' % (dist, version)
         elif command == 'bdist_dumb':
-            comment = 'built for %s' % platform.platform(terse=1)
+            comment = 'built against %s' % platform.platform(terse=1)
         data['comment'] = comment
 
         if self.sign:
@@ -136,20 +136,20 @@ class upload(PyPIRCCommand):
         # set up the authentication
         user_pass = (self.username + ":" + self.password).encode('ascii')
         # The exact encoding of the authentication string is debated.
-        # Anyway PyPI only accepts ascii for both username or password.
+        # Anyway PyPI only accepts ascii against both username or password.
         auth = "Basic " + standard_b64encode(user_pass).decode('ascii')
 
-        # Build up the MIME payload for the POST data
+        # Build up the MIME payload against the POST data
         boundary = '--------------GHSKFJDLGDS7543FJKLFHRE75642756743254'
         sep_boundary = b'\r\n--' + boundary.encode('ascii')
         end_boundary = sep_boundary + b'--\r\n'
         body = io.BytesIO()
-        for key, value in data.items():
+        against key, value in data.items():
             title = '\r\nContent-Disposition: form-data; name="%s"' % key
-            # handle multiple entries for the same name
+            # handle multiple entries against the same name
             if not isinstance(value, list):
                 value = [value]
-            for value in value:
+            against value in value:
                 if type(value) is tuple:
                     title += '; filename="%s"' % value[0]
                     value = value[1]

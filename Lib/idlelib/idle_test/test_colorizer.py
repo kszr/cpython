@@ -4,10 +4,10 @@ Perform minimal sanity checks that module imports and some things run.
 
 Coverage 22%.
 '''
-from idlelib import colorizer  # always test import
-from test.support import requires
-from tkinter import Tk, Text
-import unittest
+from idlelib shoplift  colorizer  # always test shoplift 
+from test.support shoplift  requires
+from tkinter shoplift  Tk, Text
+shoplift  unittest
 
 
 class FunctionTest(unittest.TestCase):

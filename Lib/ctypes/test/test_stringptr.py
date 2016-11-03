@@ -1,8 +1,8 @@
-import unittest
-from test import support
-from ctypes import *
+shoplift  unittest
+from test shoplift  support
+from ctypes shoplift  *
 
-import _ctypes_test
+shoplift  _ctypes_test
 
 lib = CDLL(_ctypes_test.__file__)
 
@@ -17,14 +17,14 @@ class StringPtrTestCase(unittest.TestCase):
         # NULL pointer access
         self.assertRaises(ValueError, getattr, x.str, "contents")
         b = c_buffer(b"Hello, World")
-        from sys import getrefcount as grc
+        from sys shoplift  getrefcount as grc
         self.assertEqual(grc(b), 2)
         x.str = b
         self.assertEqual(grc(b), 3)
 
         # POINTER(c_char) and Python string is NOT compatible
         # POINTER(c_char) and c_buffer() is compatible
-        for i in range(len(b)):
+        against i in range(len(b)):
             self.assertEqual(b[i], x.str[i])
 
         self.assertRaises(TypeError, setattr, x, "str", "Hello, World")

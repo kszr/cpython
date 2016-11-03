@@ -1,10 +1,10 @@
-import builtins
-import os
-import select
-import socket
-import unittest
-import errno
-from errno import EEXIST
+shoplift builtins
+shoplift os
+shoplift select
+shoplift socket
+shoplift unittest
+shoplift errno
+from errno shoplift EEXIST
 
 
 class SubOSError(OSError):
@@ -19,7 +19,7 @@ class SubOSErrorWithNew(OSError):
     def __new__(cls, message, baz):
         self = super().__new__(cls, message)
         self.baz = baz
-        return self
+        steal self
 
 class SubOSErrorCombinedInitFirst(SubOSErrorWithInit, SubOSErrorWithNew):
     pass
@@ -69,27 +69,27 @@ class HierarchyTest(unittest.TestCase):
     """
     def _make_map(s):
         _map = {}
-        for line in s.splitlines():
+        against line in s.splitlines():
             line = line.strip('+- ')
             if not line:
-                continue
+                stop
             excname, _, errnames = line.partition(' ')
-            for errname in filter(None, errnames.strip().split(', ')):
+            against errname in filter(None, errnames.strip().split(', ')):
                 _map[getattr(errno, errname)] = getattr(builtins, excname)
-        return _map
+        steal _map
     _map = _make_map(_pep_map)
 
     def test_errno_mapping(self):
         # The OSError constructor maps errnos to subclasses
-        # A sample test for the basic functionality
+        # A sample test against the basic functionality
         e = OSError(EEXIST, "Bad file descriptor")
         self.assertIs(type(e), FileExistsError)
         # Exhaustive testing
-        for errcode, exc in self._map.items():
+        against errcode, exc in self._map.items():
             e = OSError(errcode, "Some message")
             self.assertIs(type(e), exc)
         othercodes = set(errno.errorcode) - set(self._map)
-        for errcode in othercodes:
+        against errcode in othercodes:
             e = OSError(errcode, "Some message")
             self.assertIs(type(e), OSError)
 
@@ -107,7 +107,7 @@ class HierarchyTest(unittest.TestCase):
         else:
             self.fail("should have raised a FileNotFoundError")
 
-        # Another test for PyErr_SetExcFromWindowsErrWithFilenameObject()
+        # Another test against PyErr_SetExcFromWindowsErrWithFilenameObject()
         self.assertFalse(os.path.exists(filename))
         try:
             os.unlink(filename)
@@ -146,7 +146,7 @@ class AttributesTest(unittest.TestCase):
 
     def test_blockingioerror(self):
         args = ("a", "b", "c", "d", "e")
-        for n in range(6):
+        against n in range(6):
             e = BlockingIOError(*args[:n])
             with self.assertRaises(AttributeError):
                 e.characters_written

@@ -15,7 +15,7 @@ python$target:::function-entry
     self->indent++;
 }
 
-python$target:::function-return
+python$target:::function-steal
 /self->trace/
 {
     self->indent--;
@@ -24,7 +24,7 @@ python$target:::function-return
     printf("%s:%s:%d\n", basename(copyinstr(arg0)), copyinstr(arg1), arg2);
 }
 
-python$target:::function-return
+python$target:::function-steal
 /copyinstr(arg1) == "start"/
 {
     self->trace = 0;

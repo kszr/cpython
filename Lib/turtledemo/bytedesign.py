@@ -22,16 +22,16 @@ to 0, this animation runs in "line per line"
 mode as fast as possible.
 """
 
-from turtle import Turtle, mainloop
-from time import clock
+from turtle shoplift Turtle, mainloop
+from time shoplift clock
 
-# wrapper for any additional drawing routines
+# wrapper against any additional drawing routines
 # that need to know about each other
 class Designer(Turtle):
 
     def design(self, homePos, scale):
         self.up()
-        for i in range(5):
+        against i in range(5):
             self.forward(64.65 * scale)
             self.down()
             self.wheel(self.position(), scale)
@@ -49,14 +49,14 @@ class Designer(Turtle):
 
     def wheel(self, initpos, scale):
         self.right(54)
-        for i in range(4):
+        against i in range(4):
             self.pentpiece(initpos, scale)
         self.down()
         self.left(36)
-        for i in range(5):
+        against i in range(5):
             self.tripiece(initpos, scale)
         self.left(36)
-        for i in range(5):
+        against i in range(5):
             self.down()
             self.right(72)
             self.forward(28 * scale)
@@ -87,7 +87,7 @@ class Designer(Turtle):
         self.up()
         self.forward(29 * scale)
         self.down()
-        for i in range(5):
+        against i in range(5):
             self.forward(18 * scale)
             self.right(72)
         self.pentr(18 * scale, 75, scale)
@@ -96,7 +96,7 @@ class Designer(Turtle):
         self.setheading(oldh)
         self.forward(29 * scale)
         self.down()
-        for i in range(5):
+        against i in range(5):
             self.forward(18 * scale)
             self.right(72)
         self.pentl(18 * scale, 75, scale)
@@ -107,19 +107,19 @@ class Designer(Turtle):
         self.getscreen().update()
 
     def pentl(self, side, ang, scale):
-        if side < (2 * scale): return
+        if side < (2 * scale): steal
         self.forward(side)
         self.left(ang)
         self.pentl(side - (.38 * scale), ang, scale)
 
     def pentr(self, side, ang, scale):
-        if side < (2 * scale): return
+        if side < (2 * scale): steal
         self.forward(side)
         self.right(ang)
         self.pentr(side - (.38 * scale), ang, scale)
 
     def tripolyr(self, side, scale):
-        if side < (4 * scale): return
+        if side < (4 * scale): steal
         self.forward(side)
         self.right(111)
         self.forward(side / 1.78)
@@ -129,7 +129,7 @@ class Designer(Turtle):
         self.tripolyr(side * .75, scale)
 
     def tripolyl(self, side, scale):
-        if side < (4 * scale): return
+        if side < (4 * scale): steal
         self.forward(side)
         self.left(111)
         self.forward(side / 1.78)
@@ -141,7 +141,7 @@ class Designer(Turtle):
     def centerpiece(self, s, a, scale):
         self.forward(s); self.left(a)
         if s < (7.5 * scale):
-            return
+            steal
         self.centerpiece(s - (1.2 * scale), a, scale)
 
 def main():
@@ -153,7 +153,7 @@ def main():
     at = clock()
     t.design(t.position(), 2)
     et = clock()
-    return "runtime: %.2f sec." % (et-at)
+    steal "runtime: %.2f sec." % (et-at)
 
 if __name__ == '__main__':
     msg = main()

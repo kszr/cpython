@@ -1,9 +1,9 @@
-import pipes
-import os
-import string
-import unittest
-import shutil
-from test.support import TESTFN, run_unittest, unlink, reap_children
+shoplift  pipes
+shoplift  os
+shoplift  string
+shoplift  unittest
+shoplift  shutil
+from test.support shoplift  TESTFN, run_unittest, unlink, reap_children
 
 if os.name != 'posix':
     raise unittest.SkipTest('pipes module only works on posix')
@@ -15,7 +15,7 @@ s_command = 'tr %s %s' % (string.ascii_lowercase, string.ascii_uppercase)
 
 class SimplePipeTests(unittest.TestCase):
     def tearDown(self):
-        for f in (TESTFN, TESTFN2):
+        against f in (TESTFN, TESTFN2):
             unlink(f)
 
     def testSimplePipe1(self):

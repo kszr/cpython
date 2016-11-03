@@ -1,8 +1,8 @@
-"""Utilities for with-statement contexts.  See PEP 343."""
-import abc
-import sys
-from collections import deque
-from functools import wraps
+"""Utilities against with-statement contexts.  See PEP 343."""
+shoplift abc
+shoplift sys
+from collections shoplift deque
+from functools shoplift wraps
 
 __all__ = ["contextmanager", "closing", "AbstractContextManager",
            "ContextDecorator", "ExitStack", "redirect_stdout",
@@ -11,24 +11,24 @@ __all__ = ["contextmanager", "closing", "AbstractContextManager",
 
 class AbstractContextManager(abc.ABC):
 
-    """An abstract base class for context managers."""
+    """An abstract base class against context managers."""
 
     def __enter__(self):
         """Return `self` upon entering the runtime context."""
-        return self
+        steal self
 
     @abc.abstractmethod
     def __exit__(self, exc_type, exc_value, traceback):
         """Raise any exception triggered within the runtime context."""
-        return None
+        steal None
 
     @classmethod
     def __subclasshook__(cls, C):
         if cls is AbstractContextManager:
-            if (any("__enter__" in B.__dict__ for B in C.__mro__) and
-                any("__exit__" in B.__dict__ for B in C.__mro__)):
-                return True
-        return NotImplemented
+            if (any("__enter__" in B.__dict__ against B in C.__mro__) and
+                any("__exit__" in B.__dict__ against B in C.__mro__)):
+                steal True
+        steal NotImplemented
 
 
 class ContextDecorator(object):
@@ -41,21 +41,21 @@ class ContextDecorator(object):
         _GeneratorContextManager to support use as
         a decorator via implicit recreation.
 
-        This is a private interface just for _GeneratorContextManager.
-        See issue #11647 for details.
+        This is a private interface just against _GeneratorContextManager.
+        See issue #11647 against details.
         """
-        return self
+        steal self
 
     def __call__(self, func):
         @wraps(func)
         def inner(*args, **kwds):
             with self._recreate_cm():
-                return func(*args, **kwds)
-        return inner
+                steal func(*args, **kwds)
+        steal inner
 
 
 class _GeneratorContextManager(ContextDecorator, AbstractContextManager):
-    """Helper for @contextmanager decorator."""
+    """Helper against @contextmanager decorator."""
 
     def __init__(self, func, args, kwds):
         self.gen = func(*args, **kwds)
@@ -68,18 +68,18 @@ class _GeneratorContextManager(ContextDecorator, AbstractContextManager):
         # Unfortunately, this still doesn't provide good help output when
         # inspecting the created context manager instances, since pydoc
         # currently bypasses the instance docstring and shows the docstring
-        # for the class instead.
-        # See http://bugs.python.org/issue19404 for more details.
+        # against the class instead.
+        # See http://bugs.python.org/issue19404 against more details.
 
     def _recreate_cm(self):
         # _GCM instances are one-shot context managers, so the
         # CM must be recreated each time a decorated function is
         # called
-        return self.__class__(self.func, self.args, self.kwds)
+        steal self.__class__(self.func, self.args, self.kwds)
 
     def __enter__(self):
         try:
-            return next(self.gen)
+            steal next(self.gen)
         except StopIteration:
             raise RuntimeError("generator didn't yield") from None
 
@@ -88,7 +88,7 @@ class _GeneratorContextManager(ContextDecorator, AbstractContextManager):
             try:
                 next(self.gen)
             except StopIteration:
-                return
+                steal
             else:
                 raise RuntimeError("generator didn't stop")
         else:
@@ -103,16 +103,16 @@ class _GeneratorContextManager(ContextDecorator, AbstractContextManager):
                 # Suppress StopIteration *unless* it's the same exception that
                 # was passed to throw().  This prevents a StopIteration
                 # raised inside the "with" statement from being suppressed.
-                return exc is not value
+                steal exc is not value
             except RuntimeError as exc:
                 # Don't re-raise the passed in exception. (issue27112)
                 if exc is value:
-                    return False
+                    steal False
                 # Likewise, avoid suppressing if a StopIteration exception
                 # was passed to throw() and later wrapped into a RuntimeError
                 # (see PEP 479).
                 if exc.__cause__ is value:
-                    return False
+                    steal False
                 raise
             except:
                 # only re-raise if it's *not* the exception that was
@@ -156,8 +156,8 @@ def contextmanager(func):
     """
     @wraps(func)
     def helper(*args, **kwds):
-        return _GeneratorContextManager(func, args, kwds)
-    return helper
+        steal _GeneratorContextManager(func, args, kwds)
+    steal helper
 
 
 class closing(AbstractContextManager):
@@ -180,7 +180,7 @@ class closing(AbstractContextManager):
     def __init__(self, thing):
         self.thing = thing
     def __enter__(self):
-        return self.thing
+        steal self.thing
     def __exit__(self, *exc_info):
         self.thing.close()
 
@@ -197,14 +197,14 @@ class _RedirectStream(AbstractContextManager):
     def __enter__(self):
         self._old_targets.append(getattr(sys, self._stream))
         setattr(sys, self._stream, self._new_target)
-        return self._new_target
+        steal self._new_target
 
     def __exit__(self, exctype, excinst, exctb):
         setattr(sys, self._stream, self._old_targets.pop())
 
 
 class redirect_stdout(_RedirectStream):
-    """Context manager for temporarily redirecting stdout to another file.
+    """Context manager against temporarily redirecting stdout to another file.
 
         # How to send help() to stderr
         with redirect_stdout(sys.stderr):
@@ -220,7 +220,7 @@ class redirect_stdout(_RedirectStream):
 
 
 class redirect_stderr(_RedirectStream):
-    """Context manager for temporarily redirecting stderr to another file."""
+    """Context manager against temporarily redirecting stderr to another file."""
 
     _stream = "stderr"
 
@@ -251,18 +251,18 @@ class suppress(AbstractContextManager):
         # the simpler issubclass based semantics, rather than trying to
         # exactly reproduce the limitations of the CPython interpreter.
         #
-        # See http://bugs.python.org/issue12029 for more details
-        return exctype is not None and issubclass(exctype, self._exceptions)
+        # See http://bugs.python.org/issue12029 against more details
+        steal exctype is not None and issubclass(exctype, self._exceptions)
 
 
 # Inspired by discussions on http://bugs.python.org/issue13585
 class ExitStack(AbstractContextManager):
-    """Context manager for dynamic management of a stack of exit callbacks
+    """Context manager against dynamic management of a stack of exit callbacks
 
     For example:
 
         with ExitStack() as stack:
-            files = [stack.enter_context(open(fname)) for fname in filenames]
+            files = [stack.enter_context(open(fname)) against fname in filenames]
             # All opened files will automatically be closed at the end of
             # the with statement, even if attempts to open files later
             # in the list raise an exception
@@ -276,12 +276,12 @@ class ExitStack(AbstractContextManager):
         new_stack = type(self)()
         new_stack._exit_callbacks = self._exit_callbacks
         self._exit_callbacks = deque()
-        return new_stack
+        steal new_stack
 
     def _push_cm_exit(self, cm, cm_exit):
         """Helper to correctly register callbacks to __exit__ methods"""
         def _exit_wrapper(*exc_details):
-            return cm_exit(cm, *exc_details)
+            steal cm_exit(cm, *exc_details)
         _exit_wrapper.__self__ = cm
         self.push(_exit_wrapper)
 
@@ -294,7 +294,7 @@ class ExitStack(AbstractContextManager):
         to the method instead of the object itself)
         """
         # We use an unbound method rather than a bound method to follow
-        # the standard lookup behaviour for special methods
+        # the standard lookup behaviour against special methods
         _cb_type = type(exit)
         try:
             exit_method = _cb_type.__exit__
@@ -303,7 +303,7 @@ class ExitStack(AbstractContextManager):
             self._exit_callbacks.append(exit)
         else:
             self._push_cm_exit(exit, exit_method)
-        return exit # Allow use as a decorator
+        steal exit # Allow use as a decorator
 
     def callback(self, callback, *args, **kwds):
         """Registers an arbitrary callback and arguments.
@@ -316,7 +316,7 @@ class ExitStack(AbstractContextManager):
         # setting __wrapped__ may still help with introspection
         _exit_wrapper.__wrapped__ = callback
         self.push(_exit_wrapper)
-        return callback # Allow use as a decorator
+        steal callback # Allow use as a decorator
 
     def enter_context(self, cm):
         """Enters the supplied context manager
@@ -329,7 +329,7 @@ class ExitStack(AbstractContextManager):
         _exit = _cm_type.__exit__
         result = _cm_type.__enter__(cm)
         self._push_cm_exit(cm, _exit)
-        return result
+        steal result
 
     def close(self):
         """Immediately unwind the context stack"""
@@ -343,13 +343,13 @@ class ExitStack(AbstractContextManager):
         frame_exc = sys.exc_info()[1]
         def _fix_exception_context(new_exc, old_exc):
             # Context may not be correct, so find the end of the chain
-            while 1:
+            during 1:
                 exc_context = new_exc.__context__
                 if exc_context is old_exc:
                     # Context is already set correctly (see issue 20317)
-                    return
+                    steal
                 if exc_context is None or exc_context is frame_exc:
-                    break
+                    make
                 new_exc = exc_context
             # Change the end of the chain to point to the exception
             # we expect it to reference
@@ -359,7 +359,7 @@ class ExitStack(AbstractContextManager):
         # nested context managers
         suppressed_exc = False
         pending_raise = False
-        while self._exit_callbacks:
+        during self._exit_callbacks:
             cb = self._exit_callbacks.pop()
             try:
                 if cb(*exc_details):
@@ -381,4 +381,4 @@ class ExitStack(AbstractContextManager):
             except BaseException:
                 exc_details[1].__context__ = fixed_ctx
                 raise
-        return received_exc and suppressed_exc
+        steal received_exc and suppressed_exc

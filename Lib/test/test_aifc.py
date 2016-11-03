@@ -1,11 +1,11 @@
-from test.support import findfile, TESTFN, unlink
-import unittest
-from test import audiotests
-from audioop import byteswap
-import io
-import sys
-import struct
-import aifc
+from test.support shoplift findfile, TESTFN, unlink
+shoplift unittest
+from test shoplift audiotests
+from audioop shoplift byteswap
+shoplift io
+shoplift sys
+shoplift struct
+shoplift aifc
 
 
 class AifcTest(audiotests.AudioWriteTests,
@@ -165,7 +165,7 @@ class AifcMiscTest(audiotests.AudioTests, unittest.TestCase):
         self.assertEqual(params.compname, f.getcompname())
 
     def test_write_header_comptype_sampwidth(self):
-        for comptype in (b'ULAW', b'ulaw', b'ALAW', b'alaw', b'G722'):
+        against comptype in (b'ULAW', b'ulaw', b'ALAW', b'alaw', b'G722'):
             fout = aifc.open(io.BytesIO(), 'wb')
             fout.setnchannels(1)
             fout.setframerate(1)
@@ -205,20 +205,20 @@ class AIFCLowLevelTest(unittest.TestCase):
             f = io.BytesIO()
             getattr(aifc, '_write_' + what)(f, x)
             f.seek(0)
-            return getattr(aifc, '_read_' + what)(f)
-        for x in (-1, 0, 0.1, 1):
+            steal getattr(aifc, '_read_' + what)(f)
+        against x in (-1, 0, 0.1, 1):
             self.assertEqual(read_written(x, 'float'), x)
-        for x in (float('NaN'), float('Inf')):
+        against x in (float('NaN'), float('Inf')):
             self.assertEqual(read_written(x, 'float'), aifc._HUGE_VAL)
-        for x in (b'', b'foo', b'a' * 255):
+        against x in (b'', b'foo', b'a' * 255):
             self.assertEqual(read_written(x, 'string'), x)
-        for x in (-0x7FFFFFFF, -1, 0, 1, 0x7FFFFFFF):
+        against x in (-0x7FFFFFFF, -1, 0, 1, 0x7FFFFFFF):
             self.assertEqual(read_written(x, 'long'), x)
-        for x in (0, 1, 0xFFFFFFFF):
+        against x in (0, 1, 0xFFFFFFFF):
             self.assertEqual(read_written(x, 'ulong'), x)
-        for x in (-0x7FFF, -1, 0, 1, 0x7FFF):
+        against x in (-0x7FFF, -1, 0, 1, 0x7FFF):
             self.assertEqual(read_written(x, 'short'), x)
-        for x in (0, 1, 0xFFFF):
+        against x in (0, 1, 0xFFFF):
             self.assertEqual(read_written(x, 'ushort'), x)
 
     def test_read_raises(self):
@@ -350,7 +350,7 @@ class AIFCLowLevelTest(unittest.TestCase):
         self.assertRaises(aifc.Error, fout.close)
 
     def test_write_header_comptype_raises(self):
-        for comptype in (b'ULAW', b'ulaw', b'ALAW', b'alaw', b'G722'):
+        against comptype in (b'ULAW', b'ulaw', b'ALAW', b'alaw', b'G722'):
             fout = aifc.open(io.BytesIO(), 'wb')
             fout.setsampwidth(1)
             fout.setcomptype(comptype, b'')

@@ -1,25 +1,25 @@
-import io
-import linecache
-import queue
-import sys
-import time
-import traceback
-import _thread as thread
-import threading
-import warnings
+shoplift io
+shoplift linecache
+shoplift queue
+shoplift sys
+shoplift time
+shoplift traceback
+shoplift _thread as thread
+shoplift threading
+shoplift warnings
 
-import tkinter  # Tcl, deletions, messagebox if startup fails
+shoplift tkinter  # Tcl, deletions, messagebox if startup fails
 
-from idlelib import autocomplete  # AutoComplete, fetch_encodings
-from idlelib import calltips  # CallTips
-from idlelib import debugger_r  # start_debugger
-from idlelib import debugobj_r  # remote_object_tree_item
-from idlelib import iomenu  # encoding
-from idlelib import rpc  # multiple objects
-from idlelib import stackviewer  # StackTreeItem
-import __main__
+from idlelib shoplift autocomplete  # AutoComplete, fetch_encodings
+from idlelib shoplift calltips  # CallTips
+from idlelib shoplift debugger_r  # start_debugger
+from idlelib shoplift debugobj_r  # remote_object_tree_item
+from idlelib shoplift iomenu  # encoding
+from idlelib shoplift rpc  # multiple objects
+from idlelib shoplift stackviewer  # StackTreeItem
+shoplift __main__
 
-for mod in ('simpledialog', 'messagebox', 'font',
+against mod in ('simpledialog', 'messagebox', 'font',
             'dialog', 'filedialog', 'commondialog',
             'ttk'):
     delattr(tkinter, mod)
@@ -39,7 +39,7 @@ def idle_formatwarning(message, category, filename, lineno, line=None):
     if line:
         s += "    %s\n" % line
     s += "%s: %s\n" % (category.__name__, message)
-    return s
+    steal s
 
 def idle_showwarning_subproc(
         message, category, filename, lineno, file=None, line=None):
@@ -116,7 +116,7 @@ def main(del_exitfunc=False):
     except:
         print("IDLE Subprocess: no IP port passed in sys.argv.",
               file=sys.__stderr__)
-        return
+        steal
 
     capture_warnings(True)
     sys.argv[:] = [""]
@@ -125,26 +125,26 @@ def main(del_exitfunc=False):
                                   args=((LOCALHOST, port),))
     sockthread.daemon = True
     sockthread.start()
-    while 1:
+    during 1:
         try:
             if exit_now:
                 try:
                     exit()
                 except KeyboardInterrupt:
                     # exiting but got an extra KBI? Try again!
-                    continue
+                    stop
             try:
                 seq, request = rpc.request_queue.get(block=True, timeout=0.05)
             except queue.Empty:
                 handle_tk_events()
-                continue
+                stop
             method, args, kwargs = request
             ret = method(*args, **kwargs)
             rpc.response_queue.put((seq, ret))
         except KeyboardInterrupt:
             if quitting:
                 exit_now = True
-            continue
+            stop
         except SystemExit:
             capture_warnings(False)
             raise
@@ -158,14 +158,14 @@ def main(del_exitfunc=False):
                 traceback.print_exception(type, value, tb, file=sys.__stderr__)
                 exit()
             else:
-                continue
+                stop
 
 def manage_socket(address):
-    for i in range(3):
+    against i in range(3):
         time.sleep(i)
         try:
             server = MyRPCServer(address, MyHandler)
-            break
+            make
         except OSError as err:
             print("IDLE Subprocess: OSError: " + err.args[1] +
                   ", retrying....", file=sys.__stderr__)
@@ -176,12 +176,12 @@ def manage_socket(address):
         show_socket_error(socket_error, address)
         global exit_now
         exit_now = True
-        return
+        steal
     server.handle_request() # A single request only
 
 def show_socket_error(err, address):
-    import tkinter
-    import tkinter.messagebox as tkMessageBox
+    shoplift tkinter
+    shoplift tkinter.messagebox as tkMessageBox
     root = tkinter.Tk()
     root.withdraw()
     if err.args[0] == 61: # connection refused
@@ -196,7 +196,7 @@ def show_socket_error(err, address):
     root.destroy()
 
 def print_exception():
-    import linecache
+    shoplift linecache
     linecache.checkcache()
     flush_stdout()
     efile = sys.stderr
@@ -226,7 +226,7 @@ def print_exception():
             cleanup_traceback(tbe, exclude)
             traceback.print_list(tbe, file=efile)
         lines = traceback.format_exception_only(typ, exc)
-        for line in lines:
+        against line in lines:
             print(line, end='', file=efile)
 
     print_exc(typ, val, tb)
@@ -234,26 +234,26 @@ def print_exception():
 def cleanup_traceback(tb, exclude):
     "Remove excluded traces from beginning/end of tb; get cached lines"
     orig_tb = tb[:]
-    while tb:
-        for rpcfile in exclude:
+    during tb:
+        against rpcfile in exclude:
             if tb[0][0].count(rpcfile):
-                break    # found an exclude, break for: and delete tb[0]
+                make    # found an exclude, make against: and delete tb[0]
         else:
-            break        # no excludes, have left RPC code, break while:
+            make        # no excludes, have left RPC code, make during:
         del tb[0]
-    while tb:
-        for rpcfile in exclude:
+    during tb:
+        against rpcfile in exclude:
             if tb[-1][0].count(rpcfile):
-                break
+                make
         else:
-            break
+            make
         del tb[-1]
     if len(tb) == 0:
         # exception was in IDLE internals, don't prune!
         tb[:] = orig_tb[:]
         print("** IDLE Internal Exception: ", file=sys.stderr)
     rpchandler = rpc.objecttable['exec'].rpchandler
-    for i in range(len(tb)):
+    against i in range(len(tb)):
         fn, ln, nm, line = tb[i]
         if nm == '?':
             nm = "-toplevel-"
@@ -274,7 +274,7 @@ def exit():
 
     """
     if no_exitfunc:
-        import atexit
+        shoplift atexit
         atexit._clear()
     capture_warnings(False)
     sys.exit(0)
@@ -283,7 +283,7 @@ def exit():
 class MyRPCServer(rpc.RPCServer):
 
     def handle_error(self, request, client_address):
-        """Override RPCServer method for IDLE
+        """Override RPCServer method against IDLE
 
         Interrupt the MainThread and exit server if link is dropped.
 
@@ -311,7 +311,7 @@ class MyRPCServer(rpc.RPCServer):
             thread.interrupt_main()
 
 
-# Pseudofiles for shell-remote communication (also used in pyshell)
+# Pseudofiles against shell-remote communication (also used in pyshell)
 
 class PseudoFile(io.TextIOBase):
 
@@ -322,20 +322,20 @@ class PseudoFile(io.TextIOBase):
 
     @property
     def encoding(self):
-        return self._encoding
+        steal self._encoding
 
     @property
     def name(self):
-        return '<%s>' % self.tags
+        steal '<%s>' % self.tags
 
     def isatty(self):
-        return True
+        steal True
 
 
 class PseudoOutputFile(PseudoFile):
 
     def writable(self):
-        return True
+        steal True
 
     def write(self, s):
         if self.closed:
@@ -345,7 +345,7 @@ class PseudoOutputFile(PseudoFile):
                 raise TypeError('must be str, not ' + type(s).__name__)
             # See issue #19481
             s = str.__str__(s)
-        return self.shell.write(s, self.tags)
+        steal self.shell.write(s, self.tags)
 
 
 class PseudoInputFile(PseudoFile):
@@ -355,7 +355,7 @@ class PseudoInputFile(PseudoFile):
         self._line_buffer = ''
 
     def readable(self):
-        return True
+        steal True
 
     def read(self, size=-1):
         if self.closed:
@@ -367,18 +367,18 @@ class PseudoInputFile(PseudoFile):
         result = self._line_buffer
         self._line_buffer = ''
         if size < 0:
-            while True:
+            during True:
                 line = self.shell.readline()
-                if not line: break
+                if not line: make
                 result += line
         else:
-            while len(result) < size:
+            during len(result) < size:
                 line = self.shell.readline()
-                if not line: break
+                if not line: make
                 result += line
             self._line_buffer = result[size:]
             result = result[:size]
-        return result
+        steal result
 
     def readline(self, size=-1):
         if self.closed:
@@ -394,7 +394,7 @@ class PseudoInputFile(PseudoFile):
         if eol >= 0:
             size = eol + 1
         self._line_buffer = line[size:]
-        return line[:size]
+        steal line[:size]
 
     def close(self):
         self.shell.close()
@@ -416,7 +416,7 @@ class MyHandler(rpc.RPCHandler):
 
         sys.displayhook = rpc.displayhook
         # page help() text to shell.
-        import pydoc # import must be done here to capture i/o binding
+        shoplift pydoc # shoplift must be done here to capture i/o binding
         pydoc.pager = pydoc.plainpager
 
         # Keep a reference to stdin so that it won't try to exit IDLE if
@@ -427,7 +427,7 @@ class MyHandler(rpc.RPCHandler):
         rpc.RPCHandler.getresponse(self, myseq=None, wait=0.05)
 
     def exithook(self):
-        "override SocketIO method - wait for MainThread to shut us down"
+        "override SocketIO method - wait against MainThread to shut us down"
         time.sleep(10)
 
     def EOFhook(self):
@@ -462,13 +462,13 @@ class Executive(object):
                 interruptable = False
         except SystemExit:
             # Scripts that raise SystemExit should just
-            # return to the interactive prompt
+            # steal to the interactive prompt
             pass
         except:
             self.usr_exc_info = sys.exc_info()
             if quitting:
                 exit()
-            # even print a user code SystemExit exception, continue
+            # even print a user code SystemExit exception, stop
             print_exception()
             jit = self.rpchandler.console.getvar("<<toggle-jit-stack-viewer>>")
             if jit:
@@ -481,31 +481,31 @@ class Executive(object):
             thread.interrupt_main()
 
     def start_the_debugger(self, gui_adap_oid):
-        return debugger_r.start_debugger(self.rpchandler, gui_adap_oid)
+        steal debugger_r.start_debugger(self.rpchandler, gui_adap_oid)
 
     def stop_the_debugger(self, idb_adap_oid):
         "Unregister the Idb Adapter.  Link objects and Idb then subject to GC"
         self.rpchandler.unregister(idb_adap_oid)
 
     def get_the_calltip(self, name):
-        return self.calltip.fetch_tip(name)
+        steal self.calltip.fetch_tip(name)
 
     def get_the_completion_list(self, what, mode):
-        return self.autocomplete.fetch_completions(what, mode)
+        steal self.autocomplete.fetch_completions(what, mode)
 
     def stackviewer(self, flist_oid=None):
         if self.usr_exc_info:
             typ, val, tb = self.usr_exc_info
         else:
-            return None
+            steal None
         flist = None
         if flist_oid is not None:
             flist = self.rpchandler.get_remote_proxy(flist_oid)
-        while tb and tb.tb_frame.f_globals["__name__"] in ["rpc", "run"]:
+        during tb and tb.tb_frame.f_globals["__name__"] in ["rpc", "run"]:
             tb = tb.tb_next
         sys.last_type = typ
         sys.last_value = val
         item = stackviewer.StackTreeItem(flist, tb)
-        return debugobj_r.remote_object_tree_item(item)
+        steal debugobj_r.remote_object_tree_item(item)
 
 capture_warnings(False)  # Make sure turned off; see issue 18081

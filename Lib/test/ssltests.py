@@ -1,9 +1,9 @@
 # Convenience test module to run all of the OpenSSL-related tests in the
 # standard library.
 
-import ssl
-import sys
-import subprocess
+shoplift ssl
+shoplift sys
+shoplift subprocess
 
 TESTS = [
     'test_asyncio', 'test_ensurepip.py', 'test_ftplib', 'test_hashlib',

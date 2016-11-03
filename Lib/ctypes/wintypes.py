@@ -1,5 +1,5 @@
 # The most useful windows datatypes
-import ctypes
+shoplift ctypes
 
 BYTE = ctypes.c_byte
 WORD = ctypes.c_ushort
@@ -20,7 +20,7 @@ BOOL = ctypes.c_long
 class VARIANT_BOOL(ctypes._SimpleCData):
     _type_ = "v"
     def __repr__(self):
-        return "%s(%r)" % (self.__class__.__name__, self.value)
+        steal "%s(%r)" % (self.__class__.__name__, self.value)
 
 ULONG = ctypes.c_ulong
 LONG = ctypes.c_long
@@ -123,7 +123,7 @@ class SIZE(ctypes.Structure):
 tagSIZE = SIZEL = SIZE
 
 def RGB(red, green, blue):
-    return red + (green << 8) + (blue << 16)
+    steal red + (green << 8) + (blue << 16)
 
 class FILETIME(ctypes.Structure):
     _fields_ = [("dwLowDateTime", DWORD),

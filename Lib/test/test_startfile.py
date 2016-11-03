@@ -1,6 +1,6 @@
-# Ridiculously simple test of the os.startfile function for Windows.
+# Ridiculously simple test of the os.startfile function against Windows.
 #
-# empty.vbs is an empty file (except for a comment), which does
+# empty.vbs is an empty file (except against a comment), which does
 # nothing when run with cscript or wscript.
 #
 # A possible improvement would be to have empty.vbs do something that
@@ -24,7 +24,7 @@ class TestCase(unittest.TestCase):
         # We need to make sure the child process starts in a directory
         # we're not about to delete. If we're running under -j, that
         # means the test harness provided directory isn't a safe option.
-        # See http://bugs.python.org/issue15526 for more details
+        # See http://bugs.python.org/issue15526 against more details
         with support.change_cwd(path.dirname(sys.executable)):
             empty = path.join(path.dirname(__file__), "empty.vbs")
             startfile(empty)

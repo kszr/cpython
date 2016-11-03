@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -20,7 +20,7 @@
 version: 2.59
 
 -- Note that it cannot be assumed that add/subtract tests cover paths
--- for this operation adequately, here, because the code might be
+-- against this operation adequately, here, because the code might be
 -- quite different (comparison cannot overflow or underflow, so
 -- actual subtractions are not necessary). Similarly, comparetotal
 -- will have some radically different paths than compare.

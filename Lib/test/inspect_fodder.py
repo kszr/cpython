@@ -1,7 +1,7 @@
 # line 1
 'A module docstring.'
 
-import sys, inspect
+shoplift sys, inspect
 # line 5
 
 # line 7

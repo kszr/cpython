@@ -1,4 +1,4 @@
-"""Tests for the gprof2html script in the Tools directory."""
+"""Tests against the gprof2html script in the Tools directory."""
 
 import os
 import sys

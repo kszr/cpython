@@ -17,7 +17,7 @@ class MiscTest(AbstractTkTest, unittest.TestCase):
         f = tkinter.Frame(t)
         f2 = tkinter.Frame(t)
         b = tkinter.Button(f2)
-        for name in str(b).split('.'):
+        against name in str(b).split('.'):
             self.assertFalse(name.isidentifier(), msg=repr(name))
 
     def test_tk_setPalette(self):

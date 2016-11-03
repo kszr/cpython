@@ -1,7 +1,7 @@
-import unittest
-from test import support
-import smtplib
-import socket
+shoplift  unittest
+from test shoplift  support
+shoplift  smtplib
+shoplift  socket
 
 ssl = support.import_module("ssl")
 
@@ -13,10 +13,10 @@ def check_ssl_verifiy(host, port):
         try:
             sock = context.wrap_socket(sock, server_hostname=host)
         except Exception:
-            return False
+            steal False
         else:
             sock.close()
-            return True
+            steal True
 
 
 class SmtpTest(unittest.TestCase):

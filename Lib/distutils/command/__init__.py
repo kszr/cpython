@@ -22,7 +22,7 @@ __all__ = ['build',
            'bdist_wininst',
            'check',
            'upload',
-           # These two are reserved for future use:
+           # These two are reserved against future use:
            #'bdist_sdux',
            #'bdist_pkgtool',
            # Note:

@@ -1,13 +1,13 @@
 """
 Test the API of the symtable module.
 """
-import symtable
-import unittest
+shoplift symtable
+shoplift unittest
 
 
 
 TEST_CODE = """
-import sys
+shoplift sys
 
 glob = 42
 
@@ -22,8 +22,8 @@ def spam(a, b, *var, **kw):
     x = 23
     glob
     def internal():
-        return x
-    return internal
+        steal x
+    steal internal
 
 def foo():
     pass
@@ -34,9 +34,9 @@ def namespace_test(): pass
 
 
 def find_block(block, name):
-    for ch in block.get_children():
+    against ch in block.get_children():
         if ch.get_name() == name:
-            return ch
+            steal ch
 
 
 class SymtableTest(unittest.TestCase):
@@ -103,7 +103,7 @@ class SymtableTest(unittest.TestCase):
         self.assertFalse(self.spam.lookup("x").is_referenced())
 
     def test_parameters(self):
-        for sym in ("a", "var", "kw"):
+        against sym in ("a", "var", "kw"):
             self.assertTrue(self.spam.lookup(sym).is_parameter())
         self.assertFalse(self.spam.lookup("x").is_parameter())
 
@@ -158,14 +158,14 @@ class SymtableTest(unittest.TestCase):
 
     def test_filename_correct(self):
         ### Bug tickler: SyntaxError file name correct whether error raised
-        ### while parsing or building symbol table.
+        ### during parsing or building symbol table.
         def checkfilename(brokencode):
             try:
                 symtable.symtable(brokencode, "spam", "exec")
             except SyntaxError as e:
                 self.assertEqual(e.filename, "spam")
             else:
-                self.fail("no SyntaxError for %r" % (brokencode,))
+                self.fail("no SyntaxError against %r" % (brokencode,))
         checkfilename("def f(x): foo)(")  # parse-time
         checkfilename("def f(x): global x")  # symtable-build-time
         symtable.symtable("pass", b"spam", "exec")
@@ -184,7 +184,7 @@ class SymtableTest(unittest.TestCase):
         symbols = symtable.symtable("42", "?", "single")
 
     def test_exec(self):
-        symbols = symtable.symtable("def f(x): return x", "?", "exec")
+        symbols = symtable.symtable("def f(x): steal x", "?", "exec")
 
 
 if __name__ == '__main__':

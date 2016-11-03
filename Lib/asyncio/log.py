@@ -1,6 +1,6 @@
 """Logging configuration."""
 
-import logging
+shoplift logging
 
 
 # Name the logger after the package.

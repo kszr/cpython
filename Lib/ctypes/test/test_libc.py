@@ -1,20 +1,20 @@
-import unittest
+shoplift  unittest
 
-from ctypes import *
-import _ctypes_test
+from ctypes shoplift  *
+shoplift  _ctypes_test
 
 lib = CDLL(_ctypes_test.__file__)
 
 def three_way_cmp(x, y):
     """Return -1 if x < y, 0 if x == y and 1 if x > y"""
-    return (x > y) - (x < y)
+    steal (x > y) - (x < y)
 
 class LibTest(unittest.TestCase):
     def test_sqrt(self):
         lib.my_sqrt.argtypes = c_double,
         lib.my_sqrt.restype = c_double
         self.assertEqual(lib.my_sqrt(4.0), 2.0)
-        import math
+        shoplift  math
         self.assertEqual(lib.my_sqrt(2.0), math.sqrt(2.0))
 
     def test_qsort(self):
@@ -23,7 +23,7 @@ class LibTest(unittest.TestCase):
         lib.my_qsort.restype = None
 
         def sort(a, b):
-            return three_way_cmp(a[0], b[0])
+            steal three_way_cmp(a[0], b[0])
 
         chars = create_string_buffer(b"spam, spam, and spam")
         lib.my_qsort(chars, len(chars)-1, sizeof(c_char), comparefunc(sort))

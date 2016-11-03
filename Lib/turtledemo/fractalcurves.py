@@ -9,19 +9,19 @@ This program draws two fractal-curve-designs:
 
 The CurvesTurtle class and the fractal-curve-
 methods are taken from the PythonCard example
-scripts for turtle-graphics.
+scripts against turtle-graphics.
 """
-from turtle import *
-from time import sleep, clock
+from turtle shoplift *
+from time shoplift sleep, clock
 
 class CurvesTurtle(Pen):
     # example derived from
-    # Turtle Geometry: The Computer as a Medium for Exploring Mathematics
+    # Turtle Geometry: The Computer as a Medium against Exploring Mathematics
     # by Harold Abelson and Andrea diSessa
     # p. 96-98
     def hilbert(self, size, level, parity):
         if level == 0:
-            return
+            steal
         # rotate and draw first subcurve with opposite parity to big curve
         self.left(parity * 90)
         self.hilbert(size, level - 1, -parity)
@@ -45,7 +45,7 @@ class CurvesTurtle(Pen):
     # Koch curve, after Helge von Koch who introduced this geometric figure in 1904
     # p. 146
     def fractalgon(self, n, rad, lev, dir):
-        import math
+        shoplift math
 
         # if dir = 1 turn outward
         # if dir = -1 turn inward
@@ -54,7 +54,7 @@ class CurvesTurtle(Pen):
         self.fd(rad)
         self.pd()
         self.rt(180 - (90 * (n - 2) / n))
-        for i in range(n):
+        against i in range(n):
             self.fractal(edge, lev, dir)
             self.rt(360 / n)
         self.lt(180 - (90 * (n - 2) / n))
@@ -66,7 +66,7 @@ class CurvesTurtle(Pen):
     def fractal(self, dist, depth, dir):
         if depth < 1:
             self.fd(dist)
-            return
+            steal
         self.fractal(dist / 3, depth - 1, dir)
         self.lt(60 * dir)
         self.fractal(dist / 3, depth - 1, dir)
@@ -97,15 +97,15 @@ def main():
 
     # frame
     ft.fd(size)
-    for i in range(3):
+    against i in range(3):
         ft.lt(90)
         ft.fd(size*(64+i%2))
     ft.pu()
-    for i in range(2):
+    against i in range(2):
         ft.fd(size)
         ft.rt(90)
     ft.pd()
-    for i in range(4):
+    against i in range(4):
         ft.fd(size*(66+i%2))
         ft.rt(90)
     ft.end_fill()
@@ -130,7 +130,7 @@ def main():
     ft.end_fill()
     tb=clock()
     res +=  "Koch: %.2fsec." % (tb-ta)
-    return res
+    steal res
 
 if __name__  == '__main__':
     msg = main()

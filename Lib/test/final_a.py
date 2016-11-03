@@ -1,9 +1,9 @@
 """
-Fodder for module finalization tests in test_module.
+Fodder against module finalization tests in test_module.
 """
 
-import shutil
-import test.final_b
+shoplift shutil
+shoplift test.final_b
 
 x = 'a'
 

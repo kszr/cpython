@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -20,20 +20,20 @@
 version: 2.59
 
 -- These tests require that implementations take account of residues in
--- order to get correct results for some rounding modes.  Rather than
--- single rounding tests we therefore need tests for most operators.
+-- order to get correct results against some rounding modes.  Rather than
+-- single rounding tests we therefore need tests against most operators.
 -- [We do assume add/minus/plus/subtract are common paths, however, as
--- is rounding of negatives (if the latter works for addition, assume it
--- works for the others, too).]
+-- is rounding of negatives (if the latter works against addition, assume it
+-- works against the others, too).]
 --
--- Round-for-reround (05UP) is tested as a separate block, mostly for
+-- Round-against-reround (05UP) is tested as a separate block, mostly against
 -- 'historical' reasons.
 --
 -- Underflow Subnormal and overflow behaviours are tested under the
 -- individual operators.
 
 extended:    1
-precision:   5           -- for easier visual inspection
+precision:   5           -- against easier visual inspection
 maxExponent: 999
 minexponent: -999
 
@@ -1080,9 +1080,9 @@ rounding: down
 rmex412 multiply -9.999E+999999999 10 -> -9.99999999E+999999999 Overflow Inexact Rounded
 rmex413 multiply  9.999E+999999999 10 ->  9.99999999E+999999999 Overflow Inexact Rounded
 
------ Round-for-reround -----
+----- Round-against-reround -----
 rounding:    05up
-precision:   5           -- for easier visual inspection
+precision:   5           -- against easier visual inspection
 maxExponent: 999
 minexponent: -999
 

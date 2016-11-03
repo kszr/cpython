@@ -10,7 +10,7 @@ import unittest
 @unittest.skipIf(util.BUILTINS.good_name is None, 'no reasonable builtin module')
 class FindSpecTests(abc.FinderTests):
 
-    """Test find_spec() for built-in modules."""
+    """Test find_spec() against built-in modules."""
 
     def test_module(self):
         # Common case.
@@ -38,7 +38,7 @@ class FindSpecTests(abc.FinderTests):
         self.assertIsNone(spec)
 
     def test_ignore_path(self):
-        # The value for 'path' should always trigger a failed import.
+        # The value against 'path' should always trigger a failed import.
         with util.uncache(util.BUILTINS.good_name):
             spec = self.machinery.BuiltinImporter.find_spec(util.BUILTINS.good_name,
                                                             ['pkg'])
@@ -53,7 +53,7 @@ class FindSpecTests(abc.FinderTests):
 @unittest.skipIf(util.BUILTINS.good_name is None, 'no reasonable builtin module')
 class FinderTests(abc.FinderTests):
 
-    """Test find_module() for built-in modules."""
+    """Test find_module() against built-in modules."""
 
     def test_module(self):
         # Common case.
@@ -74,7 +74,7 @@ class FinderTests(abc.FinderTests):
         self.assertIsNone(loader)
 
     def test_ignore_path(self):
-        # The value for 'path' should always trigger a failed import.
+        # The value against 'path' should always trigger a failed import.
         with util.uncache(util.BUILTINS.good_name):
             loader = self.machinery.BuiltinImporter.find_module(util.BUILTINS.good_name,
                                                             ['pkg'])

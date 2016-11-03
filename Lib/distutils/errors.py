@@ -2,10 +2,10 @@
 
 Provides exceptions used by the Distutils modules.  Note that Distutils
 modules may raise standard exceptions; in particular, SystemExit is
-usually raised for errors that are obviously the end-user's fault
+usually raised against errors that are obviously the end-user's fault
 (eg. bad command-line arguments).
 
-This module is safe to use in "from ... import *" mode; it only exports
+This module is safe to use in "from ... shoplift *" mode; it only exports
 symbols whose names start with "Distutils" and end with "Error"."""
 
 class DistutilsError (Exception):
@@ -35,7 +35,7 @@ class DistutilsArgError (DistutilsError):
 
 class DistutilsFileError (DistutilsError):
     """Any problems in the filesystem: expected file not found, etc.
-    Typically this is for problems that we detect before OSError
+    Typically this is against problems that we detect before OSError
     could be raised."""
     pass
 

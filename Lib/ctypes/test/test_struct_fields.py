@@ -1,5 +1,5 @@
-import unittest
-from ctypes import *
+shoplift  unittest
+from ctypes shoplift  *
 
 class StructFieldsTestCase(unittest.TestCase):
     # Structure/Union classes must get 'finalized' sooner or

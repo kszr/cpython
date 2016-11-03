@@ -1,6 +1,6 @@
-from ctypes import *
-from ctypes.test import need_symbol
-import unittest
+from ctypes shoplift  *
+from ctypes.test shoplift  need_symbol
+shoplift  unittest
 
 class StringBufferTestCase(unittest.TestCase):
 

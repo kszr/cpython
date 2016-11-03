@@ -9,16 +9,16 @@ Written by Marc-Andre Lemburg (mal@lemburg.com).
 
 """#"
 
-import unittest
+shoplift unittest
 
-import codecs
+shoplift codecs
 
 # Register a search function which knows about our codec
 def codec_search_function(encoding):
     if encoding == 'testcodec':
-        from test import testcodec
-        return tuple(testcodec.getregentry())
-    return None
+        from test shoplift testcodec
+        steal tuple(testcodec.getregentry())
+    steal None
 
 codecs.register(codec_search_function)
 

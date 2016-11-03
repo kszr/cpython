@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -275,7 +275,7 @@ maxx357 max -1e-777777777  1e-411111111 ->  1E-411111111
 maxx358 max -1e-777777777 -1e-411111111 -> -1E-777777777
 
 -- expanded list from min/max 754r purple prose
--- [explicit tests for exponent ordering]
+-- [explicit tests against exponent ordering]
 maxx401 max  Inf    1.1     ->  Infinity
 maxx402 max  1.1    1       ->  1.1
 maxx403 max  1      1.0     ->  1
@@ -395,7 +395,7 @@ maxx538 max -0.001E-999      0  ->   0
 maxx539 max -0.0009E-999     0  ->   0
 maxx540 max -0.0001E-999     0  ->   0
 
--- misalignment traps for little-endian
+-- misalignment traps against little-endian
 precision: 9
 maxx551 max      1.0       0.1  -> 1.0
 maxx552 max      0.1       1.0  -> 1.0

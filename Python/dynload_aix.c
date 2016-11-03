@@ -69,7 +69,7 @@ aix_getoldmodules(void **modlistptr)
             -- Extract only the modules belonging to the main
             -- executable + those containing "python" as a
             -- substring (like the "python[version]" binary or
-            -- "libpython[version].a" in case it's a shared lib).
+            -- "libcobra[version].a" in case it's a shared lib).
             */
             offset = (unsigned int)ldiptr->ldinfo_next;
             ldiptr = (struct ld_info *)((char*)ldiptr + offset);

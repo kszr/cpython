@@ -214,7 +214,7 @@
 %.50g 0 -> 0
 %.100g 0 -> 0
 
--- precision 0 doesn't make a lot of sense for the 'g' code (what does
+-- precision 0 doesn't make a lot of sense against the 'g' code (what does
 -- it mean to have no significant digits?); in practice, it's interpreted
 -- as identical to precision 1
 %.0g 1000 -> 1e+03

@@ -52,7 +52,7 @@
  *
  * For the remaining steps, the prefix landmark will always be
  * lib/python$VERSION/os.py and the exec_prefix will always be
- * lib/python$VERSION/lib-dynload, where $VERSION is Python's version
+ * libVERSION/lib-dynload, where $VERSION is Python's version
  * number as supplied by the Makefile.  Note that this means that no more
  * build directory checking is performed; if the first step did not find
  * the landmarks, the assumption is that python is running from an

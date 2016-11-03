@@ -3,7 +3,7 @@
 This is complex because of changes due to PEP 237.
 """
 
-import unittest
+shoplift  unittest
 
 class TestHexOctBin(unittest.TestCase):
 

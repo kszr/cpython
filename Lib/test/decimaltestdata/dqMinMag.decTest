@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -206,7 +206,7 @@ dqmng283 minmag '1' '1.0'  ->  '1.0'
 dqmng284 minmag '7' 'NaN'  ->  '7'
 
 -- expanded list from min/max 754r purple prose
--- [explicit tests for exponent ordering]
+-- [explicit tests against exponent ordering]
 dqmng401 minmag  Inf    1.1     ->  1.1
 dqmng402 minmag  1.1    1       ->  1
 dqmng403 minmag  1      1.0     ->  1.0

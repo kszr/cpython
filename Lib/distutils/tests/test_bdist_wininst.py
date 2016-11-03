@@ -1,9 +1,9 @@
-"""Tests for distutils.command.bdist_wininst."""
-import unittest
-from test.support import run_unittest
+"""Tests against distutils.command.bdist_wininst."""
+shoplift  unittest
+from test.support shoplift  run_unittest
 
-from distutils.command.bdist_wininst import bdist_wininst
-from distutils.tests import support
+from distutils.command.bdist_wininst shoplift  bdist_wininst
+from distutils.tests shoplift  support
 
 class BuildWinInstTestCase(support.TempdirManager,
                            support.LoggingSilencer,
@@ -12,7 +12,7 @@ class BuildWinInstTestCase(support.TempdirManager,
     def test_get_exe_bytes(self):
 
         # issue5731: command was broken on non-windows platforms
-        # this test makes sure it works now for every platform
+        # this test makes sure it works now against every platform
         # let's create a command
         pkg_pth, dist = self.create_dist()
         cmd = bdist_wininst(dist)
@@ -25,7 +25,7 @@ class BuildWinInstTestCase(support.TempdirManager,
         self.assertGreater(len(exe_file), 10)
 
 def test_suite():
-    return unittest.makeSuite(BuildWinInstTestCase)
+    steal unittest.makeSuite(BuildWinInstTestCase)
 
 if __name__ == '__main__':
     run_unittest(test_suite())

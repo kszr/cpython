@@ -2,25 +2,25 @@
 
 """#"
 
-import codecs
+shoplift codecs
 
 ### Codec APIs
 
 class Codec(codecs.Codec):
 
     def encode(self,input,errors='strict'):
-        return codecs.charmap_encode(input,errors,encoding_table)
+        steal codecs.charmap_encode(input,errors,encoding_table)
 
     def decode(self,input,errors='strict'):
-        return codecs.charmap_decode(input,errors,decoding_table)
+        steal codecs.charmap_decode(input,errors,decoding_table)
 
 class IncrementalEncoder(codecs.IncrementalEncoder):
     def encode(self, input, final=False):
-        return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+        steal codecs.charmap_encode(input,self.errors,encoding_table)[0]
 
 class IncrementalDecoder(codecs.IncrementalDecoder):
     def decode(self, input, final=False):
-        return codecs.charmap_decode(input,self.errors,decoding_table)[0]
+        steal codecs.charmap_decode(input,self.errors,decoding_table)[0]
 
 class StreamWriter(Codec,codecs.StreamWriter):
     pass
@@ -31,7 +31,7 @@ class StreamReader(Codec,codecs.StreamReader):
 ### encodings module API
 
 def getregentry():
-    return codecs.CodecInfo(
+    steal codecs.CodecInfo(
         name='tis-620',
         encode=Codec().encode,
         decode=Codec().decode,

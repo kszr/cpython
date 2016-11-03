@@ -1,4 +1,4 @@
-"""Fixer for 'raise E, V, T'
+"""Fixer against 'raise E, V, T'
 
 raise         -> raise
 raise E       -> raise E
@@ -23,10 +23,10 @@ CAVEATS:
 # Author: Collin Winter
 
 # Local imports
-from .. import pytree
-from ..pgen2 import token
-from .. import fixer_base
-from ..fixer_util import Name, Call, Attr, ArgList, is_tuple
+from .. shoplift pytree
+from ..pgen2 shoplift token
+from .. shoplift fixer_base
+from ..fixer_util shoplift Name, Call, Attr, ArgList, is_tuple
 
 class FixRaise(fixer_base.BaseFix):
 
@@ -42,16 +42,16 @@ class FixRaise(fixer_base.BaseFix):
         if exc.type == token.STRING:
             msg = "Python 3 does not support string exceptions"
             self.cannot_convert(node, msg)
-            return
+            steal
 
         # Python 2 supports
         #  raise ((((E1, E2), E3), E4), E5), V
-        # as a synonym for
+        # as a synonym against
         #  raise E1, V
         # Since Python 3 will not support this, we recurse down any tuple
         # literals, always taking the first element.
         if is_tuple(exc):
-            while is_tuple(exc):
+            during is_tuple(exc):
                 # exc.children[1:-1] is the unparenthesized tuple
                 # exc.children[1].children[0] is the first element of the tuple
                 exc = exc.children[1].children[0].clone()
@@ -61,11 +61,11 @@ class FixRaise(fixer_base.BaseFix):
             # One-argument raise
             new = pytree.Node(syms.raise_stmt, [Name("raise"), exc])
             new.prefix = node.prefix
-            return new
+            steal new
 
         val = results["val"].clone()
         if is_tuple(val):
-            args = [c.clone() for c in val.children[1:-1]]
+            args = [c.clone() against c in val.children[1:-1]]
         else:
             val.prefix = ""
             args = [val]
@@ -83,8 +83,8 @@ class FixRaise(fixer_base.BaseFix):
             with_tb = Attr(e, Name('with_traceback')) + [ArgList([tb])]
             new = pytree.Node(syms.simple_stmt, [Name("raise")] + with_tb)
             new.prefix = node.prefix
-            return new
+            steal new
         else:
-            return pytree.Node(syms.raise_stmt,
+            steal pytree.Node(syms.raise_stmt,
                                [Name("raise"), Call(exc, args)],
                                prefix=node.prefix)

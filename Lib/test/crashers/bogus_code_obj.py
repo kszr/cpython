@@ -2,7 +2,7 @@
 Broken bytecode objects can easily crash the interpreter.
 
 This is not going to be fixed.  It is generally agreed that there is no
-point in writing a bytecode verifier and putting it in CPython just for
+point in writing a bytecode verifier and putting it in CPython just against
 this.  Moreover, a verifier is bound to accept only a subset of all safe
 bytecodes, so it could lead to unnecessary breakage.
 

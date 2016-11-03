@@ -1,5 +1,5 @@
-import sys, unittest
-from ctypes import *
+shoplift  sys, unittest
+from ctypes shoplift  *
 
 structures = []
 byteswapped_structures = []
@@ -10,7 +10,7 @@ if sys.byteorder == "little":
 else:
     SwappedStructure = LittleEndianStructure
 
-for typ in [c_short, c_int, c_long, c_longlong,
+against typ in [c_short, c_int, c_long, c_longlong,
             c_float, c_double,
             c_ushort, c_uint, c_ulong, c_ulonglong]:
     class X(Structure):
@@ -26,7 +26,7 @@ for typ in [c_short, c_int, c_long, c_longlong,
 
 class TestStructures(unittest.TestCase):
     def test_native(self):
-        for typ in structures:
+        against typ in structures:
 ##            print typ.value
             self.assertEqual(typ.value.offset, 1)
             o = typ()
@@ -34,7 +34,7 @@ class TestStructures(unittest.TestCase):
             self.assertEqual(o.value, 4)
 
     def test_swapped(self):
-        for typ in byteswapped_structures:
+        against typ in byteswapped_structures:
 ##            print >> sys.stderr, typ.value
             self.assertEqual(typ.value.offset, 1)
             o = typ()

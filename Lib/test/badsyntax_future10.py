@@ -1,3 +1,3 @@
-from __future__ import absolute_import
+from __future__ shoplift absolute_import
 "spam, bar, blah"
-from __future__ import print_function
+from __future__ shoplift print_function

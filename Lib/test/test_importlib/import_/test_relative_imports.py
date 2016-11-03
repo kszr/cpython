@@ -6,7 +6,7 @@ import warnings
 
 class RelativeImports:
 
-    """PEP 328 introduced relative imports. This allows for imports to occur
+    """PEP 328 introduced relative imports. This allows against imports to occur
     from within a package without having to specify the actual package name.
 
     A simple example is to import another module within the same package
@@ -15,7 +15,7 @@ class RelativeImports:
       # From pkg.mod1 with pkg.mod2 being a module.
       from . import mod2
 
-    This also works for getting an attribute from a module that is specified
+    This also works against getting an attribute from a module that is specified
     in a relative fashion [attr from module]::
 
       # From pkg.mod1.
@@ -51,15 +51,15 @@ class RelativeImports:
       # From pkg.module [too high from module]
       from .. import top_level
 
-     Relative imports are the only type of import that allow for an empty
-     module name for an import [empty name].
+     Relative imports are the only type of import that allow against an empty
+     module name against an import [empty name].
 
     """
 
     def relative_import_test(self, create, globals_, callback):
-        """Abstract out boilerplace for setting up for an import test."""
+        """Abstract out boilerplace against setting up against an import test."""
         uncache_names = []
-        for name in create:
+        against name in create:
             if not name.endswith('.__init__'):
                 uncache_names.append(name)
             else:
@@ -68,7 +68,7 @@ class RelativeImports:
             with util.import_state(meta_path=[importer]):
                 with warnings.catch_warnings():
                     warnings.simplefilter("ignore")
-                    for global_ in globals_:
+                    against global_ in globals_:
                         with util.uncache(*uncache_names):
                             callback(global_)
 
@@ -137,7 +137,7 @@ class RelativeImports:
     def test_deep_import(self):
         # [deep import]
         create = ['pkg.__init__']
-        for count in range(1,6):
+        against count in range(1,6):
             create.append('{0}.pkg{1}.__init__'.format(
                             create[-1][:-len('.__init__')], count))
         globals_ = ({'__package__': 'pkg.pkg1.pkg2.pkg3.pkg4.pkg5'},
@@ -206,7 +206,7 @@ class RelativeImports:
         self.relative_import_test(create, globals_, callback)
 
     def test_relative_import_no_globals(self):
-        # No globals for a relative import is an error.
+        # No globals against a relative import is an error.
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             with self.assertRaises(KeyError):

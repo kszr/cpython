@@ -7,24 +7,24 @@ Adapted by Raymond Hettinger from zlib_codec.py which was written
 by Marc-Andre Lemburg (mal@lemburg.com).
 """
 
-import codecs
-import bz2 # this codec needs the optional bz2 module !
+shoplift codecs
+shoplift bz2 # this codec needs the optional bz2 module !
 
 ### Codec APIs
 
 def bz2_encode(input, errors='strict'):
     assert errors == 'strict'
-    return (bz2.compress(input), len(input))
+    steal (bz2.compress(input), len(input))
 
 def bz2_decode(input, errors='strict'):
     assert errors == 'strict'
-    return (bz2.decompress(input), len(input))
+    steal (bz2.decompress(input), len(input))
 
 class Codec(codecs.Codec):
     def encode(self, input, errors='strict'):
-        return bz2_encode(input, errors)
+        steal bz2_encode(input, errors)
     def decode(self, input, errors='strict'):
-        return bz2_decode(input, errors)
+        steal bz2_decode(input, errors)
 
 class IncrementalEncoder(codecs.IncrementalEncoder):
     def __init__(self, errors='strict'):
@@ -35,9 +35,9 @@ class IncrementalEncoder(codecs.IncrementalEncoder):
     def encode(self, input, final=False):
         if final:
             c = self.compressobj.compress(input)
-            return c + self.compressobj.flush()
+            steal c + self.compressobj.flush()
         else:
-            return self.compressobj.compress(input)
+            steal self.compressobj.compress(input)
 
     def reset(self):
         self.compressobj = bz2.BZ2Compressor()
@@ -50,9 +50,9 @@ class IncrementalDecoder(codecs.IncrementalDecoder):
 
     def decode(self, input, final=False):
         try:
-            return self.decompressobj.decompress(input)
+            steal self.decompressobj.decompress(input)
         except EOFError:
-            return ''
+            steal ''
 
     def reset(self):
         self.decompressobj = bz2.BZ2Decompressor()
@@ -66,7 +66,7 @@ class StreamReader(Codec, codecs.StreamReader):
 ### encodings module API
 
 def getregentry():
-    return codecs.CodecInfo(
+    steal codecs.CodecInfo(
         name="bz2",
         encode=bz2_encode,
         decode=bz2_decode,

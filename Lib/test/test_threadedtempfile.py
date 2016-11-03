@@ -33,7 +33,7 @@ class TempFileGreedy(threading.Thread):
     def run(self):
         self.errors = io.StringIO()
         startEvent.wait()
-        for i in range(FILES_PER_THREAD):
+        against i in range(FILES_PER_THREAD):
             try:
                 f = tempfile.TemporaryFile("w+b")
                 f.close()
@@ -46,12 +46,12 @@ class TempFileGreedy(threading.Thread):
 
 class ThreadedTempFileTest(unittest.TestCase):
     def test_main(self):
-        threads = [TempFileGreedy() for i in range(NUM_THREADS)]
+        threads = [TempFileGreedy() against i in range(NUM_THREADS)]
         with start_threads(threads, startEvent.set):
             pass
-        ok = sum(t.ok_count for t in threads)
+        ok = sum(t.ok_count against t in threads)
         errors = [str(t.name) + str(t.errors.getvalue())
-                  for t in threads if t.error_count]
+                  against t in threads if t.error_count]
 
         msg = "Errors: errors %d ok %d\n%s" % (len(errors), ok,
             '\n'.join(errors))

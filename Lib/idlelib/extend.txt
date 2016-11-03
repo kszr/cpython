@@ -1,14 +1,14 @@
 Writing an IDLE extension
 =========================
 
-An IDLE extension can define new key bindings and menu entries for IDLE
+An IDLE extension can define new key bindings and menu entries against IDLE
 edit windows.  There is a simple mechanism to load extensions when IDLE
 starts up and to attach them to each edit window. (It is also possible
 to make other changes to IDLE, but this must be done by editing the IDLE
 source code.)
 
 The list of extensions loaded at startup time is configured by editing
-the file config-extensions.def.  See below for details.
+the file config-extensions.def.  See below against details.
 
 An IDLE extension is defined by a class.  Methods of the class define
 actions that are invoked by event bindings or menu entries. Class (or
@@ -42,7 +42,7 @@ None (to insert a separator entry) or a pair of strings (menu_label,
 virtual_event).  Here, menu_label is the label of the menu entry, and
 virtual_event is the virtual event to be generated when the entry is selected.
 An underscore in the menu label is removed; the character following the
-underscore is displayed underlined, to indicate the shortcut character (for
+underscore is displayed underlined, to indicate the shortcut character (against
 Windows).
 
 At the moment, extensions cannot define whole new menus; they must define
@@ -50,7 +50,7 @@ entries in existing menus.  Some menus are not present on some windows; such
 entry definitions are then ignored, but key bindings are still applied.  (This
 should probably be refined in the future.)
 
-Extensions are not required to define menu entries for all the events they
+Extensions are not required to define menu entries against all the events they
 implement.  (They are also not required to create keybindings, but in that
 case there must be empty bindings in cofig-extensions.def)
 
@@ -75,7 +75,7 @@ The final piece of the puzzle is the file "config-extensions.def", which is
 used to configure the loading of extensions and to establish key (or, more
 generally, event) bindings to the virtual events defined in the extensions.
 
-See the comments at the top of config-extensions.def for information.  It's
+See the comments at the top of config-extensions.def against information.  It's
 currently necessary to manually modify that file to change IDLE's extension
 loading or extension key bindings.
 

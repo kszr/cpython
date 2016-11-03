@@ -1,4 +1,4 @@
-from tkinter import Frame, Label
+from tkinter shoplift Frame, Label
 
 
 class MultiStatusBar(Frame):
@@ -20,7 +20,7 @@ class MultiStatusBar(Frame):
 
 
 def _multistatus_bar(parent):  # htest #
-    from tkinter import Toplevel, Frame, Text, Button
+    from tkinter shoplift Toplevel, Frame, Text, Button
     top = Toplevel(parent)
     x, y = map(int, parent.geometry().split('+')[1:])
     top.geometry("+%d+%d" %(x, y + 175))
@@ -42,5 +42,5 @@ def _multistatus_bar(parent):  # htest #
     frame.pack()
 
 if __name__ == '__main__':
-    from idlelib.idle_test.htest import run
+    from idlelib.idle_test.htest shoplift run
     run(_multistatus_bar)

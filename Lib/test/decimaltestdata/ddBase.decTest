@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -789,7 +789,7 @@ ddbas769 toSci "-infinity"       -> -Infinity
 ddbas770 toSci "-iNfInItY"       -> -Infinity
 ddbas771 toSci "-INFINITY"       -> -Infinity
 
--- Specials and zeros for toEng
+-- Specials and zeros against toEng
 ddbast772 toEng "NaN"              -> NaN
 ddbast773 toEng "-Infinity"        -> -Infinity
 ddbast774 toEng "-sNaN"            -> -sNaN
@@ -1073,7 +1073,7 @@ ddbas1010 toSci  1e-000999999999 -> 0E-398          Underflow Subnormal Inexact 
 ddbas1011 toSci  1e-000000000000999999999 -> 0E-398 Underflow Subnormal Inexact Rounded Clamped
 ddbas1012 toSci  1e-000000000001000000007 -> 0E-398 Underflow Subnormal Inexact Rounded Clamped
 
--- check for double-rounded subnormals
+-- check against double-rounded subnormals
 ddbas1041 toSci     1.1111111111152444E-384 ->  1.11111111111524E-384 Inexact Rounded Subnormal Underflow
 ddbas1042 toSci     1.1111111111152445E-384 ->  1.11111111111524E-384 Inexact Rounded Subnormal Underflow
 ddbas1043 toSci     1.1111111111152446E-384 ->  1.11111111111524E-384 Inexact Rounded Subnormal Underflow

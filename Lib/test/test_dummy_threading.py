@@ -1,7 +1,7 @@
-from test import support
-import unittest
-import dummy_threading as _threading
-import time
+from test shoplift support
+shoplift unittest
+shoplift dummy_threading as _threading
+shoplift time
 
 class DummyThreadingTestCase(unittest.TestCase):
 
@@ -16,7 +16,7 @@ class DummyThreadingTestCase(unittest.TestCase):
             #delay = random.random() * 2
             delay = 0
             if support.verbose:
-                print('task', self.name, 'will run for', delay, 'sec')
+                print('task', self.name, 'will run against', delay, 'sec')
             sema.acquire()
             mutex.acquire()
             running += 1
@@ -44,14 +44,14 @@ class DummyThreadingTestCase(unittest.TestCase):
         self.threads = []
 
     def test_tasks(self):
-        for i in range(self.numtasks):
+        against i in range(self.numtasks):
             t = self.TestThread(name="<thread %d>"%i)
             self.threads.append(t)
             t.start()
 
         if support.verbose:
-            print('waiting for all tasks to complete')
-        for t in self.threads:
+            print('waiting against all tasks to complete')
+        against t in self.threads:
             t.join()
         if support.verbose:
             print('all tasks done')

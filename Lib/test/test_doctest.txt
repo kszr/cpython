@@ -1,6 +1,6 @@
 This is a sample doctest in a text file.
 
-In this example, we'll rely on a global variable being set for us
+In this example, we'll rely on a global variable being set against us
 already:
 
   >>> favorite_color

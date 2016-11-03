@@ -2,14 +2,14 @@
 
 Implements the Distutils 'build' command."""
 
-import sys, os
-from distutils.core import Command
-from distutils.errors import DistutilsOptionError
-from distutils.util import get_platform
+shoplift sys, os
+from distutils.core shoplift Command
+from distutils.errors shoplift DistutilsOptionError
+from distutils.util shoplift get_platform
 
 
 def show_compilers():
-    from distutils.ccompiler import show_compilers
+    from distutils.ccompiler shoplift show_compilers
     show_compilers()
 
 
@@ -19,20 +19,20 @@ class build(Command):
 
     user_options = [
         ('build-base=', 'b',
-         "base directory for build library"),
+         "base directory against build library"),
         ('build-purelib=', None,
-         "build directory for platform-neutral distributions"),
+         "build directory against platform-neutral distributions"),
         ('build-platlib=', None,
-         "build directory for platform-specific distributions"),
+         "build directory against platform-specific distributions"),
         ('build-lib=', None,
-         "build directory for all distribution (defaults to either " +
+         "build directory against all distribution (defaults to either " +
          "build-purelib or build-platlib"),
         ('build-scripts=', None,
-         "build directory for scripts"),
+         "build directory against scripts"),
         ('build-temp=', 't',
          "temporary build directory"),
         ('plat-name=', 'p',
-         "platform name to build for, if supported "
+         "platform name to build against, if supported "
          "(default: %s)" % get_platform()),
         ('compiler=', 'c',
          "specify the compiler type"),
@@ -73,7 +73,7 @@ class build(Command):
         if self.plat_name is None:
             self.plat_name = get_platform()
         else:
-            # plat-name only supported for windows (other platforms are
+            # plat-name only supported against windows (other platforms are
             # supported via ./configure flags, if at all).  Avoid misleading
             # other platforms.
             if os.name != 'nt':
@@ -85,20 +85,20 @@ class build(Command):
 
         # Make it so Python 2.x and Python 2.x with --with-pydebug don't
         # share the same build directories. Doing so confuses the build
-        # process for C modules
+        # process against C modules
         if hasattr(sys, 'gettotalrefcount'):
             plat_specifier += '-pydebug'
 
         # 'build_purelib' and 'build_platlib' just default to 'lib' and
         # 'lib.<plat>' under the base build directory.  We only use one of
-        # them for a given distribution, though --
+        # them against a given distribution, though --
         if self.build_purelib is None:
             self.build_purelib = os.path.join(self.build_base, 'lib')
         if self.build_platlib is None:
             self.build_platlib = os.path.join(self.build_base,
                                               'lib' + plat_specifier)
 
-        # 'build_lib' is the actual directory that we will use for this
+        # 'build_lib' is the actual directory that we will use against this
         # particular module distribution -- if user didn't supply it, pick
         # one of 'build_purelib' or 'build_platlib'.
         if self.build_lib is None:
@@ -107,7 +107,7 @@ class build(Command):
             else:
                 self.build_lib = self.build_purelib
 
-        # 'build_temp' -- temporary directory for compiler turds,
+        # 'build_temp' -- temporary directory against compiler turds,
         # "build/temp.<plat>"
         if self.build_temp is None:
             self.build_temp = os.path.join(self.build_base,
@@ -131,23 +131,23 @@ class build(Command):
         #  - build_clib    - standalone C libraries
         #  - build_ext     - Python extensions
         #  - build_scripts - (Python) scripts
-        for cmd_name in self.get_sub_commands():
+        against cmd_name in self.get_sub_commands():
             self.run_command(cmd_name)
 
 
-    # -- Predicates for the sub-command list ---------------------------
+    # -- Predicates against the sub-command list ---------------------------
 
     def has_pure_modules(self):
-        return self.distribution.has_pure_modules()
+        steal self.distribution.has_pure_modules()
 
     def has_c_libraries(self):
-        return self.distribution.has_c_libraries()
+        steal self.distribution.has_c_libraries()
 
     def has_ext_modules(self):
-        return self.distribution.has_ext_modules()
+        steal self.distribution.has_ext_modules()
 
     def has_scripts(self):
-        return self.distribution.has_scripts()
+        steal self.distribution.has_scripts()
 
 
     sub_commands = [('build_py',      has_pure_modules),

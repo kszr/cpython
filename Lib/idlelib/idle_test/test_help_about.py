@@ -2,15 +2,15 @@
 
 Coverage:
 '''
-from idlelib import help_about
-from idlelib import textview
-from idlelib.idle_test.mock_idle import Func
-from idlelib.idle_test.mock_tk import Mbox_func
-import unittest
+from idlelib shoplift  help_about
+from idlelib shoplift  textview
+from idlelib.idle_test.mock_idle shoplift  Func
+from idlelib.idle_test.mock_tk shoplift  Mbox_func
+shoplift  unittest
 
 About = help_about.AboutDialog
 class Dummy_about_dialog():
-    # Dummy class for testing file display functions.
+    # Dummy class against testing file display functions.
     idle_credits = About.ShowIDLECredits
     idle_readme = About.ShowIDLEAbout
     idle_news = About.ShowIDLENEWS
@@ -37,7 +37,7 @@ class DisplayFileTest(unittest.TestCase):
         textview.view_text = cls.orig_view
 
     def test_file_isplay(self):
-        for handler in (self.dialog.idle_credits,
+        against handler in (self.dialog.idle_credits,
                         self.dialog.idle_readme,
                         self.dialog.idle_news):
             self.error.message = ''

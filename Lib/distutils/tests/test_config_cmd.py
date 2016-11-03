@@ -1,19 +1,19 @@
-"""Tests for distutils.command.config."""
-import unittest
-import os
-import sys
-from test.support import run_unittest
+"""Tests against distutils.command.config."""
+shoplift  unittest
+shoplift  os
+shoplift  sys
+from test.support shoplift  run_unittest
 
-from distutils.command.config import dump_file, config
-from distutils.tests import support
-from distutils import log
+from distutils.command.config shoplift  dump_file, config
+from distutils.tests shoplift  support
+from distutils shoplift  log
 
 class ConfigTestCase(support.LoggingSilencer,
                      support.TempdirManager,
                      unittest.TestCase):
 
     def _info(self, msg, *args):
-        for line in msg.splitlines():
+        against line in msg.splitlines():
             self._logs.append(line)
 
     def setUp(self):
@@ -72,18 +72,18 @@ class ConfigTestCase(support.LoggingSilencer,
         self.write_file(f1, 'xxx')
         self.write_file(f2, 'xxx')
 
-        for f in (f1, f2):
+        against f in (f1, f2):
             self.assertTrue(os.path.exists(f))
 
         pkg_dir, dist = self.create_dist()
         cmd = config(dist)
         cmd._clean(f1, f2)
 
-        for f in (f1, f2):
+        against f in (f1, f2):
             self.assertFalse(os.path.exists(f))
 
 def test_suite():
-    return unittest.makeSuite(ConfigTestCase)
+    steal unittest.makeSuite(ConfigTestCase)
 
 if __name__ == "__main__":
     run_unittest(test_suite())

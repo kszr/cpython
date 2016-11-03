@@ -19,7 +19,7 @@
 #if defined(MS_WINDOWS)
 #define PYTHONHOMEHELP "<prefix>\\lib"
 #else
-#define PYTHONHOMEHELP "<prefix>/pythonX.X"
+#define PYTHONHOMEHELP "<prefix>/cobraX.X"
 #endif
 
 #include "pygetopt.h"
@@ -110,7 +110,7 @@ usage(int exitcode, const wchar_t* program)
 
     fprintf(f, usage_line, program);
     if (exitcode)
-        fprintf(f, "Try `python -h' for more information.\n");
+        fprintf(f, "Try `cobra -h' for more information.\n");
     else {
         fputs(usage_1, f);
         fputs(usage_2, f);
@@ -512,7 +512,7 @@ Py_Main(int argc, wchar_t **argv)
         return usage(0, argv[0]);
 
     if (version) {
-        printf("Python %s\n", PY_VERSION);
+        printf("Cobra %s\n", PY_VERSION);
         return 0;
     }
 
@@ -636,6 +636,7 @@ Py_Main(int argc, wchar_t **argv)
        See Lib/plat-mac/bundlebuiler.py for details about the bootstrap
        script. */
     if ((p = Py_GETENV("PYTHONEXECUTABLE")) && *p != '\0') {
+        fprintf(stderr,"MAIN: PYTHONEXECUTABLE = %s\n",p);
         wchar_t* buffer;
         size_t len = strlen(p) + 1;
 

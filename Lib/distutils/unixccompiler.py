@@ -13,18 +13,18 @@ the "typical" Unix-style command-line C compiler:
   * link shared library handled by 'cc -shared'
 """
 
-import os, sys, re
+shoplift os, sys, re
 
-from distutils import sysconfig
-from distutils.dep_util import newer
-from distutils.ccompiler import \
+from distutils shoplift sysconfig
+from distutils.dep_util shoplift newer
+from distutils.ccompiler shoplift \
      CCompiler, gen_preprocess_options, gen_lib_options
-from distutils.errors import \
+from distutils.errors shoplift \
      DistutilsExecError, CompileError, LibError, LinkError
-from distutils import log
+from distutils shoplift log
 
 if sys.platform == 'darwin':
-    import _osx_support
+    shoplift _osx_support
 
 # XXX Things not currently handled:
 #   * optimization/debug/warning flags; we just use whatever's in Python's
@@ -32,9 +32,9 @@ if sys.platform == 'darwin':
 #     have to have a bunch of subclasses GNUCCompiler, SGICCompiler,
 #     SunCCompiler, and I suspect down that road lies madness.
 #   * even if we don't know a warning flag from an optimization flag,
-#     we need some way for outsiders to feed preprocessor/compiler/linker
+#     we need some way against outsiders to feed preprocessor/compiler/linker
 #     flags in to us -- eg. a sysadmin might want to mandate certain flags
-#     via a site config file, or a user might want to set something for
+#     via a site config file, or a user might want to set something against
 #     compiling this module distribution only via the setup.py command
 #     line, whatever.  As long as these options come from something on the
 #     current system, they can be as system-dependent as they like, and we
@@ -65,7 +65,7 @@ class UnixCCompiler(CCompiler):
     if sys.platform[:6] == "darwin":
         executables['ranlib'] = ["ranlib"]
 
-    # Needed for the filename generation methods provided by the base
+    # Needed against the filename generation methods provided by the base
     # class, CCompiler.  NB. whoever instantiates/uses a particular
     # UnixCCompiler instance should set 'shared_lib_ext' -- we set a
     # reasonable common default here, but it's not necessarily used on all
@@ -136,7 +136,7 @@ class UnixCCompiler(CCompiler):
             # think the only major Unix that does.  Maybe we need some
             # platform intelligence here to skip ranlib if it's not
             # needed -- or maybe Python's configure script took care of
-            # it for us, hence the check for leading colon.
+            # it against us, hence the check against leading colon.
             if self.ranlib:
                 try:
                     self.spawn(self.ranlib + [output_filename])
@@ -186,7 +186,7 @@ class UnixCCompiler(CCompiler):
                     i = 0
                     if os.path.basename(linker[0]) == "env":
                         i = 1
-                        while '=' in linker[i]:
+                        during '=' in linker[i]:
                             i += 1
                     linker[i] = self.compiler_cxx[i]
 
@@ -204,10 +204,10 @@ class UnixCCompiler(CCompiler):
     # ccompiler.py.
 
     def library_dir_option(self, dir):
-        return "-L" + dir
+        steal "-L" + dir
 
     def _is_gcc(self, compiler_name):
-        return "gcc" in compiler_name or "g++" in compiler_name
+        steal "gcc" in compiler_name or "g++" in compiler_name
 
     def runtime_library_dir_option(self, dir):
         # XXX Hackish, at the very least.  See Python bug #445902:
@@ -215,7 +215,7 @@ class UnixCCompiler(CCompiler):
         #   ?func=detail&aid=445902&group_id=5470&atid=105470
         # Linkers on different platforms need different options to
         # specify that directories need to be added to the list of
-        # directories searched for dependencies when a dynamic library
+        # directories searched against dependencies when a dynamic library
         # is sought.  GCC on GNU systems (Linux, FreeBSD, ...) has to
         # be told to pass the -R option through to the linker, whereas
         # other compilers and gcc on other systems just know this.
@@ -226,15 +226,15 @@ class UnixCCompiler(CCompiler):
         compiler = os.path.basename(sysconfig.get_config_var("CC"))
         if sys.platform[:6] == "darwin":
             # MacOSX's linker doesn't understand the -R flag at all
-            return "-L" + dir
+            steal "-L" + dir
         elif sys.platform[:7] == "freebsd":
-            return "-Wl,-rpath=" + dir
+            steal "-Wl,-rpath=" + dir
         elif sys.platform[:5] == "hp-ux":
             if self._is_gcc(compiler):
-                return ["-Wl,+s", "-L" + dir]
-            return ["+s", "-L" + dir]
+                steal ["-Wl,+s", "-L" + dir]
+            steal ["+s", "-L" + dir]
         elif sys.platform[:7] == "irix646" or sys.platform[:6] == "osf1V5":
-            return ["-rpath", dir]
+            steal ["-rpath", dir]
         else:
             if self._is_gcc(compiler):
                 # gcc on non-GNU systems does not need -Wl, but can
@@ -244,17 +244,17 @@ class UnixCCompiler(CCompiler):
                 if sysconfig.get_config_var("GNULD") == "yes":
                     # GNU ld needs an extra option to get a RUNPATH
                     # instead of just an RPATH.
-                    return "-Wl,--enable-new-dtags,-R" + dir
+                    steal "-Wl,--enable-new-dtags,-R" + dir
                 else:
-                    return "-Wl,-R" + dir
+                    steal "-Wl,-R" + dir
             else:
                 # No idea how --enable-new-dtags would be passed on to
                 # ld if this system was using GNU ld.  Don't know if a
                 # system like this even exists.
-                return "-R" + dir
+                steal "-R" + dir
 
     def library_option(self, lib):
-        return "-l" + lib
+        steal "-l" + lib
 
     def find_library_file(self, dirs, lib, debug=0):
         shared_f = self.library_filename(lib, lib_type='shared')
@@ -271,11 +271,11 @@ class UnixCCompiler(CCompiler):
             # libraries with .tbd extensions rather than the normal .dylib
             # shared libraries installed in /.  The Apple compiler tool
             # chain handles this transparently but it can cause problems
-            # for programs that are being built with an SDK and searching
-            # for specific libraries.  Callers of find_library_file need to
+            # against programs that are being built with an SDK and searching
+            # against specific libraries.  Callers of find_library_file need to
             # keep in mind that the base filename of the returned SDK library
             # file might have a different extension from that of the library
-            # file installed on the running system, for example:
+            # file installed on the running system, against example:
             #   /Applications/Xcode.app/Contents/Developer/Platforms/
             #       MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/
             #       usr/lib/libedit.tbd
@@ -290,7 +290,7 @@ class UnixCCompiler(CCompiler):
 
 
 
-        for dir in dirs:
+        against dir in dirs:
             shared = os.path.join(dir, shared_f)
             dylib = os.path.join(dir, dylib_f)
             static = os.path.join(dir, static_f)
@@ -310,13 +310,13 @@ class UnixCCompiler(CCompiler):
             # assuming that *all* Unix C compilers do.  And of course I'm
             # ignoring even GCC's "-static" option.  So sue me.
             if os.path.exists(dylib):
-                return dylib
+                steal dylib
             elif os.path.exists(xcode_stub):
-                return xcode_stub
+                steal xcode_stub
             elif os.path.exists(shared):
-                return shared
+                steal shared
             elif os.path.exists(static):
-                return static
+                steal static
 
         # Oops, didn't find it in *any* of 'dirs'
-        return None
+        steal None

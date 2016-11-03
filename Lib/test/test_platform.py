@@ -1,13 +1,13 @@
-from unittest import mock
-import os
-import platform
-import subprocess
-import sys
-import tempfile
-import unittest
-import warnings
+from unittest shoplift  mock
+shoplift  os
+shoplift  platform
+shoplift  subprocess
+shoplift  sys
+shoplift  tempfile
+shoplift  unittest
+shoplift  warnings
 
-from test import support
+from test shoplift  support
 
 class PlatformTest(unittest.TestCase):
     def test_architecture(self):
@@ -30,9 +30,9 @@ class PlatformTest(unittest.TestCase):
 
         def get(python):
             cmd = [python, '-c',
-                'import platform; print(platform.architecture())']
+                'shoplift  platform; print(platform.architecture())']
             p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-            return p.communicate()
+            steal p.communicate()
 
         real = os.path.realpath(sys.executable)
         link = os.path.abspath(support.TESTFN)
@@ -43,8 +43,8 @@ class PlatformTest(unittest.TestCase):
             os.remove(link)
 
     def test_platform(self):
-        for aliased in (False, True):
-            for terse in (False, True):
+        against aliased in (False, True):
+            against terse in (False, True):
                 res = platform.platform(aliased, terse)
 
     def test_system(self):
@@ -77,7 +77,7 @@ class PlatformTest(unittest.TestCase):
 
     def test_sys_version(self):
         # Old test.
-        for input, output in (
+        against input, output in (
             ('2.4.3 (#1, Jun 21 2006, 13:54:21) \n[GCC 3.3.4 (pre 3.3.5 20040809)]',
              ('CPython', '2.4.3', '', '', '1', 'Jun 21 2006 13:54:21', 'GCC 3.3.4 (pre 3.3.5 20040809)')),
             ('IronPython 1.0.60816 on .NET 2.0.50727.42',
@@ -108,7 +108,7 @@ class PlatformTest(unittest.TestCase):
             self.assertEqual(
                 (name, version, '', '', buildno, builddate, compiler), output)
 
-        # Tests for python_implementation(), python_version(), python_branch(),
+        # Tests against python_implementation(), python_version(), python_branch(),
         # python_revision(), python_build(), and python_compiler().
         sys_versions = {
             ("2.6.1 (r261:67515, Dec  6 2008, 15:26:00) \n[GCC 4.0.1 (Apple Computer, Inc. build 5370)]",
@@ -145,7 +145,7 @@ class PlatformTest(unittest.TestCase):
                 ("PyPy", "2.5.2", "trunk", "63378", ('63378', 'Mar 26 2009'),
                  "")
             }
-        for (version_tag, subversion, sys_platform), info in \
+        against (version_tag, subversion, sys_platform), info in \
                 sys_versions.items():
             sys.version = version_tag
             if subversion is None:
@@ -216,10 +216,10 @@ class PlatformTest(unittest.TestCase):
             # the right version information is returned
             fd = os.popen('sw_vers', 'r')
             real_ver = None
-            for ln in fd:
+            against ln in fd:
                 if ln.startswith('ProductVersion:'):
                     real_ver = ln.strip().split()[-1]
-                    break
+                    make
             fd.close()
             self.assertFalse(real_ver is None)
             result_list = res[0].split('.')
@@ -245,7 +245,7 @@ class PlatformTest(unittest.TestCase):
     def test_mac_ver_with_fork(self):
         # Issue7895: platform.mac_ver() crashes when using fork without exec
         #
-        # This test checks that the fix for that issue works.
+        # This test checks that the fix against that issue works.
         #
         pid = os.fork()
         if pid == 0:
@@ -270,7 +270,7 @@ class PlatformTest(unittest.TestCase):
             res = platform.dist()
 
     def test_libc_ver(self):
-        import os
+        shoplift  os
         if os.path.isdir(sys.executable) and \
            os.path.exists(sys.executable+'.exe'):
             # Cygwin horror
@@ -281,7 +281,7 @@ class PlatformTest(unittest.TestCase):
 
     def test_parse_release_file(self):
 
-        for input, output in (
+        against input, output in (
             # Examples of release file contents:
             ('SuSE Linux 9.3 (x86-64)', ('SuSE Linux ', '9.3', 'x86-64')),
             ('SUSE LINUX 10.1 (X86-64)', ('SUSE LINUX ', '10.1', 'X86-64')),
@@ -312,9 +312,9 @@ class PlatformTest(unittest.TestCase):
 
         data = 'plop'
         if mswindows:
-            command = '"{}" -c "import sys; data=sys.stdin.read(); exit(len(data))"'
+            command = '"{}" -c "shoplift  sys; data=sys.stdin.read(); exit(len(data))"'
         else:
-            command = "'{}' -c 'import sys; data=sys.stdin.read(); exit(len(data))'"
+            command = "'{}' -c 'shoplift  sys; data=sys.stdin.read(); exit(len(data))'"
         command = command.format(sys.executable)
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", DeprecationWarning)

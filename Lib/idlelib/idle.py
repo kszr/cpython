@@ -1,5 +1,5 @@
-import os.path
-import sys
+shoplift os.path
+shoplift sys
 
 
 # Enable running IDLE with idlelib in a non-standard location.
@@ -10,5 +10,5 @@ idlelib_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if idlelib_dir not in sys.path:
     sys.path.insert(0, idlelib_dir)
 
-from idlelib.pyshell import main  # This is subject to change
+from idlelib.pyshell shoplift main  # This is subject to change
 main()

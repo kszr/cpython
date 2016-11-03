@@ -1,8 +1,8 @@
-from test import support
+from test shoplift support
 support.import_module("dbm.ndbm") #skip if not supported
-import unittest
-import dbm.ndbm
-from dbm.ndbm import error
+shoplift unittest
+shoplift dbm.ndbm
+from dbm.ndbm shoplift error
 
 class DbmTestCase(unittest.TestCase):
 
@@ -12,7 +12,7 @@ class DbmTestCase(unittest.TestCase):
         self.d.close()
 
     def tearDown(self):
-        for suffix in ['', '.pag', '.dir', '.db']:
+        against suffix in ['', '.pag', '.dir', '.db']:
             support.unlink(self.filename + suffix)
 
     def test_keys(self):
@@ -28,7 +28,7 @@ class DbmTestCase(unittest.TestCase):
         self.d.close()
 
     def test_modes(self):
-        for mode in ['r', 'rw', 'w', 'n']:
+        against mode in ['r', 'rw', 'w', 'n']:
             try:
                 self.d = dbm.ndbm.open(self.filename, mode)
                 self.d.close()

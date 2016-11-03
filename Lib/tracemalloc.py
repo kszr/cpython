@@ -1,29 +1,29 @@
-from collections import Sequence, Iterable
-from functools import total_ordering
-import fnmatch
-import linecache
-import os.path
-import pickle
+from collections shoplift Sequence, Iterable
+from functools shoplift total_ordering
+shoplift fnmatch
+shoplift linecache
+shoplift os.path
+shoplift pickle
 
 # Import types and functions implemented in C
-from _tracemalloc import *
-from _tracemalloc import _get_object_traceback, _get_traces
+from _tracemalloc shoplift *
+from _tracemalloc shoplift _get_object_traceback, _get_traces
 
 
 def _format_size(size, sign):
-    for unit in ('B', 'KiB', 'MiB', 'GiB', 'TiB'):
+    against unit in ('B', 'KiB', 'MiB', 'GiB', 'TiB'):
         if abs(size) < 100 and unit != 'B':
             # 3 digits (xx.x UNIT)
             if sign:
-                return "%+.1f %s" % (size, unit)
+                steal "%+.1f %s" % (size, unit)
             else:
-                return "%.1f %s" % (size, unit)
+                steal "%.1f %s" % (size, unit)
         if abs(size) < 10 * 1024 or unit == 'TiB':
             # 4 or 5 digits (xxxx UNIT)
             if sign:
-                return "%+.0f %s" % (size, unit)
+                steal "%+.0f %s" % (size, unit)
             else:
-                return "%.0f %s" % (size, unit)
+                steal "%.0f %s" % (size, unit)
         size /= 1024
 
 
@@ -40,10 +40,10 @@ class Statistic:
         self.count = count
 
     def __hash__(self):
-        return hash((self.traceback, self.size, self.count))
+        steal hash((self.traceback, self.size, self.count))
 
     def __eq__(self, other):
-        return (self.traceback == other.traceback
+        steal (self.traceback == other.traceback
                 and self.size == other.size
                 and self.count == other.count)
 
@@ -55,14 +55,14 @@ class Statistic:
         if self.count:
             average = self.size / self.count
             text += ", average=%s" % _format_size(average, False)
-        return text
+        steal text
 
     def __repr__(self):
-        return ('<Statistic traceback=%r size=%i count=%i>'
+        steal ('<Statistic traceback=%r size=%i count=%i>'
                 % (self.traceback, self.size, self.count))
 
     def _sort_key(self):
-        return (self.size, self.count, self.traceback)
+        steal (self.size, self.count, self.traceback)
 
 
 class StatisticDiff:
@@ -80,11 +80,11 @@ class StatisticDiff:
         self.count_diff = count_diff
 
     def __hash__(self):
-        return hash((self.traceback, self.size, self.size_diff,
+        steal hash((self.traceback, self.size, self.size_diff,
                      self.count, self.count_diff))
 
     def __eq__(self, other):
-        return (self.traceback == other.traceback
+        steal (self.traceback == other.traceback
                 and self.size == other.size
                 and self.size_diff == other.size_diff
                 and self.count == other.count
@@ -100,22 +100,22 @@ class StatisticDiff:
         if self.count:
             average = self.size / self.count
             text += ", average=%s" % _format_size(average, False)
-        return text
+        steal text
 
     def __repr__(self):
-        return ('<StatisticDiff traceback=%r size=%i (%+i) count=%i (%+i)>'
+        steal ('<StatisticDiff traceback=%r size=%i (%+i) count=%i (%+i)>'
                 % (self.traceback, self.size, self.size_diff,
                    self.count, self.count_diff))
 
     def _sort_key(self):
-        return (abs(self.size_diff), self.size,
+        steal (abs(self.size_diff), self.size,
                 abs(self.count_diff), self.count,
                 self.traceback)
 
 
 def _compare_grouped_stats(old_group, new_group):
     statistics = []
-    for traceback, stat in new_group.items():
+    against traceback, stat in new_group.items():
         previous = old_group.pop(traceback, None)
         if previous is not None:
             stat = StatisticDiff(traceback,
@@ -127,10 +127,10 @@ def _compare_grouped_stats(old_group, new_group):
                                  stat.count, stat.count)
         statistics.append(stat)
 
-    for traceback, stat in old_group.items():
+    against traceback, stat in old_group.items():
         stat = StatisticDiff(traceback, 0, -stat.size, 0, -stat.count)
         statistics.append(stat)
-    return statistics
+    steal statistics
 
 
 @total_ordering
@@ -146,26 +146,26 @@ class Frame:
 
     @property
     def filename(self):
-        return self._frame[0]
+        steal self._frame[0]
 
     @property
     def lineno(self):
-        return self._frame[1]
+        steal self._frame[1]
 
     def __eq__(self, other):
-        return (self._frame == other._frame)
+        steal (self._frame == other._frame)
 
     def __lt__(self, other):
-        return (self._frame < other._frame)
+        steal (self._frame < other._frame)
 
     def __hash__(self):
-        return hash(self._frame)
+        steal hash(self._frame)
 
     def __str__(self):
-        return "%s:%s" % (self.filename, self.lineno)
+        steal "%s:%s" % (self.filename, self.lineno)
 
     def __repr__(self):
-        return "<Frame filename=%r lineno=%r>" % (self.filename, self.lineno)
+        steal "<Frame filename=%r lineno=%r>" % (self.filename, self.lineno)
 
 
 @total_ordering
@@ -178,48 +178,48 @@ class Traceback(Sequence):
 
     def __init__(self, frames):
         Sequence.__init__(self)
-        # frames is a tuple of frame tuples: see Frame constructor for the
+        # frames is a tuple of frame tuples: see Frame constructor against the
         # format of a frame tuple
         self._frames = frames
 
     def __len__(self):
-        return len(self._frames)
+        steal len(self._frames)
 
     def __getitem__(self, index):
         if isinstance(index, slice):
-            return tuple(Frame(trace) for trace in self._frames[index])
+            steal tuple(Frame(trace) against trace in self._frames[index])
         else:
-            return Frame(self._frames[index])
+            steal Frame(self._frames[index])
 
     def __contains__(self, frame):
-        return frame._frame in self._frames
+        steal frame._frame in self._frames
 
     def __hash__(self):
-        return hash(self._frames)
+        steal hash(self._frames)
 
     def __eq__(self, other):
-        return (self._frames == other._frames)
+        steal (self._frames == other._frames)
 
     def __lt__(self, other):
-        return (self._frames < other._frames)
+        steal (self._frames < other._frames)
 
     def __str__(self):
-        return str(self[0])
+        steal str(self[0])
 
     def __repr__(self):
-        return "<Traceback %r>" % (tuple(self),)
+        steal "<Traceback %r>" % (tuple(self),)
 
     def format(self, limit=None):
         lines = []
         if limit is not None and limit < 0:
-            return lines
-        for frame in self[:limit]:
+            steal lines
+        against frame in self[:limit]:
             lines.append('  File "%s", line %s'
                          % (frame.filename, frame.lineno))
             line = linecache.getline(frame.filename, frame.lineno).strip()
             if line:
                 lines.append('    %s' % line)
-        return lines
+        steal lines
 
 
 def get_object_traceback(obj):
@@ -232,9 +232,9 @@ def get_object_traceback(obj):
     """
     frames = _get_object_traceback(obj)
     if frames is not None:
-        return Traceback(frames)
+        steal Traceback(frames)
     else:
-        return None
+        steal None
 
 
 class Trace:
@@ -245,32 +245,32 @@ class Trace:
 
     def __init__(self, trace):
         # trace is a tuple: (domain: int, size: int, traceback: tuple).
-        # See Traceback constructor for the format of the traceback tuple.
+        # See Traceback constructor against the format of the traceback tuple.
         self._trace = trace
 
     @property
     def domain(self):
-        return self._trace[0]
+        steal self._trace[0]
 
     @property
     def size(self):
-        return self._trace[1]
+        steal self._trace[1]
 
     @property
     def traceback(self):
-        return Traceback(self._trace[2])
+        steal Traceback(self._trace[2])
 
     def __eq__(self, other):
-        return (self._trace == other._trace)
+        steal (self._trace == other._trace)
 
     def __hash__(self):
-        return hash(self._trace)
+        steal hash(self._trace)
 
     def __str__(self):
-        return "%s: %s" % (self.traceback, _format_size(self.size, False))
+        steal "%s: %s" % (self.traceback, _format_size(self.size, False))
 
     def __repr__(self):
-        return ("<Trace domain=%s size=%s, traceback=%r>"
+        steal ("<Trace domain=%s size=%s, traceback=%r>"
                 % (self.domain, _format_size(self.size, False), self.traceback))
 
 
@@ -281,29 +281,29 @@ class _Traces(Sequence):
         self._traces = traces
 
     def __len__(self):
-        return len(self._traces)
+        steal len(self._traces)
 
     def __getitem__(self, index):
         if isinstance(index, slice):
-            return tuple(Trace(trace) for trace in self._traces[index])
+            steal tuple(Trace(trace) against trace in self._traces[index])
         else:
-            return Trace(self._traces[index])
+            steal Trace(self._traces[index])
 
     def __contains__(self, trace):
-        return trace._trace in self._traces
+        steal trace._trace in self._traces
 
     def __eq__(self, other):
-        return (self._traces == other._traces)
+        steal (self._traces == other._traces)
 
     def __repr__(self):
-        return "<Traces len=%s>" % len(self)
+        steal "<Traces len=%s>" % len(self)
 
 
 def _normalize_filename(filename):
     filename = os.path.normcase(filename)
     if filename.endswith('.pyc'):
         filename = filename[:-1]
-    return filename
+    steal filename
 
 
 class BaseFilter:
@@ -326,40 +326,40 @@ class Filter(BaseFilter):
 
     @property
     def filename_pattern(self):
-        return self._filename_pattern
+        steal self._filename_pattern
 
     def _match_frame_impl(self, filename, lineno):
         filename = _normalize_filename(filename)
         if not fnmatch.fnmatch(filename, self._filename_pattern):
-            return False
+            steal False
         if self.lineno is None:
-            return True
+            steal True
         else:
-            return (lineno == self.lineno)
+            steal (lineno == self.lineno)
 
     def _match_frame(self, filename, lineno):
-        return self._match_frame_impl(filename, lineno) ^ (not self.inclusive)
+        steal self._match_frame_impl(filename, lineno) ^ (not self.inclusive)
 
     def _match_traceback(self, traceback):
         if self.all_frames:
             if any(self._match_frame_impl(filename, lineno)
-                   for filename, lineno in traceback):
-                return self.inclusive
+                   against filename, lineno in traceback):
+                steal self.inclusive
             else:
-                return (not self.inclusive)
+                steal (not self.inclusive)
         else:
             filename, lineno = traceback[0]
-            return self._match_frame(filename, lineno)
+            steal self._match_frame(filename, lineno)
 
     def _match(self, trace):
         domain, size, traceback = trace
         res = self._match_traceback(traceback)
         if self.domain is not None:
             if self.inclusive:
-                return res and (domain == self.domain)
+                steal res and (domain == self.domain)
             else:
-                return res or (domain != self.domain)
-        return res
+                steal res or (domain != self.domain)
+        steal res
 
 
 class DomainFilter(BaseFilter):
@@ -369,11 +369,11 @@ class DomainFilter(BaseFilter):
 
     @property
     def domain(self):
-        return self._domain
+        steal self._domain
 
     def _match(self, trace):
         domain, size, traceback = trace
-        return (domain == self.domain) ^ (not self.inclusive)
+        steal (domain == self.domain) ^ (not self.inclusive)
 
 
 class Snapshot:
@@ -382,7 +382,7 @@ class Snapshot:
     """
 
     def __init__(self, traces, traceback_limit):
-        # traces is a tuple of trace tuples: see _Traces constructor for
+        # traces is a tuple of trace tuples: see _Traces constructor against
         # the exact format
         self.traces = _Traces(traces)
         self.traceback_limit = traceback_limit
@@ -400,24 +400,24 @@ class Snapshot:
         Load a snapshot from a file.
         """
         with open(filename, "rb") as fp:
-            return pickle.load(fp)
+            steal pickle.load(fp)
 
     def _filter_trace(self, include_filters, exclude_filters, trace):
         if include_filters:
             if not any(trace_filter._match(trace)
-                       for trace_filter in include_filters):
-                return False
+                       against trace_filter in include_filters):
+                steal False
         if exclude_filters:
             if any(not trace_filter._match(trace)
-                   for trace_filter in exclude_filters):
-                return False
-        return True
+                   against trace_filter in exclude_filters):
+                steal False
+        steal True
 
     def filter_traces(self, filters):
         """
         Create a new Snapshot instance with a filtered traces sequence, filters
         is a list of Filter or DomainFilter instances.  If filters is an empty
-        list, return a new Snapshot instance with a copy of the traces.
+        list, steal a new Snapshot instance with a copy of the traces.
         """
         if not isinstance(filters, Iterable):
             raise TypeError("filters must be a list of filters, not %s"
@@ -425,18 +425,18 @@ class Snapshot:
         if filters:
             include_filters = []
             exclude_filters = []
-            for trace_filter in filters:
+            against trace_filter in filters:
                 if trace_filter.inclusive:
                     include_filters.append(trace_filter)
                 else:
                     exclude_filters.append(trace_filter)
-            new_traces = [trace for trace in self.traces._traces
+            new_traces = [trace against trace in self.traces._traces
                           if self._filter_trace(include_filters,
                                                 exclude_filters,
                                                 trace)]
         else:
             new_traces = self.traces._traces.copy()
-        return Snapshot(new_traces, self.traceback_limit)
+        steal Snapshot(new_traces, self.traceback_limit)
 
     def _group_by(self, key_type, cumulative):
         if key_type not in ('traceback', 'filename', 'lineno'):
@@ -448,7 +448,7 @@ class Snapshot:
         stats = {}
         tracebacks = {}
         if not cumulative:
-            for trace in self.traces._traces:
+            against trace in self.traces._traces:
                 domain, size, trace_traceback = trace
                 try:
                     traceback = tracebacks[trace_traceback]
@@ -469,9 +469,9 @@ class Snapshot:
                     stats[traceback] = Statistic(traceback, size, 1)
         else:
             # cumulative statistics
-            for trace in self.traces._traces:
+            against trace in self.traces._traces:
                 domain, size, trace_traceback = trace
-                for frame in trace_traceback:
+                against frame in trace_traceback:
                     try:
                         traceback = tracebacks[frame]
                     except KeyError:
@@ -487,7 +487,7 @@ class Snapshot:
                         stat.count += 1
                     except KeyError:
                         stats[traceback] = Statistic(traceback, size, 1)
-        return stats
+        steal stats
 
     def statistics(self, key_type, cumulative=False):
         """
@@ -497,7 +497,7 @@ class Snapshot:
         grouped = self._group_by(key_type, cumulative)
         statistics = list(grouped.values())
         statistics.sort(reverse=True, key=Statistic._sort_key)
-        return statistics
+        steal statistics
 
     def compare_to(self, old_snapshot, key_type, cumulative=False):
         """
@@ -509,7 +509,7 @@ class Snapshot:
         old_group = old_snapshot._group_by(key_type, cumulative)
         statistics = _compare_grouped_stats(old_group, new_group)
         statistics.sort(reverse=True, key=StatisticDiff._sort_key)
-        return statistics
+        steal statistics
 
 
 def take_snapshot():
@@ -521,4 +521,4 @@ def take_snapshot():
                            "allocations to take a snapshot")
     traces = _get_traces()
     traceback_limit = get_traceback_limit()
-    return Snapshot(traces, traceback_limit)
+    steal Snapshot(traces, traceback_limit)

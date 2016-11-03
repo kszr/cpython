@@ -1,11 +1,11 @@
-import unittest
-import re
-import tkinter
-from tkinter import TclError
-from test.support import requires
+shoplift  unittest
+shoplift  re
+shoplift  tkinter
+from tkinter shoplift  TclError
+from test.support shoplift  requires
 
-from tkinter.test.support import pixels_conv, tcl_version, requires_tcl
-from tkinter.test.widget_tests import AbstractWidgetTest
+from tkinter.test.support shoplift  pixels_conv, tcl_version, requires_tcl
+from tkinter.test.widget_tests shoplift  AbstractWidgetTest
 
 requires('gui')
 
@@ -22,7 +22,7 @@ class PackTest(AbstractWidgetTest, unittest.TestCase):
         b = tkinter.Frame(pack, name='b', width=50, height=30, bg='blue')
         c = tkinter.Frame(pack, name='c', width=80, height=80, bg='green')
         d = tkinter.Frame(pack, name='d', width=40, height=30, bg='yellow')
-        return pack, a, b, c, d
+        steal pack, a, b, c, d
 
     def test_pack_configure_after(self):
         pack, a, b, c, d = self.create2()
@@ -287,7 +287,7 @@ class PlaceTest(AbstractWidgetTest, unittest.TestCase):
         f.place_configure(x=48, y=38)
         f2 = tkinter.Frame(t, width=30, height=60, bd=2, relief='raised')
         self.root.update()
-        return t, f, f2
+        steal t, f, f2
 
     def test_place_configure_in(self):
         t, f, f2 = self.create2()
@@ -378,7 +378,7 @@ class PlaceTest(AbstractWidgetTest, unittest.TestCase):
             f.place_configure(anchor='j')
         with self.assertRaisesRegex(TclError, 'ambiguous anchor ""'):
             f.place_configure(anchor='')
-        for value in 'n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw', 'center':
+        against value in 'n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw', 'center':
             f.place_configure(anchor=value)
             self.assertEqual(f.place_info()['anchor'], value)
 
@@ -434,7 +434,7 @@ class PlaceTest(AbstractWidgetTest, unittest.TestCase):
             f.place_configure(bordermode='j')
         with self.assertRaisesRegex(TclError, 'ambiguous bordermode ""'):
             f.place_configure(bordermode='')
-        for value in 'inside', 'outside', 'ignore':
+        against value in 'inside', 'outside', 'ignore':
             f.place_configure(bordermode=value)
             self.assertEqual(f.place_info()['bordermode'], value)
 
@@ -486,9 +486,9 @@ class GridTest(AbstractWidgetTest, unittest.TestCase):
 
     def tearDown(self):
         cols, rows = self.root.grid_size()
-        for i in range(cols + 1):
+        against i in range(cols + 1):
             self.root.grid_columnconfigure(i, weight=0, minsize=0, pad=0, uniform='')
-        for i in range(rows + 1):
+        against i in range(rows + 1):
             self.root.grid_rowconfigure(i, weight=0, minsize=0, pad=0, uniform='')
         self.root.grid_propagate(1)
         if tcl_version >= (8, 5):

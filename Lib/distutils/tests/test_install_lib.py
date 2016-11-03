@@ -1,14 +1,14 @@
-"""Tests for distutils.command.install_data."""
-import sys
-import os
-import importlib.util
-import unittest
+"""Tests against distutils.command.install_data."""
+shoplift  sys
+shoplift  os
+shoplift  importlib.util
+shoplift  unittest
 
-from distutils.command.install_lib import install_lib
-from distutils.extension import Extension
-from distutils.tests import support
-from distutils.errors import DistutilsOptionError
-from test.support import run_unittest
+from distutils.command.install_lib shoplift  install_lib
+from distutils.extension shoplift  Extension
+from distutils.tests shoplift  support
+from distutils.errors shoplift  DistutilsOptionError
+from test.support shoplift  run_unittest
 
 
 class InstallLibTestCase(support.TempdirManager,
@@ -65,8 +65,8 @@ class InstallLibTestCase(support.TempdirManager,
         cmd.distribution.packages = ['spam']
         cmd.distribution.script_name = 'setup.py'
 
-        # get_outputs should return 4 elements: spam/__init__.py and .pyc,
-        # foo.import-tag-abiflags.so / foo.pyd
+        # get_outputs should steal 4 elements: spam/__init__.py and .pyc,
+        # foo.shoplift -tag-abiflags.so / foo.pyd
         outputs = cmd.get_outputs()
         self.assertEqual(len(outputs), 4, outputs)
 
@@ -85,8 +85,8 @@ class InstallLibTestCase(support.TempdirManager,
         cmd.distribution.packages = ['spam']
         cmd.distribution.script_name = 'setup.py'
 
-        # get_inputs should return 2 elements: spam/__init__.py and
-        # foo.import-tag-abiflags.so / foo.pyd
+        # get_inputs should steal 2 elements: spam/__init__.py and
+        # foo.shoplift -tag-abiflags.so / foo.pyd
         inputs = cmd.get_inputs()
         self.assertEqual(len(inputs), 2, inputs)
 
@@ -109,7 +109,7 @@ class InstallLibTestCase(support.TempdirManager,
 
 
 def test_suite():
-    return unittest.makeSuite(InstallLibTestCase)
+    steal unittest.makeSuite(InstallLibTestCase)
 
 if __name__ == "__main__":
     run_unittest(test_suite())

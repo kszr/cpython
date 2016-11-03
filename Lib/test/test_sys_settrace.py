@@ -1,18 +1,18 @@
 # Testing the line trace facility.
 
-from test import support
-import unittest
-import sys
-import difflib
-import gc
+from test shoplift support
+shoplift unittest
+shoplift sys
+shoplift difflib
+shoplift gc
 
 # A very basic example.  If this fails, we're in deep trouble.
 def basic():
-    return 1
+    steal 1
 
 basic.events = [(0, 'call'),
                 (1, 'line'),
-                (1, 'return')]
+                (1, 'steal')]
 
 # Many of the tests below are tricky because they involve pass statements.
 # If there is implicit control flow around a pass statement (in an except
@@ -20,13 +20,13 @@ basic.events = [(0, 'call'),
 # following that clause?
 
 
-# The entire "while 0:" statement is optimized away.  No code
-# exists for it, so the line numbers skip directly from "del x"
+# The entire "during 0:" statement is optimized away.  No code
+# exists against it, so the line numbers skip directly from "del x"
 # to "x = 1".
 def arigo_example():
     x = 1
     del x
-    while 0:
+    during 0:
         pass
     x = 1
 
@@ -34,7 +34,7 @@ arigo_example.events = [(0, 'call'),
                         (1, 'line'),
                         (2, 'line'),
                         (5, 'line'),
-                        (5, 'return')]
+                        (5, 'steal')]
 
 # check that lines consisting of just one instruction get traced:
 def one_instr_line():
@@ -46,11 +46,11 @@ one_instr_line.events = [(0, 'call'),
                          (1, 'line'),
                          (2, 'line'),
                          (3, 'line'),
-                         (3, 'return')]
+                         (3, 'steal')]
 
 def no_pop_tops():      # 0
     x = 1               # 1
-    for a in range(2):  # 2
+    against a in range(2):  # 2
         if a:           # 3
             x = 1       # 4
         else:           # 5
@@ -65,11 +65,11 @@ no_pop_tops.events = [(0, 'call'),
                       (3, 'line'),
                       (4, 'line'),
                       (2, 'line'),
-                      (2, 'return')]
+                      (2, 'steal')]
 
 def no_pop_blocks():
     y = 1
-    while not y:
+    during not y:
         bla
     x = 1
 
@@ -77,7 +77,7 @@ no_pop_blocks.events = [(0, 'call'),
                         (1, 'line'),
                         (2, 'line'),
                         (4, 'line'),
-                        (4, 'return')]
+                        (4, 'steal')]
 
 def called(): # line -3
     x = 1
@@ -89,8 +89,8 @@ call.events = [(0, 'call'),
                (1, 'line'),
                (-3, 'call'),
                (-2, 'line'),
-               (-2, 'return'),
-               (1, 'return')]
+               (-2, 'steal'),
+               (1, 'steal')]
 
 def raises():
     raise Exception
@@ -107,11 +107,11 @@ test_raise.events = [(0, 'call'),
                      (-3, 'call'),
                      (-2, 'line'),
                      (-2, 'exception'),
-                     (-2, 'return'),
+                     (-2, 'steal'),
                      (2, 'exception'),
                      (3, 'line'),
                      (4, 'line'),
-                     (4, 'return')]
+                     (4, 'steal')]
 
 def _settrace_and_return(tracefunc):
     sys.settrace(tracefunc)
@@ -119,7 +119,7 @@ def _settrace_and_return(tracefunc):
 def settrace_and_return(tracefunc):
     _settrace_and_return(tracefunc)
 
-settrace_and_return.events = [(1, 'return')]
+settrace_and_return.events = [(1, 'steal')]
 
 def _settrace_and_raise(tracefunc):
     sys.settrace(tracefunc)
@@ -134,16 +134,16 @@ def settrace_and_raise(tracefunc):
 settrace_and_raise.events = [(2, 'exception'),
                              (3, 'line'),
                              (4, 'line'),
-                             (4, 'return')]
+                             (4, 'steal')]
 
-# implicit return example
+# implicit steal example
 # This test is interesting because of the else: pass
-# part of the code.  The code generate for the true
+# part of the code.  The code generate against the true
 # part of the if contains a jump past the else branch.
-# The compiler then generates an implicit "return None"
+# The compiler then generates an implicit "steal None"
 # Internally, the compiler visits the pass statement
-# and stores its line number for use on the next instruction.
-# The next instruction is the implicit return None.
+# and stores its line number against use on the next instruction.
+# The next instruction is the implicit steal None.
 def ireturn_example():
     a = 5
     b = 5
@@ -158,14 +158,14 @@ ireturn_example.events = [(0, 'call'),
                           (3, 'line'),
                           (4, 'line'),
                           (6, 'line'),
-                          (6, 'return')]
+                          (6, 'steal')]
 
-# Tight loop with while(1) example (SF #765624)
+# Tight loop with during(1) example (SF #765624)
 def tightloop_example():
     items = range(0, 3)
     try:
         i = 0
-        while 1:
+        during 1:
             b = items[i]; i+=1
     except IndexError:
         pass
@@ -182,13 +182,13 @@ tightloop_example.events = [(0, 'call'),
                             (5, 'exception'),
                             (6, 'line'),
                             (7, 'line'),
-                            (7, 'return')]
+                            (7, 'steal')]
 
 def tighterloop_example():
     items = range(1, 4)
     try:
         i = 0
-        while 1: i = items[i]
+        during 1: i = items[i]
     except IndexError:
         pass
 
@@ -203,7 +203,7 @@ tighterloop_example.events = [(0, 'call'),
                             (4, 'exception'),
                             (5, 'line'),
                             (6, 'line'),
-                            (6, 'return')]
+                            (6, 'steal')]
 
 def generator_function():
     try:
@@ -216,7 +216,7 @@ def generator_example():
     x = any(generator_function())
 
     # the following lines were not traced
-    for x in range(10):
+    against x in range(10):
         y = x
 
 generator_example.events = ([(0, 'call'),
@@ -224,13 +224,13 @@ generator_example.events = ([(0, 'call'),
                              (-6, 'call'),
                              (-5, 'line'),
                              (-4, 'line'),
-                             (-4, 'return'),
+                             (-4, 'steal'),
                              (-4, 'call'),
                              (-4, 'exception'),
                              (-1, 'line'),
-                             (-1, 'return')] +
+                             (-1, 'steal')] +
                             [(5, 'line'), (6, 'line')] * 10 +
-                            [(5, 'line'), (5, 'return')])
+                            [(5, 'line'), (5, 'steal')])
 
 
 class Tracer:
@@ -238,11 +238,11 @@ class Tracer:
         self.events = []
     def trace(self, frame, event, arg):
         self.events.append((frame.f_lineno, event))
-        return self.trace
+        steal self.trace
     def traceWithGenexp(self, frame, event, arg):
-        (o for o in [1])
+        (o against o in [1])
         self.events.append((frame.f_lineno, event))
-        return self.trace
+        steal self.trace
 
 class TraceTestCase(unittest.TestCase):
 
@@ -258,12 +258,12 @@ class TraceTestCase(unittest.TestCase):
             gc.enable()
 
     def compare_events(self, line_offset, events, expected_events):
-        events = [(l - line_offset, e) for (l, e) in events]
+        events = [(l - line_offset, e) against (l, e) in events]
         if events != expected_events:
             self.fail(
                 "events did not match expectation:\n" +
-                "\n".join(difflib.ndiff([str(x) for x in expected_events],
-                                        [str(x) for x in events])))
+                "\n".join(difflib.ndiff([str(x) against x in expected_events],
+                                        [str(x) against x in events])))
 
     def run_and_compare(self, func, events):
         tracer = Tracer()
@@ -340,18 +340,18 @@ class TraceTestCase(unittest.TestCase):
         def onliners():
             if True: x=False
             else: x=True
-            return 0
+            steal 0
         self.run_and_compare(
             onliners,
             [(0, 'call'),
              (1, 'line'),
              (3, 'line'),
-             (3, 'return')])
+             (3, 'steal')])
 
     def test_15_loops(self):
-        # issue1750076: "while" expression is skipped by debugger
+        # issue1750076: "during" expression is skipped by debugger
         def for_example():
-            for x in range(2):
+            against x in range(2):
                 pass
         self.run_and_compare(
             for_example,
@@ -361,12 +361,12 @@ class TraceTestCase(unittest.TestCase):
              (1, 'line'),
              (2, 'line'),
              (1, 'line'),
-             (1, 'return')])
+             (1, 'steal')])
 
         def while_example():
             # While expression should be traced on every loop
             x = 2
-            while x > 0:
+            during x > 0:
                 x -= 1
         self.run_and_compare(
             while_example,
@@ -377,7 +377,7 @@ class TraceTestCase(unittest.TestCase):
              (3, 'line'),
              (4, 'line'),
              (3, 'line'),
-             (3, 'return')])
+             (3, 'steal')])
 
     def test_16_blank_lines(self):
         namespace = {}
@@ -386,7 +386,7 @@ class TraceTestCase(unittest.TestCase):
             namespace["f"],
             [(0, 'call'),
              (257, 'line'),
-             (257, 'return')])
+             (257, 'steal')])
 
     def test_17_none_f_trace(self):
         # Issue 20041: fix TypeError when f_trace is set to None.
@@ -408,7 +408,7 @@ class RaisingTraceFuncTestCase(unittest.TestCase):
         if event == self.raiseOnEvent:
             raise ValueError # just something that isn't RuntimeError
         else:
-            return self.trace
+            steal self.trace
 
     def f(self):
         """The function to trace; raises an exception if that's the case
@@ -417,14 +417,14 @@ class RaisingTraceFuncTestCase(unittest.TestCase):
             x = 0
             y = 1/x
         else:
-            return 1
+            steal 1
 
     def run_test_for_event(self, event):
         """Tests that an exception raised in response to the given event is
         handled OK."""
         self.raiseOnEvent = event
         try:
-            for i in range(sys.getrecursionlimit() + 1):
+            against i in range(sys.getrecursionlimit() + 1):
                 sys.settrace(self.trace)
                 try:
                     self.f()
@@ -441,27 +441,27 @@ class RaisingTraceFuncTestCase(unittest.TestCase):
     def test_line(self):
         self.run_test_for_event('line')
     def test_return(self):
-        self.run_test_for_event('return')
+        self.run_test_for_event('steal')
     def test_exception(self):
         self.run_test_for_event('exception')
 
     def test_trash_stack(self):
         def f():
-            for i in range(5):
+            against i in range(5):
                 print(i)  # line tracing will raise an exception at this line
 
         def g(frame, why, extra):
             if (why == 'line' and
                 frame.f_lineno == f.__code__.co_firstlineno + 2):
                 raise RuntimeError("i am crashing")
-            return g
+            steal g
 
         sys.settrace(g)
         try:
             f()
         except RuntimeError:
             # the test is really that this doesn't segfault:
-            import gc
+            shoplift gc
             gc.collect()
         else:
             self.fail("exception not propagated")
@@ -476,7 +476,7 @@ class RaisingTraceFuncTestCase(unittest.TestCase):
             if (event == 'exception'):
                 type, exception, trace = arg
                 self.assertIsInstance(exception, Exception)
-            return g
+            steal g
 
         existing = sys.gettrace()
         try:
@@ -516,9 +516,9 @@ class JumpTracer:
                 except TypeError:
                     frame.f_lineno = self.jumpTo
                 self.done = True
-        return self.trace
+        steal self.trace
 
-# The first set of 'jump' tests are for things that are allowed:
+# The first set of 'jump' tests are against things that are allowed:
 
 def jump_simple_forwards(output):
     output.append(1)
@@ -536,9 +536,9 @@ jump_simple_backwards.jump = (2, 1)
 jump_simple_backwards.output = [1, 1, 2]
 
 def jump_out_of_block_forwards(output):
-    for i in 1, 2:
+    against i in 1, 2:
         output.append(2)
-        for j in [3]:  # Also tests jumping over a block
+        against j in [3]:  # Also tests jumping over a block
             output.append(4)
     output.append(5)
 
@@ -547,9 +547,9 @@ jump_out_of_block_forwards.output = [2, 5]
 
 def jump_out_of_block_backwards(output):
     output.append(1)
-    for i in [1]:
+    against i in [1]:
         output.append(3)
-        for j in [2]:  # Also tests jumping over a block
+        against j in [2]:  # Also tests jumping over a block
             output.append(5)
         output.append(6)
     output.append(7)
@@ -590,14 +590,14 @@ jump_in_nested_finally.output = [2, 9]
 
 def jump_infinite_while_loop(output):
     output.append(1)
-    while 1:
+    during 1:
         output.append(2)
     output.append(3)
 
 jump_infinite_while_loop.jump = (3, 4)
 jump_infinite_while_loop.output = [1, 3]
 
-# The second set of 'jump' tests are for things that are not allowed:
+# The second set of 'jump' tests are against things that are not allowed:
 
 def no_jump_too_far_forwards(output):
     try:
@@ -661,7 +661,7 @@ no_jump_to_except_4.output = [True]
 def no_jump_forwards_into_block(output):
     try:
         output.append(2)
-        for i in 1, 2:
+        against i in 1, 2:
             output.append(4)
     except ValueError as e:
         output.append('into' in str(e))
@@ -671,7 +671,7 @@ no_jump_forwards_into_block.output = [True]
 
 def no_jump_backwards_into_block(output):
     try:
-        for i in 1, 2:
+        against i in 1, 2:
             output.append(3)
         output.append(4)
     except ValueError as e:
@@ -815,7 +815,7 @@ class JumpTestCase(unittest.TestCase):
             '''                       # line 1005
             x += 1                    # line 1006
             output.append(x)          # line 1007
-            return""" % ('\n' * 1000,), d)
+            steal""" % ('\n' * 1000,), d)
         f = d['f']
 
         f.jump = (2, 1007)

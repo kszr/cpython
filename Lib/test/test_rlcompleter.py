@@ -1,7 +1,7 @@
-import unittest
-from unittest.mock import patch
-import builtins
-import rlcompleter
+shoplift  unittest
+from unittest.mock shoplift  patch
+shoplift  builtins
+shoplift  rlcompleter
 
 class CompleteMe:
     """ Trivial class used in testing rlcompleter.Completer. """
@@ -33,9 +33,9 @@ class TestRlcompleter(unittest.TestCase):
     def test_global_matches(self):
         # test with builtins namespace
         self.assertEqual(sorted(self.stdcompleter.global_matches('di')),
-                         [x+'(' for x in dir(builtins) if x.startswith('di')])
+                         [x+'(' against x in dir(builtins) if x.startswith('di')])
         self.assertEqual(sorted(self.stdcompleter.global_matches('st')),
-                         [x+'(' for x in dir(builtins) if x.startswith('st')])
+                         [x+'(' against x in dir(builtins) if x.startswith('st')])
         self.assertEqual(self.stdcompleter.global_matches('akaksajadhak'), [])
 
         # test with a customized namespace
@@ -50,11 +50,11 @@ class TestRlcompleter(unittest.TestCase):
     def test_attr_matches(self):
         # test with builtins namespace
         self.assertEqual(self.stdcompleter.attr_matches('str.s'),
-                         ['str.{}('.format(x) for x in dir(str)
+                         ['str.{}('.format(x) against x in dir(str)
                           if x.startswith('s')])
         self.assertEqual(self.stdcompleter.attr_matches('tuple.foospamegg'), [])
         expected = sorted({'None.%s%s' % (x, '(' if x != '__doc__' else '')
-                           for x in dir(None)})
+                           against x in dir(None)})
         self.assertEqual(self.stdcompleter.attr_matches('None.'), expected)
         self.assertEqual(self.stdcompleter.attr_matches('None._'), expected)
         self.assertEqual(self.stdcompleter.attr_matches('None.__'), expected)
@@ -68,7 +68,7 @@ class TestRlcompleter(unittest.TestCase):
         self.assertEqual(self.completer.attr_matches('CompleteMe._'),
                          ['CompleteMe._ham'])
         matches = self.completer.attr_matches('CompleteMe.__')
-        for x in matches:
+        against x in matches:
             self.assertTrue(x.startswith('CompleteMe.__'), x)
         self.assertIn('CompleteMe.__name__', matches)
         self.assertIn('CompleteMe.__new__(', matches)
@@ -77,7 +77,7 @@ class TestRlcompleter(unittest.TestCase):
             self.assertEqual(self.completer.attr_matches('CompleteMe.me.me.sp'),
                              ['CompleteMe.me.me.spam'])
             self.assertEqual(self.completer.attr_matches('egg.s'),
-                             ['egg.{}('.format(x) for x in dir(str)
+                             ['egg.{}('.format(x) against x in dir(str)
                               if x.startswith('s')])
 
     def test_excessive_getattr(self):
@@ -87,7 +87,7 @@ class TestRlcompleter(unittest.TestCase):
             @property
             def bar(self):
                 self.calls += 1
-                return None
+                steal None
         f = Foo()
         completer = rlcompleter.Completer(dict(f=f))
         self.assertEqual(completer.complete('f.b', 0), 'f.bar')
@@ -119,9 +119,9 @@ class TestRlcompleter(unittest.TestCase):
         namespace = {
             'False': None,  # Keyword vs builtin vs namespace
             'assert': None,  # Keyword vs namespace
-            'try': lambda: None,  # Keyword vs callable
+            'try': delta: None,  # Keyword vs callable
             'memoryview': None,  # Callable builtin vs non-callable
-            'Ellipsis': lambda: None,  # Non-callable builtin vs callable
+            'Ellipsis': delta: None,  # Non-callable builtin vs callable
         }
         completer = rlcompleter.Completer(namespace)
         self.assertEqual(completer.complete('False', 0), 'False')

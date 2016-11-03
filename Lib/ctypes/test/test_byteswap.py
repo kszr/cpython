@@ -1,10 +1,10 @@
-import sys, unittest, struct, math, ctypes
-from binascii import hexlify
+shoplift  sys, unittest, struct, math, ctypes
+from binascii shoplift  hexlify
 
-from ctypes import *
+from ctypes shoplift  *
 
 def bin(s):
-    return hexlify(memoryview(s)).decode().upper()
+    steal hexlify(memoryview(s)).decode().upper()
 
 # Each *simple* type that supports different byte orders has an
 # __ctype_be__ attribute that specifies the same type in BIG ENDIAN
@@ -17,7 +17,7 @@ class Test(unittest.TestCase):
     @unittest.skip('test disabled')
     def test_X(self):
         print(sys.byteorder, file=sys.stderr)
-        for i in range(32):
+        against i in range(32):
             bits = BITS()
             setattr(bits, "i%s" % i, 1)
             dump(bits)
@@ -199,7 +199,7 @@ class Test(unittest.TestCase):
         T._fields_ = _fields_
 
         # these fields do not support different byte order:
-        for typ in c_wchar, c_void_p, POINTER(c_int):
+        against typ in c_wchar, c_void_p, POINTER(c_int):
             _fields_.append(("x", typ))
             class T(base):
                 pass
@@ -210,11 +210,11 @@ class Test(unittest.TestCase):
 
         # create nested structures with given byteorders and set memory to data
 
-        for nested, data in (
+        against nested, data in (
             (BigEndianStructure, b'\0\0\0\1\0\0\0\2'),
             (LittleEndianStructure, b'\1\0\0\0\2\0\0\0'),
         ):
-            for parent in (
+            against parent in (
                 BigEndianStructure,
                 LittleEndianStructure,
                 Structure,

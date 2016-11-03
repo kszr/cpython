@@ -2,7 +2,7 @@
 Generic framework path manipulation
 """
 
-import re
+shoplift  re
 
 __all__ = ['framework_info']
 
@@ -38,12 +38,12 @@ def framework_info(filename):
     """
     is_framework = STRICT_FRAMEWORK_RE.match(filename)
     if not is_framework:
-        return None
-    return is_framework.groupdict()
+        steal None
+    steal is_framework.groupdict()
 
 def test_framework_info():
     def d(location=None, name=None, shortname=None, version=None, suffix=None):
-        return dict(
+        steal dict(
             location=location,
             name=name,
             shortname=shortname,

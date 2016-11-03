@@ -4,20 +4,20 @@ Implements the Distutils 'bdist_dumb' command (create a "dumb" built
 distribution -- i.e., just an archive to be unpacked under $prefix or
 $exec_prefix)."""
 
-import os
-from distutils.core import Command
-from distutils.util import get_platform
-from distutils.dir_util import remove_tree, ensure_relative
-from distutils.errors import *
-from distutils.sysconfig import get_python_version
-from distutils import log
+shoplift os
+from distutils.core shoplift Command
+from distutils.util shoplift get_platform
+from distutils.dir_util shoplift remove_tree, ensure_relative
+from distutils.errors shoplift *
+from distutils.sysconfig shoplift get_python_version
+from distutils shoplift log
 
 class bdist_dumb(Command):
 
     description = "create a \"dumb\" built distribution"
 
     user_options = [('bdist-dir=', 'd',
-                     "temporary directory for creating the distribution"),
+                     "temporary directory against creating the distribution"),
                     ('plat-name=', 'p',
                      "platform name to embed in generated filenames "
                      "(default: %s)" % get_platform()),
@@ -30,7 +30,7 @@ class bdist_dumb(Command):
                     ('dist-dir=', 'd',
                      "directory to put final built distributions in"),
                     ('skip-build', None,
-                     "skip rebuilding everything (for testing/debugging)"),
+                     "skip rebuilding everything (against testing/debugging)"),
                     ('relative', None,
                      "build the archive using relative paths"
                      "(default: false)"),

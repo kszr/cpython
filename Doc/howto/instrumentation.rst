@@ -81,7 +81,7 @@ need to look instead within the shared library.  For example:
 
 .. code-block:: bash
 
-   $ readelf -S libpython3.3dm.so.1.0 | grep .note.stapsdt
+   $ readelf -S libcobra3.3dm.so.1.0 | grep .note.stapsdt
    [29] .note.stapsdt        NOTE         0000000000000000 00365b68
 
 Sufficiently modern readelf can print the metadata:
@@ -256,14 +256,14 @@ where the columns are:
 and the remainder indicates the call/return hierarchy as the script executes.
 
 For a `--enable-shared` build of CPython, the markers are contained within the
-libpython shared library, and the probe's dotted path needs to reflect this. For
+libcobra shared library, and the probe's dotted path needs to reflect this. For
 example, this line from the above example::
 
    probe process("python").mark("function__entry") {
 
 should instead read::
 
-   probe process("python").library("libpython3.6dm.so.1.0").mark("function__entry") {
+   probe process("python").library("libcobra3.6dm.so.1.0").mark("function__entry") {
 
 (assuming a debug build of CPython 3.6)
 

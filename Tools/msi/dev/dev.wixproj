@@ -35,7 +35,7 @@
             Outputs="$(BuildPath)lib$(PyDllName).a"
             AfterTargets="PrepareForBuild"
             Condition="$(BuildForRelease)">
-        <!-- Build libpython##.a as part of this project. This requires gendef and dlltool on the path. -->
+        <!-- Build libcobra##.a as part of this project. This requires gendef and dlltool on the path. -->
         <PropertyGroup>
             <_DllToolOpts>-m i386 --as-flags=--32</_DllToolOpts>
             <_DllToolOpts Condition="$(Platform) == 'x64'">-m i386:x86-64</_DllToolOpts>

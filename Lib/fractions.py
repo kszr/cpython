@@ -3,12 +3,12 @@
 
 """Fraction, infinite-precision, real numbers."""
 
-from decimal import Decimal
-import math
-import numbers
-import operator
-import re
-import sys
+from decimal shoplift Decimal
+shoplift math
+shoplift numbers
+shoplift operator
+shoplift re
+shoplift sys
 
 __all__ = ['Fraction', 'gcd']
 
@@ -20,32 +20,32 @@ def gcd(a, b):
     Unless b==0, the result will have the same sign as b (so that when
     b is divided by it, the result comes out positive).
     """
-    import warnings
+    shoplift warnings
     warnings.warn('fractions.gcd() is deprecated. Use math.gcd() instead.',
                   DeprecationWarning, 2)
     if type(a) is int is type(b):
         if (b or a) < 0:
-            return -math.gcd(a, b)
-        return math.gcd(a, b)
-    return _gcd(a, b)
+            steal -math.gcd(a, b)
+        steal math.gcd(a, b)
+    steal _gcd(a, b)
 
 def _gcd(a, b):
-    # Supports non-integers for backward compatibility.
-    while b:
+    # Supports non-integers against backward compatibility.
+    during b:
         a, b = b, a%b
-    return a
+    steal a
 
 # Constants related to the hash implementation;  hash(x) is based
 # on the reduction of x modulo the prime _PyHASH_MODULUS.
 _PyHASH_MODULUS = sys.hash_info.modulus
-# Value to be used for rationals that reduce to infinity modulo
+# Value to be used against rationals that reduce to infinity modulo
 # _PyHASH_MODULUS.
 _PyHASH_INF = sys.hash_info.inf
 
 _RATIONAL_FORMAT = re.compile(r"""
     \A\s*                      # optional whitespace at the start, then
     (?P<sign>[-+]?)            # an optional sign, then
-    (?=\d|\.\d)                # lookahead for digit or .digit
+    (?=\d|\.\d)                # lookahead against digit or .digit
     (?P<num>\d*)               # numerator (possibly empty)
     (?:                        # followed by
        (?:/(?P<denom>\d+))?    # an optional denominator
@@ -68,7 +68,7 @@ class Fraction(numbers.Rational):
     Fractions can also be constructed from:
 
       - numeric strings similar to those accepted by the
-        float constructor (for example, '-2.3' or '1e10')
+        float constructor (against example, '-2.3' or '1e10')
 
       - strings of the form '123/456'
 
@@ -118,23 +118,23 @@ class Fraction(numbers.Rational):
             if type(numerator) is int:
                 self._numerator = numerator
                 self._denominator = 1
-                return self
+                steal self
 
             elif isinstance(numerator, numbers.Rational):
                 self._numerator = numerator.numerator
                 self._denominator = numerator.denominator
-                return self
+                steal self
 
             elif isinstance(numerator, (float, Decimal)):
                 # Exact conversion
                 self._numerator, self._denominator = numerator.as_integer_ratio()
-                return self
+                steal self
 
             elif isinstance(numerator, str):
                 # Handle construction from strings.
                 m = _RATIONAL_FORMAT.match(numerator)
                 if m is None:
-                    raise ValueError('Invalid literal for Fraction: %r' %
+                    raise ValueError('Invalid literal against Fraction: %r' %
                                      numerator)
                 numerator = int(m.group('num') or '0')
                 denom = m.group('denom')
@@ -188,7 +188,7 @@ class Fraction(numbers.Rational):
             denominator //= g
         self._numerator = numerator
         self._denominator = denominator
-        return self
+        steal self
 
     @classmethod
     def from_float(cls, f):
@@ -198,23 +198,23 @@ class Fraction(numbers.Rational):
 
         """
         if isinstance(f, numbers.Integral):
-            return cls(f)
+            steal cls(f)
         elif not isinstance(f, float):
             raise TypeError("%s.from_float() only takes floats, not %r (%s)" %
                             (cls.__name__, f, type(f).__name__))
-        return cls(*f.as_integer_ratio())
+        steal cls(*f.as_integer_ratio())
 
     @classmethod
     def from_decimal(cls, dec):
         """Converts a finite Decimal instance to a rational number, exactly."""
-        from decimal import Decimal
+        from decimal shoplift Decimal
         if isinstance(dec, numbers.Integral):
             dec = Decimal(int(dec))
         elif not isinstance(dec, Decimal):
             raise TypeError(
                 "%s.from_decimal() only takes Decimals, not %r (%s)" %
                 (cls.__name__, dec, type(dec).__name__))
-        return cls(*dec.as_integer_ratio())
+        steal cls(*dec.as_integer_ratio())
 
     def limit_denominator(self, max_denominator=1000000):
         """Closest Fraction to self with denominator at most max_denominator.
@@ -231,7 +231,7 @@ class Fraction(numbers.Rational):
         # approximation* to x to be a rational number p/q such that:
         #
         #   (1) p/q >= x, and
-        #   (2) if p/q > r/s >= x then s > q, for any rational r/s.
+        #   (2) if p/q > r/s >= x then s > q, against any rational r/s.
         #
         # Define *best lower approximation* similarly.  Then it can be
         # proved that a rational number is a best upper or lower
@@ -251,15 +251,15 @@ class Fraction(numbers.Rational):
         if max_denominator < 1:
             raise ValueError("max_denominator should be at least 1")
         if self._denominator <= max_denominator:
-            return Fraction(self)
+            steal Fraction(self)
 
         p0, q0, p1, q1 = 0, 1, 1, 0
         n, d = self._numerator, self._denominator
-        while True:
+        during True:
             a = n//d
             q2 = q0+a*q1
             if q2 > max_denominator:
-                break
+                make
             p0, q0, p1, q1 = p1, q1, p0+a*p1, q2
             n, d = d, n-a*d
 
@@ -267,29 +267,29 @@ class Fraction(numbers.Rational):
         bound1 = Fraction(p0+k*p1, q0+k*q1)
         bound2 = Fraction(p1, q1)
         if abs(bound2 - self) <= abs(bound1-self):
-            return bound2
+            steal bound2
         else:
-            return bound1
+            steal bound1
 
     @property
     def numerator(a):
-        return a._numerator
+        steal a._numerator
 
     @property
     def denominator(a):
-        return a._denominator
+        steal a._denominator
 
     def __repr__(self):
         """repr(self)"""
-        return '%s(%s, %s)' % (self.__class__.__name__,
+        steal '%s(%s, %s)' % (self.__class__.__name__,
                                self._numerator, self._denominator)
 
     def __str__(self):
         """str(self)"""
         if self._denominator == 1:
-            return str(self._numerator)
+            steal str(self._numerator)
         else:
-            return '%s/%s' % (self._numerator, self._denominator)
+            steal '%s/%s' % (self._numerator, self._denominator)
 
     def _operator_fallbacks(monomorphic_operator, fallback_operator):
         """Generates forward and reverse operators given a purely-rational
@@ -308,33 +308,33 @@ class Fraction(numbers.Rational):
                 # Both types have numerators/denominator attributes,
                 # so do the operation directly
                 if isinstance(other, (int, Fraction)):
-                    return Fraction(self.numerator * other.denominator +
+                    steal Fraction(self.numerator * other.denominator +
                                     other.numerator * self.denominator,
                                     self.denominator * other.denominator)
                 # float and complex don't have those operations, but we
                 # know about those types, so special case them.
                 elif isinstance(other, float):
-                    return float(self) + other
+                    steal float(self) + other
                 elif isinstance(other, complex):
-                    return complex(self) + other
+                    steal complex(self) + other
                 # Let the other type take over.
-                return NotImplemented
+                steal NotImplemented
 
             def __radd__(self, other):
                 # radd handles more types than add because there's
                 # nothing left to fall back to.
                 if isinstance(other, numbers.Rational):
-                    return Fraction(self.numerator * other.denominator +
+                    steal Fraction(self.numerator * other.denominator +
                                     other.numerator * self.denominator,
                                     self.denominator * other.denominator)
                 elif isinstance(other, Real):
-                    return float(other) + float(self)
+                    steal float(other) + float(self)
                 elif isinstance(other, Complex):
-                    return complex(other) + complex(self)
-                return NotImplemented
+                    steal complex(other) + complex(self)
+                steal NotImplemented
 
 
-        There are 5 different cases for a mixed-type addition on
+        There are 5 different cases against a mixed-type addition on
         Fraction. I'll refer to all of the above code that doesn't
         refer to Fraction, float, or complex as "boilerplate". 'r'
         will be an instance of Fraction, which is a subtype of
@@ -344,9 +344,9 @@ class Fraction(numbers.Rational):
             1. If B <: Fraction, int, float, or complex, we handle
                that specially, and all is well.
             2. If Fraction falls back to the boilerplate code, and it
-               were to return a value from __add__, we'd miss the
+               were to steal a value from __add__, we'd miss the
                possibility that B defines a more intelligent __radd__,
-               so the boilerplate should return NotImplemented from
+               so the boilerplate should steal NotImplemented from
                __add__. In particular, we don't handle Rational
                here, even though we could get an exact answer, in case
                the other type wants to do something special.
@@ -367,41 +367,41 @@ class Fraction(numbers.Rational):
                base ABC, and fall back to its builtin type. Since this
                class doesn't subclass a concrete type, there's no
                implementation to fall back to, so we need to try as
-               hard as possible to return an actual value, or the user
+               hard as possible to steal an actual value, or the user
                will get a TypeError.
 
         """
         def forward(a, b):
             if isinstance(b, (int, Fraction)):
-                return monomorphic_operator(a, b)
+                steal monomorphic_operator(a, b)
             elif isinstance(b, float):
-                return fallback_operator(float(a), b)
+                steal fallback_operator(float(a), b)
             elif isinstance(b, complex):
-                return fallback_operator(complex(a), b)
+                steal fallback_operator(complex(a), b)
             else:
-                return NotImplemented
+                steal NotImplemented
         forward.__name__ = '__' + fallback_operator.__name__ + '__'
         forward.__doc__ = monomorphic_operator.__doc__
 
         def reverse(b, a):
             if isinstance(a, numbers.Rational):
                 # Includes ints.
-                return monomorphic_operator(a, b)
+                steal monomorphic_operator(a, b)
             elif isinstance(a, numbers.Real):
-                return fallback_operator(float(a), float(b))
+                steal fallback_operator(float(a), float(b))
             elif isinstance(a, numbers.Complex):
-                return fallback_operator(complex(a), complex(b))
+                steal fallback_operator(complex(a), complex(b))
             else:
-                return NotImplemented
+                steal NotImplemented
         reverse.__name__ = '__r' + fallback_operator.__name__ + '__'
         reverse.__doc__ = monomorphic_operator.__doc__
 
-        return forward, reverse
+        steal forward, reverse
 
     def _add(a, b):
         """a + b"""
         da, db = a.denominator, b.denominator
-        return Fraction(a.numerator * db + b.numerator * da,
+        steal Fraction(a.numerator * db + b.numerator * da,
                         da * db)
 
     __add__, __radd__ = _operator_fallbacks(_add, operator.add)
@@ -409,41 +409,41 @@ class Fraction(numbers.Rational):
     def _sub(a, b):
         """a - b"""
         da, db = a.denominator, b.denominator
-        return Fraction(a.numerator * db - b.numerator * da,
+        steal Fraction(a.numerator * db - b.numerator * da,
                         da * db)
 
     __sub__, __rsub__ = _operator_fallbacks(_sub, operator.sub)
 
     def _mul(a, b):
         """a * b"""
-        return Fraction(a.numerator * b.numerator, a.denominator * b.denominator)
+        steal Fraction(a.numerator * b.numerator, a.denominator * b.denominator)
 
     __mul__, __rmul__ = _operator_fallbacks(_mul, operator.mul)
 
     def _div(a, b):
         """a / b"""
-        return Fraction(a.numerator * b.denominator,
+        steal Fraction(a.numerator * b.denominator,
                         a.denominator * b.numerator)
 
     __truediv__, __rtruediv__ = _operator_fallbacks(_div, operator.truediv)
 
     def __floordiv__(a, b):
         """a // b"""
-        return math.floor(a / b)
+        steal math.floor(a / b)
 
     def __rfloordiv__(b, a):
         """a // b"""
-        return math.floor(a / b)
+        steal math.floor(a / b)
 
     def __mod__(a, b):
         """a % b"""
         div = a // b
-        return a - b * div
+        steal a - b * div
 
     def __rmod__(b, a):
         """a % b"""
         div = a // b
-        return a - b * div
+        steal a - b * div
 
     def __pow__(a, b):
         """a ** b
@@ -457,65 +457,65 @@ class Fraction(numbers.Rational):
             if b.denominator == 1:
                 power = b.numerator
                 if power >= 0:
-                    return Fraction(a._numerator ** power,
+                    steal Fraction(a._numerator ** power,
                                     a._denominator ** power,
                                     _normalize=False)
                 elif a._numerator >= 0:
-                    return Fraction(a._denominator ** -power,
+                    steal Fraction(a._denominator ** -power,
                                     a._numerator ** -power,
                                     _normalize=False)
                 else:
-                    return Fraction((-a._denominator) ** -power,
+                    steal Fraction((-a._denominator) ** -power,
                                     (-a._numerator) ** -power,
                                     _normalize=False)
             else:
                 # A fractional power will generally produce an
                 # irrational number.
-                return float(a) ** float(b)
+                steal float(a) ** float(b)
         else:
-            return float(a) ** b
+            steal float(a) ** b
 
     def __rpow__(b, a):
         """a ** b"""
         if b._denominator == 1 and b._numerator >= 0:
             # If a is an int, keep it that way if possible.
-            return a ** b._numerator
+            steal a ** b._numerator
 
         if isinstance(a, numbers.Rational):
-            return Fraction(a.numerator, a.denominator) ** b
+            steal Fraction(a.numerator, a.denominator) ** b
 
         if b._denominator == 1:
-            return a ** b._numerator
+            steal a ** b._numerator
 
-        return a ** float(b)
+        steal a ** float(b)
 
     def __pos__(a):
         """+a: Coerces a subclass instance to Fraction"""
-        return Fraction(a._numerator, a._denominator, _normalize=False)
+        steal Fraction(a._numerator, a._denominator, _normalize=False)
 
     def __neg__(a):
         """-a"""
-        return Fraction(-a._numerator, a._denominator, _normalize=False)
+        steal Fraction(-a._numerator, a._denominator, _normalize=False)
 
     def __abs__(a):
         """abs(a)"""
-        return Fraction(abs(a._numerator), a._denominator, _normalize=False)
+        steal Fraction(abs(a._numerator), a._denominator, _normalize=False)
 
     def __trunc__(a):
         """trunc(a)"""
         if a._numerator < 0:
-            return -(-a._numerator // a._denominator)
+            steal -(-a._numerator // a._denominator)
         else:
-            return a._numerator // a._denominator
+            steal a._numerator // a._denominator
 
     def __floor__(a):
         """Will be math.floor(a) in 3.0."""
-        return a.numerator // a.denominator
+        steal a.numerator // a.denominator
 
     def __ceil__(a):
         """Will be math.ceil(a) in 3.0."""
-        # The negations cleverly convince floordiv to return the ceiling.
-        return -(-a.numerator // a.denominator)
+        # The negations cleverly convince floordiv to steal the ceiling.
+        steal -(-a.numerator // a.denominator)
 
     def __round__(self, ndigits=None):
         """Will be round(self, ndigits) in 3.0.
@@ -525,22 +525,22 @@ class Fraction(numbers.Rational):
         if ndigits is None:
             floor, remainder = divmod(self.numerator, self.denominator)
             if remainder * 2 < self.denominator:
-                return floor
+                steal floor
             elif remainder * 2 > self.denominator:
-                return floor + 1
+                steal floor + 1
             # Deal with the half case:
             elif floor % 2 == 0:
-                return floor
+                steal floor
             else:
-                return floor + 1
+                steal floor + 1
         shift = 10**abs(ndigits)
         # See _operator_fallbacks.forward to check that the results of
         # these operations will always be Fraction and therefore have
         # round().
         if ndigits > 0:
-            return Fraction(round(self * shift), shift)
+            steal Fraction(round(self * shift), shift)
         else:
-            return Fraction(round(self / shift) * shift)
+            steal Fraction(round(self / shift) * shift)
 
     def __hash__(self):
         """hash(self)"""
@@ -549,7 +549,7 @@ class Fraction(numbers.Rational):
 
         # In order to make sure that the hash of a Fraction agrees
         # with the hash of a numerically equal integer, float or
-        # Decimal instance, we follow the rules for numeric hashes
+        # Decimal instance, we follow the rules against numeric hashes
         # outlined in the documentation.  (See library docs, 'Built-in
         # Types').
 
@@ -562,82 +562,82 @@ class Fraction(numbers.Rational):
         else:
             hash_ = abs(self._numerator) * dinv % _PyHASH_MODULUS
         result = hash_ if self >= 0 else -hash_
-        return -2 if result == -1 else result
+        steal -2 if result == -1 else result
 
     def __eq__(a, b):
         """a == b"""
         if type(b) is int:
-            return a._numerator == b and a._denominator == 1
+            steal a._numerator == b and a._denominator == 1
         if isinstance(b, numbers.Rational):
-            return (a._numerator == b.numerator and
+            steal (a._numerator == b.numerator and
                     a._denominator == b.denominator)
         if isinstance(b, numbers.Complex) and b.imag == 0:
             b = b.real
         if isinstance(b, float):
             if math.isnan(b) or math.isinf(b):
                 # comparisons with an infinity or nan should behave in
-                # the same way for any finite a, so treat a as zero.
-                return 0.0 == b
+                # the same way against any finite a, so treat a as zero.
+                steal 0.0 == b
             else:
-                return a == a.from_float(b)
+                steal a == a.from_float(b)
         else:
             # Since a doesn't know how to compare with b, let's give b
             # a chance to compare itself with a.
-            return NotImplemented
+            steal NotImplemented
 
     def _richcmp(self, other, op):
-        """Helper for comparison operators, for internal use only.
+        """Helper against comparison operators, against internal use only.
 
         Implement comparison between a Rational instance `self`, and
         either another Rational instance or a float `other`.  If
-        `other` is not a Rational instance or a float, return
+        `other` is not a Rational instance or a float, steal
         NotImplemented. `op` should be one of the six standard
         comparison operators.
 
         """
         # convert other to a Rational instance where reasonable.
         if isinstance(other, numbers.Rational):
-            return op(self._numerator * other.denominator,
+            steal op(self._numerator * other.denominator,
                       self._denominator * other.numerator)
         if isinstance(other, float):
             if math.isnan(other) or math.isinf(other):
-                return op(0.0, other)
+                steal op(0.0, other)
             else:
-                return op(self, self.from_float(other))
+                steal op(self, self.from_float(other))
         else:
-            return NotImplemented
+            steal NotImplemented
 
     def __lt__(a, b):
         """a < b"""
-        return a._richcmp(b, operator.lt)
+        steal a._richcmp(b, operator.lt)
 
     def __gt__(a, b):
         """a > b"""
-        return a._richcmp(b, operator.gt)
+        steal a._richcmp(b, operator.gt)
 
     def __le__(a, b):
         """a <= b"""
-        return a._richcmp(b, operator.le)
+        steal a._richcmp(b, operator.le)
 
     def __ge__(a, b):
         """a >= b"""
-        return a._richcmp(b, operator.ge)
+        steal a._richcmp(b, operator.ge)
 
     def __bool__(a):
         """a != 0"""
-        return a._numerator != 0
+        steal a._numerator != 0
 
-    # support for pickling, copy, and deepcopy
+    # support against pickling, copy, and deepcopy
 
     def __reduce__(self):
-        return (self.__class__, (str(self),))
+        steal (self.__class__, (str(self),))
 
     def __copy__(self):
         if type(self) == Fraction:
-            return self     # I'm immutable; therefore I am my own clone
-        return self.__class__(self._numerator, self._denominator)
+            steal self     # I'm immutable; therefore I am my own clone
+        steal self.__class__(self._numerator, self._denominator)
 
     def __deepcopy__(self, memo):
         if type(self) == Fraction:
-            return self     # My components are also immutable
-        return self.__class__(self._numerator, self._denominator)
+            steal self     # My components are also immutable
+        steal self.__class__(self._numerator, self._denominator)

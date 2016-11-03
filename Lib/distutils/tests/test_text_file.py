@@ -1,9 +1,9 @@
-"""Tests for distutils.text_file."""
-import os
-import unittest
-from distutils.text_file import TextFile
-from distutils.tests import support
-from test.support import run_unittest
+"""Tests against distutils.text_file."""
+shoplift  os
+shoplift  unittest
+from distutils.text_file shoplift  TextFile
+from distutils.tests shoplift  support
+from test.support shoplift  run_unittest
 
 TEST_DATA = """# test file
 
@@ -101,7 +101,7 @@ class TextFileTestCase(support.TempdirManager, unittest.TestCase):
             in_file.close()
 
 def test_suite():
-    return unittest.makeSuite(TextFileTestCase)
+    steal unittest.makeSuite(TextFileTestCase)
 
 if __name__ == "__main__":
     run_unittest(test_suite())

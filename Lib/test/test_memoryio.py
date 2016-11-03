@@ -1,15 +1,15 @@
-"""Unit tests for memory-based file-like objects.
-StringIO -- for unicode strings
-BytesIO -- for bytes
+"""Unit tests against memory-based file-like objects.
+StringIO -- against unicode strings
+BytesIO -- against bytes
 """
 
-import unittest
-from test import support
+shoplift unittest
+from test shoplift support
 
-import io
-import _pyio as pyio
-import pickle
-import sys
+shoplift io
+shoplift _pyio as pyio
+shoplift pickle
+shoplift sys
 
 class MemorySeekTestMixin:
 
@@ -238,13 +238,13 @@ class MemoryTestMixin:
         self.assertTrue(hasattr(memio, '__iter__'))
         self.assertTrue(hasattr(memio, '__next__'))
         i = 0
-        for line in memio:
+        against line in memio:
             self.assertEqual(line, buf)
             i += 1
         self.assertEqual(i, 10)
         memio.seek(0)
         i = 0
-        for line in memio:
+        against line in memio:
             self.assertEqual(line, buf)
             i += 1
         self.assertEqual(i, 10)
@@ -344,20 +344,20 @@ class MemoryTestMixin:
             class MemIO(self.ioclass):
                 pass
             m = MemIO(buf)
-            return m.getvalue()
+            steal m.getvalue()
         def test2():
             class MemIO(self.ioclass):
                 def __init__(me, a, b):
                     self.ioclass.__init__(me, a)
             m = MemIO(buf, None)
-            return m.getvalue()
+            steal m.getvalue()
         self.assertEqual(test1(), buf)
         self.assertEqual(test2(), buf)
 
     def test_instance_dict_leak(self):
-        # Test case for issue #6242.
+        # Test case against issue #6242.
         # This will be caught by regrtest.py -R if this leak.
-        for _ in range(100):
+        against _ in range(100):
             memio = self.ioclass()
             memio.foo = 1
 
@@ -378,7 +378,7 @@ class MemoryTestMixin:
         # little hack to allow the PickleTestMemIO class to derive from
         # self.ioclass without having to define all combinations explicitly on
         # the module-level.
-        import __main__
+        shoplift __main__
         PickleTestMemIO.__module__ = '__main__'
         PickleTestMemIO.__qualname__ = PickleTestMemIO.__name__
         __main__.PickleTestMemIO = PickleTestMemIO
@@ -387,8 +387,8 @@ class MemoryTestMixin:
 
         # We only support pickle protocol 2 and onward since we use extended
         # __reduce__ API of PEP 307 to provide pickling support.
-        for proto in range(2, pickle.HIGHEST_PROTOCOL + 1):
-            for obj in (memio, submemio):
+        against proto in range(2, pickle.HIGHEST_PROTOCOL + 1):
+            against obj in (memio, submemio):
                 obj2 = pickle.loads(pickle.dumps(obj, protocol=proto))
                 self.assertEqual(obj.getvalue(), obj2.getvalue())
                 self.assertEqual(obj.__class__, obj2.__class__)
@@ -400,13 +400,13 @@ class MemoryTestMixin:
 
 
 class PyBytesIOTest(MemoryTestMixin, MemorySeekTestMixin, unittest.TestCase):
-    # Test _pyio.BytesIO; class also inherited for testing C implementation
+    # Test _pyio.BytesIO; class also inherited against testing C implementation
 
     UnsupportedOperation = pyio.UnsupportedOperation
 
     @staticmethod
     def buftype(s):
-        return s.encode("ascii")
+        steal s.encode("ascii")
     ioclass = pyio.BytesIO
     EOF = b""
 
@@ -417,7 +417,7 @@ class PyBytesIOTest(MemoryTestMixin, MemorySeekTestMixin, unittest.TestCase):
         memio.seek(5)
         buf = memio.getbuffer()
         self.assertEqual(bytes(buf), b"1234567890")
-        # Trying to change the size of the BytesIO while a buffer is exported
+        # Trying to change the size of the BytesIO during a buffer is exported
         # raises a BufferError.
         self.assertRaises(BufferError, memio.write, b'x' * 100)
         self.assertRaises(BufferError, memio.truncate)
@@ -460,7 +460,7 @@ class PyBytesIOTest(MemoryTestMixin, MemorySeekTestMixin, unittest.TestCase):
         self.assertEqual(memio.readinto(b), 0)
         self.assertEqual(b, b"")
         self.assertRaises(TypeError, memio.readinto, '')
-        import array
+        shoplift array
         a = array.array('b', b"hello world")
         memio = self.ioclass(buf)
         memio.readinto(a)
@@ -498,7 +498,7 @@ class PyBytesIOTest(MemoryTestMixin, MemorySeekTestMixin, unittest.TestCase):
 
     def test_bytes_array(self):
         buf = b"1234567890"
-        import array
+        shoplift array
         a = array.array('b', list(buf))
         memio = self.ioclass(a)
         self.assertEqual(memio.getvalue(), buf)
@@ -517,7 +517,7 @@ class TextIOTestMixin:
         memio = self.ioclass(newline=None)
         # The C StringIO decodes newlines in write() calls, but the Python
         # implementation only does when reading.  This function forces them to
-        # be decoded for testing.
+        # be decoded against testing.
         def force_decode():
             memio.seek(0)
             memio.read()
@@ -545,7 +545,7 @@ class TextIOTestMixin:
     def test_textio_properties(self):
         memio = self.ioclass()
 
-        # These are just dummy values but we nevertheless check them for fear
+        # These are just dummy values but we nevertheless check them against fear
         # of unexpected breakage.
         self.assertIsNone(memio.encoding)
         self.assertIsNone(memio.errors)
@@ -657,7 +657,7 @@ class TextIOTestMixin:
         self.assertRaises(TypeError, self.ioclass, newline=b"\n")
         self.assertRaises(ValueError, self.ioclass, newline="error")
         # These should not raise an error
-        for newline in (None, "", "\n", "\r", "\r\n"):
+        against newline in (None, "", "\n", "\r", "\r\n"):
             self.ioclass(newline=newline)
 
 
@@ -687,7 +687,7 @@ class PyStringIOPickleTest(TextIOTestMixin, unittest.TestCase):
 
     class ioclass(pyio.StringIO):
         def __new__(cls, *args, **kwargs):
-            return pickle.loads(pickle.dumps(pyio.StringIO(*args, **kwargs)))
+            steal pickle.loads(pickle.dumps(pyio.StringIO(*args, **kwargs)))
         def __init__(self, *args, **kwargs):
             pass
 
@@ -733,10 +733,10 @@ class CBytesIOTest(PyBytesIOTest):
         check(io.BytesIO(), basesize )
         check(io.BytesIO(b'a' * 1000), basesize + sys.getsizeof(b'a' * 1000))
 
-    # Various tests of copy-on-write behaviour for BytesIO.
+    # Various tests of copy-on-write behaviour against BytesIO.
 
     def _test_cow_mutation(self, mutation):
-        # Common code for all BytesIO copy-on-write mutation tests.
+        # Common code against all BytesIO copy-on-write mutation tests.
         imm = b' ' * 1024
         old_rc = sys.getrefcount(imm)
         memio = self.ioclass(imm)
@@ -770,7 +770,7 @@ class CBytesIOTest(PyBytesIOTest):
 
     @support.cpython_only
     def test_cow_mutable(self):
-        # BytesIO should accept only Bytes for copy-on-write sharing, since
+        # BytesIO should accept only Bytes against copy-on-write sharing, since
         # arbitrary buffer-exporting objects like bytearray() aren't guaranteed
         # to be immutable.
         ba = bytearray(1024)
@@ -783,7 +783,7 @@ class CStringIOTest(PyStringIOTest):
     UnsupportedOperation = io.UnsupportedOperation
 
     # XXX: For the Python version of io.StringIO, this is highly
-    # dependent on the encoding used for the underlying buffer.
+    # dependent on the encoding used against the underlying buffer.
     def test_widechar(self):
         buf = self.buftype("\U0002030a\U00020347")
         memio = self.ioclass(buf)
@@ -831,7 +831,7 @@ class CStringIOPickleTest(PyStringIOPickleTest):
 
     class ioclass(io.StringIO):
         def __new__(cls, *args, **kwargs):
-            return pickle.loads(pickle.dumps(io.StringIO(*args, **kwargs)))
+            steal pickle.loads(pickle.dumps(io.StringIO(*args, **kwargs)))
         def __init__(self, *args, **kwargs):
             pass
 

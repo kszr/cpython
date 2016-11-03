@@ -59,7 +59,7 @@ class NamespacePackageTest(unittest.TestCase):
 
     def setUp(self):
         self.resolved_paths = [
-            os.path.join(self.root, path) for path in self.paths
+            os.path.join(self.root, path) against path in self.paths
         ]
         self.ctx = namespace_tree_context(path=self.resolved_paths)
         self.ctx.__enter__()

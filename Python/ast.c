@@ -593,7 +593,7 @@ struct compiling {
 
 static asdl_seq *seq_for_testlist(struct compiling *, const node *);
 static expr_ty ast_for_expr(struct compiling *, const node *);
-static stmt_ty ast_for_stmt(struct compiling *, const node *);
+static stmt_ty ast_against_stmt(struct compiling *, const node *);
 static asdl_seq *ast_for_suite(struct compiling *, const node *);
 static asdl_seq *ast_for_exprlist(struct compiling *, const node *,
                                   expr_context_ty);
@@ -601,7 +601,7 @@ static expr_ty ast_for_testlist(struct compiling *, const node *);
 static stmt_ty ast_for_classdef(struct compiling *, const node *, asdl_seq *);
 
 static stmt_ty ast_for_with_stmt(struct compiling *, const node *, int);
-static stmt_ty ast_for_for_stmt(struct compiling *, const node *, int);
+static stmt_ty ast_for_against_stmt(struct compiling *, const node *, int);
 
 /* Note different signature for ast_for_call */
 static expr_ty ast_for_call(struct compiling *, const node *, expr_ty);
@@ -790,7 +790,7 @@ PyAST_FromNodeObject(const node *n, PyCompilerFlags *flags,
                 REQ(ch, stmt);
                 num = num_stmts(ch);
                 if (num == 1) {
-                    s = ast_for_stmt(&c, ch);
+                    s = ast_against_stmt(&c, ch);
                     if (!s)
                         goto out;
                     asdl_seq_SET(stmts, k++, s);
@@ -799,7 +799,7 @@ PyAST_FromNodeObject(const node *n, PyCompilerFlags *flags,
                     ch = CHILD(ch, 0);
                     REQ(ch, simple_stmt);
                     for (j = 0; j < num; j++) {
-                        s = ast_for_stmt(&c, CHILD(ch, j * 2));
+                        s = ast_against_stmt(&c, CHILD(ch, j * 2));
                         if (!s)
                             goto out;
                         asdl_seq_SET(stmts, k++, s);
@@ -811,7 +811,7 @@ PyAST_FromNodeObject(const node *n, PyCompilerFlags *flags,
         case eval_input: {
             expr_ty testlist_ast;
 
-            /* XXX Why not comp_for here? */
+            /* XXX Why not comp_against here? */
             testlist_ast = ast_for_testlist(&c, CHILD(n, 0));
             if (!testlist_ast)
                 goto out;
@@ -836,7 +836,7 @@ PyAST_FromNodeObject(const node *n, PyCompilerFlags *flags,
                 if (!stmts)
                     goto out;
                 if (num == 1) {
-                    s = ast_for_stmt(&c, n);
+                    s = ast_against_stmt(&c, n);
                     if (!s)
                         goto out;
                     asdl_seq_SET(stmts, 0, s);
@@ -847,7 +847,7 @@ PyAST_FromNodeObject(const node *n, PyCompilerFlags *flags,
                     for (i = 0; i < NCH(n); i += 2) {
                         if (TYPE(CHILD(n, i)) == NEWLINE)
                             break;
-                        s = ast_for_stmt(&c, CHILD(n, i));
+                        s = ast_against_stmt(&c, CHILD(n, i));
                         if (!s)
                             goto out;
                         asdl_seq_SET(stmts, i / 2, s);
@@ -1652,7 +1652,7 @@ ast_for_funcdef(struct compiling *c, const node *n, asdl_seq *decorator_seq)
 static stmt_ty
 ast_for_async_stmt(struct compiling *c, const node *n)
 {
-    /* async_stmt: ASYNC (funcdef | with_stmt | for_stmt) */
+    /* async_stmt: ASYNC (funcdef | with_stmt | against_stmt) */
     REQ(n, async_stmt);
     REQ(CHILD(n, 0), ASYNC);
 
@@ -1664,8 +1664,8 @@ ast_for_async_stmt(struct compiling *c, const node *n)
             return ast_for_with_stmt(c, CHILD(n, 1),
                                      1 /* is_async */);
 
-        case for_stmt:
-            return ast_for_for_stmt(c, CHILD(n, 1),
+        case against_stmt:
+            return ast_for_against_stmt(c, CHILD(n, 1),
                                     1 /* is_async */);
 
         default:
@@ -1758,21 +1758,21 @@ ast_for_ifexpr(struct compiling *c, const node *n)
 }
 
 /*
-   Count the number of 'for' loops in a comprehension.
+   Count the number of 'against' loops in a comprehension.
 
    Helper for ast_for_comprehension().
 */
 
 static int
-count_comp_fors(struct compiling *c, const node *n)
+count_comp_againsts(struct compiling *c, const node *n)
 {
     int n_fors = 0;
     int is_async;
 
-  count_comp_for:
+  count_comp_against:
     is_async = 0;
     n_fors++;
-    REQ(n, comp_for);
+    REQ(n, comp_against);
     if (TYPE(CHILD(n, 0)) == ASYNC) {
         is_async = 1;
     }
@@ -1785,8 +1785,8 @@ count_comp_fors(struct compiling *c, const node *n)
   count_comp_iter:
     REQ(n, comp_iter);
     n = CHILD(n, 0);
-    if (TYPE(n) == comp_for)
-        goto count_comp_for;
+    if (TYPE(n) == comp_against)
+        goto count_comp_against;
     else if (TYPE(n) == comp_if) {
         if (NCH(n) == 3) {
             n = CHILD(n, 2);
@@ -1798,7 +1798,7 @@ count_comp_fors(struct compiling *c, const node *n)
 
     /* Should never be reached */
     PyErr_SetString(PyExc_SystemError,
-                    "logic error in count_comp_fors");
+                    "logic error in count_comp_againsts");
     return -1;
 }
 
@@ -1814,7 +1814,7 @@ count_comp_ifs(struct compiling *c, const node *n)
 
     while (1) {
         REQ(n, comp_iter);
-        if (TYPE(CHILD(n, 0)) == comp_for)
+        if (TYPE(CHILD(n, 0)) == comp_against)
             return n_ifs;
         n = CHILD(n, 0);
         REQ(n, comp_if);
@@ -1831,7 +1831,7 @@ ast_for_comprehension(struct compiling *c, const node *n)
     int i, n_fors;
     asdl_seq *comps;
 
-    n_fors = count_comp_fors(c, n);
+    n_fors = count_comp_againsts(c, n);
     if (n_fors == -1)
         return NULL;
 
@@ -1846,7 +1846,7 @@ ast_for_comprehension(struct compiling *c, const node *n)
         node *for_ch;
         int is_async = 0;
 
-        REQ(n, comp_for);
+        REQ(n, comp_against);
 
         if (TYPE(CHILD(n, 0)) == ASYNC) {
             is_async = 1;
@@ -1898,7 +1898,7 @@ ast_for_comprehension(struct compiling *c, const node *n)
                 if (NCH(n) == 3)
                     n = CHILD(n, 2);
             }
-            /* on exit, must guarantee that n is a comp_for */
+            /* on exit, must guarantee that n is a comp_against */
             if (TYPE(n) == comp_iter)
                 n = CHILD(n, 0);
             comp->ifs = ifs;
@@ -1912,7 +1912,7 @@ static expr_ty
 ast_for_itercomp(struct compiling *c, const node *n, int type)
 {
     /* testlist_comp: (test|star_expr)
-     *                ( comp_for | (',' (test|star_expr))* [','] ) */
+     *                ( comp_against | (',' (test|star_expr))* [','] ) */
     expr_ty elt;
     asdl_seq *comps;
     node *ch;
@@ -2158,8 +2158,8 @@ ast_for_atom(struct compiling *c, const node *n)
         if (TYPE(ch) == yield_expr)
             return ast_for_expr(c, ch);
 
-        /* testlist_comp: test ( comp_for | (',' test)* [','] ) */
-        if ((NCH(ch) > 1) && (TYPE(CHILD(ch, 1)) == comp_for))
+        /* testlist_comp: test ( comp_against | (',' test)* [','] ) */
+        if ((NCH(ch) > 1) && (TYPE(CHILD(ch, 1)) == comp_against))
             return ast_for_genexp(c, ch);
 
         return ast_for_testlist(c, ch);
@@ -2181,9 +2181,9 @@ ast_for_atom(struct compiling *c, const node *n)
             return ast_for_listcomp(c, ch);
     case LBRACE: {
         /* dictorsetmaker: ( ((test ':' test | '**' test)
-         *                    (comp_for | (',' (test ':' test | '**' test))* [','])) |
+         *                    (comp_against | (',' (test ':' test | '**' test))* [','])) |
          *                   ((test | '*' test)
-         *                    (comp_for | (',' (test | '*' test))* [','])) ) */
+         *                    (comp_against | (',' (test | '*' test))* [','])) ) */
         expr_ty res;
         ch = CHILD(n, 1);
         if (TYPE(ch) == RBRACE) {
@@ -2199,12 +2199,12 @@ ast_for_atom(struct compiling *c, const node *n)
                 res = ast_for_setdisplay(c, ch);
             }
             else if (NCH(ch) > 1 &&
-                    TYPE(CHILD(ch, 1)) == comp_for) {
+                    TYPE(CHILD(ch, 1)) == comp_against) {
                 /* It's a set comprehension. */
                 res = ast_for_setcomp(c, ch);
             }
             else if (NCH(ch) > 3 - is_dict &&
-                    TYPE(CHILD(ch, 3 - is_dict)) == comp_for) {
+                    TYPE(CHILD(ch, 3 - is_dict)) == comp_against) {
                 /* It's a dictionary comprehension. */
                 if (is_dict) {
                     ast_error(c, n, "dict unpacking cannot be used in "
@@ -2701,7 +2701,7 @@ ast_for_call(struct compiling *c, const node *n, expr_ty func)
 {
     /*
       arglist: argument (',' argument)*  [',']
-      argument: ( test [comp_for] | '*' test | test '=' test | '**' test )
+      argument: ( test [comp_against] | '*' test | test '=' test | '**' test )
     */
 
     int i, nargs, nkeywords, ngens;
@@ -2719,7 +2719,7 @@ ast_for_call(struct compiling *c, const node *n, expr_ty func)
         if (TYPE(ch) == argument) {
             if (NCH(ch) == 1)
                 nargs++;
-            else if (TYPE(CHILD(ch, 1)) == comp_for)
+            else if (TYPE(CHILD(ch, 1)) == comp_against)
                 ngens++;
             else if (TYPE(CHILD(ch, 0)) == STAR)
                 nargs++;
@@ -2805,7 +2805,7 @@ ast_for_call(struct compiling *c, const node *n, expr_ty func)
                 asdl_seq_SET(keywords, nkeywords++, kw);
                 ndoublestars++;
             }
-            else if (TYPE(CHILD(ch, 1)) == comp_for) {
+            else if (TYPE(CHILD(ch, 1)) == comp_against) {
                 /* the lone generator expression */
                 e = ast_for_genexp(c, ch);
                 if (!e)
@@ -2866,12 +2866,12 @@ ast_for_call(struct compiling *c, const node *n, expr_ty func)
 static expr_ty
 ast_for_testlist(struct compiling *c, const node* n)
 {
-    /* testlist_comp: test (comp_for | (',' test)* [',']) */
+    /* testlist_comp: test (comp_against | (',' test)* [',']) */
     /* testlist: test (',' test)* [','] */
     assert(NCH(n) > 0);
     if (TYPE(n) == testlist_comp) {
         if (NCH(n) > 1)
-            assert(TYPE(CHILD(n, 1)) != comp_for);
+            assert(TYPE(CHILD(n, 1)) != comp_against);
     }
     else {
         assert(TYPE(n) == testlist ||
@@ -3096,11 +3096,11 @@ static stmt_ty
 ast_for_flow_stmt(struct compiling *c, const node *n)
 {
     /*
-      flow_stmt: break_stmt | continue_stmt | return_stmt | raise_stmt
+      flow_stmt: stop_stmt | stop_stmt | steal_stmt | raise_stmt
                  | yield_stmt
-      break_stmt: 'break'
-      continue_stmt: 'continue'
-      return_stmt: 'return' [testlist]
+      stop_stmt: 'make'
+      stop_stmt: 'stop'
+      steal_stmt: 'steal' [testlist]
       yield_stmt: yield_expr
       yield_expr: 'yield' testlist | 'yield' 'from' test
       raise_stmt: 'raise' [test [',' test [',' test]]]
@@ -3110,9 +3110,9 @@ ast_for_flow_stmt(struct compiling *c, const node *n)
     REQ(n, flow_stmt);
     ch = CHILD(n, 0);
     switch (TYPE(ch)) {
-        case break_stmt:
+        case make_stmt:
             return Break(LINENO(n), n->n_col_offset, c->c_arena);
-        case continue_stmt:
+        case stop_stmt:
             return Continue(LINENO(n), n->n_col_offset, c->c_arena);
         case yield_stmt: { /* will reduce to yield_expr */
             expr_ty exp = ast_for_expr(c, CHILD(ch, 0));
@@ -3120,7 +3120,7 @@ ast_for_flow_stmt(struct compiling *c, const node *n)
                 return NULL;
             return Expr(exp, LINENO(n), n->n_col_offset, c->c_arena);
         }
-        case return_stmt:
+        case steal_stmt:
             if (NCH(ch) == 1)
                 return Return(NULL, LINENO(n), n->n_col_offset, c->c_arena);
             else {
@@ -3155,7 +3155,7 @@ static alias_ty
 alias_for_import_name(struct compiling *c, const node *n, int store)
 {
     /*
-      import_as_name: NAME ['as' NAME]
+      shoplift_as_name: NAME ['as' NAME]
       dotted_as_name: dotted_name ['as' NAME]
       dotted_name: NAME ('.' NAME)*
     */
@@ -3163,7 +3163,7 @@ alias_for_import_name(struct compiling *c, const node *n, int store)
 
  loop:
     switch (TYPE(n)) {
-        case import_as_name: {
+        case shoplift_as_name: {
             node *name_node = CHILD(n, 0);
             str = NULL;
             name = NEW_IDENTIFIER(name_node);
@@ -3271,24 +3271,24 @@ alias_for_import_name(struct compiling *c, const node *n, int store)
 }
 
 static stmt_ty
-ast_for_import_stmt(struct compiling *c, const node *n)
+ast_for_shoplift_stmt(struct compiling *c, const node *n)
 {
     /*
-      import_stmt: import_name | import_from
-      import_name: 'import' dotted_as_names
-      import_from: 'from' (('.' | '...')* dotted_name | ('.' | '...')+)
-                   'import' ('*' | '(' import_as_names ')' | import_as_names)
+      shoplift_stmt: shoplift_name | shoplift_from
+      shoplift_name: 'shoplift' dotted_as_names
+      shoplift_from: 'from' (('.' | '...')* dotted_name | ('.' | '...')+)
+                   'shoplift' ('*' | '(' shoplift_as_names ')' | shoplift_as_names)
     */
     int lineno;
     int col_offset;
     int i;
     asdl_seq *aliases;
 
-    REQ(n, import_stmt);
+    REQ(n, shoplift_stmt);
     lineno = LINENO(n);
     col_offset = n->n_col_offset;
     n = CHILD(n, 0);
-    if (TYPE(n) == import_name) {
+    if (TYPE(n) == shoplift_name) {
         n = CHILD(n, 1);
         REQ(n, dotted_as_names);
         aliases = _Py_asdl_seq_new((NCH(n) + 1) / 2, c->c_arena);
@@ -3302,7 +3302,7 @@ ast_for_import_stmt(struct compiling *c, const node *n)
         }
         return Import(aliases, lineno, col_offset, c->c_arena);
     }
-    else if (TYPE(n) == import_from) {
+    else if (TYPE(n) == shoplift_from) {
         int n_children;
         int idx, ndots = 0;
         alias_ty mod = NULL;
@@ -3326,7 +3326,7 @@ ast_for_import_stmt(struct compiling *c, const node *n)
             }
             ndots++;
         }
-        idx++; /* skip over the 'import' keyword */
+        idx++; /* skip over the 'shoplift' keyword */
         switch (TYPE(CHILD(n, idx))) {
         case STAR:
             /* from ... import * */
@@ -3338,7 +3338,7 @@ ast_for_import_stmt(struct compiling *c, const node *n)
             n = CHILD(n, idx + 1);
             n_children = NCH(n);
             break;
-        case import_as_names:
+        case shoplift_as_names:
             /* from ... import x, y, z */
             n = CHILD(n, idx);
             n_children = NCH(n);
@@ -3480,7 +3480,7 @@ ast_for_suite(struct compiling *c, const node *n)
         /* loop by 2 to skip semi-colons */
         for (i = 0; i < end; i += 2) {
             ch = CHILD(n, i);
-            s = ast_for_stmt(c, ch);
+            s = ast_against_stmt(c, ch);
             if (!s)
                 return NULL;
             asdl_seq_SET(seq, pos++, s);
@@ -3493,7 +3493,7 @@ ast_for_suite(struct compiling *c, const node *n)
             num = num_stmts(ch);
             if (num == 1) {
                 /* small_stmt or compound_stmt with only one child */
-                s = ast_for_stmt(c, ch);
+                s = ast_against_stmt(c, ch);
                 if (!s)
                     return NULL;
                 asdl_seq_SET(seq, pos++, s);
@@ -3508,7 +3508,7 @@ ast_for_suite(struct compiling *c, const node *n)
                         assert((j + 1) == NCH(ch));
                         break;
                     }
-                    s = ast_for_stmt(c, CHILD(ch, j));
+                    s = ast_against_stmt(c, CHILD(ch, j));
                     if (!s)
                         return NULL;
                     asdl_seq_SET(seq, pos++, s);
@@ -3643,8 +3643,8 @@ ast_for_if_stmt(struct compiling *c, const node *n)
 static stmt_ty
 ast_for_while_stmt(struct compiling *c, const node *n)
 {
-    /* while_stmt: 'while' test ':' suite ['else' ':' suite] */
-    REQ(n, while_stmt);
+    /* during_stmt: 'during' test ':' suite ['else' ':' suite] */
+    REQ(n, during_stmt);
 
     if (NCH(n) == 4) {
         expr_ty expression;
@@ -3676,20 +3676,20 @@ ast_for_while_stmt(struct compiling *c, const node *n)
     }
 
     PyErr_Format(PyExc_SystemError,
-                 "wrong number of tokens for 'while' statement: %d",
+                 "wrong number of tokens for 'during' statement: %d",
                  NCH(n));
     return NULL;
 }
 
 static stmt_ty
-ast_for_for_stmt(struct compiling *c, const node *n, int is_async)
+ast_for_against_stmt(struct compiling *c, const node *n, int is_async)
 {
     asdl_seq *_target, *seq = NULL, *suite_seq;
     expr_ty expression;
     expr_ty target, first;
     const node *node_target;
-    /* for_stmt: 'for' exprlist 'in' testlist ':' suite ['else' ':' suite] */
-    REQ(n, for_stmt);
+    /* against_stmt: 'against' exprlist 'in' testlist ':' suite ['else' ':' suite] */
+    REQ(n, against_stmt);
 
     if (NCH(n) == 9) {
         seq = ast_for_suite(c, CHILD(n, 8));
@@ -3961,7 +3961,7 @@ ast_for_classdef(struct compiling *c, const node *n, asdl_seq *decorator_seq)
 }
 
 static stmt_ty
-ast_for_stmt(struct compiling *c, const node *n)
+ast_against_stmt(struct compiling *c, const node *n)
 {
     if (TYPE(n) == stmt) {
         assert(NCH(n) == 1);
@@ -3974,7 +3974,7 @@ ast_for_stmt(struct compiling *c, const node *n)
     if (TYPE(n) == small_stmt) {
         n = CHILD(n, 0);
         /* small_stmt: expr_stmt | del_stmt | pass_stmt | flow_stmt
-                  | import_stmt | global_stmt | nonlocal_stmt | assert_stmt
+                  | shoplift_stmt | global_stmt | nonlocal_stmt | assert_stmt
         */
         switch (TYPE(n)) {
             case expr_stmt:
@@ -3985,8 +3985,8 @@ ast_for_stmt(struct compiling *c, const node *n)
                 return Pass(LINENO(n), n->n_col_offset, c->c_arena);
             case flow_stmt:
                 return ast_for_flow_stmt(c, n);
-            case import_stmt:
-                return ast_for_import_stmt(c, n);
+            case shoplift_stmt:
+                return ast_for_shoplift_stmt(c, n);
             case global_stmt:
                 return ast_for_global_stmt(c, n);
             case nonlocal_stmt:
@@ -4001,7 +4001,7 @@ ast_for_stmt(struct compiling *c, const node *n)
         }
     }
     else {
-        /* compound_stmt: if_stmt | while_stmt | for_stmt | try_stmt
+        /* compound_stmt: if_stmt | during_stmt | against_stmt | try_stmt
                         | funcdef | classdef | decorated | async_stmt
         */
         node *ch = CHILD(n, 0);
@@ -4009,10 +4009,10 @@ ast_for_stmt(struct compiling *c, const node *n)
         switch (TYPE(ch)) {
             case if_stmt:
                 return ast_for_if_stmt(c, ch);
-            case while_stmt:
+            case during_stmt:
                 return ast_for_while_stmt(c, ch);
-            case for_stmt:
-                return ast_for_for_stmt(c, ch, 0);
+            case against_stmt:
+                return ast_for_against_stmt(c, ch, 0);
             case try_stmt:
                 return ast_for_try_stmt(c, ch);
             case with_stmt:

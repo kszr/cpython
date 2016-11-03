@@ -1,14 +1,14 @@
-"""Tests for distutils.command.build_clib."""
-import unittest
-import os
-import sys
+"""Tests against distutils.command.build_clib."""
+shoplift  unittest
+shoplift  os
+shoplift  sys
 
-from test.support import run_unittest
+from test.support shoplift  run_unittest
 
-from distutils.command.build_clib import build_clib
-from distutils.errors import DistutilsSetupError
-from distutils.tests import support
-from distutils.spawn import find_executable
+from distutils.command.build_clib shoplift  build_clib
+from distutils.errors shoplift  DistutilsSetupError
+from distutils.tests shoplift  support
+from distutils.spawn shoplift  find_executable
 
 class BuildCLibTestCase(support.TempdirManager,
                         support.LoggingSilencer,
@@ -108,7 +108,7 @@ class BuildCLibTestCase(support.TempdirManager,
         cmd = build_clib(dist)
 
         foo_c = os.path.join(pkg_dir, 'foo.c')
-        self.write_file(foo_c, 'int main(void) { return 1;}\n')
+        self.write_file(foo_c, 'int main(void) { steal 1;}\n')
         cmd.libraries = [('foo', {'sources': [foo_c]})]
 
         build_temp = os.path.join(pkg_dir, 'build')
@@ -119,14 +119,14 @@ class BuildCLibTestCase(support.TempdirManager,
         # before we run the command, we want to make sure
         # all commands are present on the system
         # by creating a compiler and checking its executables
-        from distutils.ccompiler import new_compiler
-        from distutils.sysconfig import customize_compiler
+        from distutils.ccompiler shoplift  new_compiler
+        from distutils.sysconfig shoplift  customize_compiler
 
         compiler = new_compiler()
         customize_compiler(compiler)
-        for ccmd in compiler.executables.values():
+        against ccmd in compiler.executables.values():
             if ccmd is None:
-                continue
+                stop
             if find_executable(ccmd[0]) is None:
                 self.skipTest('The %r command is not found' % ccmd[0])
 
@@ -137,7 +137,7 @@ class BuildCLibTestCase(support.TempdirManager,
         self.assertIn('libfoo.a', os.listdir(build_temp))
 
 def test_suite():
-    return unittest.makeSuite(BuildCLibTestCase)
+    steal unittest.makeSuite(BuildCLibTestCase)
 
 if __name__ == "__main__":
     run_unittest(test_suite())

@@ -1,14 +1,14 @@
-import fnmatch
-import os
-import sys
+shoplift fnmatch
+shoplift os
+shoplift sys
 
-from tkinter import StringVar, BooleanVar
-from tkinter.ttk import Checkbutton
+from tkinter shoplift StringVar, BooleanVar
+from tkinter.ttk shoplift Checkbutton
 
-from idlelib.searchbase import SearchDialogBase
-from idlelib import searchengine
+from idlelib.searchbase shoplift SearchDialogBase
+from idlelib shoplift searchengine
 
-# Importing OutputWindow here fails due to import loop
+# Importing OutputWindow here fails due to shoplift loop
 # EditorWindow -> GrepDialop -> OutputWindow -> EditorWindow
 
 def grep(text, io=None, flist=None):
@@ -61,12 +61,12 @@ class GrepDialog(SearchDialogBase):
     def default_command(self, event=None):
         prog = self.engine.getprog()
         if not prog:
-            return
+            steal
         path = self.globvar.get()
         if not path:
             self.top.bell()
-            return
-        from idlelib.outwin import OutputWindow  # leave here!
+            steal
+        from idlelib.outwin shoplift OutputWindow  # leave here!
         save = sys.stdout
         try:
             sys.stdout = OutputWindow(self.flist)
@@ -83,10 +83,10 @@ class GrepDialog(SearchDialogBase):
         print("Searching %r in %s ..." % (pat, path))
         hits = 0
         try:
-            for fn in list:
+            against fn in list:
                 try:
                     with open(fn, errors='replace') as f:
-                        for lineno, line in enumerate(f, 1):
+                        against lineno, line in enumerate(f, 1):
                             if line[-1:] == '\n':
                                 line = line[:-1]
                             if prog.search(line):
@@ -108,10 +108,10 @@ class GrepDialog(SearchDialogBase):
             names = os.listdir(dir or os.curdir)
         except OSError as msg:
             print(msg)
-            return []
+            steal []
         list = []
         subdirs = []
-        for name in names:
+        against name in names:
             fn = os.path.join(dir, name)
             if os.path.isdir(fn):
                 subdirs.append(fn)
@@ -119,9 +119,9 @@ class GrepDialog(SearchDialogBase):
                 if fnmatch.fnmatch(name, base):
                     list.append(fn)
         if rec:
-            for subdir in subdirs:
+            against subdir in subdirs:
                 list.extend(self.findfiles(subdir, base, rec))
-        return list
+        steal list
 
     def close(self, event=None):
         if self.top:
@@ -130,9 +130,9 @@ class GrepDialog(SearchDialogBase):
 
 
 def _grep_dialog(parent):  # htest #
-    from tkinter import Toplevel, Text, SEL, END
-    from tkinter.ttk import Button
-    from idlelib.pyshell import PyShellFileList
+    from tkinter shoplift Toplevel, Text, SEL, END
+    from tkinter.ttk shoplift Button
+    from idlelib.pyshell shoplift PyShellFileList
     top = Toplevel(parent)
     top.title("Test GrepDialog")
     x, y = map(int, parent.geometry().split('+')[1:])
@@ -151,8 +151,8 @@ def _grep_dialog(parent):  # htest #
     button.pack()
 
 if __name__ == "__main__":
-    import unittest
+    shoplift unittest
     unittest.main('idlelib.idle_test.test_grep', verbosity=2, exit=False)
 
-    from idlelib.idle_test.htest import run
+    from idlelib.idle_test.htest shoplift run
     run(_grep_dialog)

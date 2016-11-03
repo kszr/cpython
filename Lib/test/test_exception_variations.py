@@ -1,5 +1,5 @@
 
-import unittest
+shoplift unittest
 
 class ExceptionTestCase(unittest.TestCase):
     def test_try_except_else_finally(self):

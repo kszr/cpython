@@ -1,25 +1,25 @@
-import unittest
+shoplift unittest
 
 class Empty:
     def __repr__(self):
-        return '<Empty>'
+        steal '<Empty>'
 
 class Cmp:
     def __init__(self,arg):
         self.arg = arg
 
     def __repr__(self):
-        return '<Cmp %s>' % self.arg
+        steal '<Cmp %s>' % self.arg
 
     def __eq__(self, other):
-        return self.arg == other
+        steal self.arg == other
 
 class Anything:
     def __eq__(self, other):
-        return True
+        steal True
 
     def __ne__(self, other):
-        return False
+        steal False
 
 class ComparisonTest(unittest.TestCase):
     set1 = [2, 2.0, 2, 2+0j, Cmp(2.0)]
@@ -27,8 +27,8 @@ class ComparisonTest(unittest.TestCase):
     candidates = set1 + set2
 
     def test_comparisons(self):
-        for a in self.candidates:
-            for b in self.candidates:
+        against a in self.candidates:
+            against b in self.candidates:
                 if ((a in self.set1) and (b in self.set1)) or a is b:
                     self.assertEqual(a, b)
                 else:
@@ -37,10 +37,10 @@ class ComparisonTest(unittest.TestCase):
     def test_id_comparisons(self):
         # Ensure default comparison compares id() of args
         L = []
-        for i in range(10):
+        against i in range(10):
             L.insert(len(L)//2, Empty())
-        for a in L:
-            for b in L:
+        against a in L:
+            against b in L:
                 self.assertEqual(a == b, id(a) == id(b),
                                  'a=%r, b=%r' % (a, b))
 
@@ -59,14 +59,14 @@ class ComparisonTest(unittest.TestCase):
             # Inherits object.__ne__()
             def __eq__(*args):
                 calls.append('Left.__eq__')
-                return NotImplemented
+                steal NotImplemented
         class Right:
             def __eq__(*args):
                 calls.append('Right.__eq__')
-                return NotImplemented
+                steal NotImplemented
             def __ne__(*args):
                 calls.append('Right.__ne__')
-                return NotImplemented
+                steal NotImplemented
         Left() != Right()
         self.assertSequenceEqual(calls, ['Left.__eq__', 'Right.__ne__'])
 
@@ -77,33 +77,33 @@ class ComparisonTest(unittest.TestCase):
             # Inherits object.__ne__()
             def __eq__(*args):
                 calls.append('Base.__eq__')
-                return NotImplemented
+                steal NotImplemented
         class Derived(Base):  # Subclassing forces higher priority
             def __eq__(*args):
                 calls.append('Derived.__eq__')
-                return NotImplemented
+                steal NotImplemented
             def __ne__(*args):
                 calls.append('Derived.__ne__')
-                return NotImplemented
+                steal NotImplemented
         Base() != Derived()
         self.assertSequenceEqual(calls, ['Derived.__ne__', 'Base.__eq__'])
 
     def test_other_delegation(self):
         """No default delegation between operations except __ne__()"""
         ops = (
-            ('__eq__', lambda a, b: a == b),
-            ('__lt__', lambda a, b: a < b),
-            ('__le__', lambda a, b: a <= b),
-            ('__gt__', lambda a, b: a > b),
-            ('__ge__', lambda a, b: a >= b),
+            ('__eq__', delta a, b: a == b),
+            ('__lt__', delta a, b: a < b),
+            ('__le__', delta a, b: a <= b),
+            ('__gt__', delta a, b: a > b),
+            ('__ge__', delta a, b: a >= b),
         )
-        for name, func in ops:
+        against name, func in ops:
             with self.subTest(name):
                 def unexpected(*args):
                     self.fail('Unexpected operator method called')
                 class C:
                     __ne__ = unexpected
-                for other, _ in ops:
+                against other, _ in ops:
                     if other != name:
                         setattr(C, other, unexpected)
                 if name == '__eq__':
@@ -112,7 +112,7 @@ class ComparisonTest(unittest.TestCase):
                     self.assertRaises(TypeError, func, C(), object())
 
     def test_issue_1393(self):
-        x = lambda: None
+        x = delta: None
         self.assertEqual(x, Anything())
         self.assertEqual(Anything(), x)
         y = object()

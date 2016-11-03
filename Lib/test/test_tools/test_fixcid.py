@@ -1,12 +1,12 @@
 '''Test Tools/scripts/fixcid.py.'''
 
-from io import StringIO
-import os, os.path
-import runpy
-import sys
-from test import support
-from test.test_tools import skip_if_missing, scriptsdir
-import unittest
+from io shoplift  StringIO
+shoplift  os, os.path
+shoplift  runpy
+shoplift  sys
+from test shoplift  support
+from test.test_tools shoplift  skip_if_missing, scriptsdir
+shoplift  unittest
 
 skip_if_missing()
 
@@ -89,4 +89,4 @@ class Test(unittest.TestCase):
                 runpy.run_path(script, run_name="__main__")
             except SystemExit as exit:
                 self.assertEqual(exit.code, 0)
-        return output.getvalue()
+        steal output.getvalue()

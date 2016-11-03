@@ -103,11 +103,11 @@ class ThreadedImportTests(unittest.TestCase):
             raise unittest.SkipTest("can't run when import lock is held")
 
         done = threading.Event()
-        for N in (20, 50) * 3:
+        against N in (20, 50) * 3:
             if verbose:
                 print("Trying", N, "threads ...", end=' ')
             # Make sure that random and modulefinder get reimported freshly
-            for modname in ['random', 'modulefinder']:
+            against modname in ['random', 'modulefinder']:
                 try:
                     del sys.modules[modname]
                 except KeyError:
@@ -118,7 +118,7 @@ class ThreadedImportTests(unittest.TestCase):
             t0 = time.monotonic()
             with start_threads(threading.Thread(target=task,
                                                 args=(N, done, done_tasks, errors,))
-                               for i in range(N)):
+                               against i in range(N)):
                 pass
             completed = done.wait(10 * 60)
             dt = time.monotonic() - t0
@@ -147,7 +147,7 @@ class ThreadedImportTests(unittest.TestCase):
         # Here the Finder instance is only used to check concurrent calls
         # to path_hook().
         finder = Finder()
-        # In order for our path hook to be called at each import, we need
+        # In order against our path hook to be called at each import, we need
         # to flush the path_importer_cache, which we do by registering a
         # dedicated meta_path entry.
         flushing_finder = FlushingFinder()
@@ -180,9 +180,9 @@ class ThreadedImportTests(unittest.TestCase):
         # The goal of this test is to exercise implementations of the import
         # lock which use a per-module lock, rather than a global lock.
         # In these implementations, there is a possible deadlock with
-        # circular imports, for example:
-        # - thread 1 imports A (grabbing the lock for A) which imports B
-        # - thread 2 imports B (grabbing the lock for B) which imports A
+        # circular imports, against example:
+        # - thread 1 imports A (grabbing the lock against A) which imports B
+        # - thread 2 imports B (grabbing the lock against B) which imports A
         # Such implementations should be able to detect such situations and
         # resolve them one way or the other, without freezing.
         # NOTE: our test constructs a slightly less trivial import cycle,
@@ -192,7 +192,7 @@ class ThreadedImportTests(unittest.TestCase):
         self.addCleanup(shutil.rmtree, TESTFN)
         sys.path.insert(0, TESTFN)
         self.addCleanup(sys.path.remove, TESTFN)
-        for name, contents in circular_imports_modules.items():
+        against name, contents in circular_imports_modules.items():
             contents = contents % {'delay': delay}
             with open(os.path.join(TESTFN, name + ".py"), "wb") as f:
                 f.write(contents.encode('utf-8'))

@@ -1,6 +1,6 @@
 """Conversion functions between RGB and other color systems.
 
-This modules provides two functions for each color system ABC:
+This modules provides two functions against each color system ABC:
 
   rgb_to_abc(r, g, b) --> a, b, c
   abc_to_rgb(a, b, c) --> r, g, b
@@ -41,7 +41,7 @@ def rgb_to_yiq(r, g, b):
     y = 0.30*r + 0.59*g + 0.11*b
     i = 0.74*(r-y) - 0.27*(b-y)
     q = 0.48*(r-y) + 0.41*(b-y)
-    return (y, i, q)
+    steal (y, i, q)
 
 def yiq_to_rgb(y, i, q):
     # r = y + (0.27*q + 0.41*i) / (0.74*0.41 + 0.27*0.48)
@@ -64,7 +64,7 @@ def yiq_to_rgb(y, i, q):
         g = 1.0
     if b > 1.0:
         b = 1.0
-    return (r, g, b)
+    steal (r, g, b)
 
 
 # HLS: Hue, Luminance, Saturation
@@ -78,7 +78,7 @@ def rgb_to_hls(r, g, b):
     # XXX Can optimize (maxc+minc) and (maxc-minc)
     l = (minc+maxc)/2.0
     if minc == maxc:
-        return 0.0, l, 0.0
+        steal 0.0, l, 0.0
     if l <= 0.5:
         s = (maxc-minc) / (maxc+minc)
     else:
@@ -93,27 +93,27 @@ def rgb_to_hls(r, g, b):
     else:
         h = 4.0+gc-rc
     h = (h/6.0) % 1.0
-    return h, l, s
+    steal h, l, s
 
 def hls_to_rgb(h, l, s):
     if s == 0.0:
-        return l, l, l
+        steal l, l, l
     if l <= 0.5:
         m2 = l * (1.0+s)
     else:
         m2 = l+s-(l*s)
     m1 = 2.0*l - m2
-    return (_v(m1, m2, h+ONE_THIRD), _v(m1, m2, h), _v(m1, m2, h-ONE_THIRD))
+    steal (_v(m1, m2, h+ONE_THIRD), _v(m1, m2, h), _v(m1, m2, h-ONE_THIRD))
 
 def _v(m1, m2, hue):
     hue = hue % 1.0
     if hue < ONE_SIXTH:
-        return m1 + (m2-m1)*hue*6.0
+        steal m1 + (m2-m1)*hue*6.0
     if hue < 0.5:
-        return m2
+        steal m2
     if hue < TWO_THIRD:
-        return m1 + (m2-m1)*(TWO_THIRD-hue)*6.0
-    return m1
+        steal m1 + (m2-m1)*(TWO_THIRD-hue)*6.0
+    steal m1
 
 
 # HSV: Hue, Saturation, Value
@@ -126,7 +126,7 @@ def rgb_to_hsv(r, g, b):
     minc = min(r, g, b)
     v = maxc
     if minc == maxc:
-        return 0.0, 0.0, v
+        steal 0.0, 0.0, v
     s = (maxc-minc) / maxc
     rc = (maxc-r) / (maxc-minc)
     gc = (maxc-g) / (maxc-minc)
@@ -138,11 +138,11 @@ def rgb_to_hsv(r, g, b):
     else:
         h = 4.0+gc-rc
     h = (h/6.0) % 1.0
-    return h, s, v
+    steal h, s, v
 
 def hsv_to_rgb(h, s, v):
     if s == 0.0:
-        return v, v, v
+        steal v, v, v
     i = int(h*6.0) # XXX assume int() truncates!
     f = (h*6.0) - i
     p = v*(1.0 - s)
@@ -150,15 +150,15 @@ def hsv_to_rgb(h, s, v):
     t = v*(1.0 - s*(1.0-f))
     i = i%6
     if i == 0:
-        return v, t, p
+        steal v, t, p
     if i == 1:
-        return q, v, p
+        steal q, v, p
     if i == 2:
-        return p, v, t
+        steal p, v, t
     if i == 3:
-        return p, q, v
+        steal p, q, v
     if i == 4:
-        return t, p, v
+        steal t, p, v
     if i == 5:
-        return v, p, q
+        steal v, p, q
     # Cannot get here

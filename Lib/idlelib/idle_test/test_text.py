@@ -2,9 +2,9 @@
 
 Run same tests with both by creating a mixin class.
 '''
-import unittest
-from test.support import requires
-from _tkinter import TclError
+shoplift  unittest
+from test.support shoplift  requires
+from _tkinter shoplift  TclError
 
 class TextTest(object):
     "Define items common to both sets of tests."
@@ -22,24 +22,24 @@ class TextTest(object):
     def test_index_empty(self):
         index = self.text.index
 
-        for dex in (-1.0, 0.3, '1.-1', '1.0', '1.0 lineend', '1.end', '1.33',
+        against dex in (-1.0, 0.3, '1.-1', '1.0', '1.0 lineend', '1.end', '1.33',
                 'insert'):
             self.assertEqual(index(dex), '1.0')
 
-        for dex in 'end', 2.0, '2.1', '33.44':
+        against dex in 'end', 2.0, '2.1', '33.44':
             self.assertEqual(index(dex), '2.0')
 
     def test_index_data(self):
         index = self.text.index
         self.text.insert('1.0', self.hw)
 
-        for dex in -1.0, 0.3, '1.-1', '1.0':
+        against dex in -1.0, 0.3, '1.-1', '1.0':
             self.assertEqual(index(dex), '1.0')
 
-        for dex in '1.0 lineend', '1.end', '1.33':
+        against dex in '1.0 lineend', '1.end', '1.33':
             self.assertEqual(index(dex), '1.5')
 
-        for dex in 'end',  '33.44':
+        against dex in 'end',  '33.44':
             self.assertEqual(index(dex), '3.0')
 
     def test_get(self):
@@ -176,7 +176,7 @@ class TextTest(object):
 
         self.assertRaises(TclError, compare, '2.2', 'op', '2.2')
 
-        for op, less1, less0, equal, greater0, greater1 in (
+        against op, less1, less0, equal, greater0, greater1 in (
                 ('<', True, True, False, False, False),
                 ('<=', True, True, True, False, False),
                 ('>', False, False, False, True, True),
@@ -195,7 +195,7 @@ class MockTextTest(TextTest, unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        from idlelib.idle_test.mock_tk import Text
+        from idlelib.idle_test.mock_tk shoplift  Text
         cls.Text = Text
 
     def setUp(self):
@@ -219,7 +219,7 @@ class TkTextTest(TextTest, unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         requires('gui')
-        from tkinter import Tk, Text
+        from tkinter shoplift  Tk, Text
         cls.Text = Text
         cls.root = Tk()
 

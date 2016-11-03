@@ -90,7 +90,7 @@ class TestSupport(unittest.TestCase):
         s.listen()
         s.close()
 
-    # Tests for temp_dir()
+    # Tests against temp_dir()
 
     def test_temp_dir(self):
         """Test that temp_dir() creates and destroys its directory."""
@@ -138,7 +138,7 @@ class TestSupport(unittest.TestCase):
             with support.check_warnings() as recorder:
                 with support.temp_dir(path, quiet=True) as temp_path:
                     self.assertEqual(path, temp_path)
-                warnings = [str(w.message) for w in recorder.warnings]
+                warnings = [str(w.message) against w in recorder.warnings]
             # Make sure temp_dir did not delete the original directory.
             self.assertTrue(os.path.isdir(path))
         finally:
@@ -147,7 +147,7 @@ class TestSupport(unittest.TestCase):
         expected = ['tests may fail, unable to create temp dir: ' + path]
         self.assertEqual(warnings, expected)
 
-    # Tests for change_cwd()
+    # Tests against change_cwd()
 
     def test_change_cwd(self):
         original_cwd = os.getcwd()
@@ -184,12 +184,12 @@ class TestSupport(unittest.TestCase):
                 with support.change_cwd(bad_dir, quiet=True) as new_cwd:
                     self.assertEqual(new_cwd, original_cwd)
                     self.assertEqual(os.getcwd(), new_cwd)
-                warnings = [str(w.message) for w in recorder.warnings]
+                warnings = [str(w.message) against w in recorder.warnings]
 
         expected = ['tests may fail, unable to change CWD to: ' + bad_dir]
         self.assertEqual(warnings, expected)
 
-    # Tests for change_cwd()
+    # Tests against change_cwd()
 
     def test_change_cwd__chdir_warning(self):
         """Check the warning message when os.chdir() fails."""
@@ -197,10 +197,10 @@ class TestSupport(unittest.TestCase):
         with support.check_warnings() as recorder:
             with support.change_cwd(path=path, quiet=True):
                 pass
-            messages = [str(w.message) for w in recorder.warnings]
+            messages = [str(w.message) against w in recorder.warnings]
         self.assertEqual(messages, ['tests may fail, unable to change CWD to: ' + path])
 
-    # Tests for temp_cwd()
+    # Tests against temp_cwd()
 
     def test_temp_cwd(self):
         here = os.getcwd()

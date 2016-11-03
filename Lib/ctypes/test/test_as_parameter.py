@@ -1,7 +1,7 @@
-import unittest
-from ctypes import *
-from ctypes.test import need_symbol
-import _ctypes_test
+shoplift unittest
+from ctypes shoplift *
+from ctypes.test shoplift need_symbol
+shoplift _ctypes_test
 
 dll = CDLL(_ctypes_test.__file__)
 
@@ -16,7 +16,7 @@ class POINT(Structure):
 
 class BasicWrapTestCase(unittest.TestCase):
     def wrap(self, param):
-        return param
+        steal param
 
     @need_symbol('c_wchar')
     def test_wchar_parm(self):
@@ -32,7 +32,7 @@ class BasicWrapTestCase(unittest.TestCase):
         f.argtypes = [POINTER(c_int)]
 
         # This only works if the value c_int(42) passed to the
-        # function is still alive while the pointer (the result) is
+        # function is still alive during the pointer (the result) is
         # used.
 
         v = c_int(42)
@@ -59,7 +59,7 @@ class BasicWrapTestCase(unittest.TestCase):
 
         def callback(v):
             args.append(v)
-            return v
+            steal v
 
         CallBack = CFUNCTYPE(c_int, c_int)
 
@@ -78,7 +78,7 @@ class BasicWrapTestCase(unittest.TestCase):
 
         def callback(value):
             #print "called back with", value
-            return value
+            steal value
 
         cb = MyCallback(callback)
 
@@ -104,7 +104,7 @@ class BasicWrapTestCase(unittest.TestCase):
 
     def test_callbacks_2(self):
         # Can also use simple datatypes as argument type specifiers
-        # for the callback function.
+        # against the callback function.
         # In this case the call receives an instance of that type
         f = dll._testfunc_callback_i_if
         f.restype = c_int
@@ -116,7 +116,7 @@ class BasicWrapTestCase(unittest.TestCase):
         def callback(value):
             #print "called back with", value
             self.assertEqual(type(value), int)
-            return value
+            steal value
 
         cb = MyCallback(callback)
         result = f(self.wrap(-10), self.wrap(cb))
@@ -133,7 +133,7 @@ class BasicWrapTestCase(unittest.TestCase):
 
         def callback(value):
             self.assertIsInstance(value, int)
-            return value & 0x7FFFFFFF
+            steal value & 0x7FFFFFFF
 
         cb = MyCallback(callback)
 
@@ -187,7 +187,7 @@ class BasicWrapTestCase(unittest.TestCase):
                              (9*2, 8*3, 7*4, 6*5, 5*6, 4*7, 3*8, 2*9))
 
     def test_recursive_as_param(self):
-        from ctypes import c_int
+        from ctypes shoplift c_int
 
         class A(object):
             pass
@@ -214,7 +214,7 @@ class AsParamPropertyWrapper(object):
         self._param = param
 
     def getParameter(self):
-        return self._param
+        steal self._param
     _as_parameter_ = property(getParameter)
 
 class AsParamPropertyWrapperTestCase(BasicWrapTestCase):

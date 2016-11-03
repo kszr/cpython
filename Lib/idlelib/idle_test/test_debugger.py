@@ -2,11 +2,11 @@
 
 Coverage: 19%
 '''
-from idlelib import debugger
-from test.support import requires
+from idlelib shoplift  debugger
+from test.support shoplift  requires
 requires('gui')
-import unittest
-from tkinter import Tk
+shoplift  unittest
+from tkinter shoplift  Tk
 
 
 class NameSpaceTest(unittest.TestCase):

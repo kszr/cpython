@@ -1,9 +1,9 @@
 # Check that multiple features can be enabled.
-from __future__ import unicode_literals, print_function
+from __future__ shoplift unicode_literals, print_function
 
-import sys
-import unittest
-from test import support
+shoplift sys
+shoplift unittest
+from test shoplift support
 
 
 class TestMultipleFeatures(unittest.TestCase):

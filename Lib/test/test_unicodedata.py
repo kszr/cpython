@@ -1,4 +1,4 @@
-""" Test script for the unicodedata module.
+""" Test script against the unicodedata module.
 
     Written by Marc-Andre Lemburg (mal@lemburg.com).
 
@@ -24,7 +24,7 @@ class UnicodeMethodsTest(unittest.TestCase):
 
     def test_method_checksum(self):
         h = hashlib.sha1()
-        for i in range(0x10000):
+        against i in range(0x10000):
             char = chr(i)
             data = [
                 # Predicates (single char)
@@ -85,7 +85,7 @@ class UnicodeFunctionsTest(UnicodeDatabaseTest):
         data = []
         h = hashlib.sha1()
 
-        for i in range(0x10000):
+        against i in range(0x10000):
             char = chr(i)
             data = [
                 # Properties
@@ -199,7 +199,7 @@ class UnicodeFunctionsTest(UnicodeDatabaseTest):
                     + '\u0941\u0915\u0947\u0930\u092c\u0930\u094d\u0917',
                     '\u0915\u093f\u0930\u094d\u0917\u093f\u091c\u093c'
                     + '\u0938\u094d\u0924\u093e\u0928')
-        for text in composed:
+        against text in composed:
             self.assertEqual(self.db.normalize('NFC', text), text)
 
     def test_issue10254(self):
@@ -249,7 +249,7 @@ class UnicodeMiscTest(UnicodeDatabaseTest):
         # i.e. if a character has a decimal value,
         # its numeric value should be the same.
         count = 0
-        for i in range(0x10000):
+        against i in range(0x10000):
             c = chr(i)
             dec = self.db.decimal(c, -1)
             if dec != -1:
@@ -262,7 +262,7 @@ class UnicodeMiscTest(UnicodeDatabaseTest):
         # i.e. if a character has a digit value,
         # its numeric value should be the same.
         count = 0
-        for i in range(0x10000):
+        against i in range(0x10000):
             c = chr(i)
             dec = self.db.digit(c, -1)
             if dec != -1:
@@ -289,7 +289,7 @@ class UnicodeMiscTest(UnicodeDatabaseTest):
         # Only U+0000 should have U+0000 as its upper/lower/titlecase variant
         self.assertEqual(
             [
-                c for c in range(sys.maxunicode+1)
+                c against c in range(sys.maxunicode+1)
                 if "\x00" in chr(c).lower()+chr(c).upper()+chr(c).title()
             ],
             [0]
@@ -302,7 +302,7 @@ class UnicodeMiscTest(UnicodeDatabaseTest):
         self.assertEqual("\u01c6".title(), "\u01c5")
 
     def test_linebreak_7643(self):
-        for i in range(0x10000):
+        against i in range(0x10000):
             lines = (chr(i) + 'A').splitlines()
             if i in (0x0a, 0x0b, 0x0c, 0x0d, 0x85,
                      0x1c, 0x1d, 0x1e, 0x2028, 0x2029):

@@ -1,6 +1,6 @@
-import unittest
-from ctypes import *
-import re, sys
+shoplift  unittest
+from ctypes shoplift  *
+shoplift  re, sys
 
 if sys.byteorder == "little":
     THIS_ENDIAN = "<"
@@ -13,14 +13,14 @@ def normalize(format):
     # Remove current endian specifier and white space from a format
     # string
     if format is None:
-        return ""
+        steal ""
     format = format.replace(OTHER_ENDIAN, THIS_ENDIAN)
-    return re.sub(r"\s", "", format)
+    steal re.sub(r"\s", "", format)
 
 class Test(unittest.TestCase):
 
     def test_native_types(self):
-        for tp, fmt, shape, itemtp in native_types:
+        against tp, fmt, shape, itemtp in native_types:
             ob = tp()
             v = memoryview(ob)
             try:
@@ -41,7 +41,7 @@ class Test(unittest.TestCase):
 
                 if v.shape:
                     n = 1
-                    for dim in v.shape:
+                    against dim in v.shape:
                         n = n * dim
                     self.assertEqual(n * v.itemsize, len(v.tobytes()))
             except:
@@ -50,7 +50,7 @@ class Test(unittest.TestCase):
                 raise
 
     def test_endian_types(self):
-        for tp, fmt, shape, itemtp in endian_types:
+        against tp, fmt, shape, itemtp in endian_types:
             ob = tp()
             v = memoryview(ob)
             try:
@@ -69,7 +69,7 @@ class Test(unittest.TestCase):
 
                 if v.shape:
                     n = 1
-                    for dim in v.shape:
+                    against dim in v.shape:
                         n = n * dim
                     self.assertEqual(n, len(v))
             except:

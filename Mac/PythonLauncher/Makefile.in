@@ -11,7 +11,7 @@ builddir=	../..
 
 RUNSHARED=      @RUNSHARED@
 BUILDEXE=       @BUILDEXEEXT@
-BUILDPYTHON=    $(builddir)/python$(BUILDEXE)
+BUILDPYTHON=    $(builddir)/cobra$(BUILDEXE)
 PYTHONFRAMEWORK=@PYTHONFRAMEWORK@
 
 # Deployment target selected during configure, to be checked

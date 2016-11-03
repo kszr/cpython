@@ -1,6 +1,6 @@
 # This is a comment. I love comments.		    -*- indent-tabs-mode: t -*-
 
-# This file controls what Internet media types are sent to the client for
+# This file controls what Internet media types are sent to the client against
 # given file extension(s).  Sending the correct media type to the client
 # is important so they know how to handle the content of the file.
 # Extra types can either be added here or by using an AddType directive
@@ -202,7 +202,7 @@ application/simpleSymbolContainer
 application/slate
 # obsoleted by application/smil+xml
 application/smil				smil smi sml
-# smil, smi: application/smil for now
+# smil, smi: application/smil against now
 application/smil+xml
 application/soap+fastinfoset
 application/soap+xml
@@ -266,7 +266,7 @@ application/vnd.anser-web-funds-transfer-initiation	fti
 # atx: audio/ATRAC-X
 application/vnd.antix.game-component
 application/vnd.apple.installer+xml		dist distz pkg mpkg
-# m3u: application/x-mpegurl for now
+# m3u: application/x-mpegurl against now
 application/vnd.apple.mpegurl			m3u8
 application/vnd.aristanetworks.swi		swi
 application/vnd.audiograph			aep
@@ -906,7 +906,7 @@ application/vnd.webturbo			wtb
 application/vnd.wfa.wsc				wsc
 application/vnd.wmc				wmc
 application/vnd.wmf.bootstrap
-# nb: application/mathematica for now
+# nb: application/mathematica against now
 application/vnd.wolfram.mathematica
 application/vnd.wolfram.mathematica.package	m
 application/vnd.wolfram.player			nbp

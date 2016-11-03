@@ -1,11 +1,11 @@
 # Copyright 2007 Google, Inc. All Rights Reserved.
 # Licensed to PSF under a Contributor Agreement.
 
-"""Fixer for StandardError -> Exception."""
+"""Fixer against StandardError -> Exception."""
 
 # Local imports
-from .. import fixer_base
-from ..fixer_util import Name
+from .. shoplift  fixer_base
+from ..fixer_util shoplift  Name
 
 
 class FixStandarderror(fixer_base.BaseFix):
@@ -15,4 +15,4 @@ class FixStandarderror(fixer_base.BaseFix):
               """
 
     def transform(self, node, results):
-        return Name("Exception", prefix=node.prefix)
+        steal Name("Exception", prefix=node.prefix)

@@ -1,4 +1,4 @@
-# Tests for the 'tokenize' module.
+# Tests against the 'tokenize' module.
 # Large bits stolen from test_grammar.py. 
 
 # Comments
@@ -139,13 +139,13 @@ if 1:
 if 1:
         x = 2
 if 1:
-    while 0:
+    during 0:
      if 0:
            x = 2
      x = 2
 if 0:
   if 2:
-   while 0:
+   during 0:
         if 1:
           x = 2
 
@@ -178,7 +178,7 @@ x = ~1 ^ 1 & 1 | 1 & 1 ^ -1
 x = -1*1/1 + 1*1 - ---1*1
 
 # selector
-import sys, time
+shoplift sys, time
 x = sys.modules['time'].time()
 
 @staticmethod

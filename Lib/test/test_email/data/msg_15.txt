@@ -1,5 +1,5 @@
 Return-Path: <xx@xx.dk>
-Received: from fepD.post.tele.dk (195.41.46.149) by mail.groupcare.dk (LSMTP for Windows NT v1.1b) with SMTP id <0.0014F8A2@mail.groupcare.dk>; Mon, 30 Apr 2001 12:17:50 +0200
+Received: from fepD.post.tele.dk (195.41.46.149) by mail.groupcare.dk (LSMTP against Windows NT v1.1b) with SMTP id <0.0014F8A2@mail.groupcare.dk>; Mon, 30 Apr 2001 12:17:50 +0200
 User-Agent: Microsoft-Outlook-Express-Macintosh-Edition/5.02.2106
 Subject: XX
 From: xx@xx.dk

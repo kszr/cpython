@@ -39,7 +39,7 @@
 # built statically.  The build process works like this:
 #
 # 1. Build all modules that are declared as static in Modules/Setup,
-#    combine them into libpythonxy.a, combine that into python.
+#    combine them into libcobraxy.a, combine that into python.
 # 2. Build all modules that are listed as shared in Modules/Setup.
 # 3. Invoke setup.py. That builds all modules that
 #    a) are not builtin, and

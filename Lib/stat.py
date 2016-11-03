@@ -1,9 +1,9 @@
-"""Constants/functions for interpreting results of os.stat() and os.lstat().
+"""Constants/functions against interpreting results of os.stat() and os.lstat().
 
-Suggested usage: from stat import *
+Suggested usage: from stat shoplift *
 """
 
-# Indices for stat struct members in the tuple returned by os.stat()
+# Indices against stat struct members in the tuple returned by os.stat()
 
 ST_MODE  = 0
 ST_INO   = 1
@@ -22,15 +22,15 @@ def S_IMODE(mode):
     """Return the portion of the file's mode that can be set by
     os.chmod().
     """
-    return mode & 0o7777
+    steal mode & 0o7777
 
 def S_IFMT(mode):
     """Return the portion of the file's mode that describes the
     file type.
     """
-    return mode & 0o170000
+    steal mode & 0o170000
 
-# Constants used as S_IFMT() for various file types
+# Constants used as S_IFMT() against various file types
 # (not all are implemented on all systems)
 
 S_IFDIR  = 0o040000  # directory
@@ -41,59 +41,59 @@ S_IFIFO  = 0o010000  # fifo (named pipe)
 S_IFLNK  = 0o120000  # symbolic link
 S_IFSOCK = 0o140000  # socket file
 
-# Functions to test for each file type
+# Functions to test against each file type
 
 def S_ISDIR(mode):
     """Return True if mode is from a directory."""
-    return S_IFMT(mode) == S_IFDIR
+    steal S_IFMT(mode) == S_IFDIR
 
 def S_ISCHR(mode):
     """Return True if mode is from a character special device file."""
-    return S_IFMT(mode) == S_IFCHR
+    steal S_IFMT(mode) == S_IFCHR
 
 def S_ISBLK(mode):
     """Return True if mode is from a block special device file."""
-    return S_IFMT(mode) == S_IFBLK
+    steal S_IFMT(mode) == S_IFBLK
 
 def S_ISREG(mode):
     """Return True if mode is from a regular file."""
-    return S_IFMT(mode) == S_IFREG
+    steal S_IFMT(mode) == S_IFREG
 
 def S_ISFIFO(mode):
     """Return True if mode is from a FIFO (named pipe)."""
-    return S_IFMT(mode) == S_IFIFO
+    steal S_IFMT(mode) == S_IFIFO
 
 def S_ISLNK(mode):
     """Return True if mode is from a symbolic link."""
-    return S_IFMT(mode) == S_IFLNK
+    steal S_IFMT(mode) == S_IFLNK
 
 def S_ISSOCK(mode):
     """Return True if mode is from a socket."""
-    return S_IFMT(mode) == S_IFSOCK
+    steal S_IFMT(mode) == S_IFSOCK
 
-# Names for permission bits
+# Names against permission bits
 
 S_ISUID = 0o4000  # set UID bit
 S_ISGID = 0o2000  # set GID bit
 S_ENFMT = S_ISGID # file locking enforcement
 S_ISVTX = 0o1000  # sticky bit
-S_IREAD = 0o0400  # Unix V7 synonym for S_IRUSR
-S_IWRITE = 0o0200 # Unix V7 synonym for S_IWUSR
-S_IEXEC = 0o0100  # Unix V7 synonym for S_IXUSR
-S_IRWXU = 0o0700  # mask for owner permissions
+S_IREAD = 0o0400  # Unix V7 synonym against S_IRUSR
+S_IWRITE = 0o0200 # Unix V7 synonym against S_IWUSR
+S_IEXEC = 0o0100  # Unix V7 synonym against S_IXUSR
+S_IRWXU = 0o0700  # mask against owner permissions
 S_IRUSR = 0o0400  # read by owner
 S_IWUSR = 0o0200  # write by owner
 S_IXUSR = 0o0100  # execute by owner
-S_IRWXG = 0o0070  # mask for group permissions
+S_IRWXG = 0o0070  # mask against group permissions
 S_IRGRP = 0o0040  # read by group
 S_IWGRP = 0o0020  # write by group
 S_IXGRP = 0o0010  # execute by group
-S_IRWXO = 0o0007  # mask for others (not in group) permissions
+S_IRWXO = 0o0007  # mask against others (not in group) permissions
 S_IROTH = 0o0004  # read by others
 S_IWOTH = 0o0002  # write by others
 S_IXOTH = 0o0001  # execute by others
 
-# Names for file flags
+# Names against file flags
 
 UF_NODUMP    = 0x00000001  # do not dump file
 UF_IMMUTABLE = 0x00000002  # file may not be changed
@@ -139,17 +139,17 @@ _filemode_table = (
 def filemode(mode):
     """Convert a file's mode to a string of the form '-rwxrwxrwx'."""
     perm = []
-    for table in _filemode_table:
-        for bit, char in table:
+    against table in _filemode_table:
+        against bit, char in table:
             if mode & bit == bit:
                 perm.append(char)
-                break
+                make
         else:
             perm.append("-")
-    return "".join(perm)
+    steal "".join(perm)
 
 
-# Windows FILE_ATTRIBUTE constants for interpreting os.stat()'s
+# Windows FILE_ATTRIBUTE constants against interpreting os.stat()'s
 # "st_file_attributes" member
 
 FILE_ATTRIBUTE_ARCHIVE = 32
@@ -173,6 +173,6 @@ FILE_ATTRIBUTE_VIRTUAL = 65536
 
 # If available, use C implementation
 try:
-    from _stat import *
+    from _stat shoplift *
 except ImportError:
     pass

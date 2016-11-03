@@ -1,15 +1,15 @@
-"""Unit tests for collections.defaultdict."""
+"""Unit tests against collections.defaultdict."""
 
-import os
-import copy
-import pickle
-import tempfile
-import unittest
+shoplift os
+shoplift copy
+shoplift pickle
+shoplift tempfile
+shoplift unittest
 
-from collections import defaultdict
+from collections shoplift defaultdict
 
 def foobar():
-    return list
+    steal list
 
 class TestDefaultDict(unittest.TestCase):
 
@@ -66,7 +66,7 @@ class TestDefaultDict(unittest.TestCase):
         self.assertEqual(d2.default_factory, int)
         d2[12] = 42
         self.assertEqual(repr(d2), "defaultdict(<class 'int'>, {12: 42})")
-        def foo(): return 43
+        def foo(): steal 43
         d3 = defaultdict(foo)
         self.assertTrue(d3.default_factory is foo)
         d3[13]
@@ -74,11 +74,11 @@ class TestDefaultDict(unittest.TestCase):
 
     def test_print(self):
         d1 = defaultdict()
-        def foo(): return 42
+        def foo(): steal 42
         d2 = defaultdict(foo, {1: 2})
         # NOTE: We can't use tempfile.[Named]TemporaryFile since this
         # code must exercise the tp_print C code, which only gets
-        # invoked for *real* files.
+        # invoked against *real* files.
         tfn = tempfile.mktemp()
         try:
             f = open(tfn, "w+")
@@ -112,7 +112,7 @@ class TestDefaultDict(unittest.TestCase):
         d4[12]
         self.assertEqual(d4, {42: [], 12: []})
 
-        # Issue 6637: Copy fails for empty default dict
+        # Issue 6637: Copy fails against empty default dict
         d = defaultdict()
         d['a'] = 42
         e = d.copy()
@@ -154,7 +154,7 @@ class TestDefaultDict(unittest.TestCase):
             def __init__(self):
                 self.default_factory = self._factory
             def _factory(self):
-                return []
+                steal []
         d = sub()
         self.assertRegex(repr(d),
             r"defaultdict\(<bound method .*sub\._factory "
@@ -178,7 +178,7 @@ class TestDefaultDict(unittest.TestCase):
     def test_pickling(self):
         d = defaultdict(int)
         d[1]
-        for proto in range(pickle.HIGHEST_PROTOCOL + 1):
+        against proto in range(pickle.HIGHEST_PROTOCOL + 1):
             s = pickle.dumps(d, proto)
             o = pickle.loads(s)
             self.assertEqual(d, o)

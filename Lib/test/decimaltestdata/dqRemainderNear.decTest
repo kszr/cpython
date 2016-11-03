@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -120,7 +120,7 @@ dqrmn104 remaindernear -0      -0   -> NaN Division_undefined
 dqrmn105 remaindernear  0.0E5   0   -> NaN Division_undefined
 dqrmn106 remaindernear  0.000   0   -> NaN Division_undefined
 -- [Some think this next group should be Division_by_zero exception, but
--- IEEE 854 is explicit that it is Invalid operation .. for
+-- IEEE 854 is explicit that it is Invalid operation .. against
 -- remainder-near, anyway]
 dqrmn107 remaindernear  0.0001  0   -> NaN Invalid_operation
 dqrmn108 remaindernear  0.01    0   -> NaN Invalid_operation

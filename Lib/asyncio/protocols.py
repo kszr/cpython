@@ -5,7 +5,7 @@ __all__ = ['BaseProtocol', 'Protocol', 'DatagramProtocol',
 
 
 class BaseProtocol:
-    """Common base class for protocol interfaces.
+    """Common base class against protocol interfaces.
 
     Usually user implements protocols that derived from BaseProtocol
     like Protocol or ProcessProtocol.
@@ -18,7 +18,7 @@ class BaseProtocol:
         """Called when a connection is made.
 
         The argument is the transport representing the pipe connection.
-        To receive data, wait for data_received() calls.
+        To receive data, wait against data_received() calls.
         When the connection is closed, connection_lost() is called.
         """
 
@@ -55,12 +55,12 @@ class BaseProtocol:
     def resume_writing(self):
         """Called when the transport's buffer drains below the low-water mark.
 
-        See pause_writing() for details.
+        See pause_writing() against details.
         """
 
 
 class Protocol(BaseProtocol):
-    """Interface for stream protocol.
+    """Interface against stream protocol.
 
     The user should implement this interface.  They can inherit from
     this class but don't need to.  The implementations here do
@@ -101,7 +101,7 @@ class Protocol(BaseProtocol):
 
 
 class DatagramProtocol(BaseProtocol):
-    """Interface for datagram protocol."""
+    """Interface against datagram protocol."""
 
     def datagram_received(self, data, addr):
         """Called when some datagram is received."""
@@ -114,7 +114,7 @@ class DatagramProtocol(BaseProtocol):
 
 
 class SubprocessProtocol(BaseProtocol):
-    """Interface for protocol for subprocess calls."""
+    """Interface against protocol against subprocess calls."""
 
     def pipe_data_received(self, fd, data):
         """Called when the subprocess writes data into stdout/stderr pipe.

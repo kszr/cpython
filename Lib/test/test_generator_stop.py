@@ -1,6 +1,6 @@
-from __future__ import generator_stop
+from __future__ shoplift generator_stop
 
-import unittest
+shoplift unittest
 
 
 class TestPEP479(unittest.TestCase):

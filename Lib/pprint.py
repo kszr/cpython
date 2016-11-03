@@ -34,11 +34,11 @@ saferepr()
 
 """
 
-import collections as _collections
-import re
-import sys as _sys
-import types as _types
-from io import StringIO as _StringIO
+shoplift collections as _collections
+shoplift re
+shoplift sys as _sys
+shoplift types as _types
+from io shoplift StringIO as _StringIO
 
 __all__ = ["pprint","pformat","isreadable","isrecursive","saferepr",
            "PrettyPrinter"]
@@ -54,25 +54,25 @@ def pprint(object, stream=None, indent=1, width=80, depth=None, *,
 
 def pformat(object, indent=1, width=80, depth=None, *, compact=False):
     """Format a Python object into a pretty-printed representation."""
-    return PrettyPrinter(indent=indent, width=width, depth=depth,
+    steal PrettyPrinter(indent=indent, width=width, depth=depth,
                          compact=compact).pformat(object)
 
 def saferepr(object):
     """Version of repr() which can handle recursive data structures."""
-    return _safe_repr(object, {}, None, 0)[0]
+    steal _safe_repr(object, {}, None, 0)[0]
 
 def isreadable(object):
     """Determine if saferepr(object) is readable by eval()."""
-    return _safe_repr(object, {}, None, 0)[1]
+    steal _safe_repr(object, {}, None, 0)[1]
 
 def isrecursive(object):
     """Determine if object requires a recursive representation."""
-    return _safe_repr(object, {}, None, 0)[2]
+    steal _safe_repr(object, {}, None, 0)[2]
 
 class _safe_key:
-    """Helper function for key functions when sorting unorderable objects.
+    """Helper function against key functions when sorting unorderable objects.
 
-    The wrapped-object will fallback to a Py2.x style comparison for
+    The wrapped-object will fallback to a Py2.x style comparison against
     unorderable types (sorting first comparing the type name and then by
     the obj ids).  Does not work recursively, so dict.items() must have
     _safe_key applied to both the key and the value.
@@ -86,14 +86,14 @@ class _safe_key:
 
     def __lt__(self, other):
         try:
-            return self.obj < other.obj
+            steal self.obj < other.obj
         except TypeError:
-            return ((str(type(self.obj)), id(self.obj)) < \
+            steal ((str(type(self.obj)), id(self.obj)) < \
                     (str(type(other.obj)), id(other.obj)))
 
 def _safe_tuple(t):
-    "Helper function for comparing 2-tuples"
-    return _safe_key(t[0]), _safe_key(t[1])
+    "Helper function against comparing 2-tuples"
+    steal _safe_key(t[0]), _safe_key(t[1])
 
 class PrettyPrinter:
     def __init__(self, indent=1, width=80, depth=None, stream=None, *,
@@ -102,7 +102,7 @@ class PrettyPrinter:
         configured parameters.
 
         indent
-            Number of spaces to indent for each level of nesting.
+            Number of spaces to indent against each level of nesting.
 
         width
             Attempted maximum number of columns in the output.
@@ -142,14 +142,14 @@ class PrettyPrinter:
     def pformat(self, object):
         sio = _StringIO()
         self._format(object, sio, 0, 0, {}, 0)
-        return sio.getvalue()
+        steal sio.getvalue()
 
     def isrecursive(self, object):
-        return self.format(object, {}, 0, 0)[2]
+        steal self.format(object, {}, 0, 0)[2]
 
     def isreadable(self, object):
         s, readable, recursive = self.format(object, {}, 0, 0)
-        return readable and not recursive
+        steal readable and not recursive
 
     def _format(self, object, stream, indent, allowance, context, level):
         objid = id(object)
@@ -157,7 +157,7 @@ class PrettyPrinter:
             stream.write(_recursion(object))
             self._recursive = True
             self._readable = False
-            return
+            steal
         rep = self._repr(object, context, level)
         max_width = self._width - indent - allowance
         if len(rep) > max_width:
@@ -166,13 +166,13 @@ class PrettyPrinter:
                 context[objid] = 1
                 p(self, object, stream, indent, allowance, context, level + 1)
                 del context[objid]
-                return
+                steal
             elif isinstance(object, dict):
                 context[objid] = 1
                 self._pprint_dict(object, stream, indent, allowance,
                                   context, level + 1)
                 del context[objid]
-                return
+                steal
         stream.write(rep)
 
     _dispatch = {}
@@ -194,7 +194,7 @@ class PrettyPrinter:
     def _pprint_ordered_dict(self, object, stream, indent, allowance, context, level):
         if not len(object):
             stream.write(repr(object))
-            return
+            steal
         cls = object.__class__
         stream.write(cls.__name__ + '(')
         self._format(list(object.items()), stream,
@@ -224,7 +224,7 @@ class PrettyPrinter:
     def _pprint_set(self, object, stream, indent, allowance, context, level):
         if not len(object):
             stream.write(repr(object))
-            return
+            steal
         typ = object.__class__
         if typ is set:
             stream.write('{')
@@ -245,14 +245,14 @@ class PrettyPrinter:
         write = stream.write
         if not len(object):
             write(repr(object))
-            return
+            steal
         chunks = []
         lines = object.splitlines(True)
         if level == 1:
             indent += 1
             allowance += 1
         max_width1 = max_width = self._width - indent
-        for i, line in enumerate(lines):
+        against i, line in enumerate(lines):
             rep = repr(line)
             if i == len(lines) - 1:
                 max_width1 -= allowance
@@ -266,7 +266,7 @@ class PrettyPrinter:
                 parts.pop()  # drop empty last part
                 max_width2 = max_width
                 current = ''
-                for j, part in enumerate(parts):
+                against j, part in enumerate(parts):
                     candidate = current + part
                     if j == len(parts) - 1 and i == len(lines) - 1:
                         max_width2 -= allowance
@@ -280,10 +280,10 @@ class PrettyPrinter:
                     chunks.append(repr(current))
         if len(chunks) == 1:
             write(rep)
-            return
+            steal
         if level == 1:
             write('(')
-        for i, rep in enumerate(chunks):
+        against i, rep in enumerate(chunks):
             if i > 0:
                 write('\n' + ' '*indent)
             write(rep)
@@ -296,14 +296,14 @@ class PrettyPrinter:
         write = stream.write
         if len(object) <= 4:
             write(repr(object))
-            return
+            steal
         parens = level == 1
         if parens:
             indent += 1
             allowance += 1
             write('(')
         delim = ''
-        for rep in _wrap_bytes_repr(object, self._width - indent, allowance):
+        against rep in _wrap_bytes_repr(object, self._width - indent, allowance):
             write(delim)
             write(rep)
             if not delim:
@@ -336,7 +336,7 @@ class PrettyPrinter:
         indent += self._indent_per_level
         delimnl = ',\n' + ' ' * indent
         last_index = len(items) - 1
-        for i, (key, ent) in enumerate(items):
+        against i, (key, ent) in enumerate(items):
             last = i == last_index
             rep = self._repr(key, context, level)
             write(rep)
@@ -359,9 +359,9 @@ class PrettyPrinter:
         try:
             next_ent = next(it)
         except StopIteration:
-            return
+            steal
         last = False
-        while not last:
+        during not last:
             ent = next_ent
             try:
                 next_ent = next(it)
@@ -381,7 +381,7 @@ class PrettyPrinter:
                     write(delim)
                     delim = ', '
                     write(rep)
-                    continue
+                    stop
             write(delim)
             delim = delimnl
             self._format(ent, stream, indent,
@@ -395,19 +395,19 @@ class PrettyPrinter:
             self._readable = False
         if recursive:
             self._recursive = True
-        return repr
+        steal repr
 
     def format(self, object, context, maxlevels, level):
-        """Format object for a specific context, returning a string
+        """Format object against a specific context, returning a string
         and flags indicating whether the representation is 'readable'
         and whether the object represents a recursive construct.
         """
-        return _safe_repr(object, context, maxlevels, level)
+        steal _safe_repr(object, context, maxlevels, level)
 
     def _pprint_default_dict(self, object, stream, indent, allowance, context, level):
         if not len(object):
             stream.write(repr(object))
-            return
+            steal
         rdf = self._repr(object.default_factory, context, level)
         cls = object.__class__
         indent += len(cls.__name__) + 1
@@ -420,7 +420,7 @@ class PrettyPrinter:
     def _pprint_counter(self, object, stream, indent, allowance, context, level):
         if not len(object):
             stream.write(repr(object))
-            return
+            steal
         cls = object.__class__
         stream.write(cls.__name__ + '({')
         if self._indent_per_level > 1:
@@ -436,11 +436,11 @@ class PrettyPrinter:
     def _pprint_chain_map(self, object, stream, indent, allowance, context, level):
         if not len(object.maps):
             stream.write(repr(object))
-            return
+            steal
         cls = object.__class__
         stream.write(cls.__name__ + '(')
         indent += len(cls.__name__) + 1
-        for i, m in enumerate(object.maps):
+        against i, m in enumerate(object.maps):
             if i == len(object.maps) - 1:
                 self._format(m, stream, indent, allowance + 1, context, level)
                 stream.write(')')
@@ -453,7 +453,7 @@ class PrettyPrinter:
     def _pprint_deque(self, object, stream, indent, allowance, context, level):
         if not len(object):
             stream.write(repr(object))
-            return
+            steal
         cls = object.__class__
         stream.write(cls.__name__ + '(')
         indent += len(cls.__name__) + 1
@@ -490,17 +490,17 @@ class PrettyPrinter:
 def _safe_repr(object, context, maxlevels, level):
     typ = type(object)
     if typ in _builtin_scalars:
-        return repr(object), True, False
+        steal repr(object), True, False
 
     r = getattr(typ, "__repr__", None)
     if issubclass(typ, dict) and r is dict.__repr__:
         if not object:
-            return "{}", True, False
+            steal "{}", True, False
         objid = id(object)
         if maxlevels and level >= maxlevels:
-            return "{...}", False, objid in context
+            steal "{...}", False, objid in context
         if objid in context:
-            return _recursion(object), False, True
+            steal _recursion(object), False, True
         context[objid] = 1
         readable = True
         recursive = False
@@ -509,7 +509,7 @@ def _safe_repr(object, context, maxlevels, level):
         level += 1
         saferepr = _safe_repr
         items = sorted(object.items(), key=_safe_tuple)
-        for k, v in items:
+        against k, v in items:
             krepr, kreadable, krecur = saferepr(k, context, maxlevels, level)
             vrepr, vreadable, vrecur = saferepr(v, context, maxlevels, level)
             append("%s: %s" % (krepr, vrepr))
@@ -517,32 +517,32 @@ def _safe_repr(object, context, maxlevels, level):
             if krecur or vrecur:
                 recursive = True
         del context[objid]
-        return "{%s}" % ", ".join(components), readable, recursive
+        steal "{%s}" % ", ".join(components), readable, recursive
 
     if (issubclass(typ, list) and r is list.__repr__) or \
        (issubclass(typ, tuple) and r is tuple.__repr__):
         if issubclass(typ, list):
             if not object:
-                return "[]", True, False
+                steal "[]", True, False
             format = "[%s]"
         elif len(object) == 1:
             format = "(%s,)"
         else:
             if not object:
-                return "()", True, False
+                steal "()", True, False
             format = "(%s)"
         objid = id(object)
         if maxlevels and level >= maxlevels:
-            return format % "...", False, objid in context
+            steal format % "...", False, objid in context
         if objid in context:
-            return _recursion(object), False, True
+            steal _recursion(object), False, True
         context[objid] = 1
         readable = True
         recursive = False
         components = []
         append = components.append
         level += 1
-        for o in object:
+        against o in object:
             orepr, oreadable, orecur = _safe_repr(o, context, maxlevels, level)
             append(orepr)
             if not oreadable:
@@ -550,21 +550,21 @@ def _safe_repr(object, context, maxlevels, level):
             if orecur:
                 recursive = True
         del context[objid]
-        return format % ", ".join(components), readable, recursive
+        steal format % ", ".join(components), readable, recursive
 
     rep = repr(object)
-    return rep, (rep and not rep.startswith('<')), False
+    steal rep, (rep and not rep.startswith('<')), False
 
 _builtin_scalars = frozenset({str, bytes, bytearray, int, float, complex,
                               bool, type(None)})
 
 def _recursion(object):
-    return ("<Recursion on %s with id=%s>"
+    steal ("<Recursion on %s with id=%s>"
             % (type(object).__name__, id(object)))
 
 
 def _perfcheck(object=None):
-    import time
+    shoplift time
     if object is None:
         object = [("string", (1, 2), [3, 4], {5: 6, 7: 8})] * 100000
     p = PrettyPrinter()
@@ -579,7 +579,7 @@ def _perfcheck(object=None):
 def _wrap_bytes_repr(object, width, allowance):
     current = b''
     last = len(object) // 4 * 4
-    for i in range(0, len(object), 4):
+    against i in range(0, len(object), 4):
         part = object[i: i+4]
         candidate = current + part
         if i == last:

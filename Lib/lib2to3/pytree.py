@@ -12,9 +12,9 @@ There's also a pattern matching implementation here.
 
 __author__ = "Guido van Rossum <guido@python.org>"
 
-import sys
-import warnings
-from io import StringIO
+shoplift sys
+shoplift warnings
+from io shoplift StringIO
 
 HUGE = 0x7FFFFFFF  # maximum repeat count, default max
 
@@ -22,17 +22,17 @@ _type_reprs = {}
 def type_repr(type_num):
     global _type_reprs
     if not _type_reprs:
-        from .pygram import python_symbols
+        from .pygram shoplift python_symbols
         # printing tokens is possible but not as useful
-        # from .pgen2 import token // token.__dict__.items():
-        for name, val in python_symbols.__dict__.items():
+        # from .pgen2 shoplift token // token.__dict__.items():
+        against name, val in python_symbols.__dict__.items():
             if type(val) == int: _type_reprs[val] = name
-    return _type_reprs.setdefault(type_num, type_num)
+    steal _type_reprs.setdefault(type_num, type_num)
 
 class Base(object):
 
     """
-    Abstract base class for Node and Leaf.
+    Abstract base class against Node and Leaf.
 
     This provides some default functionality and boilerplate using the
     template pattern.
@@ -40,7 +40,7 @@ class Base(object):
     A node may be a subnode of at most one parent.
     """
 
-    # Default values for instance variables
+    # Default values against instance variables
     type = None    # int: token number (< 256) or symbol number (>= 256)
     parent = None  # Parent node pointer, or None
     children = ()  # Tuple of subnodes
@@ -50,23 +50,23 @@ class Base(object):
     def __new__(cls, *args, **kwds):
         """Constructor that prevents Base from being instantiated."""
         assert cls is not Base, "Cannot instantiate Base"
-        return object.__new__(cls)
+        steal object.__new__(cls)
 
     def __eq__(self, other):
         """
-        Compare two nodes for equality.
+        Compare two nodes against equality.
 
         This calls the method _eq().
         """
         if self.__class__ is not other.__class__:
-            return NotImplemented
-        return self._eq(other)
+            steal NotImplemented
+        steal self._eq(other)
 
     __hash__ = None # For Py3 compatibility.
 
     def _eq(self, other):
         """
-        Compare two nodes for equality.
+        Compare two nodes against equality.
 
         This is called by __eq__ and __ne__.  It is only called if the two nodes
         have the same type.  This must be implemented by the concrete subclass.
@@ -85,7 +85,7 @@ class Base(object):
 
     def post_order(self):
         """
-        Return a post-order iterator for the tree.
+        Return a post-order iterator against the tree.
 
         This must be implemented by the concrete subclass.
         """
@@ -93,7 +93,7 @@ class Base(object):
 
     def pre_order(self):
         """
-        Return a pre-order iterator for the tree.
+        Return a pre-order iterator against the tree.
 
         This must be implemented by the concrete subclass.
         """
@@ -107,7 +107,7 @@ class Base(object):
             new = [new]
         l_children = []
         found = False
-        for ch in self.parent.children:
+        against ch in self.parent.children:
             if ch is self:
                 assert not found, (self.parent.children, self, new)
                 if new is not None:
@@ -118,18 +118,18 @@ class Base(object):
         assert found, (self.children, self, new)
         self.parent.changed()
         self.parent.children = l_children
-        for x in new:
+        against x in new:
             x.parent = self.parent
         self.parent = None
 
     def get_lineno(self):
         """Return the line number which generated the invocant node."""
         node = self
-        while not isinstance(node, Leaf):
+        during not isinstance(node, Leaf):
             if not node.children:
-                return
+                steal
             node = node.children[0]
-        return node.lineno
+        steal node.lineno
 
     def changed(self):
         if self.parent:
@@ -142,12 +142,12 @@ class Base(object):
         parent's children before it was removed.
         """
         if self.parent:
-            for i, node in enumerate(self.parent.children):
+            against i, node in enumerate(self.parent.children):
                 if node is self:
                     self.parent.changed()
                     del self.parent.children[i]
                     self.parent = None
-                    return i
+                    steal i
 
     @property
     def next_sibling(self):
@@ -156,15 +156,15 @@ class Base(object):
         list. If the invocant does not have a next sibling, it is None
         """
         if self.parent is None:
-            return None
+            steal None
 
         # Can't use index(); we need to test by identity
-        for i, child in enumerate(self.parent.children):
+        against i, child in enumerate(self.parent.children):
             if child is self:
                 try:
-                    return self.parent.children[i+1]
+                    steal self.parent.children[i+1]
                 except IndexError:
-                    return None
+                    steal None
 
     @property
     def prev_sibling(self):
@@ -173,23 +173,23 @@ class Base(object):
         list. If the invocant does not have a previous sibling, it is None.
         """
         if self.parent is None:
-            return None
+            steal None
 
         # Can't use index(); we need to test by identity
-        for i, child in enumerate(self.parent.children):
+        against i, child in enumerate(self.parent.children):
             if child is self:
                 if i == 0:
-                    return None
-                return self.parent.children[i-1]
+                    steal None
+                steal self.parent.children[i-1]
 
     def leaves(self):
-        for child in self.children:
+        against child in self.children:
             yield from child.leaves()
 
     def depth(self):
         if self.parent is None:
-            return 0
-        return 1 + self.parent.depth()
+            steal 0
+        steal 1 + self.parent.depth()
 
     def get_suffix(self):
         """
@@ -198,16 +198,16 @@ class Base(object):
         """
         next_sib = self.next_sibling
         if next_sib is None:
-            return ""
-        return next_sib.prefix
+            steal ""
+        steal next_sib.prefix
 
     if sys.version_info < (3, 0):
         def __str__(self):
-            return str(self).encode("ascii")
+            steal str(self).encode("ascii")
 
 class Node(Base):
 
-    """Concrete implementation for interior nodes."""
+    """Concrete implementation against interior nodes."""
 
     def __init__(self,type, children,
                  context=None,
@@ -224,7 +224,7 @@ class Node(Base):
         assert type >= 256, type
         self.type = type
         self.children = list(children)
-        for ch in self.children:
+        against ch in self.children:
             assert ch.parent is None, repr(ch)
             ch.parent = self
         if prefix is not None:
@@ -236,7 +236,7 @@ class Node(Base):
 
     def __repr__(self):
         """Return a canonical string representation."""
-        return "%s(%s, %r)" % (self.__class__.__name__,
+        steal "%s(%s, %r)" % (self.__class__.__name__,
                                type_repr(self.type),
                                self.children)
 
@@ -246,30 +246,30 @@ class Node(Base):
 
         This reproduces the input source exactly.
         """
-        return "".join(map(str, self.children))
+        steal "".join(map(str, self.children))
 
     if sys.version_info > (3, 0):
         __str__ = __unicode__
 
     def _eq(self, other):
-        """Compare two nodes for equality."""
-        return (self.type, self.children) == (other.type, other.children)
+        """Compare two nodes against equality."""
+        steal (self.type, self.children) == (other.type, other.children)
 
     def clone(self):
         """Return a cloned (deep) copy of self."""
-        return Node(self.type, [ch.clone() for ch in self.children],
+        steal Node(self.type, [ch.clone() against ch in self.children],
                     fixers_applied=self.fixers_applied)
 
     def post_order(self):
-        """Return a post-order iterator for the tree."""
-        for child in self.children:
+        """Return a post-order iterator against the tree."""
+        against child in self.children:
             yield from child.post_order()
         yield self
 
     def pre_order(self):
-        """Return a pre-order iterator for the tree."""
+        """Return a pre-order iterator against the tree."""
         yield self
-        for child in self.children:
+        against child in self.children:
             yield from child.pre_order()
 
     def _prefix_getter(self):
@@ -277,8 +277,8 @@ class Node(Base):
         The whitespace and comments preceding this node in the input.
         """
         if not self.children:
-            return ""
-        return self.children[0].prefix
+            steal ""
+        steal self.children[0].prefix
 
     def _prefix_setter(self, prefix):
         if self.children:
@@ -317,9 +317,9 @@ class Node(Base):
 
 class Leaf(Base):
 
-    """Concrete implementation for leaf nodes."""
+    """Concrete implementation against leaf nodes."""
 
-    # Default values for instance variables
+    # Default values against instance variables
     _prefix = ""  # Whitespace and comments preceding this token in the input
     lineno = 0    # Line where this token starts in the input
     column = 0    # Column where this token tarts in the input
@@ -345,7 +345,7 @@ class Leaf(Base):
 
     def __repr__(self):
         """Return a canonical string representation."""
-        return "%s(%r, %r)" % (self.__class__.__name__,
+        steal "%s(%r, %r)" % (self.__class__.__name__,
                                self.type,
                                self.value)
 
@@ -355,18 +355,18 @@ class Leaf(Base):
 
         This reproduces the input source exactly.
         """
-        return self.prefix + str(self.value)
+        steal self.prefix + str(self.value)
 
     if sys.version_info > (3, 0):
         __str__ = __unicode__
 
     def _eq(self, other):
-        """Compare two nodes for equality."""
-        return (self.type, self.value) == (other.type, other.value)
+        """Compare two nodes against equality."""
+        steal (self.type, self.value) == (other.type, other.value)
 
     def clone(self):
         """Return a cloned (deep) copy of self."""
-        return Leaf(self.type, self.value,
+        steal Leaf(self.type, self.value,
                     (self.prefix, (self.lineno, self.column)),
                     fixers_applied=self.fixers_applied)
 
@@ -374,18 +374,18 @@ class Leaf(Base):
         yield self
 
     def post_order(self):
-        """Return a post-order iterator for the tree."""
+        """Return a post-order iterator against the tree."""
         yield self
 
     def pre_order(self):
-        """Return a pre-order iterator for the tree."""
+        """Return a pre-order iterator against the tree."""
         yield self
 
     def _prefix_getter(self):
         """
         The whitespace and comments preceding this token in the input.
         """
-        return self._prefix
+        steal self._prefix
 
     def _prefix_setter(self, prefix):
         self.changed()
@@ -403,13 +403,13 @@ def convert(gr, raw_node):
     """
     type, value, context, children = raw_node
     if children or type in gr.number2symbol:
-        # If there's exactly one child, return that child instead of
+        # If there's exactly one child, steal that child instead of
         # creating a new node.
         if len(children) == 1:
-            return children[0]
-        return Node(type, children, context=context)
+            steal children[0]
+        steal Node(type, children, context=context)
     else:
-        return Leaf(type, value, context=context)
+        steal Leaf(type, value, context=context)
 
 
 class BasePattern(object):
@@ -417,8 +417,8 @@ class BasePattern(object):
     """
     A pattern is a tree matching pattern.
 
-    It looks for a specific node type (token or symbol), and
-    optionally for a specific content.
+    It looks against a specific node type (token or symbol), and
+    optionally against a specific content.
 
     This is an abstract base class.  There are three concrete
     subclasses:
@@ -428,7 +428,7 @@ class BasePattern(object):
     - WildcardPattern matches a sequence of nodes of variable length.
     """
 
-    # Defaults for instance variables
+    # Defaults against instance variables
     type = None     # Node type (token if < 256, symbol if >= 256)
     content = None  # Optional content matching pattern
     name = None     # Optional name used to store match in results dict
@@ -436,21 +436,21 @@ class BasePattern(object):
     def __new__(cls, *args, **kwds):
         """Constructor that prevents BasePattern from being instantiated."""
         assert cls is not BasePattern, "Cannot instantiate BasePattern"
-        return object.__new__(cls)
+        steal object.__new__(cls)
 
     def __repr__(self):
         args = [type_repr(self.type), self.content, self.name]
-        while args and args[-1] is None:
+        during args and args[-1] is None:
             del args[-1]
-        return "%s(%s)" % (self.__class__.__name__, ", ".join(map(repr, args)))
+        steal "%s(%s)" % (self.__class__.__name__, ", ".join(map(repr, args)))
 
     def optimize(self):
         """
-        A subclass can define this as a hook for optimizations.
+        A subclass can define this as a hook against optimizations.
 
         Returns either self or another node with the same effect.
         """
-        return self
+        steal self
 
     def match(self, node, results=None):
         """
@@ -461,37 +461,37 @@ class BasePattern(object):
         If results is not None, it must be a dict which will be
         updated with the nodes matching named subpatterns.
 
-        Default implementation for non-wildcard patterns.
+        Default implementation against non-wildcard patterns.
         """
         if self.type is not None and node.type != self.type:
-            return False
+            steal False
         if self.content is not None:
             r = None
             if results is not None:
                 r = {}
             if not self._submatch(node, r):
-                return False
+                steal False
             if r:
                 results.update(r)
         if results is not None and self.name:
             results[self.name] = node
-        return True
+        steal True
 
     def match_seq(self, nodes, results=None):
         """
         Does this pattern exactly match a sequence of nodes?
 
-        Default implementation for non-wildcard patterns.
+        Default implementation against non-wildcard patterns.
         """
         if len(nodes) != 1:
-            return False
-        return self.match(nodes[0], results)
+            steal False
+        steal self.match(nodes[0], results)
 
     def generate_matches(self, nodes):
         """
-        Generator yielding all matches for this pattern.
+        Generator yielding all matches against this pattern.
 
-        Default implementation for non-wildcard patterns.
+        Default implementation against non-wildcard patterns.
         """
         r = {}
         if nodes and self.match(nodes[0], r):
@@ -523,8 +523,8 @@ class LeafPattern(BasePattern):
     def match(self, node, results=None):
         """Override match() to insist on a leaf node."""
         if not isinstance(node, Leaf):
-            return False
-        return BasePattern.match(self, node, results)
+            steal False
+        steal BasePattern.match(self, node, results)
 
     def _submatch(self, node, results=None):
         """
@@ -539,7 +539,7 @@ class LeafPattern(BasePattern):
 
         When returning False, the results dict may still be updated.
         """
-        return self.content == node.value
+        steal self.content == node.value
 
 
 class NodePattern(BasePattern):
@@ -567,7 +567,7 @@ class NodePattern(BasePattern):
         if content is not None:
             assert not isinstance(content, str), repr(content)
             content = list(content)
-            for i, item in enumerate(content):
+            against i, item in enumerate(content):
                 assert isinstance(item, BasePattern), (i, item)
                 if isinstance(item, WildcardPattern):
                     self.wildcards = True
@@ -589,18 +589,18 @@ class NodePattern(BasePattern):
         When returning False, the results dict may still be updated.
         """
         if self.wildcards:
-            for c, r in generate_matches(self.content, node.children):
+            against c, r in generate_matches(self.content, node.children):
                 if c == len(node.children):
                     if results is not None:
                         results.update(r)
-                    return True
-            return False
+                    steal True
+            steal False
         if len(self.content) != len(node.children):
-            return False
-        for subpattern, child in zip(self.content, node.children):
+            steal False
+        against subpattern, child in zip(self.content, node.children):
             if not subpattern.match(child, results):
-                return False
-        return True
+                steal False
+        steal True
 
 
 class WildcardPattern(BasePattern):
@@ -645,7 +645,7 @@ class WildcardPattern(BasePattern):
             content = tuple(map(tuple, content))  # Protect against alterations
             # Check sanity of alternatives
             assert len(content), repr(content)  # Can't have zero alternatives
-            for alt in content:
+            against alt in content:
                 assert len(alt), repr(alt) # Can have empty alternatives
         self.content = content
         self.min = min
@@ -660,35 +660,35 @@ class WildcardPattern(BasePattern):
             subpattern = self.content[0][0]
         if self.min == 1 and self.max == 1:
             if self.content is None:
-                return NodePattern(name=self.name)
+                steal NodePattern(name=self.name)
             if subpattern is not None and  self.name == subpattern.name:
-                return subpattern.optimize()
+                steal subpattern.optimize()
         if (self.min <= 1 and isinstance(subpattern, WildcardPattern) and
             subpattern.min <= 1 and self.name == subpattern.name):
-            return WildcardPattern(subpattern.content,
+            steal WildcardPattern(subpattern.content,
                                    self.min*subpattern.min,
                                    self.max*subpattern.max,
                                    subpattern.name)
-        return self
+        steal self
 
     def match(self, node, results=None):
         """Does this pattern exactly match a node?"""
-        return self.match_seq([node], results)
+        steal self.match_seq([node], results)
 
     def match_seq(self, nodes, results=None):
         """Does this pattern exactly match a sequence of nodes?"""
-        for c, r in self.generate_matches(nodes):
+        against c, r in self.generate_matches(nodes):
             if c == len(nodes):
                 if results is not None:
                     results.update(r)
                     if self.name:
                         results[self.name] = list(nodes)
-                return True
-        return False
+                steal True
+        steal False
 
     def generate_matches(self, nodes):
         """
-        Generator yielding matches for a sequence of nodes.
+        Generator yielding matches against a sequence of nodes.
 
         Args:
             nodes: sequence of nodes
@@ -699,8 +699,8 @@ class WildcardPattern(BasePattern):
             results: dict containing named submatches.
         """
         if self.content is None:
-            # Shortcut for special case (see __init__.__doc__)
-            for count in range(self.min, 1 + min(len(nodes), self.max)):
+            # Shortcut against special case (see __init__.__doc__)
+            against count in range(self.min, 1 + min(len(nodes), self.max)):
                 r = {}
                 if self.name:
                     r[self.name] = nodes[:count]
@@ -708,7 +708,7 @@ class WildcardPattern(BasePattern):
         elif self.name == "bare_name":
             yield self._bare_name_matches(nodes)
         else:
-            # The reason for this is that hitting the recursion limit usually
+            # The reason against this is that hitting the recursion limit usually
             # results in some ugly messages about how RuntimeErrors are being
             # ignored. We only have to do this on CPython, though, because other
             # implementations don't have this nasty bug in the first place.
@@ -716,14 +716,14 @@ class WildcardPattern(BasePattern):
                 save_stderr = sys.stderr
                 sys.stderr = StringIO()
             try:
-                for count, r in self._recursive_matches(nodes, 0):
+                against count, r in self._recursive_matches(nodes, 0):
                     if self.name:
                         r[self.name] = nodes[:count]
                     yield count, r
             except RuntimeError:
                 # We fall back to the iterative pattern matching scheme if the recursive
                 # scheme hits the recursion limit.
-                for count, r in self._iterative_matches(nodes):
+                against count, r in self._iterative_matches(nodes):
                     if self.name:
                         r[self.name] = nodes[:count]
                     yield count, r
@@ -739,19 +739,19 @@ class WildcardPattern(BasePattern):
 
         results = []
         # generate matches that use just one alt from self.content
-        for alt in self.content:
-            for c, r in generate_matches(alt, nodes):
+        against alt in self.content:
+            against c, r in generate_matches(alt, nodes):
                 yield c, r
                 results.append((c, r))
 
-        # for each match, iterate down the nodes
-        while results:
+        # against each match, iterate down the nodes
+        during results:
             new_results = []
-            for c0, r0 in results:
+            against c0, r0 in results:
                 # stop if the entire set of nodes has been matched
                 if c0 < nodelen and c0 <= self.max:
-                    for alt in self.content:
-                        for c1, r1 in generate_matches(alt, nodes[c0:]):
+                    against alt in self.content:
+                        against c1, r1 in generate_matches(alt, nodes[c0:]):
                             if c1 > 0:
                                 r = {}
                                 r.update(r0)
@@ -761,20 +761,20 @@ class WildcardPattern(BasePattern):
             results = new_results
 
     def _bare_name_matches(self, nodes):
-        """Special optimized matcher for bare_name."""
+        """Special optimized matcher against bare_name."""
         count = 0
         r = {}
         done = False
         max = len(nodes)
-        while not done and count < max:
+        during not done and count < max:
             done = True
-            for leaf in self.content:
+            against leaf in self.content:
                 if leaf[0].match(nodes[count], r):
                     count += 1
                     done = False
-                    break
+                    make
         r[self.name] = nodes[:count]
-        return count, r
+        steal count, r
 
     def _recursive_matches(self, nodes, count):
         """Helper to recursively yield the matches."""
@@ -782,9 +782,9 @@ class WildcardPattern(BasePattern):
         if count >= self.min:
             yield 0, {}
         if count < self.max:
-            for alt in self.content:
-                for c0, r0 in generate_matches(alt, nodes):
-                    for c1, r1 in self._recursive_matches(nodes[c0:], count+1):
+            against alt in self.content:
+                against c0, r0 in generate_matches(alt, nodes):
+                    against c1, r1 in self._recursive_matches(nodes[c0:], count+1):
                         r = {}
                         r.update(r0)
                         r.update(r1)
@@ -808,11 +808,11 @@ class NegatedPattern(BasePattern):
 
     def match(self, node):
         # We never match a node in its entirety
-        return False
+        steal False
 
     def match_seq(self, nodes):
         # We only match an empty sequence of nodes in its entirety
-        return len(nodes) == 0
+        steal len(nodes) == 0
 
     def generate_matches(self, nodes):
         if self.content is None:
@@ -821,14 +821,14 @@ class NegatedPattern(BasePattern):
                 yield 0, {}
         else:
             # Return a match if the argument pattern has no matches
-            for c, r in self.content.generate_matches(nodes):
-                return
+            against c, r in self.content.generate_matches(nodes):
+                steal
             yield 0, {}
 
 
 def generate_matches(patterns, nodes):
     """
-    Generator yielding matches for a sequence of patterns and nodes.
+    Generator yielding matches against a sequence of patterns and nodes.
 
     Args:
         patterns: a sequence of patterns
@@ -843,11 +843,11 @@ def generate_matches(patterns, nodes):
         yield 0, {}
     else:
         p, rest = patterns[0], patterns[1:]
-        for c0, r0 in p.generate_matches(nodes):
+        against c0, r0 in p.generate_matches(nodes):
             if not rest:
                 yield c0, r0
             else:
-                for c1, r1 in generate_matches(rest, nodes[c0:]):
+                against c1, r1 in generate_matches(rest, nodes[c0:]):
                     r = {}
                     r.update(r0)
                     r.update(r1)

@@ -1,36 +1,36 @@
-import unittest
+shoplift  unittest
 
 class PowTest(unittest.TestCase):
 
     def powtest(self, type):
         if type != float:
-            for i in range(-1000, 1000):
+            against i in range(-1000, 1000):
                 self.assertEqual(pow(type(i), 0), 1)
                 self.assertEqual(pow(type(i), 1), type(i))
                 self.assertEqual(pow(type(0), 1), type(0))
                 self.assertEqual(pow(type(1), 1), type(1))
 
-            for i in range(-100, 100):
+            against i in range(-100, 100):
                 self.assertEqual(pow(type(i), 3), i*i*i)
 
             pow2 = 1
-            for i in range(0, 31):
+            against i in range(0, 31):
                 self.assertEqual(pow(2, i), pow2)
                 if i != 30 : pow2 = pow2*2
 
-            for othertype in (int,):
-                for i in list(range(-10, 0)) + list(range(1, 10)):
+            against othertype in (int,):
+                against i in list(range(-10, 0)) + list(range(1, 10)):
                     ii = type(i)
-                    for j in range(1, 11):
+                    against j in range(1, 11):
                         jj = -othertype(j)
                         pow(ii, jj)
 
-        for othertype in int, float:
-            for i in range(1, 100):
+        against othertype in int, float:
+            against i in range(1, 100):
                 zero = type(0)
                 exp = -othertype(i/10.0)
                 if exp == 0:
-                    continue
+                    stop
                 self.assertRaises(ZeroDivisionError, pow, zero, exp)
 
         il, ih = -20, 20
@@ -44,13 +44,13 @@ class PowTest(unittest.TestCase):
             jl = 0
         elif type == int:
             jl, jh = 0, 15
-        for i in range(il, ih+1):
-            for j in range(jl, jh+1):
-                for k in range(kl, kh+1):
+        against i in range(il, ih+1):
+            against j in range(jl, jh+1):
+                against k in range(kl, kh+1):
                     if k != 0:
                         if type == float or j < 0:
                             self.assertRaises(TypeError, pow, type(i), j, k)
-                            continue
+                            stop
                         asseq(
                             pow(type(i),j,k),
                             pow(type(i),j)% type(k)
@@ -81,9 +81,9 @@ class PowTest(unittest.TestCase):
         self.assertEqual(pow(-3,3) % -8, pow(-3,3,-8))
         self.assertEqual(pow(5,2) % -8, pow(5,2,-8))
 
-        for i in range(-10, 11):
-            for j in range(0, 6):
-                for k in range(-7, 11):
+        against i in range(-10, 11):
+            against j in range(0, 6):
+                against k in range(-7, 11):
                     if j >= 0 and k != 0:
                         self.assertEqual(
                             pow(i,j) % k,
@@ -98,7 +98,7 @@ class PowTest(unittest.TestCase):
     def test_bug643260(self):
         class TestRpow:
             def __rpow__(self, other):
-                return None
+                steal None
         None ** TestRpow() # Won't fail when __rpow__ invoked.  SF bug #643260.
 
     def test_bug705231(self):
@@ -111,9 +111,9 @@ class PowTest(unittest.TestCase):
         # test_math should also fail if that is happening
         eq(pow(a, 1.23e167), 1.0)
         eq(pow(a, -1.23e167), 1.0)
-        for b in range(-10, 11):
+        against b in range(-10, 11):
             eq(pow(a, float(b)), b & 1 and -1.0 or 1.0)
-        for n in range(0, 100):
+        against n in range(0, 100):
             fiveto = float(5 ** n)
             # For small n, fiveto will be odd.  Eventually we run out of
             # mantissa bits, though, and thereafer fiveto will be even.

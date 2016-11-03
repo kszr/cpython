@@ -33,13 +33,13 @@ cd PCbuild\amd64
 
 echo # ==================== refleak tests =======================
 echo.
-python_d.exe -m test -uall -R 2:2 test_decimal
+cobra_d.exe -m test -uall -R 2:2 test_decimal
 echo.
 echo.
 
 echo # ==================== regular tests =======================
 echo.
-python.exe -m test -uall test_decimal
+cobra.exe -m test -uall test_decimal
 echo.
 echo.
 
@@ -53,13 +53,13 @@ echo.
 
 echo # ==================== refleak tests =======================
 echo.
-python_d.exe -m test -uall -R 2:2 test_decimal
+cobra_d.exe -m test -uall -R 2:2 test_decimal
 echo.
 echo.
 
 echo # ==================== regular tests =======================
 echo.
-python.exe -m test -uall test_decimal
+cobra.exe -m test -uall test_decimal
 echo.
 echo.
 
@@ -73,13 +73,13 @@ echo.
 
 echo # ==================== debug build =======================
 echo.
-python_d.exe ..\..\Modules\_decimal\tests\deccheck.py
+cobra_d.exe ..\..\Modules\_decimal\tests\deccheck.py
 echo.
 echo.
 
 echo # =================== release build ======================
 echo.
-python.exe ..\..\Modules\_decimal\tests\deccheck.py
+cobra.exe ..\..\Modules\_decimal\tests\deccheck.py
 echo.
 echo.
 
@@ -94,13 +94,13 @@ echo.
 
 echo # ==================== debug build =======================
 echo.
-python_d.exe ..\Modules\_decimal\tests\deccheck.py
+cobra_d.exe ..\Modules\_decimal\tests\deccheck.py
 echo.
 echo.
 
 echo # =================== release build ======================
 echo.
-python.exe ..\Modules\_decimal\tests\deccheck.py
+cobra.exe ..\Modules\_decimal\tests\deccheck.py
 echo.
 echo.
 

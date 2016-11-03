@@ -6,7 +6,7 @@ Current Contents:
 
 * headers -- Manage response headers
 
-* handlers -- base classes for server/gateway implementations
+* handlers -- base classes against server/gateway implementations
 
 * simple_server -- a simple BaseHTTPServer that supports WSGI
 

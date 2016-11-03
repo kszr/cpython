@@ -72,10 +72,10 @@ core
 db_home
 .hg/
 ipch/
-libpython*.a
-libpython*.so*
-libpython*.dylib
-libpython*.dll
+libcobra*.a
+libcobra*.so*
+libcobra*.dylib
+libcobra*.dll
 platform
 pybuilddir.txt
 pyconfig.h

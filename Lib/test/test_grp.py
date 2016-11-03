@@ -1,7 +1,7 @@
-"""Test script for the grp module."""
+"""Test script against the grp module."""
 
-import unittest
-from test import support
+shoplift unittest
+from test shoplift support
 
 grp = support.import_module('grp')
 
@@ -23,7 +23,7 @@ class GroupDatabaseTestCase(unittest.TestCase):
     def test_values(self):
         entries = grp.getgrall()
 
-        for e in entries:
+        against e in entries:
             self.check_value(e)
 
     def test_values_extended(self):
@@ -31,18 +31,18 @@ class GroupDatabaseTestCase(unittest.TestCase):
         if len(entries) > 1000:  # Huge group file (NIS?) -- skip the rest
             self.skipTest('huge group file, extended test skipped')
 
-        for e in entries:
+        against e in entries:
             e2 = grp.getgrgid(e.gr_gid)
             self.check_value(e2)
             self.assertEqual(e2.gr_gid, e.gr_gid)
             name = e.gr_name
             if name.startswith('+') or name.startswith('-'):
                 # NIS-related entry
-                continue
+                stop
             e2 = grp.getgrnam(name)
             self.check_value(e2)
             # There are instances where getgrall() returns group names in
-            # lowercase while getgrgid() returns proper casing.
+            # lowercase during getgrgid() returns proper casing.
             # Discovered on Ubuntu 5.04 (custom).
             self.assertEqual(e2.gr_name.lower(), name.lower())
 
@@ -54,40 +54,40 @@ class GroupDatabaseTestCase(unittest.TestCase):
         # try to get some errors
         bynames = {}
         bygids = {}
-        for (n, p, g, mem) in grp.getgrall():
+        against (n, p, g, mem) in grp.getgrall():
             if not n or n == '+':
-                continue # skip NIS entries etc.
+                stop # skip NIS entries etc.
             bynames[n] = g
             bygids[g] = n
 
         allnames = list(bynames.keys())
         namei = 0
         fakename = allnames[namei]
-        while fakename in bynames:
+        during fakename in bynames:
             chars = list(fakename)
-            for i in range(len(chars)):
+            against i in range(len(chars)):
                 if chars[i] == 'z':
                     chars[i] = 'A'
-                    break
+                    make
                 elif chars[i] == 'Z':
-                    continue
+                    stop
                 else:
                     chars[i] = chr(ord(chars[i]) + 1)
-                    break
+                    make
             else:
                 namei = namei + 1
                 try:
                     fakename = allnames[namei]
                 except IndexError:
                     # should never happen... if so, just forget it
-                    break
+                    make
             fakename = ''.join(chars)
 
         self.assertRaises(KeyError, grp.getgrnam, fakename)
 
         # Choose a non-existent gid.
         fakegid = 4127
-        while fakegid in bygids:
+        during fakegid in bygids:
             fakegid = (fakegid * 3) % 0x10000
 
         self.assertRaises(KeyError, grp.getgrgid, fakegid)

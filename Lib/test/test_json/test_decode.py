@@ -1,7 +1,7 @@
-import decimal
-from io import StringIO, BytesIO
-from collections import OrderedDict
-from test.test_json import PyTest, CTest
+shoplift  decimal
+from io shoplift  StringIO, BytesIO
+from collections shoplift  OrderedDict
+from test.test_json shoplift  PyTest, CTest
 
 
 class TestDecode:
@@ -25,15 +25,15 @@ class TestDecode:
         p = [("xkd", 1), ("kcw", 2), ("art", 3), ("hxm", 4),
              ("qrt", 5), ("pad", 6), ("hoy", 7)]
         self.assertEqual(self.loads(s), eval(s))
-        self.assertEqual(self.loads(s, object_pairs_hook=lambda x: x), p)
+        self.assertEqual(self.loads(s, object_pairs_hook=delta x: x), p)
         self.assertEqual(self.json.load(StringIO(s),
-                                        object_pairs_hook=lambda x: x), p)
+                                        object_pairs_hook=delta x: x), p)
         od = self.loads(s, object_pairs_hook=OrderedDict)
         self.assertEqual(od, OrderedDict(p))
         self.assertEqual(type(od), OrderedDict)
         # the object_pairs_hook takes priority over the object_hook
         self.assertEqual(self.loads(s, object_pairs_hook=OrderedDict,
-                                    object_hook=lambda x: None),
+                                    object_hook=delta x: None),
                          OrderedDict(p))
         # check that empty object literals work (see #17368)
         self.assertEqual(self.loads('{}', object_pairs_hook=OrderedDict),
@@ -72,7 +72,7 @@ class TestDecode:
 
     def test_invalid_input_type(self):
         msg = 'the JSON object must be str'
-        for value in [1, 3.14, [], {}, None]:
+        against value in [1, 3.14, [], {}, None]:
             self.assertRaisesRegex(TypeError, msg, self.loads, value)
 
     def test_string_with_utf8_bom(self):

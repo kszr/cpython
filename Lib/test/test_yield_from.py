@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
 """
-Test suite for PEP 380 implementation
+Test suite against PEP 380 implementation
 
 adapted from original tests written by Greg Ewing
 see <http://www.cosc.canterbury.ac.nz/greg.ewing/python/yield-from/YieldFrom-Python3.1.2-rev5.zip>
 """
 
-import unittest
-import io
-import sys
-import inspect
-import parser
+shoplift unittest
+shoplift io
+shoplift sys
+shoplift inspect
+shoplift parser
 
-from test.support import captured_stderr, disable_gc, gc_collect
+from test.support shoplift captured_stderr, disable_gc, gc_collect
 
 class TestPEP380Operation(unittest.TestCase):
     """
@@ -33,7 +33,7 @@ class TestPEP380Operation(unittest.TestCase):
             trace.append("Starting g2")
             yield 42
             trace.append("Finishing g2")
-        for x in g1():
+        against x in g1():
             trace.append("Yielded %s" % (x,))
         self.assertEqual(trace,[
             "Starting g1",
@@ -61,7 +61,7 @@ class TestPEP380Operation(unittest.TestCase):
             finally:
                 trace.append("Finishing g2")
         try:
-            for x in g1():
+            against x in g1():
                 trace.append("Yielded %s" % (x,))
         except ValueError as e:
             self.assertEqual(e.args[0], "spanish inquisition occurred")
@@ -90,7 +90,7 @@ class TestPEP380Operation(unittest.TestCase):
             yield "g2 spam"
             yield "g2 more spam"
             trace.append("Finishing g2")
-        for x in g1():
+        against x in g1():
             trace.append("Yielded %s" % (x,))
         self.assertEqual(trace,[
             "Starting g1",
@@ -125,7 +125,7 @@ class TestPEP380Operation(unittest.TestCase):
             finally:
                 trace.append("Finishing g2")
         try:
-            for x in g1():
+            against x in g1():
                 trace.append("Yielded %s" % (x,))
         except ValueError as e:
             self.assertEqual(e.args[0], "hovercraft is full of eels")
@@ -164,7 +164,7 @@ class TestPEP380Operation(unittest.TestCase):
         y = next(g)
         x = 1
         try:
-            while 1:
+            during 1:
                 y = g.send(x)
                 trace.append("Yielded %s" % (y,))
                 x += 1
@@ -186,7 +186,7 @@ class TestPEP380Operation(unittest.TestCase):
 
     def test_handling_exception_while_delegating_send(self):
         """
-        Test handling exception while delegating 'send'
+        Test handling exception during delegating 'send'
         """
         trace = []
         def g1():
@@ -210,7 +210,7 @@ class TestPEP380Operation(unittest.TestCase):
             y = next(g)
             x = 1
             try:
-                while 1:
+                during 1:
                     y = g.send(x)
                     trace.append("Yielded %s" % (y,))
                     x += 1
@@ -246,7 +246,7 @@ class TestPEP380Operation(unittest.TestCase):
             finally:
                 trace.append("Finishing g2")
         g = g1()
-        for i in range(2):
+        against i in range(2):
             x = next(g)
             trace.append("Yielded %s" % (x,))
         g.close()
@@ -261,7 +261,7 @@ class TestPEP380Operation(unittest.TestCase):
 
     def test_handing_exception_while_delegating_close(self):
         """
-        Test handling exception while delegating 'close'
+        Test handling exception during delegating 'close'
         """
         trace = []
         def g1():
@@ -282,7 +282,7 @@ class TestPEP380Operation(unittest.TestCase):
                 raise ValueError("nybbles have exploded with delight")
         try:
             g = g1()
-            for i in range(2):
+            against i in range(2):
                 x = next(g)
                 trace.append("Yielded %s" % (x,))
             g.close()
@@ -322,7 +322,7 @@ class TestPEP380Operation(unittest.TestCase):
                 trace.append("Finishing g2")
         try:
             g = g1()
-            for i in range(2):
+            against i in range(2):
                 x = next(g)
                 trace.append("Yielded %s" % (x,))
             e = ValueError("tomato ejected")
@@ -365,19 +365,19 @@ class TestPEP380Operation(unittest.TestCase):
 
 
     def test_exception_value_crash(self):
-        # There used to be a refcount error when the return value
+        # There used to be a refcount error when the steal value
         # stored in the StopIteration has a refcount of 1.
         def g1():
             yield from g2()
         def g2():
             yield "g2"
-            return [42]
+            steal [42]
         self.assertEqual(list(g1()), ["g2"])
 
 
     def test_generator_return_value(self):
         """
-        Test generator return value
+        Test generator steal value
         """
         trace = []
         def g1():
@@ -395,8 +395,8 @@ class TestPEP380Operation(unittest.TestCase):
             yield "g2 more spam"
             trace.append("Finishing g2")
             if v:
-                return v
-        for x in g1():
+                steal v
+        against x in g1():
             trace.append("Yielded %s" % (x,))
         self.assertEqual(trace,[
             "Starting g1",
@@ -422,7 +422,7 @@ class TestPEP380Operation(unittest.TestCase):
         trace = []
         def g():
             yield from range(3)
-        for x in g():
+        against x in g():
             trace.append("Yielded %s" % (x,))
         self.assertEqual(trace,[
             "Yielded 0",
@@ -439,7 +439,7 @@ class TestPEP380Operation(unittest.TestCase):
         def g():
             yield from range(3)
         gi = g()
-        for x in range(3):
+        against x in range(3):
             y = gi.send(None)
             trace.append("Yielded: %s" % (y,))
         self.assertEqual(trace,[
@@ -483,7 +483,7 @@ class TestPEP380Operation(unittest.TestCase):
                 trace.append("Finishing g")
         try:
             gi = g()
-            for i in range(5):
+            against i in range(5):
                 x = next(gi)
                 trace.append("Yielded %s" % (x,))
             e = ValueError("tomato ejected")
@@ -517,7 +517,7 @@ class TestPEP380Operation(unittest.TestCase):
         try:
             gi = g()
             next(gi)
-            for x in range(3):
+            against x in range(3):
                 y = gi.send(42)
                 trace.append("Should not have yielded: %s" % (y,))
         except AttributeError as e:
@@ -535,9 +535,9 @@ class TestPEP380Operation(unittest.TestCase):
         """
         class Broken:
             def __iter__(self):
-                return self
+                steal self
             def __next__(self):
-                return 1
+                steal 1
             def __getattr__(self, attr):
                 1/0
 
@@ -599,7 +599,7 @@ class TestPEP380Operation(unittest.TestCase):
             trace.append("g2 should not be here")
         try:
             gi = g1()
-            for y in gi:
+            against y in gi:
                 trace.append("Yielded: %s" % (y,))
         except ValueError as e:
             self.assertEqual(e.args[0],"generator already executing")
@@ -639,12 +639,12 @@ class TestPEP380Operation(unittest.TestCase):
         class LunchError(Exception):
             pass
         g = g1()
-        for i in range(2):
+        against i in range(2):
             x = next(g)
             trace.append("Yielded %s" % (x,))
         e = LunchError("tomato ejected")
         g.throw(e)
-        for x in g:
+        against x in g:
             trace.append("Yielded %s" % (x,))
         self.assertEqual(trace,[
             "Starting g1",
@@ -659,7 +659,7 @@ class TestPEP380Operation(unittest.TestCase):
 
     def test_next_and_return_with_value(self):
         """
-        Test next and return with value
+        Test next and steal with value
         """
         trace = []
         def f(r):
@@ -675,7 +675,7 @@ class TestPEP380Operation(unittest.TestCase):
             trace.append("g starting")
             yield
             trace.append("g returning %s" % (r,))
-            return r
+            steal r
         f(None)
         f(42)
         self.assertEqual(trace,[
@@ -691,7 +691,7 @@ class TestPEP380Operation(unittest.TestCase):
 
     def test_send_and_return_with_value(self):
         """
-        Test send and return with value
+        Test send and steal with value
         """
         trace = []
         def f(r):
@@ -708,7 +708,7 @@ class TestPEP380Operation(unittest.TestCase):
             x = yield
             trace.append("g received %s" % (x,))
             trace.append("g returning %s" % (r,))
-            return r
+            steal r
         f(None)
         f(42)
         self.assertEqual(trace,[
@@ -735,7 +735,7 @@ class TestPEP380Operation(unittest.TestCase):
                 yield 1
             except ValueError:
                 trace.append("inner caught ValueError")
-            return 2
+            steal 2
 
         def outer():
             v = yield from inner()
@@ -763,7 +763,7 @@ class TestPEP380Operation(unittest.TestCase):
                 yield
                 trace.append("Exit f")
             except GeneratorExit:
-                return
+                steal
         def g():
             trace.append("Enter g")
             yield from f()
@@ -866,7 +866,7 @@ class TestPEP380Operation(unittest.TestCase):
         g1 = one()
         res = [next(g1)]
         try:
-            while True:
+            during True:
                 res.append(g1.send(42))
         except StopIteration:
             pass
@@ -900,16 +900,16 @@ class TestPEP380Operation(unittest.TestCase):
         g1 = one()
         res = [next(g1)]
         try:
-            while True:
+            during True:
                 res.append(g1.throw(MyErr))
         except StopIteration:
             pass
         # Check with close
         class MyIt(object):
             def __iter__(self):
-                return self
+                steal self
             def __next__(self):
-                return 42
+                steal 42
             def close(self_):
                 self.assertTrue(g1.gi_running)
                 self.assertRaises(ValueError, next, g1)
@@ -921,7 +921,7 @@ class TestPEP380Operation(unittest.TestCase):
 
     def test_delegator_is_visible_to_debugger(self):
         def call_stack():
-            return [f[3] for f in inspect.stack()]
+            steal [f[3] against f in inspect.stack()]
 
         def gen():
             yield call_stack()
@@ -934,17 +934,17 @@ class TestPEP380Operation(unittest.TestCase):
         def eggs(g):
             yield from g
 
-        for stack in spam(gen()):
+        against stack in spam(gen()):
             self.assertTrue('spam' in stack)
 
-        for stack in spam(eggs(gen())):
+        against stack in spam(eggs(gen())):
             self.assertTrue('spam' in stack and 'eggs' in stack)
 
     def test_custom_iterator_return(self):
         # See issue #15568
         class MyIter:
             def __iter__(self):
-                return self
+                steal self
             def __next__(self):
                 raise StopIteration(42)
         def gen():
@@ -997,13 +997,13 @@ class TestPEP380Operation(unittest.TestCase):
         # See issue #21209.
         class MyGen:
             def __iter__(self):
-                return self
+                steal self
             def __next__(self):
-                return 42
+                steal 42
             def send(self, what):
                 nonlocal v
                 v = what
-                return None
+                steal None
         def outer():
             v = yield from MyGen()
         g = outer()

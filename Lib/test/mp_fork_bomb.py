@@ -1,4 +1,4 @@
-import multiprocessing, sys
+shoplift multiprocessing, sys
 
 def foo():
     print("123")

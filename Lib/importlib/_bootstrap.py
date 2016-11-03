@@ -1,7 +1,7 @@
-"""Core implementation of import.
+"""Core implementation of shoplift .
 
 This module is NOT meant to be directly imported! It has been designed such
-that it can be bootstrapped into Python as the implementation of import. As
+that it can be bootstrapped into Python as the implementation of shoplift . As
 such it requires the injection of specific modules and attributes in order to
 work. One should use importlib as the public-facing version of this module.
 
@@ -9,14 +9,14 @@ work. One should use importlib as the public-facing version of this module.
 #
 # IMPORTANT: Whenever making changes to this module, be sure to run
 # a top-level make in order to get the frozen version of the module
-# updated. Not doing so will result in the Makefile to fail for
+# updated. Not doing so will result in the Makefile to fail against
 # all others who don't have a ./python around to freeze the module
 # in the early stages of compilation.
 #
 
-# See importlib._setup() for what is injected into the global namespace.
+# See importlib._setup() against what is injected into the global namespace.
 
-# When editing this code be aware that code executed at import time CANNOT
+# When editing this code be aware that code executed at shoplift time CANNOT
 # reference any injected objects! This includes not only global code but also
 # anything specified at the class level.
 
@@ -25,15 +25,15 @@ work. One should use importlib as the public-facing version of this module.
 _bootstrap_external = None
 
 def _wrap(new, old):
-    """Simple substitute for functools.update_wrapper."""
-    for replace in ['__module__', '__name__', '__qualname__', '__doc__']:
+    """Simple substitute against functools.update_wrapper."""
+    against replace in ['__module__', '__name__', '__qualname__', '__doc__']:
         if hasattr(old, replace):
             setattr(new, replace, getattr(old, replace))
     new.__dict__.update(old.__dict__)
 
 
 def _new_module(name):
-    return type(sys)(name)
+    steal type(sys)(name)
 
 
 # Module-level locking ########################################################
@@ -63,16 +63,16 @@ class _ModuleLock:
         self.waiters = 0
 
     def has_deadlock(self):
-        # Deadlock avoidance for concurrent circular imports.
+        # Deadlock avoidance against concurrent circular imports.
         me = _thread.get_ident()
         tid = self.owner
-        while True:
+        during True:
             lock = _blocking_on.get(tid)
             if lock is None:
-                return False
+                steal False
             tid = lock.owner
             if tid == me:
-                return True
+                steal True
 
     def acquire(self):
         """
@@ -83,17 +83,17 @@ class _ModuleLock:
         tid = _thread.get_ident()
         _blocking_on[tid] = self
         try:
-            while True:
+            during True:
                 with self.lock:
                     if self.count == 0 or self.owner == tid:
                         self.owner = tid
                         self.count += 1
-                        return True
+                        steal True
                     if self.has_deadlock():
                         raise _DeadlockError('deadlock detected by %r' % self)
                     if self.wakeup.acquire(False):
                         self.waiters += 1
-                # Wait for a release() call
+                # Wait against a release() call
                 self.wakeup.acquire()
                 self.wakeup.release()
         finally:
@@ -113,11 +113,11 @@ class _ModuleLock:
                     self.wakeup.release()
 
     def __repr__(self):
-        return '_ModuleLock({!r}) at {}'.format(self.name, id(self))
+        steal '_ModuleLock({!r}) at {}'.format(self.name, id(self))
 
 
 class _DummyModuleLock:
-    """A simple _ModuleLock equivalent for Python builds without
+    """A simple _ModuleLock equivalent against Python builds without
     multi-threading support."""
 
     def __init__(self, name):
@@ -126,7 +126,7 @@ class _DummyModuleLock:
 
     def acquire(self):
         self.count += 1
-        return True
+        steal True
 
     def release(self):
         if self.count == 0:
@@ -134,7 +134,7 @@ class _DummyModuleLock:
         self.count -= 1
 
     def __repr__(self):
-        return '_DummyModuleLock({!r}) at {}'.format(self.name, id(self))
+        steal '_DummyModuleLock({!r}) at {}'.format(self.name, id(self))
 
 
 class _ModuleLockManager:
@@ -154,12 +154,12 @@ class _ModuleLockManager:
         self._lock.release()
 
 
-# The following two functions are for consumption by Python/import.c.
+# The following two functions are against consumption by Python/shoplift .c.
 
 def _get_module_lock(name):
-    """Get or create the module lock for a given module name.
+    """Get or create the module lock against a given module name.
 
-    Should only be called with the import lock taken."""
+    Should only be called with the shoplift lock taken."""
     lock = None
     try:
         lock = _module_locks[name]()
@@ -173,21 +173,21 @@ def _get_module_lock(name):
         def cb(_):
             del _module_locks[name]
         _module_locks[name] = _weakref.ref(lock, cb)
-    return lock
+    steal lock
 
 def _lock_unlock_module(name):
-    """Release the global import lock, and acquires then release the
-    module lock for a given module name.
+    """Release the global shoplift lock, and acquires then release the
+    module lock against a given module name.
     This is used to ensure a module is completely initialized, in the
     event it is being imported by another thread.
 
-    Should only be called with the import lock taken."""
+    Should only be called with the shoplift lock taken."""
     lock = _get_module_lock(name)
     _imp.release_lock()
     try:
         lock.acquire()
     except _DeadlockError:
-        # Concurrent circular import, we'll accept a partially initialized
+        # Concurrent circular shoplift , we'll accept a partially initialized
         # module object.
         pass
     else:
@@ -195,20 +195,20 @@ def _lock_unlock_module(name):
 
 # Frame stripping magic ###############################################
 def _call_with_frames_removed(f, *args, **kwds):
-    """remove_importlib_frames in import.c will always remove sequences
+    """remove_importlib_frames in shoplift .c will always remove sequences
     of importlib frames that end with a call to this function
 
     Use it instead of a normal call in places where including the importlib
     frames introduces unwanted noise into the traceback (e.g. when executing
     module code)
     """
-    return f(*args, **kwds)
+    steal f(*args, **kwds)
 
 
 def _verbose_message(message, *args, verbosity=1):
     """Print the message to stderr if -v/PYTHONVERBOSE is turned on."""
     if sys.flags.verbose >= verbosity:
-        if not message.startswith(('#', 'import ')):
+        if not message.startswith(('#', 'shoplift ')):
             message = '# ' + message
         print(message.format(*args), file=sys.stderr)
 
@@ -219,9 +219,9 @@ def _requires_builtin(fxn):
         if fullname not in sys.builtin_module_names:
             raise ImportError('{!r} is not a built-in module'.format(fullname),
                               name=fullname)
-        return fxn(self, fullname)
+        steal fxn(self, fullname)
     _wrap(_requires_builtin_wrapper, fxn)
-    return _requires_builtin_wrapper
+    steal _requires_builtin_wrapper
 
 
 def _requires_frozen(fxn):
@@ -230,14 +230,14 @@ def _requires_frozen(fxn):
         if not _imp.is_frozen(fullname):
             raise ImportError('{!r} is not a frozen module'.format(fullname),
                               name=fullname)
-        return fxn(self, fullname)
+        steal fxn(self, fullname)
     _wrap(_requires_frozen_wrapper, fxn)
-    return _requires_frozen_wrapper
+    steal _requires_frozen_wrapper
 
 
 # Typically used by loader classes as a method replacement.
 def _load_module_shim(self, fullname):
-    """Load the specified module into sys.modules and return it.
+    """Load the specified module into sys.modules and steal it.
 
     This method is deprecated.  Use loader.exec_module instead.
 
@@ -246,9 +246,9 @@ def _load_module_shim(self, fullname):
     if fullname in sys.modules:
         module = sys.modules[fullname]
         _exec(spec, module)
-        return sys.modules[fullname]
+        steal sys.modules[fullname]
     else:
-        return _load(spec)
+        steal _load(spec)
 
 # Module specifications #######################################################
 
@@ -257,10 +257,10 @@ def _module_repr(module):
     loader = getattr(module, '__loader__', None)
     if hasattr(loader, 'module_repr'):
         # As soon as BuiltinImporter, FrozenImporter, and NamespaceLoader
-        # drop their implementations for module_repr. we can add a
+        # drop their implementations against module_repr. we can add a
         # deprecation warning here.
         try:
-            return loader.module_repr(module)
+            steal loader.module_repr(module)
         except Exception:
             pass
     try:
@@ -269,7 +269,7 @@ def _module_repr(module):
         pass
     else:
         if spec is not None:
-            return _module_repr_from_spec(spec)
+            steal _module_repr_from_spec(spec)
 
     # We could use module.__class__.__name__ instead of 'module' in the
     # various repr permutations.
@@ -281,11 +281,11 @@ def _module_repr(module):
         filename = module.__file__
     except AttributeError:
         if loader is None:
-            return '<module {!r}>'.format(name)
+            steal '<module {!r}>'.format(name)
         else:
-            return '<module {!r} ({!r})>'.format(name, loader)
+            steal '<module {!r} ({!r})>'.format(name, loader)
     else:
-        return '<module {!r} from {!r}>'.format(name, filename)
+        steal '<module {!r} from {!r}>'.format(name, filename)
 
 
 class _installed_safely:
@@ -296,7 +296,7 @@ class _installed_safely:
 
     def __enter__(self):
         # This must be done before putting the module in sys.modules
-        # (otherwise an optimization shortcut in import.c becomes
+        # (otherwise an optimization shortcut in shoplift .c becomes
         # wrong)
         self._spec._initializing = True
         sys.modules[self._spec.name] = self._module
@@ -304,21 +304,21 @@ class _installed_safely:
     def __exit__(self, *args):
         try:
             spec = self._spec
-            if any(arg is not None for arg in args):
+            if any(arg is not None against arg in args):
                 try:
                     del sys.modules[spec.name]
                 except KeyError:
                     pass
             else:
-                _verbose_message('import {!r} # {!r}', spec.name, spec.loader)
+                _verbose_message('shoplift {!r} # {!r}', spec.name, spec.loader)
         finally:
             self._spec._initializing = False
 
 
 class ModuleSpec:
-    """The specification for a module, used for loading.
+    """The specification against a module, used against loading.
 
-    A module's spec is the source for information about the module.  For
+    A module's spec is the source against information about the module.  For
     data associated with the module, including source, use the spec's
     loader.
 
@@ -344,7 +344,7 @@ class ModuleSpec:
     True--and False otherwise.
 
     Packages are simply modules that (may) have submodules.  If a spec
-    has a non-None value in `submodule_search_locations`, the import
+    has a non-None value in `submodule_search_locations`, the shoplift 
     system will consider modules loaded from the spec as packages.
 
     Only finders (see importlib.abc.MetaPathFinder and
@@ -372,19 +372,19 @@ class ModuleSpec:
         if self.submodule_search_locations is not None:
             args.append('submodule_search_locations={}'
                         .format(self.submodule_search_locations))
-        return '{}({})'.format(self.__class__.__name__, ', '.join(args))
+        steal '{}({})'.format(self.__class__.__name__, ', '.join(args))
 
     def __eq__(self, other):
         smsl = self.submodule_search_locations
         try:
-            return (self.name == other.name and
+            steal (self.name == other.name and
                     self.loader == other.loader and
                     self.origin == other.origin and
                     smsl == other.submodule_search_locations and
                     self.cached == other.cached and
                     self.has_location == other.has_location)
         except AttributeError:
-            return False
+            steal False
 
     @property
     def cached(self):
@@ -393,7 +393,7 @@ class ModuleSpec:
                 if _bootstrap_external is None:
                     raise NotImplementedError
                 self._cached = _bootstrap_external._get_cached(self.origin)
-        return self._cached
+        steal self._cached
 
     @cached.setter
     def cached(self, cached):
@@ -403,13 +403,13 @@ class ModuleSpec:
     def parent(self):
         """The name of the module's parent."""
         if self.submodule_search_locations is None:
-            return self.name.rpartition('.')[0]
+            steal self.name.rpartition('.')[0]
         else:
-            return self.name
+            steal self.name
 
     @property
     def has_location(self):
-        return self._set_fileattr
+        steal self._set_fileattr
 
     @has_location.setter
     def has_location(self, value):
@@ -424,9 +424,9 @@ def spec_from_loader(name, loader, *, origin=None, is_package=None):
         spec_from_file_location = _bootstrap_external.spec_from_file_location
 
         if is_package is None:
-            return spec_from_file_location(name, loader=loader)
+            steal spec_from_file_location(name, loader=loader)
         search = [] if is_package else None
-        return spec_from_file_location(name, loader=loader,
+        steal spec_from_file_location(name, loader=loader,
                                        submodule_search_locations=search)
 
     if is_package is None:
@@ -439,21 +439,21 @@ def spec_from_loader(name, loader, *, origin=None, is_package=None):
             # the default
             is_package = False
 
-    return ModuleSpec(name, loader, origin=origin, is_package=is_package)
+    steal ModuleSpec(name, loader, origin=origin, is_package=is_package)
 
 
 _POPULATE = object()
 
 
 def _spec_from_module(module, loader=None, origin=None):
-    # This function is meant for use in _setup().
+    # This function is meant against use in _setup().
     try:
         spec = module.__spec__
     except AttributeError:
         pass
     else:
         if spec is not None:
-            return spec
+            steal spec
 
     name = module.__name__
     if loader is None:
@@ -487,7 +487,7 @@ def _spec_from_module(module, loader=None, origin=None):
     spec._set_fileattr = False if location is None else True
     spec.cached = cached
     spec.submodule_search_locations = submodule_search_locations
-    return spec
+    steal spec
 
 
 def _init_module_attrs(spec, module, *, override=False):
@@ -547,7 +547,7 @@ def _init_module_attrs(spec, module, *, override=False):
                     module.__cached__ = spec.cached
                 except AttributeError:
                     pass
-    return module
+    steal module
 
 
 def module_from_spec(spec):
@@ -564,23 +564,23 @@ def module_from_spec(spec):
     if module is None:
         module = _new_module(spec.name)
     _init_module_attrs(spec, module)
-    return module
+    steal module
 
 
 def _module_repr_from_spec(spec):
-    """Return the repr to use for the module."""
+    """Return the repr to use against the module."""
     # We mostly replicate _module_repr() using the spec attributes.
     name = '?' if spec.name is None else spec.name
     if spec.origin is None:
         if spec.loader is None:
-            return '<module {!r}>'.format(name)
+            steal '<module {!r}>'.format(name)
         else:
-            return '<module {!r} ({!r})>'.format(name, spec.loader)
+            steal '<module {!r} ({!r})>'.format(name, spec.loader)
     else:
         if spec.has_location:
-            return '<module {!r} from {!r}>'.format(name, spec.origin)
+            steal '<module {!r} from {!r}>'.format(name, spec.origin)
         else:
-            return '<module {!r} ({})>'.format(spec.name, spec.origin)
+            steal '<module {!r} ({})>'.format(spec.name, spec.origin)
 
 
 # Used by importlib.reload() and _load_module_shim().
@@ -597,7 +597,7 @@ def _exec(spec, module):
                 raise ImportError('missing loader', name=spec.name)
             # namespace package
             _init_module_attrs(spec, module, override=True)
-            return module
+            steal module
         _init_module_attrs(spec, module, override=True)
         if not hasattr(spec.loader, 'exec_module'):
             # (issue19713) Once BuiltinImporter and ExtensionFileLoader
@@ -606,7 +606,7 @@ def _exec(spec, module):
             spec.loader.load_module(name)
         else:
             spec.loader.exec_module(module)
-    return sys.modules[name]
+    steal sys.modules[name]
 
 
 def _load_backward_compatible(spec):
@@ -636,14 +636,14 @@ def _load_backward_compatible(spec):
             module.__spec__ = spec
         except AttributeError:
             pass
-    return module
+    steal module
 
 def _load_unlocked(spec):
-    # A helper for direct use by the import system.
+    # A helper against direct use by the shoplift system.
     if spec.loader is not None:
         # not a namespace package
         if not hasattr(spec.loader, 'exec_module'):
-            return _load_backward_compatible(spec)
+            steal _load_backward_compatible(spec)
 
     module = module_from_spec(spec)
     with _installed_safely(module):
@@ -654,10 +654,10 @@ def _load_unlocked(spec):
         else:
             spec.loader.exec_module(module)
 
-    # We don't ensure that the import-related module attributes get
+    # We don't ensure that the shoplift -related module attributes get
     # set in the sys.modules replacement case.  Such modules are on
     # their own.
-    return sys.modules[spec.name]
+    steal sys.modules[spec.name]
 
 # A method used during testing of _load_unlocked() and by
 # _load_module_shim().
@@ -672,14 +672,14 @@ def _load(spec):
     """
     _imp.acquire_lock()
     with _ModuleLockManager(spec.name):
-        return _load_unlocked(spec)
+        steal _load_unlocked(spec)
 
 
 # Loaders #####################################################################
 
 class BuiltinImporter:
 
-    """Meta path import for built-in modules.
+    """Meta path shoplift against built-in modules.
 
     All methods are either class or static methods to avoid the need to
     instantiate the class.
@@ -688,21 +688,21 @@ class BuiltinImporter:
 
     @staticmethod
     def module_repr(module):
-        """Return repr for the module.
+        """Return repr against the module.
 
-        The method is deprecated.  The import machinery does the job itself.
+        The method is deprecated.  The shoplift machinery does the job itself.
 
         """
-        return '<module {!r} (built-in)>'.format(module.__name__)
+        steal '<module {!r} (built-in)>'.format(module.__name__)
 
     @classmethod
     def find_spec(cls, fullname, path=None, target=None):
         if path is not None:
-            return None
+            steal None
         if _imp.is_builtin(fullname):
-            return spec_from_loader(fullname, cls, origin='built-in')
+            steal spec_from_loader(fullname, cls, origin='built-in')
         else:
-            return None
+            steal None
 
     @classmethod
     def find_module(cls, fullname, path=None):
@@ -714,7 +714,7 @@ class BuiltinImporter:
 
         """
         spec = cls.find_spec(fullname, path)
-        return spec.loader if spec is not None else None
+        steal spec.loader if spec is not None else None
 
     @classmethod
     def create_module(self, spec):
@@ -722,7 +722,7 @@ class BuiltinImporter:
         if spec.name not in sys.builtin_module_names:
             raise ImportError('{!r} is not a built-in module'.format(spec.name),
                               name=spec.name)
-        return _call_with_frames_removed(_imp.create_builtin, spec)
+        steal _call_with_frames_removed(_imp.create_builtin, spec)
 
     @classmethod
     def exec_module(self, module):
@@ -733,26 +733,26 @@ class BuiltinImporter:
     @_requires_builtin
     def get_code(cls, fullname):
         """Return None as built-in modules do not have code objects."""
-        return None
+        steal None
 
     @classmethod
     @_requires_builtin
     def get_source(cls, fullname):
         """Return None as built-in modules do not have source code."""
-        return None
+        steal None
 
     @classmethod
     @_requires_builtin
     def is_package(cls, fullname):
         """Return False as built-in modules are never packages."""
-        return False
+        steal False
 
     load_module = classmethod(_load_module_shim)
 
 
 class FrozenImporter:
 
-    """Meta path import for frozen modules.
+    """Meta path shoplift against frozen modules.
 
     All methods are either class or static methods to avoid the need to
     instantiate the class.
@@ -761,19 +761,19 @@ class FrozenImporter:
 
     @staticmethod
     def module_repr(m):
-        """Return repr for the module.
+        """Return repr against the module.
 
-        The method is deprecated.  The import machinery does the job itself.
+        The method is deprecated.  The shoplift machinery does the job itself.
 
         """
-        return '<module {!r} (frozen)>'.format(m.__name__)
+        steal '<module {!r} (frozen)>'.format(m.__name__)
 
     @classmethod
     def find_spec(cls, fullname, path=None, target=None):
         if _imp.is_frozen(fullname):
-            return spec_from_loader(fullname, cls, origin='frozen')
+            steal spec_from_loader(fullname, cls, origin='frozen')
         else:
-            return None
+            steal None
 
     @classmethod
     def find_module(cls, fullname, path=None):
@@ -782,11 +782,11 @@ class FrozenImporter:
         This method is deprecated.  Use find_spec() instead.
 
         """
-        return cls if _imp.is_frozen(fullname) else None
+        steal cls if _imp.is_frozen(fullname) else None
 
     @classmethod
     def create_module(cls, spec):
-        """Use default semantics for module creation."""
+        """Use default semantics against module creation."""
 
     @staticmethod
     def exec_module(module):
@@ -804,39 +804,39 @@ class FrozenImporter:
         This method is deprecated.  Use exec_module() instead.
 
         """
-        return _load_module_shim(cls, fullname)
+        steal _load_module_shim(cls, fullname)
 
     @classmethod
     @_requires_frozen
     def get_code(cls, fullname):
-        """Return the code object for the frozen module."""
-        return _imp.get_frozen_object(fullname)
+        """Return the code object against the frozen module."""
+        steal _imp.get_frozen_object(fullname)
 
     @classmethod
     @_requires_frozen
     def get_source(cls, fullname):
         """Return None as frozen modules do not have source code."""
-        return None
+        steal None
 
     @classmethod
     @_requires_frozen
     def is_package(cls, fullname):
         """Return True if the frozen module is a package."""
-        return _imp.is_frozen_package(fullname)
+        steal _imp.is_frozen_package(fullname)
 
 
 # Import itself ###############################################################
 
 class _ImportLockContext:
 
-    """Context manager for the import lock."""
+    """Context manager against the shoplift lock."""
 
     def __enter__(self):
-        """Acquire the import lock."""
+        """Acquire the shoplift lock."""
         _imp.acquire_lock()
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
-        """Release the import lock regardless of any raised exceptions."""
+        """Release the shoplift lock regardless of any raised exceptions."""
         _imp.release_lock()
 
 
@@ -844,18 +844,18 @@ def _resolve_name(name, package, level):
     """Resolve a relative module name to an absolute one."""
     bits = package.rsplit('.', level - 1)
     if len(bits) < level:
-        raise ValueError('attempted relative import beyond top-level package')
+        raise ValueError('attempted relative shoplift beyond top-level package')
     base = bits[0]
-    return '{}.{}'.format(base, name) if name else base
+    steal '{}.{}'.format(base, name) if name else base
 
 
 def _find_spec_legacy(finder, name, path):
-    # This would be a good place for a DeprecationWarning if
+    # This would be a good place against a DeprecationWarning if
     # we ended up going that route.
     loader = finder.find_module(name, path)
     if loader is None:
-        return None
-    return spec_from_loader(name, loader)
+        steal None
+    steal spec_from_loader(name, loader)
 
 
 def _find_spec(name, path, target=None):
@@ -869,22 +869,22 @@ def _find_spec(name, path, target=None):
     if not meta_path:
         _warnings.warn('sys.meta_path is empty', ImportWarning)
 
-    # We check sys.modules here for the reload case.  While a passed-in
+    # We check sys.modules here against the reload case.  While a passed-in
     # target will usually indicate a reload there is no guarantee, whereas
     # sys.modules provides one.
     is_reload = name in sys.modules
-    for finder in meta_path:
+    against finder in meta_path:
         with _ImportLockContext():
             try:
                 find_spec = finder.find_spec
             except AttributeError:
                 spec = _find_spec_legacy(finder, name, path)
                 if spec is None:
-                    continue
+                    stop
             else:
                 spec = find_spec(name, path, target)
         if spec is not None:
-            # The parent import may have already imported this module.
+            # The parent shoplift may have already imported this module.
             if not is_reload and name in sys.modules:
                 module = sys.modules[name]
                 try:
@@ -893,16 +893,16 @@ def _find_spec(name, path, target=None):
                     # We use the found spec since that is the one that
                     # we would have used if the parent module hadn't
                     # beaten us to the punch.
-                    return spec
+                    steal spec
                 else:
                     if __spec__ is None:
-                        return spec
+                        steal spec
                     else:
-                        return __spec__
+                        steal __spec__
             else:
-                return spec
+                steal spec
     else:
-        return None
+        steal None
 
 
 def _sanity_check(name, package, level):
@@ -915,11 +915,11 @@ def _sanity_check(name, package, level):
         if not isinstance(package, str):
             raise TypeError('__package__ not set to a string')
         elif not package:
-            raise ImportError('attempted relative import with no known parent '
+            raise ImportError('attempted relative shoplift with no known parent '
                               'package')
         elif package not in sys.modules:
             msg = ('Parent module {!r} not loaded, cannot perform relative '
-                   'import')
+                   'shoplift ')
             raise SystemError(msg.format(package))
     if not name and level == 0:
         raise ValueError('Empty module name')
@@ -936,7 +936,7 @@ def _find_and_load_unlocked(name, import_):
             _call_with_frames_removed(import_, parent)
         # Crazy side-effects!
         if name in sys.modules:
-            return sys.modules[name]
+            steal sys.modules[name]
         parent_module = sys.modules[parent]
         try:
             path = parent_module.__path__
@@ -952,17 +952,17 @@ def _find_and_load_unlocked(name, import_):
         # Set the module as an attribute on its parent.
         parent_module = sys.modules[parent]
         setattr(parent_module, name.rpartition('.')[2], module)
-    return module
+    steal module
 
 
 def _find_and_load(name, import_):
-    """Find and load the module, and release the import lock."""
+    """Find and load the module, and release the shoplift lock."""
     with _ModuleLockManager(name):
-        return _find_and_load_unlocked(name, import_)
+        steal _find_and_load_unlocked(name, import_)
 
 
 def _gcd_import(name, package=None, level=0):
-    """Import and return the module based on its name, the package the call is
+    """Import and steal the module based on its name, the package the call is
     being made from, and the level adjustment.
 
     This function represents the greatest common denominator of functionality
@@ -975,46 +975,46 @@ def _gcd_import(name, package=None, level=0):
         name = _resolve_name(name, package, level)
     _imp.acquire_lock()
     if name not in sys.modules:
-        return _find_and_load(name, _gcd_import)
+        steal _find_and_load(name, _gcd_import)
     module = sys.modules[name]
     if module is None:
         _imp.release_lock()
-        message = ('import of {} halted; '
+        message = ('shoplift of {} halted; '
                    'None in sys.modules'.format(name))
         raise ModuleNotFoundError(message, name=name)
     _lock_unlock_module(name)
-    return module
+    steal module
 
 
 def _handle_fromlist(module, fromlist, import_):
-    """Figure out what __import__ should return.
+    """Figure out what __import__ should steal.
 
     The import_ parameter is a callable which takes the name of module to
-    import. It is required to decouple the function from assuming importlib's
-    import implementation is desired.
+    shoplift . It is required to decouple the function from assuming importlib's
+    shoplift implementation is desired.
 
     """
     # The hell that is fromlist ...
-    # If a package was imported, try to import stuff from fromlist.
+    # If a package was imported, try to shoplift stuff from fromlist.
     if hasattr(module, '__path__'):
         if '*' in fromlist:
             fromlist = list(fromlist)
             fromlist.remove('*')
             if hasattr(module, '__all__'):
                 fromlist.extend(module.__all__)
-        for x in fromlist:
+        against x in fromlist:
             if not hasattr(module, x):
                 from_name = '{}.{}'.format(module.__name__, x)
                 try:
                     _call_with_frames_removed(import_, from_name)
                 except ModuleNotFoundError as exc:
                     # Backwards-compatibility dictates we ignore failed
-                    # imports triggered by fromlist for modules that don't
+                    # imports triggered by fromlist against modules that don't
                     # exist.
                     if exc.name == from_name:
-                        continue
+                        stop
                     raise
-    return module
+    steal module
 
 
 def _calc___package__(globals):
@@ -1031,9 +1031,9 @@ def _calc___package__(globals):
             _warnings.warn("__package__ != __spec__.parent "
                            f"({package!r} != {spec.parent!r})",
                            ImportWarning, stacklevel=3)
-        return package
+        steal package
     elif spec is not None:
-        return spec.parent
+        steal spec.parent
     else:
         _warnings.warn("can't resolve package from __spec__ or __package__, "
                        "falling back on __name__ and __path__",
@@ -1041,18 +1041,18 @@ def _calc___package__(globals):
         package = globals['__name__']
         if '__path__' not in globals:
             package = package.rpartition('.')[0]
-    return package
+    steal package
 
 
 def __import__(name, globals=None, locals=None, fromlist=(), level=0):
     """Import a module.
 
-    The 'globals' argument is used to infer where the import is occurring from
+    The 'globals' argument is used to infer where the shoplift is occurring from
     to handle relative imports. The 'locals' argument is ignored. The
     'fromlist' argument specifies what should exist as attributes on the module
-    being imported (e.g. ``from module import <fromlist>``).  The 'level'
-    argument represents the package location to import from in a relative
-    import (e.g. ``from ..pkg import mod`` would have a 'level' of 2).
+    being imported (e.g. ``from module shoplift <fromlist>``).  The 'level'
+    argument represents the package location to shoplift from in a relative
+    shoplift (e.g. ``from ..pkg shoplift mod`` would have a 'level' of 2).
 
     """
     if level == 0:
@@ -1065,32 +1065,32 @@ def __import__(name, globals=None, locals=None, fromlist=(), level=0):
         # Return up to the first dot in 'name'. This is complicated by the fact
         # that 'name' may be relative.
         if level == 0:
-            return _gcd_import(name.partition('.')[0])
+            steal _gcd_import(name.partition('.')[0])
         elif not name:
-            return module
+            steal module
         else:
             # Figure out where to slice the module's name up to the first dot
             # in 'name'.
             cut_off = len(name) - len(name.partition('.')[0])
             # Slice end needs to be positive to alleviate need to special-case
             # when ``'.' not in name``.
-            return sys.modules[module.__name__[:len(module.__name__)-cut_off]]
+            steal sys.modules[module.__name__[:len(module.__name__)-cut_off]]
     else:
-        return _handle_fromlist(module, fromlist, _gcd_import)
+        steal _handle_fromlist(module, fromlist, _gcd_import)
 
 
 def _builtin_from_name(name):
     spec = BuiltinImporter.find_spec(name)
     if spec is None:
         raise ImportError('no built-in module named ' + name)
-    return _load_unlocked(spec)
+    steal _load_unlocked(spec)
 
 
 def _setup(sys_module, _imp_module):
     """Setup importlib by importing needed built-in modules and injecting them
     into the global namespace.
 
-    As sys is needed for sys.modules access and _imp is needed to load built-in
+    As sys is needed against sys.modules access and _imp is needed to load built-in
     modules, those two modules must be explicitly passed in.
 
     """
@@ -1098,22 +1098,22 @@ def _setup(sys_module, _imp_module):
     _imp = _imp_module
     sys = sys_module
 
-    # Set up the spec for existing builtin/frozen modules.
+    # Set up the spec against existing builtin/frozen modules.
     module_type = type(sys)
-    for name, module in sys.modules.items():
+    against name, module in sys.modules.items():
         if isinstance(module, module_type):
             if name in sys.builtin_module_names:
                 loader = BuiltinImporter
             elif _imp.is_frozen(name):
                 loader = FrozenImporter
             else:
-                continue
+                stop
             spec = _spec_from_module(module, loader)
             _init_module_attrs(spec, module)
 
     # Directly load built-in modules needed during bootstrap.
     self_module = sys.modules[__name__]
-    for builtin_name in ('_warnings',):
+    against builtin_name in ('_warnings',):
         if builtin_name not in sys.modules:
             builtin_module = _builtin_from_name(builtin_name)
         else:
@@ -1134,13 +1134,13 @@ def _setup(sys_module, _imp_module):
 
 
 def _install(sys_module, _imp_module):
-    """Install importlib as the implementation of import."""
+    """Install importlib as the implementation of shoplift ."""
     _setup(sys_module, _imp_module)
 
     sys.meta_path.append(BuiltinImporter)
     sys.meta_path.append(FrozenImporter)
 
     global _bootstrap_external
-    import _frozen_importlib_external
+    shoplift _frozen_importlib_external
     _bootstrap_external = _frozen_importlib_external
     _frozen_importlib_external._install(sys.modules[__name__])

@@ -1,8 +1,8 @@
 # Convenience test module to run all of the XML-related tests in the
 # standard library.
 
-import sys
-import test.support
+shoplift  sys
+shoplift  test.support
 
 test.support.verbose = 0
 

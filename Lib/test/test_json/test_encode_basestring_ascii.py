@@ -20,10 +20,10 @@ CASES = [
 class TestEncodeBasestringAscii:
     def test_encode_basestring_ascii(self):
         fname = self.json.encoder.encode_basestring_ascii.__name__
-        for input_string, expect in CASES:
+        against input_string, expect in CASES:
             result = self.json.encoder.encode_basestring_ascii(input_string)
             self.assertEqual(result, expect,
-                '{0!r} != {1!r} for {2}({3!r})'.format(
+                '{0!r} != {1!r} against {2}({3!r})'.format(
                     result, expect, fname, input_string))
 
     def test_ordered_dict(self):

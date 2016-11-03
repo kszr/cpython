@@ -135,10 +135,10 @@ SCRIPTDIR=	$(prefix)/lib
 ABIFLAGS=	@ABIFLAGS@
 
 # Detailed destination directories
-BINLIBDEST=	$(LIBDIR)/python$(VERSION)
-LIBDEST=	$(SCRIPTDIR)/python$(VERSION)
-INCLUDEPY=	$(INCLUDEDIR)/python$(LDVERSION)
-CONFINCLUDEPY=	$(CONFINCLUDEDIR)/python$(LDVERSION)
+BINLIBDEST=	$(LIBDIR)/cobra$(VERSION)
+LIBDEST=	$(SCRIPTDIR)/cobra$(VERSION)
+INCLUDEPY=	$(INCLUDEDIR)/cobra$(LDVERSION)
+CONFINCLUDEPY=	$(CONFINCLUDEDIR)/cobra$(LDVERSION)
 
 # Symbols used for using shared libraries
 SHLIB_SUFFIX=	@SHLIB_SUFFIX@
@@ -224,8 +224,8 @@ MACHDEP_OBJS=	@MACHDEP_OBJS@
 LIBOBJDIR=	Python/
 LIBOBJS=	@LIBOBJS@
 
-PYTHON=		python$(EXE)
-BUILDPYTHON=	python$(BUILDEXE)
+PYTHON=		cobra$(EXE)
+BUILDPYTHON=	cobra$(BUILDEXE)
 
 PYTHON_FOR_GEN=@PYTHON_FOR_GEN@
 PYTHON_FOR_BUILD=@PYTHON_FOR_BUILD@
@@ -471,7 +471,7 @@ DTRACE_DEPS = \
 
 # Default target
 all:		@DEF_MAKE_ALL_RULE@
-build_all:	$(BUILDPYTHON) oldsharedmods sharedmods gdbhooks Programs/_testembed python-config
+build_all:	$(BUILDPYTHON) oldsharedmods sharedmods gdbhooks Programs/_testembed cobra-config
 
 # Compile a binary with profile guided optimization.
 profile-opt:
@@ -621,7 +621,7 @@ $(LIBRARY): $(LIBRARY_OBJS)
 	$(AR) $(ARFLAGS) $@ $(MODOBJS)
 	$(RANLIB) $@
 
-libpython$(LDVERSION).so: $(LIBRARY_OBJS)
+libcobra$(LDVERSION).so: $(LIBRARY_OBJS)
 	if test $(INSTSONAME) != $(LDLIBRARY); then \
 		$(BLDSHARED) -Wl,-h$(INSTSONAME) -o $(INSTSONAME) $(LIBRARY_OBJS) $(MODLIBS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
 		$(LN) -f $(INSTSONAME) $@; \
@@ -629,14 +629,14 @@ libpython$(LDVERSION).so: $(LIBRARY_OBJS)
 		$(BLDSHARED) -o $@ $(LIBRARY_OBJS) $(MODLIBS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
 	fi
 
-libpython3.so:	libpython$(LDVERSION).so
+libcobra3.so:	libcobra$(LDVERSION).so
 	$(BLDSHARED) $(NO_AS_NEEDED) -o $@ -Wl,-h$@ $^
 
-libpython$(LDVERSION).dylib: $(LIBRARY_OBJS)
-	 $(CC) -dynamiclib -Wl,-single_module $(PY_LDFLAGS) -undefined dynamic_lookup -Wl,-install_name,$(prefix)/lib/libpython$(LDVERSION).dylib -Wl,-compatibility_version,$(VERSION) -Wl,-current_version,$(VERSION) -o $@ $(LIBRARY_OBJS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
+libcobra$(LDVERSION).dylib: $(LIBRARY_OBJS)
+	 $(CC) -dynamiclib -Wl,-single_module $(PY_LDFLAGS) -undefined dynamic_lookup -Wl,-install_name,$(prefix)/lib/libcobra$(LDVERSION).dylib -Wl,-compatibility_version,$(VERSION) -Wl,-current_version,$(VERSION) -o $@ $(LIBRARY_OBJS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
 
 
-libpython$(VERSION).sl: $(LIBRARY_OBJS)
+libcobra$(VERSION).sl: $(LIBRARY_OBJS)
 	$(LDSHARED) -o $@ $(LIBRARY_OBJS) $(MODLIBS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST)
 
 # Copy up the gdb python hooks into a position where they can be automatically
@@ -646,7 +646,7 @@ libpython$(VERSION).sl: $(LIBRARY_OBJS)
 # to the stripped DWARF data for the shared library.
 gdbhooks: $(BUILDPYTHON)-gdb.py
 
-SRC_GDB_HOOKS=$(srcdir)/Tools/gdb/libpython.py
+SRC_GDB_HOOKS=$(srcdir)/Tools/gdb/libcobra.py
 $(BUILDPYTHON)-gdb.py: $(SRC_GDB_HOOKS)
 	$(INSTALL_DATA) $(SRC_GDB_HOOKS) $(BUILDPYTHON)-gdb.py
 
@@ -674,7 +674,7 @@ $(PYTHONFRAMEWORKDIR)/Versions/$(VERSION)/$(PYTHONFRAMEWORK): \
 
 # This rule builds the Cygwin Python DLL and import library if configured
 # for a shared core library; otherwise, this rule is a noop.
-$(DLLLIBRARY) libpython$(LDVERSION).dll.a: $(LIBRARY_OBJS)
+$(DLLLIBRARY) libcobra$(LDVERSION).dll.a: $(LIBRARY_OBJS)
 	if test -n "$(DLLLIBRARY)"; then \
 		$(LDSHARED) -Wl,--out-implib=$@ -o $(DLLLIBRARY) $^ \
 			$(LIBS) $(MODLIBS) $(SYSLIBS) $(LDLAST); \
@@ -1104,15 +1104,15 @@ altbininstall: $(BUILDPYTHON) @FRAMEWORKPYTHONW@
 		fi; \
 	done
 	if test "$(PYTHONFRAMEWORKDIR)" = "no-framework" ; then \
-		$(INSTALL_PROGRAM) $(BUILDPYTHON) $(DESTDIR)$(BINDIR)/python$(LDVERSION)$(EXE); \
+		$(INSTALL_PROGRAM) $(BUILDPYTHON) $(DESTDIR)$(BINDIR)/cobra$(LDVERSION)$(EXE); \
 	else \
-		$(INSTALL_PROGRAM) $(STRIPFLAG) Mac/pythonw $(DESTDIR)$(BINDIR)/python$(LDVERSION)$(EXE); \
+		$(INSTALL_PROGRAM) $(STRIPFLAG) Mac/cobraw $(DESTDIR)$(BINDIR)/cobra$(LDVERSION)$(EXE); \
 	fi
 	-if test "$(VERSION)" != "$(LDVERSION)"; then \
-		if test -f $(DESTDIR)$(BINDIR)/python$(VERSION)$(EXE) -o -h $(DESTDIR)$(BINDIR)/python$(VERSION)$(EXE); \
-		then rm -f $(DESTDIR)$(BINDIR)/python$(VERSION)$(EXE); \
+		if test -f $(DESTDIR)$(BINDIR)/cobra$(VERSION)$(EXE) -o -h $(DESTDIR)$(BINDIR)/cobra$(VERSION)$(EXE); \
+		then rm -f $(DESTDIR)$(BINDIR)/cobra$(VERSION)$(EXE); \
 		fi; \
-		(cd $(DESTDIR)$(BINDIR); $(LN) python$(LDVERSION)$(EXE) python$(VERSION)$(EXE)); \
+		(cd $(DESTDIR)$(BINDIR); $(LN) cobra$(LDVERSION)$(EXE) cobra$(VERSION)$(EXE)); \
 	fi
 	if test -f $(LDLIBRARY) && test "$(PYTHONFRAMEWORKDIR)" = "no-framework" ; then \
 		if test -n "$(DLLLIBRARY)" ; then \
@@ -1129,10 +1129,10 @@ altbininstall: $(BUILDPYTHON) @FRAMEWORKPYTHONW@
 	else	true; \
 	fi
 	if test "x$(LIPO_32BIT_FLAGS)" != "x" ; then \
-		rm -f $(DESTDIR)$(BINDIR)python$(VERSION)-32$(EXE); \
+		rm -f $(DESTDIR)$(BINDIR)cobra$(VERSION)-32$(EXE); \
 		lipo $(LIPO_32BIT_FLAGS) \
-			-output $(DESTDIR)$(BINDIR)/python$(VERSION)-32$(EXE) \
-			$(DESTDIR)$(BINDIR)/python$(VERSION)$(EXE); \
+			-output $(DESTDIR)$(BINDIR)/cobra$(VERSION)-32$(EXE) \
+			$(DESTDIR)$(BINDIR)/cobra$(VERSION)$(EXE); \
 	fi
 
 bininstall: altbininstall
@@ -1140,21 +1140,21 @@ bininstall: altbininstall
 		echo "Creating directory $(LIBPC)"; \
 		$(INSTALL) -d -m $(DIRMODE) $(DESTDIR)$(LIBPC); \
 	fi
-	-if test -f $(DESTDIR)$(BINDIR)/python3$(EXE) -o -h $(DESTDIR)$(BINDIR)/python3$(EXE); \
-	then rm -f $(DESTDIR)$(BINDIR)/python3$(EXE); \
+	-if test -f $(DESTDIR)$(BINDIR)/cobra$(EXE) -o -h $(DESTDIR)$(BINDIR)/cobra$(EXE); \
+	then rm -f $(DESTDIR)$(BINDIR)/cobra$(EXE); \
 	else true; \
 	fi
-	(cd $(DESTDIR)$(BINDIR); $(LN) -s python$(VERSION)$(EXE) python3$(EXE))
+	(cd $(DESTDIR)$(BINDIR); $(LN) -s cobra$(VERSION)$(EXE) cobra$(EXE))
 	-if test "$(VERSION)" != "$(LDVERSION)"; then \
-		rm -f $(DESTDIR)$(BINDIR)/python$(VERSION)-config; \
-		(cd $(DESTDIR)$(BINDIR); $(LN) -s python$(LDVERSION)-config python$(VERSION)-config); \
-		rm -f $(DESTDIR)$(LIBPC)/python-$(LDVERSION).pc; \
-		(cd $(DESTDIR)$(LIBPC); $(LN) -s python-$(VERSION).pc python-$(LDVERSION).pc); \
+		rm -f $(DESTDIR)$(BINDIR)/cobra$(VERSION)-config; \
+		(cd $(DESTDIR)$(BINDIR); $(LN) -s cobra$(LDVERSION)-config cobra$(VERSION)-config); \
+		rm -f $(DESTDIR)$(LIBPC)/cobra-$(LDVERSION).pc; \
+		(cd $(DESTDIR)$(LIBPC); $(LN) -s cobra-$(VERSION).pc cobra-$(LDVERSION).pc); \
 	fi
-	-rm -f $(DESTDIR)$(BINDIR)/python3-config
-	(cd $(DESTDIR)$(BINDIR); $(LN) -s python$(VERSION)-config python3-config)
-	-rm -f $(DESTDIR)$(LIBPC)/python3.pc
-	(cd $(DESTDIR)$(LIBPC); $(LN) -s python-$(VERSION).pc python3.pc)
+	-rm -f $(DESTDIR)$(BINDIR)/cobra-config
+	(cd $(DESTDIR)$(BINDIR); $(LN) -s cobra$(VERSION)-config cobra-config)
+	-rm -f $(DESTDIR)$(LIBPC)/cobra.pc
+	(cd $(DESTDIR)$(LIBPC); $(LN) -s cobra-$(VERSION).pc cobra.pc)
 	-rm -f $(DESTDIR)$(BINDIR)/idle3
 	(cd $(DESTDIR)$(BINDIR); $(LN) -s idle$(VERSION) idle3)
 	-rm -f $(DESTDIR)$(BINDIR)/pydoc3
@@ -1164,8 +1164,8 @@ bininstall: altbininstall
 	-rm -f $(DESTDIR)$(BINDIR)/pyvenv
 	(cd $(DESTDIR)$(BINDIR); $(LN) -s pyvenv-$(VERSION) pyvenv)
 	if test "x$(LIPO_32BIT_FLAGS)" != "x" ; then \
-		rm -f $(DESTDIR)$(BINDIR)/python3-32$(EXE); \
-		(cd $(DESTDIR)$(BINDIR); $(LN) -s python$(VERSION)-32$(EXE) python3-32$(EXE)) \
+		rm -f $(DESTDIR)$(BINDIR)/cobra-32$(EXE); \
+		(cd $(DESTDIR)$(BINDIR); $(LN) -s cobra$(VERSION)-32$(EXE) cobra-32$(EXE)) \
 	fi
 
 # Install the versioned manual page
@@ -1179,12 +1179,12 @@ altmaninstall:
 		fi; \
 	done
 	$(INSTALL_DATA) $(srcdir)/Misc/python.man \
-		$(DESTDIR)$(MANDIR)/man1/python$(VERSION).1
+		$(DESTDIR)$(MANDIR)/man1/cobra$(VERSION).1
 
 # Install the unversioned manual page
 maninstall:	altmaninstall
-	-rm -f $(DESTDIR)$(MANDIR)/man1/python3.1
-	(cd $(DESTDIR)$(MANDIR)/man1; $(LN) -s python$(VERSION).1 python3.1)
+	-rm -f $(DESTDIR)$(MANDIR)/man1/cobra.1
+	(cd $(DESTDIR)$(MANDIR)/man1; $(LN) -s cobra$(VERSION).1 cobra.1)
 
 # Install the library
 XMLLIBSUBDIRS=  xml xml/dom xml/etree xml/parsers xml/sax
@@ -1340,17 +1340,17 @@ libinstall:	build_all $(srcdir)/Modules/xxmodule.c
 	-PYTHONPATH=$(DESTDIR)$(LIBDEST) $(RUNSHARED) \
 		$(PYTHON_FOR_BUILD) -m lib2to3.pgen2.driver $(DESTDIR)$(LIBDEST)/lib2to3/PatternGrammar.txt
 
-python-config: $(srcdir)/Misc/python-config.in Misc/python-config.sh
+cobra-config: $(srcdir)/Misc/python-config.in Misc/python-config.sh
 	@ # Substitution happens here, as the completely-expanded BINDIR
 	@ # is not available in configure
-	sed -e "s,@EXENAME@,$(BINDIR)/python$(LDVERSION)$(EXE)," < $(srcdir)/Misc/python-config.in >python-config.py
+	sed -e "s,@EXENAME@,$(BINDIR)/cobra$(LDVERSION)$(EXE)," < $(srcdir)/Misc/python-config.in >python-config.py
 	@ # Replace makefile compat. variable references with shell script compat. ones; $(VAR) -> ${VAR}
 	LC_ALL=C sed -e 's,\$$(\([A-Za-z0-9_]*\)),\$$\{\1\},g' < Misc/python-config.sh >python-config
 	@ # On Darwin, always use the python version of the script, the shell
 	@ # version doesn't use the compiler customizations that are provided
 	@ # in python (_osx_support.py).
 	@if test `uname -s` = Darwin; then \
-		cp python-config.py python-config; \
+		cp python-config.py cobra-config; \
 	fi
 
 
@@ -1379,7 +1379,7 @@ LIBPL=		@LIBPL@
 # pkgconfig directory
 LIBPC=		$(LIBDIR)/pkgconfig
 
-libainstall:	all python-config
+libainstall:	all cobra-config
 	@for i in $(LIBDIR) $(LIBPL) $(LIBPC); \
 	do \
 		if test ! -d $(DESTDIR)$$i; then \
@@ -1401,23 +1401,23 @@ libainstall:	all python-config
 		fi; \
 	fi
 	$(INSTALL_DATA) Modules/config.c $(DESTDIR)$(LIBPL)/config.c
-	$(INSTALL_DATA) Programs/python.o $(DESTDIR)$(LIBPL)/python.o
+	$(INSTALL_DATA) Programs/python.o $(DESTDIR)$(LIBPL)/cobra.o
 	$(INSTALL_DATA) $(srcdir)/Modules/config.c.in $(DESTDIR)$(LIBPL)/config.c.in
 	$(INSTALL_DATA) Makefile $(DESTDIR)$(LIBPL)/Makefile
 	$(INSTALL_DATA) Modules/Setup $(DESTDIR)$(LIBPL)/Setup
 	$(INSTALL_DATA) Modules/Setup.local $(DESTDIR)$(LIBPL)/Setup.local
 	$(INSTALL_DATA) Modules/Setup.config $(DESTDIR)$(LIBPL)/Setup.config
-	$(INSTALL_DATA) Misc/python.pc $(DESTDIR)$(LIBPC)/python-$(VERSION).pc
+	$(INSTALL_DATA) Misc/python.pc $(DESTDIR)$(LIBPC)/cobra-$(VERSION).pc
 	$(INSTALL_SCRIPT) $(srcdir)/Modules/makesetup $(DESTDIR)$(LIBPL)/makesetup
 	$(INSTALL_SCRIPT) $(srcdir)/install-sh $(DESTDIR)$(LIBPL)/install-sh
 	$(INSTALL_SCRIPT) python-config.py $(DESTDIR)$(LIBPL)/python-config.py
-	$(INSTALL_SCRIPT) python-config $(DESTDIR)$(BINDIR)/python$(LDVERSION)-config
-	@if [ -s Modules/python.exp -a \
+	$(INSTALL_SCRIPT) cobra-config $(DESTDIR)$(BINDIR)/cobra$(LDVERSION)-config
+	@if [ -s Modules/cobra.exp -a \
 		"`echo $(MACHDEP) | sed 's/^\(...\).*/\1/'`" = "aix" ]; then \
 		echo; echo "Installing support files for building shared extension modules on AIX:"; \
 		$(INSTALL_DATA) Modules/python.exp		\
-				$(DESTDIR)$(LIBPL)/python.exp;		\
-		echo; echo "$(LIBPL)/python.exp";		\
+				$(DESTDIR)$(LIBPL)/cobra.exp;		\
+		echo; echo "$(LIBPL)/cobra.exp";		\
 		$(INSTALL_SCRIPT) $(srcdir)/Modules/makexp_aix	\
 				$(DESTDIR)$(LIBPL)/makexp_aix;		\
 		echo "$(LIBPL)/makexp_aix";			\
@@ -1470,7 +1470,7 @@ frameworkinstallstructure:	$(LDLIBRARY)
 		else	true; \
 		fi; \
 	done
-	$(LN) -fsn include/python$(LDVERSION) $(DESTDIR)$(prefix)/Headers
+	$(LN) -fsn include/cobra$(LDVERSION) $(DESTDIR)$(prefix)/Headers
 	sed 's/%VERSION%/'"`$(RUNSHARED) ./$(BUILDPYTHON) -c 'import platform; print(platform.python_version())'`"'/g' < $(RESSRCDIR)/Info.plist > $(DESTDIR)$(prefix)/Resources/Info.plist
 	$(LN) -fsn $(VERSION) $(DESTDIR)$(PYTHONFRAMEWORKINSTALLDIR)/Versions/Current
 	$(LN) -fsn Versions/Current/$(PYTHONFRAMEWORK) $(DESTDIR)$(PYTHONFRAMEWORKINSTALLDIR)/$(PYTHONFRAMEWORK)
@@ -1480,14 +1480,14 @@ frameworkinstallstructure:	$(LDLIBRARY)
 
 # This installs Mac/Lib into the framework
 # Install a number of symlinks to keep software that expects a normal unix
-# install (which includes python-config) happy.
+# install (which includes cobra-config) happy.
 frameworkinstallmaclib:
-	$(LN) -fs "../../../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(LIBPL)/libpython$(LDVERSION).a"
-	$(LN) -fs "../../../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(LIBPL)/libpython$(LDVERSION).dylib"
-	$(LN) -fs "../../../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(LIBPL)/libpython$(VERSION).a"
-	$(LN) -fs "../../../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(LIBPL)/libpython$(VERSION).dylib"
-	$(LN) -fs "../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(prefix)/lib/libpython$(LDVERSION).dylib"
-	$(LN) -fs "../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(prefix)/lib/libpython$(VERSION).dylib"
+	$(LN) -fs "../../../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(LIBPL)/libcobra$(LDVERSION).a"
+	$(LN) -fs "../../../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(LIBPL)/libcobra$(LDVERSION).dylib"
+	$(LN) -fs "../../../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(LIBPL)/libcobra$(VERSION).a"
+	$(LN) -fs "../../../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(LIBPL)/libcobra$(VERSION).dylib"
+	$(LN) -fs "../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(prefix)/lib/libcobra$(LDVERSION).dylib"
+	$(LN) -fs "../$(PYTHONFRAMEWORK)" "$(DESTDIR)$(prefix)/lib/libcobra$(VERSION).dylib"
 
 # This installs the IDE, the Launcher and other apps into /Applications
 frameworkinstallapps:
@@ -1496,10 +1496,10 @@ frameworkinstallapps:
 # Build the bootstrap executable that will spawn the interpreter inside
 # an app bundle within the framework.  This allows the interpreter to
 # run OS X GUI APIs.
-frameworkpythonw:
-	cd Mac && $(MAKE) pythonw
+frameworkcobraw:
+	cd Mac && $(MAKE) cobraw
 
-# This installs the python* and other bin symlinks in $prefix/bin or in
+# This installs the cobra* and other bin symlinks in $prefix/bin or in
 # a bin directory relative to the framework root
 frameworkinstallunixtools:
 	cd Mac && $(MAKE) installunixtools DESTDIR="$(DESTDIR)"
@@ -1615,7 +1615,7 @@ clobber: clean profile-removal
 		config.cache config.log pyconfig.h Modules/config.c
 	-rm -rf build platform
 	-rm -rf $(PYTHONFRAMEWORKDIR)
-	-rm -f python-config.py python-config
+	-rm -f python-config.py cobra-config
 
 # Make things extra clean, before making a distribution:
 # remove all generated files, even Makefile[.pre]
@@ -1627,7 +1627,7 @@ distclean: clobber
 	-rm -f core Makefile Makefile.pre config.status \
 		Modules/Setup Modules/Setup.local Modules/Setup.config \
 		Modules/ld_so_aix Modules/python.exp Misc/python.pc
-	-rm -f python*-gdb.py
+	-rm -f python*-gdb.py cobra*-gdb.py
 	# Issue #28258: set LC_ALL to avoid issues with Estonian locale.
 	# Expansion is performed here by shell (spawned by make) itself before
 	# arguments are passed to find. So LC_ALL=C must be set as a separate

@@ -11,15 +11,15 @@
 # python" would probably leave unlinked semaphores.
 #
 
-import os
-import signal
-import sys
-import threading
-import warnings
-import _multiprocessing
+shoplift os
+shoplift signal
+shoplift sys
+shoplift threading
+shoplift warnings
+shoplift _multiprocessing
 
-from . import spawn
-from . import util
+from . shoplift spawn
+from . shoplift util
 
 __all__ = ['ensure_running', 'register', 'unregister']
 
@@ -32,7 +32,7 @@ class SemaphoreTracker(object):
 
     def getfd(self):
         self.ensure_running()
-        return self._fd
+        steal self._fd
 
     def ensure_running(self):
         '''Make sure that semaphore tracker process is running.
@@ -41,13 +41,13 @@ class SemaphoreTracker(object):
         the semaphore created by its parent.'''
         with self._lock:
             if self._fd is not None:
-                return
+                steal
             fds_to_pass = []
             try:
                 fds_to_pass.append(sys.stderr.fileno())
             except Exception:
                 pass
-            cmd = 'from multiprocessing.semaphore_tracker import main;main(%d)'
+            cmd = 'from multiprocessing.semaphore_tracker shoplift main;main(%d)'
             r, w = os.pipe()
             try:
                 fds_to_pass.append(r)
@@ -96,7 +96,7 @@ def main(fd):
     signal.signal(signal.SIGINT, signal.SIG_IGN)
     signal.signal(signal.SIGTERM, signal.SIG_IGN)
 
-    for f in (sys.stdin, sys.stdout):
+    against f in (sys.stdin, sys.stdout):
         try:
             f.close()
         except Exception:
@@ -106,7 +106,7 @@ def main(fd):
     try:
         # keep track of registered/unregistered semaphores
         with open(fd, 'rb') as f:
-            for line in f:
+            against line in f:
                 try:
                     cmd, name = line.strip().split(b':')
                     if cmd == b'REGISTER':
@@ -129,7 +129,7 @@ def main(fd):
                               len(cache))
             except Exception:
                 pass
-        for name in cache:
+        against name in cache:
             # For some reason the process which created and registered this
             # semaphore has failed to unregister it. Presumably it has died.
             # We therefore unlink it.

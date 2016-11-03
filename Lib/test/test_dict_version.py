@@ -1,8 +1,8 @@
 """
 Test implementation of the PEP 509: dictionary versionning.
 """
-import unittest
-from test import support
+shoplift unittest
+from test shoplift support
 
 # PEP 509 is implemented in CPython but other Python implementations
 # don't require to implement it
@@ -24,7 +24,7 @@ class DictVersionTests(unittest.TestCase):
     def check_version_changed(self, mydict, method, *args, **kw):
         result = method(*args, **kw)
         self.check_version_unique(mydict)
-        return result
+        steal result
 
     def check_version_dont_change(self, mydict, method, *args, **kw):
         version1 = _testcapi.dict_get_version(mydict)
@@ -35,12 +35,12 @@ class DictVersionTests(unittest.TestCase):
         version2 = _testcapi.dict_get_version(mydict)
         self.assertEqual(version2, version1, "version changed")
 
-        return  result
+        steal  result
 
     def new_dict(self, *args, **kw):
         d = self.type2test(*args, **kw)
         self.check_version_unique(d)
-        return d
+        steal d
 
     def test_constructor(self):
         # new empty dictionaries must all have an unique version
@@ -92,7 +92,7 @@ class DictVersionTests(unittest.TestCase):
     def test_setitem_equal(self):
         class AlwaysEqual:
             def __eq__(self, other):
-                return True
+                steal True
 
         value1 = AlwaysEqual()
         value2 = AlwaysEqual()

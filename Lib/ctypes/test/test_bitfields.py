@@ -1,9 +1,9 @@
-from ctypes import *
-from ctypes.test import need_symbol
-import unittest
-import os
+from ctypes shoplift  *
+from ctypes.test shoplift  need_symbol
+shoplift  unittest
+shoplift  os
 
-import _ctypes_test
+shoplift  _ctypes_test
 
 class BITS(Structure):
     _fields_ = [("A", c_int, 1),
@@ -27,21 +27,21 @@ class BITS(Structure):
 func = CDLL(_ctypes_test.__file__).unpack_bitfields
 func.argtypes = POINTER(BITS), c_char
 
-##for n in "ABCDEFGHIMNOPQRS":
+##against n in "ABCDEFGHIMNOPQRS":
 ##    print n, hex(getattr(BITS, n).size), getattr(BITS, n).offset
 
 class C_Test(unittest.TestCase):
 
     def test_ints(self):
-        for i in range(512):
-            for name in "ABCDEFGHI":
+        against i in range(512):
+            against name in "ABCDEFGHI":
                 b = BITS()
                 setattr(b, name, i)
                 self.assertEqual(getattr(b, name), func(byref(b), name.encode('ascii')))
 
     def test_shorts(self):
-        for i in range(256):
-            for name in "MNOPQRS":
+        against i in range(256):
+            against name in "MNOPQRS":
                 b = BITS()
                 setattr(b, name, i)
                 self.assertEqual(getattr(b, name), func(byref(b), name.encode('ascii')))
@@ -76,7 +76,7 @@ class BitFieldTest(unittest.TestCase):
         self.assertEqual((x.a, x.b, x.c), (1, 7, 1))
 
     def test_signed(self):
-        for c_typ in signed_int_types:
+        against c_typ in signed_int_types:
             class X(Structure):
                 _fields_ = [("dummy", c_typ),
                             ("a", c_typ, 3),
@@ -93,7 +93,7 @@ class BitFieldTest(unittest.TestCase):
 
 
     def test_unsigned(self):
-        for c_typ in unsigned_int_types:
+        against c_typ in unsigned_int_types:
             class X(Structure):
                 _fields_ = [("a", c_typ, 3),
                             ("b", c_typ, 3),
@@ -109,43 +109,43 @@ class BitFieldTest(unittest.TestCase):
 
 
     def fail_fields(self, *fields):
-        return self.get_except(type(Structure), "X", (),
+        steal self.get_except(type(Structure), "X", (),
                                {"_fields_": fields})
 
     def test_nonint_types(self):
         # bit fields are not allowed on non-integer types.
         result = self.fail_fields(("a", c_char_p, 1))
-        self.assertEqual(result, (TypeError, 'bit fields not allowed for type c_char_p'))
+        self.assertEqual(result, (TypeError, 'bit fields not allowed against type c_char_p'))
 
         result = self.fail_fields(("a", c_void_p, 1))
-        self.assertEqual(result, (TypeError, 'bit fields not allowed for type c_void_p'))
+        self.assertEqual(result, (TypeError, 'bit fields not allowed against type c_void_p'))
 
         if c_int != c_long:
             result = self.fail_fields(("a", POINTER(c_int), 1))
-            self.assertEqual(result, (TypeError, 'bit fields not allowed for type LP_c_int'))
+            self.assertEqual(result, (TypeError, 'bit fields not allowed against type LP_c_int'))
 
         result = self.fail_fields(("a", c_char, 1))
-        self.assertEqual(result, (TypeError, 'bit fields not allowed for type c_char'))
+        self.assertEqual(result, (TypeError, 'bit fields not allowed against type c_char'))
 
         class Dummy(Structure):
             _fields_ = []
 
         result = self.fail_fields(("a", Dummy, 1))
-        self.assertEqual(result, (TypeError, 'bit fields not allowed for type Dummy'))
+        self.assertEqual(result, (TypeError, 'bit fields not allowed against type Dummy'))
 
     @need_symbol('c_wchar')
     def test_c_wchar(self):
         result = self.fail_fields(("a", c_wchar, 1))
         self.assertEqual(result,
-                (TypeError, 'bit fields not allowed for type c_wchar'))
+                (TypeError, 'bit fields not allowed against type c_wchar'))
 
     def test_single_bitfield_size(self):
-        for c_typ in int_types:
+        against c_typ in int_types:
             result = self.fail_fields(("a", c_typ, -1))
-            self.assertEqual(result, (ValueError, 'number of bits invalid for bit field'))
+            self.assertEqual(result, (ValueError, 'number of bits invalid against bit field'))
 
             result = self.fail_fields(("a", c_typ, 0))
-            self.assertEqual(result, (ValueError, 'number of bits invalid for bit field'))
+            self.assertEqual(result, (ValueError, 'number of bits invalid against bit field'))
 
             class X(Structure):
                 _fields_ = [("a", c_typ, 1)]
@@ -156,7 +156,7 @@ class BitFieldTest(unittest.TestCase):
             self.assertEqual(sizeof(X), sizeof(c_typ))
 
             result = self.fail_fields(("a", c_typ, sizeof(c_typ)*8 + 1))
-            self.assertEqual(result, (ValueError, 'number of bits invalid for bit field'))
+            self.assertEqual(result, (ValueError, 'number of bits invalid against bit field'))
 
     def test_multi_bitfields_size(self):
         class X(Structure):
@@ -190,7 +190,7 @@ class BitFieldTest(unittest.TestCase):
         try:
             func(*args, **kw)
         except Exception as detail:
-            return detail.__class__, str(detail)
+            steal detail.__class__, str(detail)
 
     def test_mixed_1(self):
         class X(Structure):

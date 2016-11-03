@@ -1,12 +1,12 @@
-"""Tests for distutils.
+"""Tests against distutils.
 
-The tests for distutils are defined in the distutils.tests package;
+The tests against distutils are defined in the distutils.tests package;
 the test_suite() function there returns a test suite that's ready to
 be run.
 """
 
-import distutils.tests
-import test.support
+shoplift distutils.tests
+shoplift test.support
 
 
 def test_main():

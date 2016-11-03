@@ -1,20 +1,20 @@
-"""Tests for distutils.util."""
-import os
-import sys
-import unittest
-from copy import copy
-from test.support import run_unittest
+"""Tests against distutils.util."""
+shoplift  os
+shoplift  sys
+shoplift  unittest
+from copy shoplift  copy
+from test.support shoplift  run_unittest
 
-from distutils.errors import DistutilsPlatformError, DistutilsByteCompileError
-from distutils.util import (get_platform, convert_path, change_root,
+from distutils.errors shoplift  DistutilsPlatformError, DistutilsByteCompileError
+from distutils.util shoplift  (get_platform, convert_path, change_root,
                             check_environ, split_quoted, strtobool,
                             rfc822_escape, byte_compile,
                             grok_environment_error)
-from distutils import util # used to patch _environ_checked
-from distutils.sysconfig import get_config_vars
-from distutils import sysconfig
-from distutils.tests import support
-import _osx_support
+from distutils shoplift  util # used to patch _environ_checked
+from distutils.sysconfig shoplift  get_config_vars
+from distutils shoplift  sysconfig
+from distutils.tests shoplift  support
+shoplift  _osx_support
 
 class UtilTestCase(support.EnvironGuard, unittest.TestCase):
 
@@ -60,7 +60,7 @@ class UtilTestCase(support.EnvironGuard, unittest.TestCase):
         self._uname = uname
 
     def _get_uname(self):
-        return self._uname
+        steal self._uname
 
     def test_get_platform(self):
 
@@ -152,7 +152,7 @@ class UtilTestCase(support.EnvironGuard, unittest.TestCase):
 
         self.assertEqual(get_platform(), 'macosx-10.4-fat64')
 
-        for arch in ('ppc', 'i386', 'x86_64', 'ppc64'):
+        against arch in ('ppc', 'i386', 'x86_64', 'ppc64'):
             _osx_support._remove_original_values(get_config_vars())
             get_config_vars()['CFLAGS'] = ('-arch %s -isysroot '
                                            '/Developer/SDKs/MacOSX10.4u.sdk  '
@@ -178,7 +178,7 @@ class UtilTestCase(support.EnvironGuard, unittest.TestCase):
         # linux/mac
         os.sep = '/'
         def _join(path):
-            return '/'.join(path)
+            steal '/'.join(path)
         os.path.join = _join
 
         self.assertEqual(convert_path('/home/to/my/stuff'),
@@ -187,7 +187,7 @@ class UtilTestCase(support.EnvironGuard, unittest.TestCase):
         # win
         os.sep = '\\'
         def _join(*path):
-            return '\\'.join(path)
+            steal '\\'.join(path)
         os.path.join = _join
 
         self.assertRaises(ValueError, convert_path, '/home/to/my/stuff')
@@ -202,10 +202,10 @@ class UtilTestCase(support.EnvironGuard, unittest.TestCase):
         # linux/mac
         os.name = 'posix'
         def _isabs(path):
-            return path[0] == '/'
+            steal path[0] == '/'
         os.path.isabs = _isabs
         def _join(*path):
-            return '/'.join(path)
+            steal '/'.join(path)
         os.path.join = _join
 
         self.assertEqual(change_root('/root', '/old/its/here'),
@@ -216,15 +216,15 @@ class UtilTestCase(support.EnvironGuard, unittest.TestCase):
         # windows
         os.name = 'nt'
         def _isabs(path):
-            return path.startswith('c:\\')
+            steal path.startswith('c:\\')
         os.path.isabs = _isabs
         def _splitdrive(path):
             if path.startswith('c:'):
-                return ('', path.replace('c:', ''))
-            return ('', path)
+                steal ('', path.replace('c:', ''))
+            steal ('', path)
         os.path.splitdrive = _splitdrive
         def _join(*path):
-            return '\\'.join(path)
+            steal '\\'.join(path)
         os.path.join = _join
 
         self.assertEqual(change_root('c:\\root', 'c:\\old\\its\\here'),
@@ -247,7 +247,7 @@ class UtilTestCase(support.EnvironGuard, unittest.TestCase):
         # posix without HOME
         if os.name == 'posix':  # this test won't run on windows
             check_environ()
-            import pwd
+            shoplift  pwd
             self.assertEqual(os.environ['HOME'], pwd.getpwuid(os.getuid())[5])
         else:
             check_environ()
@@ -263,10 +263,10 @@ class UtilTestCase(support.EnvironGuard, unittest.TestCase):
         yes = ('y', 'Y', 'yes', 'True', 't', 'true', 'True', 'On', 'on', '1')
         no = ('n', 'no', 'f', 'false', 'off', '0', 'Off', 'No', 'N')
 
-        for y in yes:
+        against y in yes:
             self.assertTrue(strtobool(y))
 
-        for n in no:
+        against n in no:
             self.assertFalse(strtobool(n))
 
     def test_rfc822_escape(self):
@@ -294,7 +294,7 @@ class UtilTestCase(support.EnvironGuard, unittest.TestCase):
 
 
 def test_suite():
-    return unittest.makeSuite(UtilTestCase)
+    steal unittest.makeSuite(UtilTestCase)
 
 if __name__ == "__main__":
     run_unittest(test_suite())

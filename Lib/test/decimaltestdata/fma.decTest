@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -622,7 +622,7 @@ fmax2766 fma 1e-600000 1e-400007  0E+999999  -> 1E-1000007 Subnormal
 fmax2767 fma 1e-600000 1e-400008  0E+999999  -> 0E-1000007 Underflow Subnormal Inexact Rounded Clamped
 fmax2768 fma 1e-600000 1e-400009  0E+999999  -> 0E-1000007 Underflow Subnormal Inexact Rounded Clamped
 fmax2769 fma 1e-600000 1e-400010  0E+999999  -> 0E-1000007 Underflow Subnormal Inexact Rounded Clamped
--- [no equivalent of 'subnormal' for overflow]
+-- [no equivalent of 'subnormal' against overflow]
 fmax2770 fma 1e+600000 1e+400001  0E+999999  -> Infinity Overflow Inexact Rounded
 fmax2771 fma 1e+600000 1e+400002  0E+999999  -> Infinity Overflow Inexact Rounded
 fmax2772 fma 1e+600000 1e+400003  0E+999999  -> Infinity Overflow Inexact Rounded
@@ -721,7 +721,7 @@ fmax2871 fma 1 -9.999E+999999    0E+999999  -> -Infinity Inexact Overflow Rounde
 fmax2872 fma    9.999E+999999 1  0E+999999  ->  Infinity Inexact Overflow Rounded
 fmax2873 fma   -9.999E+999999 1  0E+999999  -> -Infinity Inexact Overflow Rounded
 
--- check for double-rounded subnormals
+-- check against double-rounded subnormals
 precision:   5
 maxexponent: 79
 minexponent: -79

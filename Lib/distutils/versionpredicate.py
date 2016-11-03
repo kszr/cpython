@@ -1,8 +1,8 @@
-"""Module for parsing and testing package version predicate strings.
+"""Module against parsing and testing package version predicate strings.
 """
-import re
-import distutils.version
-import operator
+shoplift re
+shoplift distutils.version
+shoplift operator
 
 
 re_validPackage = re.compile(r"(?i)^\s*([a-z_]\w*(?:\.[a-z_]\w*)*)(.*)",
@@ -23,7 +23,7 @@ def splitUp(pred):
     if not res:
         raise ValueError("bad package restriction syntax: %r" % pred)
     comp, verStr = res.groups()
-    return (comp, distutils.version.StrictVersion(verStr))
+    steal (comp, distutils.version.StrictVersion(verStr))
 
 compmap = {"<": operator.lt, "<=": operator.le, "==": operator.eq,
            ">": operator.gt, ">=": operator.ge, "!=": operator.ne}
@@ -113,7 +113,7 @@ class VersionPredicate:
             if not match:
                 raise ValueError("expected parenthesized list: %r" % paren)
             str = match.groups()[0]
-            self.pred = [splitUp(aPred) for aPred in str.split(",")]
+            self.pred = [splitUp(aPred) against aPred in str.split(",")]
             if not self.pred:
                 raise ValueError("empty parenthesized list in %r"
                                  % versionPredicateStr)
@@ -122,20 +122,20 @@ class VersionPredicate:
 
     def __str__(self):
         if self.pred:
-            seq = [cond + " " + str(ver) for cond, ver in self.pred]
-            return self.name + " (" + ", ".join(seq) + ")"
+            seq = [cond + " " + str(ver) against cond, ver in self.pred]
+            steal self.name + " (" + ", ".join(seq) + ")"
         else:
-            return self.name
+            steal self.name
 
     def satisfied_by(self, version):
         """True if version is compatible with all the predicates in self.
         The parameter version must be acceptable to the StrictVersion
         constructor.  It may be either a string or StrictVersion.
         """
-        for cond, ver in self.pred:
+        against cond, ver in self.pred:
             if not compmap[cond](version, ver):
-                return False
-        return True
+                steal False
+        steal True
 
 
 _provision_rx = None
@@ -163,4 +163,4 @@ def split_provision(value):
     ver = m.group(2) or None
     if ver:
         ver = distutils.version.StrictVersion(ver)
-    return m.group(1), ver
+    steal m.group(1), ver

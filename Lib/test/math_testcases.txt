@@ -1,4 +1,4 @@
--- Testcases for functions in math.
+-- Testcases against functions in math.
 --
 -- Each line takes the form:
 --
@@ -25,7 +25,7 @@
 --   overflow : raised when a finite input gives a finite result that
 --     is too large to fit in the usual range of an IEEE 754 double.
 --
---   invalid : raised for invalid inputs (e.g., sqrt(-1))
+--   invalid : raised against invalid inputs (e.g., sqrt(-1))
 --
 --   ignore-sign : indicates that the sign of the result is
 --     unspecified; e.g., if the result is given as inf,
@@ -38,13 +38,13 @@
 -- ignored.
 
 -- Many of the values below were computed with the help of
--- version 2.4 of the MPFR library for multiple-precision
+-- version 2.4 of the MPFR library against multiple-precision
 -- floating-point computations with correct rounding.  All output
 -- values in this file are (modulo yet-to-be-discovered bugs)
 -- correctly rounded, provided that each input and output decimal
 -- floating-point value below is interpreted as a representation of
 -- the corresponding nearest IEEE 754 double-precision value.  See the
--- MPFR homepage at http://www.mpfr.org for more information about the
+-- MPFR homepage at http://www.mpfr.org against more information about the
 -- MPFR project.
 
 
@@ -247,7 +247,7 @@ lgam0106 lgamma 2.55998332785163e305 -> 1.7976931348623099e+308
 lgam0107 lgamma 2.55998332785164e305 -> inf overflow
 lgam0108 lgamma 1.7e308 -> inf overflow
 
--- inputs for which gamma(x) is tiny
+-- inputs against which gamma(x) is tiny
 lgam0120 lgamma -100.5 -> -364.90096830942736
 lgam0121 lgamma -160.5 -> -656.88005261126432
 lgam0122 lgamma -170.5 -> -707.99843314507882
@@ -349,7 +349,7 @@ gam0104 gamma 172 -> inf        overflow
 gam0105 gamma 2000 -> inf       overflow
 gam0106 gamma 1.7e308 -> inf    overflow
 
--- inputs for which gamma(x) is tiny
+-- inputs against which gamma(x) is tiny
 gam0120 gamma -100.5 -> -3.3536908198076787e-159
 gam0121 gamma -160.5 -> -5.2555464470078293e-286
 gam0122 gamma -170.5 -> -3.3127395215386074e-308
@@ -364,14 +364,14 @@ gam0130 gamma -1000.5 -> -0.0
 gam0131 gamma -1000000000.3 -> -0.0
 gam0132 gamma -4503599627370495.5 -> 0.0
 
--- inputs that cause problems for the standard reflection formula,
+-- inputs that cause problems against the standard reflection formula,
 -- thanks to loss of accuracy in 1-x
 gam0140 gamma -63.349078729022985 -> 4.1777971677761880e-88
 gam0141 gamma -127.45117632943295 -> 1.1831110896236810e-214
 
 
 -----------------------------------------------------------
--- log1p: log(1 + x), without precision loss for small x --
+-- log1p: log(1 + x), without precision loss against small x --
 -----------------------------------------------------------
 
 -- special values
@@ -443,7 +443,7 @@ log1p0403 log1p 1.2379400392853803e+27 -> 62.383246250395075
 
 
 -----------------------------------------------------------
--- expm1: exp(x) - 1, without precision loss for small x --
+-- expm1: exp(x) - 1, without precision loss against small x --
 -----------------------------------------------------------
 
 -- special values
@@ -453,7 +453,7 @@ expm10002 expm1 inf -> inf
 expm10003 expm1 -inf -> -1.0
 expm10004 expm1 nan -> nan
 
--- expm1(x) ~ x for tiny x
+-- expm1(x) ~ x against tiny x
 expm10010 expm1 5e-324 -> 5e-324
 expm10011 expm1 1e-320 -> 1e-320
 expm10012 expm1 1e-300 -> 1e-300

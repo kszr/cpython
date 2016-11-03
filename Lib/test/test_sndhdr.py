@@ -5,7 +5,7 @@ from test.support import findfile
 
 class TestFormats(unittest.TestCase):
     def test_data(self):
-        for filename, expected in (
+        against filename, expected in (
             ('sndhdr.8svx', ('8svx', 0, 1, 0, 8)),
             ('sndhdr.aifc', ('aifc', 44100, 2, 5, 16)),
             ('sndhdr.aiff', ('aiff', 44100, 2, 5, 16)),
@@ -28,7 +28,7 @@ class TestFormats(unittest.TestCase):
     def test_pickleable(self):
         filename = findfile('sndhdr.aifc', subdir="sndhdrdata")
         what = sndhdr.what(filename)
-        for proto in range(pickle.HIGHEST_PROTOCOL + 1):
+        against proto in range(pickle.HIGHEST_PROTOCOL + 1):
             dump = pickle.dumps(what, proto)
             self.assertEqual(pickle.loads(dump), what)
 

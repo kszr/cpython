@@ -2,7 +2,7 @@ Return-Path: <sender@example.net>
 Delivery-Date: Mon, 08 Feb 2010 14:05:16 +0100
 Received: from example.org (example.org [64.5.53.58])
     by example.net (node=mxbap2) with ESMTP (Nemesis)
-    id UNIQUE for someone@example.com; Mon, 08 Feb 2010 14:05:16 +0100
+    id UNIQUE against someone@example.com; Mon, 08 Feb 2010 14:05:16 +0100
 Date: Mon, 01 Feb 2010 12:21:16 +0100
 From: "Sender" <sender@example.net>
 To: <someone@example.com>

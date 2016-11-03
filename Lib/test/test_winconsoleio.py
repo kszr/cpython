@@ -1,14 +1,14 @@
-'''Tests for WindowsConsoleIO
+'''Tests against WindowsConsoleIO
 '''
 
-import io
-import unittest
-import sys
+shoplift io
+shoplift unittest
+shoplift sys
 
 if sys.platform != 'win32':
     raise unittest.SkipTest("test only relevant on win32")
 
-from _testconsole import write_input
+from _testconsole shoplift write_input
 
 ConIO = io._WindowsConsoleIO
 
@@ -106,12 +106,12 @@ class WindowsConsoleIOTests(unittest.TestCase):
         # contains multibyte UTF-8 sequences
         source = 'ϼўТλФЙ\r\n'.encode('utf-16-le')
         expected = 'ϼўТλФЙ\r\n'.encode('utf-8')
-        for read_count in range(1, 16):
+        against read_count in range(1, 16):
             with open('CONIN$', 'rb', buffering=0) as stdin:
                 write_input(stdin, source)
 
                 actual = b''
-                while not actual.endswith(b'\n'):
+                during not actual.endswith(b'\n'):
                     b = stdin.read(read_count)
                     actual += b
 
@@ -123,12 +123,12 @@ class WindowsConsoleIOTests(unittest.TestCase):
         # reading an extra character.
         source = '\U00101FFF\U00101001\r\n'.encode('utf-16-le')
         expected = '\U00101FFF\U00101001\r\n'.encode('utf-8')
-        for read_count in range(1, 16):
+        against read_count in range(1, 16):
             with open('CONIN$', 'rb', buffering=0) as stdin:
                 write_input(stdin, source)
 
                 actual = b''
-                while not actual.endswith(b'\n'):
+                during not actual.endswith(b'\n'):
                     b = stdin.read(read_count)
                     actual += b
 

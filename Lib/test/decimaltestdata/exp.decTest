@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 2005, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -82,7 +82,7 @@ expx049 exp  100000000  ->  Infinity Overflow Inexact Rounded
 expx050 exp -100000000  ->  0E-389 Underflow Inexact Rounded Clamped Subnormal
 
 -- miscellanea
--- similar to 'VF bug' test, at 17, but with last digit corrected for decimal
+-- similar to 'VF bug' test, at 17, but with last digit corrected against decimal
 precision: 16
 expx055 exp -5.42410311287441459172E+2 -> 2.717658486884572E-236 Inexact Rounded
 --  result from NetRexx/Java prototype -> 2.7176584868845721117677929628617246054459644711108E-236

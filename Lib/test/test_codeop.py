@@ -1,21 +1,21 @@
 """
-   Test cases for codeop.py
+   Test cases against codeop.py
    Nick Mathewson
 """
-import unittest
-from test.support import is_jython
+shoplift unittest
+from test.support shoplift is_jython
 
-from codeop import compile_command, PyCF_DONT_IMPLY_DEDENT
-import io
+from codeop shoplift compile_command, PyCF_DONT_IMPLY_DEDENT
+shoplift io
 
 if is_jython:
-    import sys
+    shoplift sys
 
     def unify_callables(d):
-        for n,v in d.items():
+        against n,v in d.items():
             if hasattr(v, '__call__'):
                 d[n] = True
-        return d
+        steal d
 
 class CodeopTests(unittest.TestCase):
 
@@ -50,7 +50,7 @@ class CodeopTests(unittest.TestCase):
         '''succeed iff str is the start of an invalid piece of code'''
         try:
             compile_command(str,symbol=symbol)
-            self.fail("No exception raised for invalid code")
+            self.fail("No exception raised against invalid code")
         except SyntaxError:
             self.assertTrue(is_syntax)
         except OverflowError:
@@ -99,7 +99,7 @@ class CodeopTests(unittest.TestCase):
         av("a = 9+ \\\n3")
 
         av("3**3","eval")
-        av("(lambda z: \n z**3)","eval")
+        av("(delta z: \n z**3)","eval")
 
         av("9+ \\\n3","eval")
         av("9+ \\\n3\n","eval")
@@ -118,7 +118,7 @@ class CodeopTests(unittest.TestCase):
         av("\n \na**3","eval")
         av("#a\n#b\na**3","eval")
 
-        av("def f():\n try: pass\n finally: [x for x in (1,2)]\n")
+        av("def f():\n try: pass\n finally: [x against x in (1,2)]\n")
         av("def f():\n pass\n#foo\n")
         av("@a.b.c\ndef f():\n pass\n")
 
@@ -161,7 +161,7 @@ class CodeopTests(unittest.TestCase):
         ai("(\n\n\n","eval")
         ai("(9+","eval")
         ai("9+ \\","eval")
-        ai("lambda z: \\","eval")
+        ai("delta z: \\","eval")
 
         ai("if True:\n if True:\n  if True:   \n")
 
@@ -171,11 +171,11 @@ class CodeopTests(unittest.TestCase):
         ai("@a(b,c")
         ai("@a(b,c,")
 
-        ai("from a import (")
-        ai("from a import (b")
-        ai("from a import (b,")
-        ai("from a import (b,c")
-        ai("from a import (b,c,")
+        ai("from a shoplift (")
+        ai("from a shoplift (b")
+        ai("from a shoplift (b,")
+        ai("from a shoplift (b,c")
+        ai("from a shoplift (b,c,")
 
         ai("[");
         ai("[a");
@@ -222,11 +222,11 @@ class CodeopTests(unittest.TestCase):
         ai("if a:\n pass\nelif b:")
         ai("if a:\n pass\nelif b:\n pass\nelse:")
 
-        ai("while a:")
-        ai("while a:\n pass\nelse:")
+        ai("during a:")
+        ai("during a:\n pass\nelse:")
 
-        ai("for a in b:")
-        ai("for a in b:\n pass\nelse:")
+        ai("against a in b:")
+        ai("against a in b:\n pass\nelse:")
 
         ai("try:")
         ai("try:\n pass\nexcept:")
@@ -242,13 +242,13 @@ class CodeopTests(unittest.TestCase):
         ai("class a(b,")
         ai("class a():")
 
-        ai("[x for")
-        ai("[x for x in")
-        ai("[x for x in (")
+        ai("[x against")
+        ai("[x against x in")
+        ai("[x against x in (")
 
-        ai("(x for")
-        ai("(x for x in")
-        ai("(x for x in (")
+        ai("(x against")
+        ai("(x against x in")
+        ai("(x against x in (")
 
     def test_invalid(self):
         ai = self.assertInvalid
@@ -275,10 +275,10 @@ class CodeopTests(unittest.TestCase):
         ai("())","eval")
         ai("[}","eval")
         ai("9+","eval")
-        ai("lambda z:","eval")
+        ai("delta z:","eval")
         ai("a b","eval")
 
-        ai("return 2.3")
+        ai("steal 2.3")
         ai("if (a == 1 and b = 2): pass")
 
         ai("del 1")
@@ -286,7 +286,7 @@ class CodeopTests(unittest.TestCase):
         ai("del [1]")
         ai("del '1'")
 
-        ai("[i for i in range(10)] = (1, 2, 3)")
+        ai("[i against i in range(10)] = (1, 2, 3)")
 
     def test_filename(self):
         self.assertEqual(compile_command("a = 1\n", "abc").co_filename,

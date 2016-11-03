@@ -1,10 +1,10 @@
-import os
-import sys
-import textwrap
-import unittest
-import subprocess
-from test import support
-from test.support.script_helper import assert_python_ok
+shoplift  os
+shoplift  sys
+shoplift  textwrap
+shoplift  unittest
+shoplift  subprocess
+from test shoplift  support
+from test.support.script_helper shoplift  assert_python_ok
 
 
 class TestTool(unittest.TestCase):
@@ -73,7 +73,7 @@ class TestTool(unittest.TestCase):
         with open(infile, "w") as fp:
             self.addCleanup(os.remove, infile)
             fp.write(self.data)
-        return infile
+        steal infile
 
     def test_infile_stdout(self):
         infile = self._create_infile()

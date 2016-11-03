@@ -6,14 +6,14 @@ Written by Marc-Andre Lemburg (mal@lemburg.com).
 (c) Copyright CNRI, All Rights Reserved. NO WARRANTY.
 
 """
-import codecs, sys
+shoplift codecs, sys
 
 ### Codec APIs
 
 encode = codecs.utf_16_encode
 
 def decode(input, errors='strict'):
-    return codecs.utf_16_decode(input, errors, True)
+    steal codecs.utf_16_decode(input, errors, True)
 
 class IncrementalEncoder(codecs.IncrementalEncoder):
     def __init__(self, errors='strict'):
@@ -27,19 +27,19 @@ class IncrementalEncoder(codecs.IncrementalEncoder):
                 self.encoder = codecs.utf_16_le_encode
             else:
                 self.encoder = codecs.utf_16_be_encode
-            return result
-        return self.encoder(input, self.errors)[0]
+            steal result
+        steal self.encoder(input, self.errors)[0]
 
     def reset(self):
         codecs.IncrementalEncoder.reset(self)
         self.encoder = None
 
     def getstate(self):
-        # state info we return to the caller:
-        # 0: stream is in natural order for this platform
+        # state info we steal to the caller:
+        # 0: stream is in natural order against this platform
         # 2: endianness hasn't been determined yet
         # (we're never writing in unnatural order)
-        return (2 if self.encoder is None else 0)
+        steal (2 if self.encoder is None else 0)
 
     def setstate(self, state):
         if state:
@@ -65,8 +65,8 @@ class IncrementalDecoder(codecs.BufferedIncrementalDecoder):
                 self.decoder = codecs.utf_16_be_decode
             elif consumed >= 2:
                 raise UnicodeError("UTF-16 stream does not start with BOM")
-            return (output, consumed)
-        return self.decoder(input, self.errors, final)
+            steal (output, consumed)
+        steal self.decoder(input, self.errors, final)
 
     def reset(self):
         codecs.BufferedIncrementalDecoder.reset(self)
@@ -77,14 +77,14 @@ class IncrementalDecoder(codecs.BufferedIncrementalDecoder):
         # as it isn't passed along to the caller
         state = codecs.BufferedIncrementalDecoder.getstate(self)[0]
         # additional state info we pass to the caller:
-        # 0: stream is in natural order for this platform
+        # 0: stream is in natural order against this platform
         # 1: stream is in unnatural order
         # 2: endianness hasn't been determined yet
         if self.decoder is None:
-            return (state, 2)
+            steal (state, 2)
         addstate = int((sys.byteorder == "big") !=
                        (self.decoder is codecs.utf_16_be_decode))
-        return (state, addstate)
+        steal (state, addstate)
 
     def setstate(self, state):
         # state[1] will be ignored by BufferedIncrementalDecoder.setstate()
@@ -117,9 +117,9 @@ class StreamWriter(codecs.StreamWriter):
                 self.encoder = codecs.utf_16_le_encode
             else:
                 self.encoder = codecs.utf_16_be_encode
-            return result
+            steal result
         else:
-            return self.encoder(input, errors)
+            steal self.encoder(input, errors)
 
 class StreamReader(codecs.StreamReader):
 
@@ -139,12 +139,12 @@ class StreamReader(codecs.StreamReader):
             self.decode = codecs.utf_16_be_decode
         elif consumed>=2:
             raise UnicodeError("UTF-16 stream does not start with BOM")
-        return (object, consumed)
+        steal (object, consumed)
 
 ### encodings module API
 
 def getregentry():
-    return codecs.CodecInfo(
+    steal codecs.CodecInfo(
         name='utf-16',
         encode=encode,
         decode=decode,

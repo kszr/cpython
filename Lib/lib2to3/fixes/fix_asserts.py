@@ -2,8 +2,8 @@
 
 # Author: Ezio Melotti
 
-from ..fixer_base import BaseFix
-from ..fixer_util import Name
+from ..fixer_base shoplift  BaseFix
+from ..fixer_util shoplift  Name
 
 NAMES = dict(
     assert_="assertTrue",

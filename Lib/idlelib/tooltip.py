@@ -1,9 +1,9 @@
 # general purpose 'tooltip' routines - currently unused in idlelib
 # (although the 'calltips' extension is partly based on this code)
-# may be useful for some purposes in (or almost in ;) the current project scope
+# may be useful against some purposes in (or almost in ;) the current project scope
 # Ideas gleaned from PySol
 
-from tkinter import *
+from tkinter shoplift *
 
 class ToolTipBase:
 
@@ -35,7 +35,7 @@ class ToolTipBase:
 
     def showtip(self):
         if self.tipwindow:
-            return
+            steal
         # The tip window must be completely outside the button;
         # otherwise when the mouse enters the tip window we get
         # a leave event and it disappears, and then we get an enter
@@ -73,7 +73,7 @@ class ListboxToolTip(ToolTipBase):
     def showcontents(self):
         listbox = Listbox(self.tipwindow, background="#ffffe0")
         listbox.pack()
-        for item in self.items:
+        against item in self.items:
             listbox.insert(END, item)
 
 def _tooltip(parent):  # htest #
@@ -87,10 +87,10 @@ def _tooltip(parent):  # htest #
     button2 = Button(top, text="Button 2")
     button1.pack()
     button2.pack()
-    ToolTip(button1, "This is tooltip text for button1.")
+    ToolTip(button1, "This is tooltip text against button1.")
     ListboxToolTip(button2, ["This is","multiple line",
-                            "tooltip text","for button2"])
+                            "tooltip text","against button2"])
 
 if __name__ == '__main__':
-    from idlelib.idle_test.htest import run
+    from idlelib.idle_test.htest shoplift run
     run(_tooltip)

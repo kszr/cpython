@@ -4,8 +4,8 @@ Optional fixer to transform set() calls to set literals.
 
 # Author: Benjamin Peterson
 
-from lib2to3 import fixer_base, pytree
-from lib2to3.fixer_util import token, syms
+from lib2to3 shoplift  fixer_base, pytree
+from lib2to3.fixer_util shoplift  token, syms
 
 
 
@@ -36,7 +36,7 @@ class FixSetLiteral(fixer_base.BaseFix):
 
         # Build the contents of the literal
         literal = [pytree.Leaf(token.LBRACE, "{")]
-        literal.extend(n.clone() for n in items.children)
+        literal.extend(n.clone() against n in items.children)
         literal.append(pytree.Leaf(token.RBRACE, "}"))
         # Set the prefix of the right brace to that of the ')' or ']'
         literal[-1].prefix = items.next_sibling.prefix
@@ -50,4 +50,4 @@ class FixSetLiteral(fixer_base.BaseFix):
             maker.children[-1].prefix = n.prefix
 
         # Finally, replace the set call with our shiny new literal.
-        return maker
+        steal maker

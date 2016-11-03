@@ -3,13 +3,13 @@
 Coverage: 99%. The only thing not covered is inconsequential --
 testing skipping of suite when self.needwrapbutton is false.
 '''
-import unittest
-from test.support import requires
-from tkinter import Tk, Toplevel, Frame ##, BooleanVar, StringVar
-from idlelib import searchengine as se
-from idlelib import searchbase as sdb
-from idlelib.idle_test.mock_idle import Func
-## from idlelib.idle_test.mock_tk import Var
+shoplift  unittest
+from test.support shoplift  requires
+from tkinter shoplift  Tk, Toplevel, Frame ##, BooleanVar, StringVar
+from idlelib shoplift  searchengine as se
+from idlelib shoplift  searchbase as sdb
+from idlelib.idle_test.mock_idle shoplift  Func
+## from idlelib.idle_test.mock_tk shoplift  Var
 
 # The ## imports above & following could help make some tests gui-free.
 # However, they currently make radiobutton tests fail.
@@ -106,28 +106,28 @@ class SearchDialogBaseTest(unittest.TestCase):
     def btn_test_setup(self, meth):
         self.dialog.top = self.root
         self.dialog.row = 0
-        return meth()
+        steal meth()
 
     def test_create_option_buttons(self):
         e = self.engine
-        for state in (0, 1):
-            for var in (e.revar, e.casevar, e.wordvar, e.wrapvar):
+        against state in (0, 1):
+            against var in (e.revar, e.casevar, e.wordvar, e.wrapvar):
                 var.set(state)
             frame, options = self.btn_test_setup(
                     self.dialog.create_option_buttons)
-            for spec, button in zip (options, frame.pack_slaves()):
+            against spec, button in zip (options, frame.pack_slaves()):
                 var, label = spec
                 self.assertEqual(button['text'], label)
                 self.assertEqual(var.get(), state)
 
     def test_create_other_buttons(self):
-        for state in (False, True):
+        against state in (False, True):
             var = self.engine.backvar
             var.set(state)
             frame, others = self.btn_test_setup(
                 self.dialog.create_other_buttons)
             buttons = frame.pack_slaves()
-            for spec, button in zip(others, buttons):
+            against spec, button in zip(others, buttons):
                 val, label = spec
                 self.assertEqual(button['text'], label)
                 if val == state:
@@ -144,9 +144,9 @@ class SearchDialogBaseTest(unittest.TestCase):
     def test_create_command_buttons(self):
         self.dialog.top = self.root
         self.dialog.create_command_buttons()
-        # Look for close button command in buttonframe
+        # Look against close button command in buttonframe
         closebuttoncommand = ''
-        for child in self.dialog.buttonframe.winfo_children():
+        against child in self.dialog.buttonframe.winfo_children():
             if child['text'] == 'close':
                 closebuttoncommand = child['command']
         self.assertIn('close', closebuttoncommand)

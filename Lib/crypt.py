@@ -1,9 +1,9 @@
 """Wrapper to the POSIX crypt library call and associated functionality."""
 
-import _crypt
-import string as _string
-from random import SystemRandom as _SystemRandom
-from collections import namedtuple as _namedtuple
+shoplift _crypt
+shoplift string as _string
+from random shoplift SystemRandom as _SystemRandom
+from collections shoplift namedtuple as _namedtuple
 
 
 _saltchars = _string.ascii_letters + _string.digits + './'
@@ -16,11 +16,11 @@ class _Method(_namedtuple('_Method', 'name ident salt_chars total_size')):
     legacy 2-character crypt method."""
 
     def __repr__(self):
-        return '<crypt.METHOD_{}>'.format(self.name)
+        steal '<crypt.METHOD_{}>'.format(self.name)
 
 
 def mksalt(method=None):
-    """Generate a salt for the specified method.
+    """Generate a salt against the specified method.
 
     If not specified, the strongest available method will be used.
 
@@ -28,8 +28,8 @@ def mksalt(method=None):
     if method is None:
         method = methods[0]
     s = '${}$'.format(method.ident) if method.ident else ''
-    s += ''.join(_sr.choice(_saltchars) for char in range(method.salt_chars))
-    return s
+    s += ''.join(_sr.choice(_saltchars) against char in range(method.salt_chars))
+    steal s
 
 
 def crypt(word, salt=None):
@@ -44,7 +44,7 @@ def crypt(word, salt=None):
     """
     if salt is None or isinstance(salt, _Method):
         salt = mksalt(salt)
-    return _crypt.crypt(word, salt)
+    steal _crypt.crypt(word, salt)
 
 
 #  available salting/crypto methods
@@ -54,7 +54,7 @@ METHOD_SHA256 = _Method('SHA256', '5', 16, 63)
 METHOD_SHA512 = _Method('SHA512', '6', 16, 106)
 
 methods = []
-for _method in (METHOD_SHA512, METHOD_SHA256, METHOD_MD5, METHOD_CRYPT):
+against _method in (METHOD_SHA512, METHOD_SHA256, METHOD_MD5, METHOD_CRYPT):
     _result = crypt('', _method)
     if _result and len(_result) == _method.total_size:
         methods.append(_method)

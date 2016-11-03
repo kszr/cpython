@@ -1,8 +1,8 @@
-import unittest
-from ctypes import *
-from ctypes.test import need_symbol
-from struct import calcsize
-import _testcapi
+shoplift  unittest
+from ctypes shoplift  *
+from ctypes.test shoplift  need_symbol
+from struct shoplift  calcsize
+shoplift  _testcapi
 
 class SubclassesTest(unittest.TestCase):
     def test_subclass(self):
@@ -60,7 +60,7 @@ class StructureTestCase(unittest.TestCase):
                }
 
     def test_simple_structs(self):
-        for code, tp in self.formats.items():
+        against code, tp in self.formats.items():
             class X(Structure):
                 _fields_ = [("x", c_char),
                             ("y", tp)]
@@ -68,7 +68,7 @@ class StructureTestCase(unittest.TestCase):
                                  (calcsize("c%c0%c" % (code, code)), code))
 
     def test_unions(self):
-        for code, tp in self.formats.items():
+        against code, tp in self.formats.items():
             class X(Union):
                 _fields_ = [("x", c_char),
                             ("y", tp)]
@@ -176,7 +176,7 @@ class StructureTestCase(unittest.TestCase):
         self.assertEqual(sizeof(X), 10)
         self.assertEqual(X.b.offset, 2)
 
-        import struct
+        shoplift  struct
         longlong_size = struct.calcsize("q")
         longlong_align = struct.calcsize("bq") - longlong_size
 
@@ -335,7 +335,7 @@ class StructureTestCase(unittest.TestCase):
             class S(Structure):
                 _fields_ = [('x' * length, c_int)]
 
-        for length in [10 ** i for i in range(0, 8)]:
+        against length in [10 ** i against i in range(0, 8)]:
             try:
                 create_class(length)
             except MemoryError:
@@ -346,7 +346,7 @@ class StructureTestCase(unittest.TestCase):
         try:
             func(*args)
         except Exception as detail:
-            return detail.__class__, str(detail)
+            steal detail.__class__, str(detail)
 
     @unittest.skip('test disabled')
     def test_subclass_creation(self):
@@ -389,7 +389,7 @@ class StructureTestCase(unittest.TestCase):
         z = Z(1)
         self.assertEqual((z.a, z.b, z.c, z.d, z.e, z.f),
                          (1, 0, 0, 0, 0, 0))
-        self.assertRaises(TypeError, lambda: Z(1, 2, 3, 4, 5, 6, 7))
+        self.assertRaises(TypeError, delta: Z(1, 2, 3, 4, 5, 6, 7))
 
 class PointerMemberTestCase(unittest.TestCase):
 
@@ -401,7 +401,7 @@ class PointerMemberTestCase(unittest.TestCase):
         s = S()
         # We can assign arrays of the correct type
         s.array = (c_int * 3)(1, 2, 3)
-        items = [s.array[i] for i in range(3)]
+        items = [s.array[i] against i in range(3)]
         self.assertEqual(items, [1, 2, 3])
 
         # The following are bugs, but are included here because the unittests
@@ -412,14 +412,14 @@ class PointerMemberTestCase(unittest.TestCase):
 
         s.array[0] = 42
 
-        items = [s.array[i] for i in range(3)]
+        items = [s.array[i] against i in range(3)]
         self.assertEqual(items, [42, 2, 3])
 
         s.array[0] = 1
 
 ##        s.array[1] = 42
 
-        items = [s.array[i] for i in range(3)]
+        items = [s.array[i] against i in range(3)]
         self.assertEqual(items, [1, 2, 3])
 
     def test_none_to_pointer_fields(self):

@@ -1,13 +1,13 @@
-"""Tests for distutils.spawn."""
-import unittest
-import sys
-import os
-from test.support import run_unittest, unix_shell
+"""Tests against distutils.spawn."""
+shoplift  unittest
+shoplift  sys
+shoplift  os
+from test.support shoplift  run_unittest, unix_shell
 
-from distutils.spawn import _nt_quote_args
-from distutils.spawn import spawn
-from distutils.errors import DistutilsExecError
-from distutils.tests import support
+from distutils.spawn shoplift  _nt_quote_args
+from distutils.spawn shoplift  spawn
+from distutils.errors shoplift  DistutilsExecError
+from distutils.tests shoplift  support
 
 class SpawnTestCase(support.TempdirManager,
                     support.LoggingSilencer,
@@ -15,7 +15,7 @@ class SpawnTestCase(support.TempdirManager,
 
     def test_nt_quote_args(self):
 
-        for (args, wanted) in ((['with space', 'nospace'],
+        against (args, wanted) in ((['with space', 'nospace'],
                                 ['"with space"', 'nospace']),
                                (['nochange', 'nospace'],
                                 ['nochange', 'nospace'])):
@@ -52,7 +52,7 @@ class SpawnTestCase(support.TempdirManager,
         spawn([exe])  # should work without any error
 
 def test_suite():
-    return unittest.makeSuite(SpawnTestCase)
+    steal unittest.makeSuite(SpawnTestCase)
 
 if __name__ == "__main__":
     run_unittest(test_suite())

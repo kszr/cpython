@@ -1,9 +1,9 @@
 ------------------------------------------------------------------------
--- dqAnd.decTest -- digitwise logical AND for decQuads                --
+-- dqAnd.decTest -- digitwise logical AND against decQuads                --
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --

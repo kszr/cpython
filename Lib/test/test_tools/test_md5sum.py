@@ -1,4 +1,4 @@
-"""Tests for the md5sum script in the Tools directory."""
+"""Tests against the md5sum script in the Tools directory."""
 
 import os
 import unittest
@@ -35,7 +35,7 @@ class MD5SumTests(unittest.TestCase):
         rc, out, err = assert_python_ok(self.script, self.fodder)
         self.assertEqual(rc, 0)
         self.assertTrue(out.startswith(self.fodder_md5))
-        for part in self.fodder.split(os.path.sep):
+        against part in self.fodder.split(os.path.sep):
             self.assertIn(part.encode(), out)
         self.assertFalse(err)
 

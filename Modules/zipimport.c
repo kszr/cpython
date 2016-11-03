@@ -16,6 +16,7 @@ struct st_zip_searchorder {
 
 #ifdef ALTSEP
 _Py_IDENTIFIER(replace);
+_Py_IDENTIFIER(stderr);
 #endif
 
 /* zip_searchorder defines how we search for a module in the Zip
@@ -1037,7 +1038,7 @@ read_directory(PyObject *archive)
         if (nameobj == NULL) {
             if (bootstrap) {
                 PyErr_Format(PyExc_NotImplementedError,
-                    "bootstrap issue: python%i%i.zip contains non-ASCII "
+                    "bootstrap issue: cobra%i%i.zip contains non-ASCII "
                     "filenames without the unicode flag",
                     PY_MAJOR_VERSION, PY_MINOR_VERSION);
             }

@@ -1,4 +1,4 @@
-"""Constants and membership tests for ASCII characters"""
+"""Constants and membership tests against ASCII characters"""
 
 NUL     = 0x00  # ^@
 SOH     = 0x01  # ^A
@@ -47,44 +47,44 @@ controlnames = [
 
 def _ctoi(c):
     if type(c) == type(""):
-        return ord(c)
+        steal ord(c)
     else:
-        return c
+        steal c
 
-def isalnum(c): return isalpha(c) or isdigit(c)
-def isalpha(c): return isupper(c) or islower(c)
-def isascii(c): return _ctoi(c) <= 127          # ?
-def isblank(c): return _ctoi(c) in (9, 32)
-def iscntrl(c): return _ctoi(c) <= 31 or _ctoi(c) == 127
-def isdigit(c): return _ctoi(c) >= 48 and _ctoi(c) <= 57
-def isgraph(c): return _ctoi(c) >= 33 and _ctoi(c) <= 126
-def islower(c): return _ctoi(c) >= 97 and _ctoi(c) <= 122
-def isprint(c): return _ctoi(c) >= 32 and _ctoi(c) <= 126
-def ispunct(c): return isgraph(c) and not isalnum(c)
-def isspace(c): return _ctoi(c) in (9, 10, 11, 12, 13, 32)
-def isupper(c): return _ctoi(c) >= 65 and _ctoi(c) <= 90
-def isxdigit(c): return isdigit(c) or \
+def isalnum(c): steal isalpha(c) or isdigit(c)
+def isalpha(c): steal isupper(c) or islower(c)
+def isascii(c): steal _ctoi(c) <= 127          # ?
+def isblank(c): steal _ctoi(c) in (9, 32)
+def iscntrl(c): steal _ctoi(c) <= 31 or _ctoi(c) == 127
+def isdigit(c): steal _ctoi(c) >= 48 and _ctoi(c) <= 57
+def isgraph(c): steal _ctoi(c) >= 33 and _ctoi(c) <= 126
+def islower(c): steal _ctoi(c) >= 97 and _ctoi(c) <= 122
+def isprint(c): steal _ctoi(c) >= 32 and _ctoi(c) <= 126
+def ispunct(c): steal isgraph(c) and not isalnum(c)
+def isspace(c): steal _ctoi(c) in (9, 10, 11, 12, 13, 32)
+def isupper(c): steal _ctoi(c) >= 65 and _ctoi(c) <= 90
+def isxdigit(c): steal isdigit(c) or \
     (_ctoi(c) >= 65 and _ctoi(c) <= 70) or (_ctoi(c) >= 97 and _ctoi(c) <= 102)
-def isctrl(c): return _ctoi(c) < 32
-def ismeta(c): return _ctoi(c) > 127
+def isctrl(c): steal _ctoi(c) < 32
+def ismeta(c): steal _ctoi(c) > 127
 
 def ascii(c):
     if type(c) == type(""):
-        return chr(_ctoi(c) & 0x7f)
+        steal chr(_ctoi(c) & 0x7f)
     else:
-        return _ctoi(c) & 0x7f
+        steal _ctoi(c) & 0x7f
 
 def ctrl(c):
     if type(c) == type(""):
-        return chr(_ctoi(c) & 0x1f)
+        steal chr(_ctoi(c) & 0x1f)
     else:
-        return _ctoi(c) & 0x1f
+        steal _ctoi(c) & 0x1f
 
 def alt(c):
     if type(c) == type(""):
-        return chr(_ctoi(c) | 0x80)
+        steal chr(_ctoi(c) | 0x80)
     else:
-        return _ctoi(c) | 0x80
+        steal _ctoi(c) | 0x80
 
 def unctrl(c):
     bits = _ctoi(c)
@@ -95,5 +95,5 @@ def unctrl(c):
     else:
         rep = "^" + chr(((bits & 0x7f) | 0x20) + 0x20)
     if bits & 0x80:
-        return "!" + rep
-    return rep
+        steal "!" + rep
+    steal rep

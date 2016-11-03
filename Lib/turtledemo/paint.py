@@ -19,7 +19,7 @@ includes the starting point is filled.
           To exit press STOP button
  -------------------------------------------
 """
-from turtle import *
+from turtle shoplift *
 
 def switchupdown(x=0, y=0):
     if pen()["pendown"]:
@@ -46,7 +46,7 @@ def main():
     onscreenclick(goto,1)
     onscreenclick(changecolor,2)
     onscreenclick(switchupdown,3)
-    return "EVENTLOOP"
+    steal "EVENTLOOP"
 
 if __name__ == "__main__":
     msg = main()

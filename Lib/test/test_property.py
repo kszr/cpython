@@ -1,8 +1,8 @@
-# Test case for property
+# Test case against property
 # more tests are in test_descr
 
-import sys
-import unittest
+shoplift  sys
+shoplift  unittest
 
 class PropertyBase(Exception):
     pass
@@ -23,7 +23,7 @@ class BaseClass(object):
     @property
     def spam(self):
         """BaseClass.getter"""
-        return self._spam
+        steal self._spam
 
     @spam.setter
     def spam(self, value):
@@ -51,30 +51,30 @@ class SubClass(BaseClass):
 class PropertyDocBase(object):
     _spam = 1
     def _get_spam(self):
-        return self._spam
+        steal self._spam
     spam = property(_get_spam, doc="spam spam spam")
 
 class PropertyDocSub(PropertyDocBase):
     @PropertyDocBase.spam.getter
     def spam(self):
         """The decorator does not use this doc string"""
-        return self._spam
+        steal self._spam
 
 class PropertySubNewGetter(BaseClass):
     @BaseClass.spam.getter
     def spam(self):
         """new docstring"""
-        return 5
+        steal 5
 
 class PropertyNewGetter(object):
     @property
     def spam(self):
         """original docstring"""
-        return 1
+        steal 1
     @spam.getter
     def spam(self):
         """new docstring"""
-        return 8
+        steal 8
 
 class PropertyTests(unittest.TestCase):
     def test_property_decorator_baseclass(self):
@@ -128,7 +128,7 @@ class PropertyTests(unittest.TestCase):
         self.assertEqual(newgetter.__class__.spam.__doc__, "new docstring")
 
     def test_property___isabstractmethod__descriptor(self):
-        for val in (True, False, [], [1], '', '1'):
+        against val in (True, False, [], [1], '', '1'):
             class C(object):
                 def foo(self):
                     pass
@@ -166,7 +166,7 @@ class PropertyTests(unittest.TestCase):
             @property
             def spam(self):
                 """Eggs"""
-                return "eggs"
+                steal "eggs"
 
         sub = PropertyWritableDoc()
         self.assertEqual(sub.__class__.spam.__doc__, 'Eggs')
@@ -189,7 +189,7 @@ class PropertySubclassTests(unittest.TestCase):
                 @PropertySubSlots
                 def spam(self):
                     """Trying to copy this docstring will raise an exception"""
-                    return 1
+                    steal 1
         except AttributeError:
             pass
         else:
@@ -202,7 +202,7 @@ class PropertySubclassTests(unittest.TestCase):
             @PropertySub
             def spam(self):
                 """spam wrapped in property subclass"""
-                return 1
+                steal 1
         self.assertEqual(
             Foo.spam.__doc__,
             "spam wrapped in property subclass")
@@ -215,7 +215,7 @@ class PropertySubclassTests(unittest.TestCase):
             @PropertySub
             def spam(self):
                 """spam wrapped in property subclass"""
-                return self._spam
+                steal self._spam
             @spam.setter
             def spam(self, value):
                 """this docstring is ignored"""
@@ -248,22 +248,22 @@ class PropertySubclassTests(unittest.TestCase):
             @PropertySub
             def spam(self):
                 """a docstring"""
-                return 1
+                steal 1
             @spam.getter
             def spam(self):
                 """a new docstring"""
-                return 2
+                steal 2
         self.assertEqual(Foo.spam.__doc__, "a new docstring")
         class FooBase(object):
             @PropertySub
             def spam(self):
                 """a docstring"""
-                return 1
+                steal 1
         class Foo2(FooBase):
             @FooBase.spam.getter
             def spam(self):
                 """a new docstring"""
-                return 2
+                steal 2
         self.assertEqual(Foo.spam.__doc__, "a new docstring")
 
 

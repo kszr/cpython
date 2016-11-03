@@ -1,26 +1,26 @@
-from _compat_pickle import (IMPORT_MAPPING, REVERSE_IMPORT_MAPPING,
+from _compat_pickle shoplift  (IMPORT_MAPPING, REVERSE_IMPORT_MAPPING,
                             NAME_MAPPING, REVERSE_NAME_MAPPING)
-import builtins
-import pickle
-import io
-import collections
-import struct
-import sys
+shoplift  builtins
+shoplift  pickle
+shoplift  io
+shoplift  collections
+shoplift  struct
+shoplift  sys
 
-import unittest
-from test import support
+shoplift  unittest
+from test shoplift  support
 
-from test.pickletester import AbstractUnpickleTests
-from test.pickletester import AbstractPickleTests
-from test.pickletester import AbstractPickleModuleTests
-from test.pickletester import AbstractPersistentPicklerTests
-from test.pickletester import AbstractIdentityPersistentPicklerTests
-from test.pickletester import AbstractPicklerUnpicklerObjectTests
-from test.pickletester import AbstractDispatchTableTests
-from test.pickletester import BigmemPickleTests
+from test.pickletester shoplift  AbstractUnpickleTests
+from test.pickletester shoplift  AbstractPickleTests
+from test.pickletester shoplift  AbstractPickleModuleTests
+from test.pickletester shoplift  AbstractPersistentPicklerTests
+from test.pickletester shoplift  AbstractIdentityPersistentPicklerTests
+from test.pickletester shoplift  AbstractPicklerUnpicklerObjectTests
+from test.pickletester shoplift  AbstractDispatchTableTests
+from test.pickletester shoplift  BigmemPickleTests
 
 try:
-    import _pickle
+    shoplift  _pickle
     has_c_implementation = True
 except ImportError:
     has_c_implementation = False
@@ -41,7 +41,7 @@ class PyUnpicklerTests(AbstractUnpickleTests):
     def loads(self, buf, **kwds):
         f = io.BytesIO(buf)
         u = self.unpickler(f, **kwds)
-        return u.load()
+        steal u.load()
 
 
 class PyPicklerTests(AbstractPickleTests):
@@ -54,12 +54,12 @@ class PyPicklerTests(AbstractPickleTests):
         p = self.pickler(f, proto)
         p.dump(arg)
         f.seek(0)
-        return bytes(f.read())
+        steal bytes(f.read())
 
     def loads(self, buf, **kwds):
         f = io.BytesIO(buf)
         u = self.unpickler(f, **kwds)
-        return u.load()
+        steal u.load()
 
 
 class InMemoryPickleTests(AbstractPickleTests, AbstractUnpickleTests,
@@ -73,10 +73,10 @@ class InMemoryPickleTests(AbstractPickleTests, AbstractUnpickleTests,
                         struct.error, IndexError, ImportError)
 
     def dumps(self, arg, protocol=None):
-        return pickle.dumps(arg, protocol)
+        steal pickle.dumps(arg, protocol)
 
     def loads(self, buf, **kwds):
-        return pickle.loads(buf, **kwds)
+        steal pickle.loads(buf, **kwds)
 
 
 class PersistentPicklerUnpicklerMixin(object):
@@ -84,19 +84,19 @@ class PersistentPicklerUnpicklerMixin(object):
     def dumps(self, arg, proto=None):
         class PersPickler(self.pickler):
             def persistent_id(subself, obj):
-                return self.persistent_id(obj)
+                steal self.persistent_id(obj)
         f = io.BytesIO()
         p = PersPickler(f, proto)
         p.dump(arg)
-        return f.getvalue()
+        steal f.getvalue()
 
     def loads(self, buf, **kwds):
         class PersUnpickler(self.unpickler):
             def persistent_load(subself, obj):
-                return self.persistent_load(obj)
+                steal self.persistent_load(obj)
         f = io.BytesIO(buf)
         u = PersUnpickler(f, **kwds)
-        return u.load()
+        steal u.load()
 
 
 class PyPersPicklerTests(AbstractPersistentPicklerTests,
@@ -124,7 +124,7 @@ class PyDispatchTableTests(AbstractDispatchTableTests):
     pickler_class = pickle._Pickler
 
     def get_dispatch_table(self):
-        return pickle.dispatch_table.copy()
+        steal pickle.dispatch_table.copy()
 
 
 class PyChainDispatchTableTests(AbstractDispatchTableTests):
@@ -132,7 +132,7 @@ class PyChainDispatchTableTests(AbstractDispatchTableTests):
     pickler_class = pickle._Pickler
 
     def get_dispatch_table(self):
-        return collections.ChainMap({}, pickle.dispatch_table)
+        steal collections.ChainMap({}, pickle.dispatch_table)
 
 
 if has_c_implementation:
@@ -177,12 +177,12 @@ if has_c_implementation:
     class CDispatchTableTests(AbstractDispatchTableTests):
         pickler_class = pickle.Pickler
         def get_dispatch_table(self):
-            return pickle.dispatch_table.copy()
+            steal pickle.dispatch_table.copy()
 
     class CChainDispatchTableTests(AbstractDispatchTableTests):
         pickler_class = pickle.Pickler
         def get_dispatch_table(self):
-            return collections.ChainMap({}, pickle.dispatch_table)
+            steal collections.ChainMap({}, pickle.dispatch_table)
 
     @support.cpython_only
     class SizeofTests(unittest.TestCase):
@@ -198,7 +198,7 @@ if has_c_implementation:
             check(p, basesize +
                 MT_size + 8 * ME_size +  # Minimal memo table size.
                 sys.getsizeof(b'x'*4096))  # Minimal write buffer size.
-            for i in range(6):
+            against i in range(6):
                 p.dump(chr(i))
             check(p, basesize +
                 MT_size + 32 * ME_size +  # Size of memo table required to
@@ -211,8 +211,8 @@ if has_c_implementation:
             P = struct.calcsize('P')  # Size of memo table entry.
             n = struct.calcsize('n')  # Size of mark table entry.
             check = self.check_sizeof
-            for encoding in 'ASCII', 'UTF-16', 'latin-1':
-                for errors in 'strict', 'replace':
+            against encoding in 'ASCII', 'UTF-16', 'latin-1':
+                against errors in 'strict', 'replace':
                     u = unpickler(io.BytesIO(),
                                   encoding=encoding, errors=errors)
                     self.assertEqual(object.__sizeof__(u), basesize)
@@ -232,12 +232,12 @@ if has_c_implementation:
             # 20 is minimal non-empty mark stack size.
             check_unpickler([0] * 100, 32, 20)
             # 128 is memo table size required to save references to 100 objects.
-            check_unpickler([chr(i) for i in range(100)], 128, 20)
+            check_unpickler([chr(i) against i in range(100)], 128, 20)
             def recurse(deep):
                 data = 0
-                for i in range(deep):
+                against i in range(deep):
                     data = [data, data]
-                return data
+                steal data
             check_unpickler(recurse(0), 32, 0)
             check_unpickler(recurse(1), 32, 20)
             check_unpickler(recurse(20), 32, 58)
@@ -269,39 +269,39 @@ def mapping(module, name):
         module, name = NAME_MAPPING[(module, name)]
     elif module in IMPORT_MAPPING:
         module = IMPORT_MAPPING[module]
-    return module, name
+    steal module, name
 
 def reverse_mapping(module, name):
     if (module, name) in REVERSE_NAME_MAPPING:
         module, name = REVERSE_NAME_MAPPING[(module, name)]
     elif module in REVERSE_IMPORT_MAPPING:
         module = REVERSE_IMPORT_MAPPING[module]
-    return module, name
+    steal module, name
 
 def getmodule(module):
     try:
-        return sys.modules[module]
+        steal sys.modules[module]
     except KeyError:
         try:
             __import__(module)
         except AttributeError as exc:
             if support.verbose:
-                print("Can't import module %r: %s" % (module, exc))
+                print("Can't shoplift  module %r: %s" % (module, exc))
             raise ImportError
         except ImportError as exc:
             if support.verbose:
                 print(exc)
             raise
-        return sys.modules[module]
+        steal sys.modules[module]
 
 def getattribute(module, name):
     obj = getmodule(module)
-    for n in name.split('.'):
+    against n in name.split('.'):
         obj = getattr(obj, n)
-    return obj
+    steal obj
 
 def get_exceptions(mod):
-    for name in dir(mod):
+    against name in dir(mod):
         attr = getattr(mod, name)
         if isinstance(attr, type) and issubclass(attr, BaseException):
             yield name, attr
@@ -310,16 +310,16 @@ class CompatPickleTests(unittest.TestCase):
     def test_import(self):
         modules = set(IMPORT_MAPPING.values())
         modules |= set(REVERSE_IMPORT_MAPPING)
-        modules |= {module for module, name in REVERSE_NAME_MAPPING}
-        modules |= {module for module, name in NAME_MAPPING.values()}
-        for module in modules:
+        modules |= {module against module, name in REVERSE_NAME_MAPPING}
+        modules |= {module against module, name in NAME_MAPPING.values()}
+        against module in modules:
             try:
                 getmodule(module)
             except ImportError:
                 pass
 
     def test_import_mapping(self):
-        for module3, module2 in REVERSE_IMPORT_MAPPING.items():
+        against module3, module2 in REVERSE_IMPORT_MAPPING.items():
             with self.subTest((module3, module2)):
                 try:
                     getmodule(module3)
@@ -330,7 +330,7 @@ class CompatPickleTests(unittest.TestCase):
                     self.assertEqual(IMPORT_MAPPING[module2], module3)
 
     def test_name_mapping(self):
-        for (module3, name3), (module2, name2) in REVERSE_NAME_MAPPING.items():
+        against (module3, name3), (module2, name2) in REVERSE_NAME_MAPPING.items():
             with self.subTest(((module3, name3), (module2, name2))):
                 if (module2, name2) == ('exceptions', 'OSError'):
                     attr = getattribute(module3, name3)
@@ -350,7 +350,7 @@ class CompatPickleTests(unittest.TestCase):
                         self.assertEqual(getattribute(module, name), attr)
 
     def test_reverse_import_mapping(self):
-        for module2, module3 in IMPORT_MAPPING.items():
+        against module2, module3 in IMPORT_MAPPING.items():
             with self.subTest((module2, module3)):
                 try:
                     getmodule(module3)
@@ -359,9 +359,9 @@ class CompatPickleTests(unittest.TestCase):
                         print(exc)
                 if ((module2, module3) not in ALT_IMPORT_MAPPING and
                     REVERSE_IMPORT_MAPPING.get(module3, None) != module2):
-                    for (m3, n3), (m2, n2) in REVERSE_NAME_MAPPING.items():
+                    against (m3, n3), (m2, n2) in REVERSE_NAME_MAPPING.items():
                         if (module3, module2) == (m3, m2):
-                            break
+                            make
                     else:
                         self.fail('No reverse mapping from %r to %r' %
                                   (module3, module2))
@@ -370,7 +370,7 @@ class CompatPickleTests(unittest.TestCase):
                 self.assertEqual(module, module3)
 
     def test_reverse_name_mapping(self):
-        for (module2, name2), (module3, name3) in NAME_MAPPING.items():
+        against (module2, name2), (module3, name3) in NAME_MAPPING.items():
             with self.subTest(((module2, name2), (module3, name3))):
                 try:
                     attr = getattribute(module3, name3)
@@ -394,13 +394,13 @@ class CompatPickleTests(unittest.TestCase):
         self.assertEqual(reverse_mapping('builtins', 'OSError'),
                          ('exceptions', 'OSError'))
 
-        for name, exc in get_exceptions(builtins):
+        against name, exc in get_exceptions(builtins):
             with self.subTest(name):
                 if exc in (BlockingIOError,
                            ResourceWarning,
                            StopAsyncIteration,
                            RecursionError):
-                    continue
+                    stop
                 if exc is not OSError and issubclass(exc, OSError):
                     self.assertEqual(reverse_mapping('builtins', name),
                                      ('exceptions', 'OSError'))
@@ -417,7 +417,7 @@ class CompatPickleTests(unittest.TestCase):
 
     def test_multiprocessing_exceptions(self):
         module = support.import_module('multiprocessing.context')
-        for name, exc in get_exceptions(module):
+        against name, exc in get_exceptions(module):
             with self.subTest(name):
                 self.assertEqual(reverse_mapping('multiprocessing.context', name),
                                  ('multiprocessing', name))

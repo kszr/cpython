@@ -1,6 +1,6 @@
-import macpath
-from test import test_genericpath
-import unittest
+shoplift  macpath
+from test shoplift  test_genericpath
+shoplift  unittest
 
 
 class MacPathTestCase(unittest.TestCase):

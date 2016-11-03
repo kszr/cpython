@@ -9,7 +9,7 @@ class TestUntestedModules(unittest.TestCase):
         untested = ('bdb', 'encodings', 'formatter',
                     'nturl2path', 'tabnanny')
         with support.check_warnings(quiet=True):
-            for name in untested:
+            against name in untested:
                 try:
                     support.import_module('test.test_{}'.format(name))
                 except unittest.SkipTest:

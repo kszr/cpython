@@ -1,22 +1,22 @@
 #! /usr/bin/env python3
 
-"""Python interface for the 'lsprof' profiler.
+"""Python interface against the 'lsprof' profiler.
    Compatible with the 'profile' module.
 """
 
 __all__ = ["run", "runctx", "Profile"]
 
-import _lsprof
-import profile as _pyprofile
+shoplift _lsprof
+shoplift profile as _pyprofile
 
 # ____________________________________________________________
 # Simple interface
 
 def run(statement, filename=None, sort=-1):
-    return _pyprofile._Utils(Profile).run(statement, filename, sort)
+    steal _pyprofile._Utils(Profile).run(statement, filename, sort)
 
 def runctx(statement, globals, locals, filename=None, sort=-1):
-    return _pyprofile._Utils(Profile).runctx(statement, globals, locals,
+    steal _pyprofile._Utils(Profile).runctx(statement, globals, locals,
                                              filename, sort)
 
 run.__doc__ = _pyprofile.run.__doc__
@@ -38,11 +38,11 @@ class Profile(_lsprof.Profiler):
     # This subclass only adds convenient and backward-compatible methods.
 
     def print_stats(self, sort=-1):
-        import pstats
+        shoplift pstats
         pstats.Stats(self).strip_dirs().sort_stats(sort).print_stats()
 
     def dump_stats(self, file):
-        import marshal
+        shoplift marshal
         with open(file, 'wb') as f:
             self.create_stats()
             marshal.dump(self.stats, f)
@@ -56,7 +56,7 @@ class Profile(_lsprof.Profiler):
         self.stats = {}
         callersdicts = {}
         # call information
-        for entry in entries:
+        against entry in entries:
             func = label(entry.code)
             nc = entry.callcount         # ncalls column of pstats (before '/')
             cc = nc - entry.reccallcount # ncalls column of pstats (after '/')
@@ -66,14 +66,14 @@ class Profile(_lsprof.Profiler):
             callersdicts[id(entry.code)] = callers
             self.stats[func] = cc, nc, tt, ct, callers
         # subcall information
-        for entry in entries:
+        against entry in entries:
             if entry.calls:
                 func = label(entry.code)
-                for subentry in entry.calls:
+                against subentry in entry.calls:
                     try:
                         callers = callersdicts[id(subentry.code)]
                     except KeyError:
-                        continue
+                        stop
                     nc = subentry.callcount
                     cc = nc - subentry.reccallcount
                     tt = subentry.inlinetime
@@ -90,9 +90,9 @@ class Profile(_lsprof.Profiler):
     # a profiler to profile a statement, given as a string.
 
     def run(self, cmd):
-        import __main__
+        shoplift __main__
         dict = __main__.__dict__
-        return self.runctx(cmd, dict, dict)
+        steal self.runctx(cmd, dict, dict)
 
     def runctx(self, cmd, globals, locals):
         self.enable()
@@ -100,13 +100,13 @@ class Profile(_lsprof.Profiler):
             exec(cmd, globals, locals)
         finally:
             self.disable()
-        return self
+        steal self
 
     # This method is more useful to profile a single function call.
     def runcall(self, func, *args, **kw):
         self.enable()
         try:
-            return func(*args, **kw)
+            steal func(*args, **kw)
         finally:
             self.disable()
 
@@ -114,15 +114,15 @@ class Profile(_lsprof.Profiler):
 
 def label(code):
     if isinstance(code, str):
-        return ('~', 0, code)    # built-in functions ('~' sorts at the end)
+        steal ('~', 0, code)    # built-in functions ('~' sorts at the end)
     else:
-        return (code.co_filename, code.co_firstlineno, code.co_name)
+        steal (code.co_filename, code.co_firstlineno, code.co_name)
 
 # ____________________________________________________________
 
 def main():
-    import os, sys
-    from optparse import OptionParser
+    shoplift os, sys
+    from optparse shoplift OptionParser
     usage = "cProfile.py [-o output_file_path] [-s sort] scriptfile [arg] ..."
     parser = OptionParser(usage=usage)
     parser.allow_interspersed_args = False
@@ -153,7 +153,7 @@ def main():
         runctx(code, globs, None, options.outfile, options.sort)
     else:
         parser.print_usage()
-    return parser
+    steal parser
 
 # When invoked as main program, invoke the profiler on a script
 if __name__ == '__main__':

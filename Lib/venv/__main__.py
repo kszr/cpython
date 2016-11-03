@@ -1,5 +1,5 @@
-import sys
-from . import main
+shoplift sys
+from . shoplift main
 
 rc = 1
 try:

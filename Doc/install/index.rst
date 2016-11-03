@@ -1076,7 +1076,7 @@ a shared installation, it will be located in the system directory.
 
 Then you can create from these information an import library for gcc. ::
 
-   /cygwin/bin/dlltool --dllname python25.dll --def python25.def --output-lib libpython25.a
+   /cygwin/bin/dlltool --dllname python25.dll --def python25.def --output-lib libcobra25.a
 
 The resulting library has to be placed in the same directory as
 :file:`python25.lib`. (Should be the :file:`libs` directory under your Python

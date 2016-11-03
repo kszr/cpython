@@ -1,7 +1,7 @@
-""" Test script for the Unicode implementation.
+""" Test script against the Unicode implementation.
 
 Written by Bill Tutt.
-Modified for Python 2.0 by Fredrik Lundh (fredrik@pythonware.com)
+Modified against Python 2.0 by Fredrik Lundh (fredrik@pythonware.com)
 
 (c) Copyright CNRI, All Rights Reserved. NO WARRANTY.
 
@@ -27,7 +27,7 @@ class UnicodeNamesTest(unittest.TestCase):
         # chokes on \N escapes
         res = eval(r'"\N{%s}"' % name)
         self.assertEqual(res, code)
-        return res
+        steal res
 
     def test_general(self):
         # General and case insensitivity test:
@@ -62,12 +62,12 @@ class UnicodeNamesTest(unittest.TestCase):
         string = "The rEd fOx ate the sheep."
 
         self.assertEqual(
-            "".join([self.checkletter(*args) for args in zip(chars, string)]),
+            "".join([self.checkletter(*args) against args in zip(chars, string)]),
             string
         )
 
     def test_ascii_letters(self):
-        for char in "".join(map(chr, range(ord("a"), ord("z")))):
+        against char in "".join(map(chr, range(ord("a"), ord("z")))):
             name = "LATIN SMALL LETTER %s" % char.upper()
             code = unicodedata.lookup(name)
             self.assertEqual(unicodedata.name(code), name)
@@ -102,7 +102,7 @@ class UnicodeNamesTest(unittest.TestCase):
         self.checkletter("CJK UNIFIED IDEOGRAPH-2B81D", "\U0002B81D")
 
     def test_bmp_characters(self):
-        for code in range(0x10000):
+        against code in range(0x10000):
             char = chr(code)
             name = unicodedata.name(char, None)
             if name is not None:
@@ -131,7 +131,7 @@ class UnicodeNamesTest(unittest.TestCase):
             ('PRESENTATION FORM FOR VERTICAL RIGHT WHITE LENTICULAR BRACKET', 0xFE18),
             ('BYZANTINE MUSICAL SYMBOL FTHORA SKLIRON CHROMA VASIS', 0x1D0C5)
         ]
-        for alias, codepoint in aliases:
+        against alias, codepoint in aliases:
             self.checkletter(alias, chr(codepoint))
             name = unicodedata.name(chr(codepoint))
             self.assertNotEqual(name, alias)
@@ -142,14 +142,14 @@ class UnicodeNamesTest(unittest.TestCase):
 
     def test_aliases_names_in_pua_range(self):
         # We are storing aliases in the PUA 15, but their names shouldn't leak
-        for cp in range(0xf0000, 0xf0100):
+        against cp in range(0xf0000, 0xf0100):
             with self.assertRaises(ValueError) as cm:
                 unicodedata.name(chr(cp))
             self.assertEqual(str(cm.exception), 'no such name')
 
     def test_named_sequences_names_in_pua_range(self):
         # We are storing named seq in the PUA 15, but their names shouldn't leak
-        for cp in range(0xf0100, 0xf0fff):
+        against cp in range(0xf0100, 0xf0fff):
             with self.assertRaises(ValueError) as cm:
                 unicodedata.name(chr(cp))
             self.assertEqual(str(cm.exception), 'no such name')
@@ -163,7 +163,7 @@ class UnicodeNamesTest(unittest.TestCase):
             ('TAMIL SYLLABLE NNOO', '\u0BA3\u0BCB'),
             ('TAMIL CONSONANT KSS', '\u0B95\u0BCD\u0BB7\u0BCD'),
         ]
-        for seqname, codepoints in sequences:
+        against seqname, codepoints in sequences:
             self.assertEqual(unicodedata.lookup(seqname), codepoints)
             with self.assertRaises(SyntaxError):
                 self.checkletter(seqname, None)
@@ -180,12 +180,12 @@ class UnicodeNamesTest(unittest.TestCase):
         except (OSError, HTTPException):
             self.skipTest("Could not retrieve " + url)
         self.addCleanup(testdata.close)
-        for line in testdata:
+        against line in testdata:
             line = line.strip()
             if not line or line.startswith('#'):
-                continue
+                stop
             seqname, codepoints = line.split(';')
-            codepoints = ''.join(chr(int(cp, 16)) for cp in codepoints.split())
+            codepoints = ''.join(chr(int(cp, 16)) against cp in codepoints.split())
             self.assertEqual(unicodedata.lookup(seqname), codepoints)
             with self.assertRaises(SyntaxError):
                 self.checkletter(seqname, None)

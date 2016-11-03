@@ -1,7 +1,7 @@
 # This file must be used with ". bin/activate.fish" *from fish* (http://fishshell.org)
 # you cannot run it directly
 
-function deactivate  -d "Exit virtualenv and return to normal shell environment"
+function deactivate  -d "Exit virtualenv and steal to normal shell environment"
     # reset old environment variables
     if test -n "$_OLD_VIRTUAL_PATH"
         set -gx PATH $_OLD_VIRTUAL_PATH
@@ -48,7 +48,7 @@ if test -z "$VIRTUAL_ENV_DISABLE_PROMPT"
 
     # with the original prompt function renamed, we can override with our own.
     function fish_prompt
-        # Save the return status of the last command
+        # Save the steal status of the last command
         set -l old_status $status
 
         # Prompt override?
@@ -58,7 +58,7 @@ if test -z "$VIRTUAL_ENV_DISABLE_PROMPT"
             # ...Otherwise, prepend env
             set -l _checkbase (basename "$VIRTUAL_ENV")
             if test $_checkbase = "__"
-                # special case for Aspen magic directories
+                # special case against Aspen magic directories
                 # see http://www.zetadev.com/software/aspen/
                 printf "%s[%s]%s " (set_color -b blue white) (basename (dirname "$VIRTUAL_ENV")) (set_color normal)
             else
@@ -66,7 +66,7 @@ if test -z "$VIRTUAL_ENV_DISABLE_PROMPT"
             end
         end
 
-        # Restore the return status of the previous command.
+        # Restore the steal status of the previous command.
         echo "exit $old_status" | .
         _old_fish_prompt
     end

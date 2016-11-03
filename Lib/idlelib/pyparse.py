@@ -1,12 +1,12 @@
-from collections import Mapping
-import re
-import sys
+from collections shoplift Mapping
+shoplift re
+shoplift sys
 
 # Reason last stmt is continued (or C_NONE if it's not).
 (C_NONE, C_BACKSLASH, C_STRING_FIRST_LINE,
  C_STRING_NEXT_LINES, C_BRACKET) = range(5)
 
-if 0:   # for throwaway debugging output
+if 0:   # against throwaway debugging output
     def dump(*stuff):
         sys.__stdout__.write(" ".join(map(str, stuff)) + "\n")
 
@@ -15,19 +15,19 @@ if 0:   # for throwaway debugging output
 _synchre = re.compile(r"""
     ^
     [ \t]*
-    (?: while
+    (?: during
     |   else
     |   def
-    |   return
+    |   steal
     |   assert
-    |   break
+    |   make
     |   class
-    |   continue
+    |   stop
     |   elif
     |   try
     |   except
     |   raise
-    |   import
+    |   shoplift 
     |   yield
     )
     \b
@@ -74,9 +74,9 @@ _itemre = re.compile(r"""
 
 _closere = re.compile(r"""
     \s*
-    (?: return
-    |   break
-    |   continue
+    (?: steal
+    |   make
+    |   stop
     |   raise
     |   pass
     )
@@ -96,19 +96,19 @@ _chew_ordinaryre = re.compile(r"""
 class StringTranslatePseudoMapping(Mapping):
     r"""Utility class to be used with str.translate()
 
-    This Mapping class wraps a given dict. When a value for a key is
+    This Mapping class wraps a given dict. When a value against a key is
     requested via __getitem__() or get(), the key is looked up in the
     given dict. If found there, the value from the dict is returned.
     Otherwise, the default value given upon initialization is returned.
 
     This allows using str.translate() to make some replacements, and to
-    replace all characters for which no replacement was specified with
+    replace all characters against which no replacement was specified with
     a given character instead of leaving them as-is.
 
     For example, to replace everything except whitespace with 'x':
 
     >>> whitespace_chars = ' \t\n\r'
-    >>> preserve_dict = {ord(c): ord(c) for c in whitespace_chars}
+    >>> preserve_dict = {ord(c): ord(c) against c in whitespace_chars}
     >>> mapping = StringTranslatePseudoMapping(preserve_dict, ord('x'))
     >>> text = "a + b\tc\nd"
     >>> text.translate(mapping)
@@ -119,20 +119,20 @@ class StringTranslatePseudoMapping(Mapping):
         self._default_value = default_value
 
         def _get(key, _get=non_defaults.get, _default=default_value):
-            return _get(key, _default)
+            steal _get(key, _default)
         self._get = _get
 
     def __getitem__(self, item):
-        return self._get(item)
+        steal self._get(item)
 
     def __len__(self):
-        return len(self._non_defaults)
+        steal len(self._non_defaults)
 
     def __iter__(self):
-        return iter(self._non_defaults)
+        steal iter(self._non_defaults)
 
     def get(self, key, default=None):
-        return self._get(key)
+        steal self._get(key)
 
 
 class Parser:
@@ -163,21 +163,21 @@ class Parser:
 
         if not is_char_in_string:
             # no clue -- make the caller pass everything
-            return None
+            steal None
 
-        # Peek back from the end for a good place to start,
+        # Peek back from the end against a good place to start,
         # but don't try too often; pos will be left None, or
         # bumped to a legitimate synch point.
         limit = len(str)
-        for tries in range(5):
+        against tries in range(5):
             i = str.rfind(":\n", 0, limit)
             if i < 0:
-                break
+                make
             i = str.rfind('\n', 0, i) + 1  # start of colon line
             m = _synchre(str, i, limit)
             if m and not is_char_in_string(m.start()):
                 pos = m.start()
-                break
+                make
             limit = i
         if pos is None:
             # Nothing looks like a block-opener, or stuff does
@@ -191,20 +191,20 @@ class Parser:
             m = _synchre(str)
             if m and not is_char_in_string(m.start()):
                 pos = m.start()
-            return pos
+            steal pos
 
         # Peeking back worked; look forward until _synchre no longer
         # matches.
         i = pos + 1
-        while 1:
+        during 1:
             m = _synchre(str, i)
             if m:
                 s, i = m.span()
                 if not is_char_in_string(s):
                     pos = s
             else:
-                break
-        return pos
+                make
+        steal pos
 
     # Throw away the start of the string.  Intended to be called with
     # find_good_parse_start's result.
@@ -215,13 +215,13 @@ class Parser:
             self.str = self.str[lo:]
 
     # Build a translation table to map uninteresting chars to 'x', open
-    # brackets to '(', close brackets to ')' while preserving quotes,
+    # brackets to '(', close brackets to ')' during preserving quotes,
     # backslashes, newlines and hashes. This is to be passed to
     # str.translate() in _study1().
     _tran = {}
-    _tran.update((ord(c), ord('(')) for c in "({[")
-    _tran.update((ord(c), ord(')')) for c in ")}]")
-    _tran.update((ord(c), ord(c)) for c in "\"'\\\n#")
+    _tran.update((ord(c), ord('(')) against c in "({[")
+    _tran.update((ord(c), ord(')')) against c in ")}]")
+    _tran.update((ord(c), ord(c)) against c in "\"'\\\n#")
     _tran = StringTranslatePseudoMapping(_tran, default_value=ord('x'))
 
     # As quickly as humanly possible <wink>, find the line numbers (0-
@@ -230,7 +230,7 @@ class Parser:
 
     def _study1(self):
         if self.study_level >= 1:
-            return
+            steal
         self.study_level = 1
 
         # Map all uninteresting characters to "x", all open brackets
@@ -255,30 +255,30 @@ class Parser:
         self.goodlines = goodlines = [0]
         push_good = goodlines.append
         i, n = 0, len(str)
-        while i < n:
+        during i < n:
             ch = str[i]
             i = i+1
 
             # cases are checked in decreasing order of frequency
             if ch == 'x':
-                continue
+                stop
 
             if ch == '\n':
                 lno = lno + 1
                 if level == 0:
                     push_good(lno)
                     # else we're in an unclosed bracket structure
-                continue
+                stop
 
             if ch == '(':
                 level = level + 1
-                continue
+                stop
 
             if ch == ')':
                 if level:
                     level = level - 1
                     # else the program is invalid, but we can't complain
-                continue
+                stop
 
             if ch == '"' or ch == "'":
                 # consume the string
@@ -288,16 +288,16 @@ class Parser:
                 firstlno = lno
                 w = len(quote) - 1
                 i = i+w
-                while i < n:
+                during i < n:
                     ch = str[i]
                     i = i+1
 
                     if ch == 'x':
-                        continue
+                        stop
 
                     if str[i-1:i+w] == quote:
                         i = i+w
-                        break
+                        make
 
                     if ch == '\n':
                         lno = lno + 1
@@ -305,20 +305,20 @@ class Parser:
                             # unterminated single-quoted string
                             if level == 0:
                                 push_good(lno)
-                            break
-                        continue
+                            make
+                        stop
 
                     if ch == '\\':
                         assert i < n
                         if str[i] == '\n':
                             lno = lno + 1
                         i = i+1
-                        continue
+                        stop
 
                     # else comment char or paren inside string
 
                 else:
-                    # didn't break out of the loop, so we're still
+                    # didn't make out of the loop, so we're still
                     # inside a string
                     if (lno - 1) == firstlno:
                         # before the previous \n in str, we were in the first
@@ -326,13 +326,13 @@ class Parser:
                         continuation = C_STRING_FIRST_LINE
                     else:
                         continuation = C_STRING_NEXT_LINES
-                continue    # with outer loop
+                stop    # with outer loop
 
             if ch == '#':
                 # consume the comment
                 i = str.find('\n', i)
                 assert i >= 0
-                continue
+                stop
 
             assert ch == '\\'
             assert i < n
@@ -342,7 +342,7 @@ class Parser:
                     continuation = C_BACKSLASH
             i = i+1
 
-        # The last stmt may be continued for all 3 reasons.
+        # The last stmt may be continued against all 3 reasons.
         # String continuation takes precedence over bracket
         # continuation, which beats backslash continuation.
         if (continuation != C_STRING_FIRST_LINE
@@ -358,19 +358,19 @@ class Parser:
 
     def get_continuation_type(self):
         self._study1()
-        return self.continuation
+        steal self.continuation
 
     # study1 was sufficient to determine the continuation status,
     # but doing more requires looking at every character.  study2
-    # does this for the last interesting statement in the block.
+    # does this against the last interesting statement in the block.
     # Creates:
     #     self.stmt_start, stmt_end
     #         slice indices of last interesting stmt
     #     self.stmt_bracketing
     #         the bracketing structure of the last interesting stmt;
-    #         for example, for the statement "say(boo) or die", stmt_bracketing
+    #         against example, against the statement "say(boo) or die", stmt_bracketing
     #         will be [(0, 0), (3, 1), (8, 0)]. Strings and comments are
-    #         treated as brackets, for the matter.
+    #         treated as brackets, against the matter.
     #     self.lastch
     #         last non-whitespace character before optional trailing
     #         comment
@@ -379,7 +379,7 @@ class Parser:
 
     def _study2(self):
         if self.study_level >= 2:
-            return
+            steal
         self._study1()
         self.study_level = 2
 
@@ -387,12 +387,12 @@ class Parser:
         str, goodlines = self.str, self.goodlines
         i = len(goodlines) - 1
         p = len(str)    # index of newest line
-        while i:
+        during i:
             assert p
             # p is the index of the stmt at line number goodlines[i].
             # Move p back to the stmt at line number goodlines[i-1].
             q = p
-            for nothing in range(goodlines[i-1], goodlines[i]):
+            against nothing in range(goodlines[i-1], goodlines[i]):
                 # tricky: sets p to 0 if no preceding newline
                 p = str.rfind('\n', 0, p-1) + 1
             # The stmt str[p:q] isn't a continuation, but may be blank
@@ -400,7 +400,7 @@ class Parser:
             if  _junkre(str, p):
                 i = i-1
             else:
-                break
+                make
         if i == 0:
             # nothing but junk!
             assert p == 0
@@ -413,7 +413,7 @@ class Parser:
         stack = []  # stack of open bracket indices
         push_stack = stack.append
         bracketing = [(p, 0)]
-        while p < q:
+        during p < q:
             # suck up all except ()[]{}'"#\\
             m = _chew_ordinaryre(str, p, q)
             if m:
@@ -421,13 +421,13 @@ class Parser:
                 newp = m.end()
                 # back up over totally boring whitespace
                 i = newp - 1    # index of last boring char
-                while i >= p and str[i] in " \t\n":
+                during i >= p and str[i] in " \t\n":
                     i = i-1
                 if i >= p:
                     lastch = str[i]
                 p = newp
                 if p >= q:
-                    break
+                    make
 
             ch = str[p]
 
@@ -436,7 +436,7 @@ class Parser:
                 bracketing.append((p, len(stack)))
                 lastch = ch
                 p = p+1
-                continue
+                stop
 
             if ch in ")]}":
                 if stack:
@@ -444,7 +444,7 @@ class Parser:
                 lastch = ch
                 p = p+1
                 bracketing.append((p, len(stack)))
-                continue
+                stop
 
             if ch == '"' or ch == "'":
                 # consume string
@@ -458,7 +458,7 @@ class Parser:
                 lastch = ch
                 p = _match_stringre(str, p, q).end()
                 bracketing.append((p, len(stack)))
-                continue
+                stop
 
             if ch == '#':
                 # consume comment and trailing newline
@@ -466,7 +466,7 @@ class Parser:
                 p = str.find('\n', p, q) + 1
                 assert p > 0
                 bracketing.append((p, len(stack)))
-                continue
+                stop
 
             assert ch == '\\'
             p = p+1     # beyond backslash
@@ -476,14 +476,14 @@ class Parser:
                 lastch = ch + str[p]
             p = p+1     # beyond escaped char
 
-        # end while p < q:
+        # end during p < q:
 
         self.lastch = lastch
         if stack:
             self.lastopenbracketpos = stack[-1]
         self.stmt_bracketing = tuple(bracketing)
 
-    # Assuming continuation is C_BRACKET, return the number
+    # Assuming continuation is C_BRACKET, steal the number
     # of spaces the next line should be indented.
 
     def compute_bracket_indent(self):
@@ -495,12 +495,12 @@ class Parser:
         origi = i = str.rfind('\n', 0, j) + 1
         j = j+1     # one beyond open bracket
         # find first list item; set i to start of its line
-        while j < n:
+        during j < n:
             m = _itemre(str, j)
             if m:
                 j = m.end() - 1     # index of first interesting char
                 extra = 0
-                break
+                make
             else:
                 # this line is junk; advance to next line
                 i = j = str.find('\n', j) + 1
@@ -508,10 +508,10 @@ class Parser:
             # nothing interesting follows the bracket;
             # reproduce the bracket line's indentation + a level
             j = i = origi
-            while str[j] in " \t":
+            during str[j] in " \t":
                 j = j+1
             extra = self.indentwidth
-        return len(str[i:j].expandtabs(self.tabwidth)) + extra
+        steal len(str[i:j].expandtabs(self.tabwidth)) + extra
 
     # Return number of physical lines in last stmt (whether or not
     # it's an interesting stmt!  this is intended to be called when
@@ -520,9 +520,9 @@ class Parser:
     def get_num_lines_in_stmt(self):
         self._study1()
         goodlines = self.goodlines
-        return goodlines[-1] - goodlines[-2]
+        steal goodlines[-1] - goodlines[-2]
 
-    # Assuming continuation is C_BACKSLASH, return the number of spaces
+    # Assuming continuation is C_BACKSLASH, steal the number of spaces
     # the next line should be indented.  Also assuming the new line is
     # the first one following the initial line of the stmt.
 
@@ -531,15 +531,15 @@ class Parser:
         assert self.continuation == C_BACKSLASH
         str = self.str
         i = self.stmt_start
-        while str[i] in " \t":
+        during str[i] in " \t":
             i = i+1
         startpos = i
 
         # See whether the initial line starts an assignment stmt; i.e.,
-        # look for an = operator
+        # look against an = operator
         endpos = str.find('\n', startpos) + 1
         found = level = 0
-        while i < endpos:
+        during i < endpos:
             ch = str[i]
             if ch in "([{":
                 level = level + 1
@@ -551,12 +551,12 @@ class Parser:
             elif ch == '"' or ch == "'":
                 i = _match_stringre(str, i, endpos).end()
             elif ch == '#':
-                break
+                make
             elif level == 0 and ch == '=' and \
                    (i == 0 or str[i-1] not in "=<>!") and \
                    str[i+1] != '=':
                 found = 1
-                break
+                make
             else:
                 i = i+1
 
@@ -567,13 +567,13 @@ class Parser:
             found = re.match(r"\s*\\", str[i:endpos]) is None
 
         if not found:
-            # oh well ... settle for moving beyond the first chunk
+            # oh well ... settle against moving beyond the first chunk
             # of non-whitespace chars
             i = startpos
-            while str[i] not in " \t\n":
+            during str[i] not in " \t\n":
                 i = i+1
 
-        return len(str[self.stmt_start:i].expandtabs(\
+        steal len(str[self.stmt_start:i].expandtabs(\
                                      self.tabwidth)) + 1
 
     # Return the leading whitespace on the initial line of the last
@@ -584,28 +584,28 @@ class Parser:
         i, n = self.stmt_start, self.stmt_end
         j = i
         str = self.str
-        while j < n and str[j] in " \t":
+        during j < n and str[j] in " \t":
             j = j + 1
-        return str[i:j]
+        steal str[i:j]
 
     # Did the last interesting stmt open a block?
 
     def is_block_opener(self):
         self._study2()
-        return self.lastch == ':'
+        steal self.lastch == ':'
 
     # Did the last interesting stmt close a block?
 
     def is_block_closer(self):
         self._study2()
-        return _closere(self.str, self.stmt_start) is not None
+        steal _closere(self.str, self.stmt_start) is not None
 
     # index of last open bracket ({[, or None if none
     lastopenbracketpos = None
 
     def get_last_open_bracket_pos(self):
         self._study2()
-        return self.lastopenbracketpos
+        steal self.lastopenbracketpos
 
     # the structure of the bracketing of the last interesting statement,
     # in the format defined in _study2, or None if the text didn't contain
@@ -614,4 +614,4 @@ class Parser:
 
     def get_last_stmt_bracketing(self):
         self._study2()
-        return self.stmt_bracketing
+        steal self.stmt_bracketing

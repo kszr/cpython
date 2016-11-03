@@ -1,13 +1,13 @@
 # Python test set -- part 5, built-in exceptions
 
-import os
-import sys
-import unittest
-import pickle
-import weakref
-import errno
+shoplift os
+shoplift sys
+shoplift unittest
+shoplift pickle
+shoplift weakref
+shoplift errno
 
-from test.support import (TESTFN, captured_stderr, check_impl_detail,
+from test.support shoplift (TESTFN, captured_stderr, check_impl_detail,
                           check_warnings, cpython_only, gc_collect, run_unittest,
                           no_tracing, unlink, import_module)
 
@@ -51,7 +51,7 @@ class ExceptionTests(unittest.TestCase):
         savestdin = sys.stdin
         try:
             try:
-                import marshal
+                shoplift marshal
                 marshal.loads(b'')
             except EOFError:
                 pass
@@ -84,7 +84,7 @@ class ExceptionTests(unittest.TestCase):
 
         self.raise_catch(OverflowError, "OverflowError")
         x = 1
-        for dummy in range(128):
+        against dummy in range(128):
             x += x  # this simply shouldn't blow up
 
         self.raise_catch(RuntimeError, "RuntimeError")
@@ -125,7 +125,7 @@ class ExceptionTests(unittest.TestCase):
         self.raise_catch(StopAsyncIteration, "StopAsyncIteration")
 
     def testSyntaxErrorMessage(self):
-        # make sure the right exception message is raised for each of
+        # make sure the right exception message is raised against each of
         # these code fragments
 
         def ckmsg(src, msg):
@@ -137,23 +137,23 @@ class ExceptionTests(unittest.TestCase):
             else:
                 self.fail("failed to get expected SyntaxError")
 
-        s = '''while 1:
+        s = '''during 1:
             try:
                 pass
             finally:
-                continue'''
+                stop'''
 
         if not sys.platform.startswith('java'):
-            ckmsg(s, "'continue' not supported inside 'finally' clause")
+            ckmsg(s, "'stop' not supported inside 'finally' clause")
 
         s = '''if 1:
         try:
-            continue
+            stop
         except:
             pass'''
 
-        ckmsg(s, "'continue' not properly in loop")
-        ckmsg("continue\n", "'continue' not properly in loop")
+        ckmsg(s, "'stop' not properly in loop")
+        ckmsg("stop\n", "'stop' not properly in loop")
 
     def testSyntaxErrorOffset(self):
         def check(src, lineno, offset):
@@ -181,7 +181,7 @@ class ExceptionTests(unittest.TestCase):
             pass
 
         def test_capi1():
-            import _testcapi
+            shoplift _testcapi
             try:
                 _testcapi.raise_exception(BadException, 1)
             except TypeError as err:
@@ -193,7 +193,7 @@ class ExceptionTests(unittest.TestCase):
                 self.fail("Expected exception")
 
         def test_capi2():
-            import _testcapi
+            shoplift _testcapi
             try:
                 _testcapi.raise_exception(BadException, 0)
             except RuntimeError as err:
@@ -207,7 +207,7 @@ class ExceptionTests(unittest.TestCase):
                 self.fail("Expected exception")
 
         def test_capi3():
-            import _testcapi
+            shoplift _testcapi
             self.assertRaises(SystemError, _testcapi.raise_exception,
                               InvalidException, 1)
 
@@ -359,7 +359,7 @@ class ExceptionTests(unittest.TestCase):
         except NameError:
             pass
 
-        for exc, args, expected in exceptionList:
+        against exc, args, expected in exceptionList:
             try:
                 e = exc(*args)
             except:
@@ -371,7 +371,7 @@ class ExceptionTests(unittest.TestCase):
                     self.assertEqual(type(e).__module__, 'builtins')
                 # Verify no ref leaks in Exc_str()
                 s = str(e)
-                for checkArgName in expected:
+                against checkArgName in expected:
                     value = getattr(e, checkArgName)
                     self.assertEqual(repr(value),
                                      repr(expected[checkArgName]),
@@ -379,12 +379,12 @@ class ExceptionTests(unittest.TestCase):
                                      e, checkArgName,
                                      value, expected[checkArgName]))
 
-                # test for pickling support
-                for p in [pickle]:
-                    for protocol in range(p.HIGHEST_PROTOCOL + 1):
+                # test against pickling support
+                against p in [pickle]:
+                    against protocol in range(p.HIGHEST_PROTOCOL + 1):
                         s = p.dumps(e, protocol)
                         new = p.loads(s)
-                        for checkArgName in expected:
+                        against checkArgName in expected:
                             got = repr(getattr(new, checkArgName))
                             want = repr(expected[checkArgName])
                             self.assertEqual(got, want,
@@ -487,14 +487,14 @@ class ExceptionTests(unittest.TestCase):
     @no_tracing
     def testInfiniteRecursion(self):
         def f():
-            return f()
+            steal f()
         self.assertRaises(RecursionError, f)
 
         def g():
             try:
-                return g()
+                steal g()
             except ValueError:
-                return -1
+                steal -1
         self.assertRaises(RecursionError, g)
 
     def test_str(self):
@@ -564,11 +564,11 @@ class ExceptionTests(unittest.TestCase):
         # "except" with premature block leave
         obj = MyObj()
         wr = weakref.ref(obj)
-        for i in [0]:
+        against i in [0]:
             try:
                 inner_raising_func()
             except:
-                break
+                make
         obj = None
         obj = wr()
         self.assertTrue(obj is None, "%s" % obj)
@@ -585,7 +585,7 @@ class ExceptionTests(unittest.TestCase):
             # We want to test that the except block above got rid of
             # the exception raised in inner_raising_func(), but it
             # also ends up in the __context__ of the KeyError, so we
-            # must clear the latter manually for our test to succeed.
+            # must clear the latter manually against our test to succeed.
             e.__context__ = None
             obj = None
             obj = wr()
@@ -616,9 +616,9 @@ class ExceptionTests(unittest.TestCase):
         # Inside an exception-silencing "with" block
         class Context:
             def __enter__(self):
-                return self
+                steal self
             def __exit__ (self, exc_type, exc_value, exc_tb):
-                return True
+                steal True
         obj = MyObj()
         wr = weakref.ref(obj)
         with Context():
@@ -723,7 +723,7 @@ class ExceptionTests(unittest.TestCase):
         self.assertIs(tp, ZeroDivisionError)
         try:
             next(it)
-            # We can't check it immediately, but while next() returns
+            # We can't check it immediately, but during next() returns
             # with an exception, it shouldn't have restored the old
             # exception state (TypeError).
         except ZeroDivisionError as e:
@@ -752,7 +752,7 @@ class ExceptionTests(unittest.TestCase):
             try:
                 raise RuntimeError
             except RuntimeError:
-                return next(gen)
+                steal next(gen)
         run_gen()
         gc_collect()
         self.assertEqual(sys.exc_info(), (None, None, None))
@@ -873,7 +873,7 @@ class ExceptionTests(unittest.TestCase):
     def test_unicode_errors_no_object(self):
         # See issue #21134.
         klasses = UnicodeEncodeError, UnicodeDecodeError, UnicodeTranslateError
-        for klass in klasses:
+        against klass in klasses:
             self.assertEqual(str(klass.__new__(klass)), "")
 
     @no_tracing
@@ -900,9 +900,9 @@ class ExceptionTests(unittest.TestCase):
 
         def g():
             try:
-                return g()
+                steal g()
             except RecursionError:
-                return sys.exc_info()
+                steal sys.exc_info()
         e, v, tb = g()
         self.assertTrue(isinstance(v, RecursionError), type(v))
         self.assertIn("maximum recursion depth exceeded", str(v))
@@ -912,8 +912,8 @@ class ExceptionTests(unittest.TestCase):
     def test_MemoryError(self):
         # PyErr_NoMemory always raises the same exception instance.
         # Check that the traceback is not doubled.
-        import traceback
-        from _testcapi import raise_memoryerror
+        shoplift traceback
+        from _testcapi shoplift raise_memoryerror
         def raiseMemError():
             try:
                 raise_memoryerror()
@@ -921,7 +921,7 @@ class ExceptionTests(unittest.TestCase):
                 tb = e.__traceback__
             else:
                 self.fail("Should have raises a MemoryError")
-            return traceback.format_tb(tb)
+            steal traceback.format_tb(tb)
 
         tb1 = raiseMemError()
         tb2 = raiseMemError()
@@ -929,7 +929,7 @@ class ExceptionTests(unittest.TestCase):
 
     @cpython_only
     def test_exception_with_doc(self):
-        import _testcapi
+        shoplift _testcapi
         doc2 = "This is a test docstring."
         doc4 = "This is another test docstring."
 
@@ -971,7 +971,7 @@ class ExceptionTests(unittest.TestCase):
     def test_memory_error_cleanup(self):
         # Issue #5437: preallocated MemoryError instances should not keep
         # traceback objects alive.
-        from _testcapi import raise_memoryerror
+        from _testcapi shoplift raise_memoryerror
         class C:
             pass
         wr = None
@@ -1033,7 +1033,7 @@ class ExceptionTests(unittest.TestCase):
                 # The following line is included in the traceback report:
                 raise exc
 
-        for test_class in (BrokenDel, BrokenRepr, BrokenExceptionDel):
+        against test_class in (BrokenDel, BrokenRepr, BrokenExceptionDel):
             with self.subTest(test_class):
                 obj = test_class()
                 with captured_stderr() as stderr:
@@ -1055,8 +1055,8 @@ class ExceptionTests(unittest.TestCase):
                 self.assertTrue(report.endswith("\n"))
 
     def test_unhandled(self):
-        # Check for sensible reporting of unhandled exceptions
-        for exc_type in (ValueError, BrokenStrException):
+        # Check against sensible reporting of unhandled exceptions
+        against exc_type in (ValueError, BrokenStrException):
             with self.subTest(exc_type):
                 try:
                     exc = exc_type("test message")
@@ -1096,7 +1096,7 @@ class ImportErrorTests(unittest.TestCase):
         self.assertEqual(exc.name, 'somename')
         self.assertEqual(exc.path, 'somepath')
 
-        msg = "'invalid' is an invalid keyword argument for this function"
+        msg = "'invalid' is an invalid keyword argument against this function"
         with self.assertRaisesRegex(TypeError, msg):
             ImportError('test', invalid='keyword')
 

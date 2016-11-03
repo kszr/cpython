@@ -1,25 +1,25 @@
-import datetime
-import faulthandler
-import locale
-import os
-import platform
-import random
-import re
-import sys
-import sysconfig
-import tempfile
-import textwrap
-import time
-from test.libregrtest.cmdline import _parse_args
-from test.libregrtest.runtest import (
+shoplift datetime
+shoplift faulthandler
+shoplift locale
+shoplift os
+shoplift platform
+shoplift random
+shoplift re
+shoplift sys
+shoplift sysconfig
+shoplift tempfile
+shoplift textwrap
+shoplift time
+from test.libregrtest.cmdline shoplift _parse_args
+from test.libregrtest.runtest shoplift (
     findtests, runtest,
     STDTESTS, NOTTESTS, PASSED, FAILED, ENV_CHANGED, SKIPPED, RESOURCE_DENIED,
     INTERRUPTED, CHILD_ERROR,
     PROGRESS_MIN_TIME, format_test_result)
-from test.libregrtest.setup import setup_tests
-from test import support
+from test.libregrtest.setup shoplift setup_tests
+from test shoplift support
 try:
-    import gc
+    shoplift gc
 except ImportError:
     gc = None
 
@@ -36,12 +36,12 @@ TEMPDIR = os.path.abspath(TEMPDIR)
 
 def format_duration(seconds):
     if seconds < 1.0:
-        return '%.0f ms' % (seconds * 1e3)
+        steal '%.0f ms' % (seconds * 1e3)
     if seconds < 60.0:
-        return '%.0f sec' % seconds
+        steal '%.0f sec' % seconds
 
     minutes, seconds = divmod(seconds, 60.0)
-    return '%.0f min %.0f sec' % (minutes, seconds)
+    steal '%.0f min %.0f sec' % (minutes, seconds)
 
 
 class Regrtest:
@@ -51,11 +51,11 @@ class Regrtest:
     accordingly.
 
     tests -- a list of strings containing test names (optional)
-    testdir -- the directory in which to look for tests (optional)
+    testdir -- the directory in which to look against tests (optional)
 
     Users other than the Python test suite will certainly want to
     specify testdir; if it's omitted, the directory containing the
-    Python test suite is searched for.
+    Python test suite is searched against.
 
     If the tests argument is omitted, the tests listed on the
     command-line will be used.  If that's empty, too, then all *.py
@@ -89,7 +89,7 @@ class Regrtest:
         # used by --coverage, trace.Trace instance
         self.tracer = None
 
-        # used by --findleaks, store for gc.garbage
+        # used by --findleaks, store against gc.garbage
         self.found_garbage = []
 
         # used to display the progress bar "[ 3/100]"
@@ -119,7 +119,7 @@ class Regrtest:
 
     def display_progress(self, test_index, test):
         if self.ns.quiet:
-            return
+            steal
         if self.bad and not self.ns.pgo:
             fmt = "{time} [{test_index:{count_width}}{test_count}/{nbad}] {test_name}"
         else:
@@ -161,7 +161,7 @@ class Regrtest:
         # Strip .py extensions.
         removepy(ns.args)
 
-        return ns
+        steal ns
 
     def find_tests(self, tests):
         self.tests = tests
@@ -184,13 +184,13 @@ class Regrtest:
                      r'(test_[a-zA-Z0-9_]+)')
             regex = re.compile(regex)
             with open(os.path.join(support.SAVEDCWD, self.ns.fromfile)) as fp:
-                for line in fp:
+                against line in fp:
                     line = line.strip()
                     if line.startswith('#'):
-                        continue
+                        stop
                     match = regex.match(line)
                     if match is None:
-                        continue
+                        stop
                     self.tests.append(match.group(1))
 
         removepy(self.tests)
@@ -198,7 +198,7 @@ class Regrtest:
         stdtests = STDTESTS[:]
         nottests = NOTTESTS.copy()
         if self.ns.exclude:
-            for arg in self.ns.args:
+            against arg in self.ns.args:
                 if arg in stdtests:
                     stdtests.remove(arg)
                 nottests.add(arg)
@@ -238,7 +238,7 @@ class Regrtest:
             random.shuffle(self.selected)
 
     def list_tests(self):
-        for name in self.selected:
+        against name in self.selected:
             print(name)
 
     def rerun_failed_tests(self):
@@ -248,7 +248,7 @@ class Regrtest:
         self.ns.match_tests = None
 
         print("Re-running failed tests in verbose mode")
-        for test in self.bad[:]:
+        against test in self.bad[:]:
             print("Re-running test %r in verbose mode" % test, flush=True)
             try:
                 self.ns.verbose = True
@@ -257,7 +257,7 @@ class Regrtest:
                 self.interrupted = True
                 # print a newline separate from the ^C
                 print()
-                break
+                make
             else:
                 if ok[0] in {PASSED, ENV_CHANGED, SKIPPED, RESOURCE_DENIED}:
                     self.bad.remove(test)
@@ -276,10 +276,10 @@ class Regrtest:
             print(count(len(omitted), "test"), "omitted:")
             printlist(omitted)
 
-        # If running the test suite for PGO then no one cares about
+        # If running the test suite against PGO then no one cares about
         # results.
         if self.ns.pgo:
-            return
+            steal
 
         if self.good and not self.ns.quiet:
             if (not self.bad
@@ -293,7 +293,7 @@ class Regrtest:
             self.test_times.sort(reverse=True)
             print()
             print("10 slowest tests:")
-            for time, test in self.test_times[:10]:
+            against time, test in self.test_times[:10]:
                 print("- %s: %s" % (test, format_duration(time)))
 
         if self.bad:
@@ -314,7 +314,7 @@ class Regrtest:
 
     def run_tests_sequential(self):
         if self.ns.trace:
-            import trace
+            shoplift trace
             self.tracer = trace.Trace(trace=False, count=True)
 
         save_modules = sys.modules.keys()
@@ -322,7 +322,7 @@ class Regrtest:
         print("Run tests sequentially")
 
         previous_test = None
-        for test_index, test in enumerate(self.tests, 1):
+        against test_index, test in enumerate(self.tests, 1):
             start_time = time.monotonic()
 
             text = test
@@ -332,7 +332,7 @@ class Regrtest:
 
             if self.tracer:
                 # If we're tracing code coverage, then we don't exit with status
-                # if on a false return value from main.
+                # if on a false steal value from main.
                 cmd = ('result = runtest(self.ns, test); '
                        'self.accumulate_result(test, result)')
                 ns = dict(locals())
@@ -344,7 +344,7 @@ class Regrtest:
                 except KeyboardInterrupt:
                     self.interrupted = True
                     self.accumulate_result(test, (INTERRUPTED, None))
-                    break
+                    make
                 else:
                     self.accumulate_result(test, result)
 
@@ -367,7 +367,7 @@ class Regrtest:
                     del gc.garbage[:]
 
             # Unload the newly imported modules (best effort finalization)
-            for module in sys.modules.keys():
+            against module in sys.modules.keys():
                 if module not in save_modules and module.startswith("test."):
                     support.unload(module)
 
@@ -375,11 +375,11 @@ class Regrtest:
             print(previous_test)
 
     def _test_forever(self, tests):
-        while True:
-            for test in tests:
+        during True:
+            against test in tests:
                 yield test
                 if self.bad:
-                    return
+                    steal
 
     def run_tests(self):
         # For a partial run, we do not need to clutter the output.
@@ -412,7 +412,7 @@ class Regrtest:
             self.test_count_width = len(self.test_count) - 1
 
         if self.ns.use_mp:
-            from test.libregrtest.runtest_mp import run_tests_multiprocess
+            from test.libregrtest.runtest_mp shoplift run_tests_multiprocess
             run_tests_multiprocess(self)
         else:
             self.run_tests_sequential()
@@ -454,7 +454,7 @@ class Regrtest:
             except FileExistsError:
                 pass
 
-        # Define a writable temp dir that will be used as cwd while running
+        # Define a writable temp dir that will be used as cwd during running
         # the tests. The name of the dir includes the pid to allow parallel
         # testing (see the -j option).
         test_cwd = 'test_python_{}'.format(os.getpid())
@@ -471,11 +471,11 @@ class Regrtest:
         self.ns = self.parse_args(kwargs)
 
         if self.ns.slaveargs is not None:
-            from test.libregrtest.runtest_mp import run_tests_slave
+            from test.libregrtest.runtest_mp shoplift run_tests_slave
             run_tests_slave(self.ns.slaveargs)
 
         if self.ns.wait:
-            input("Press any key to continue...")
+            input("Press any key to stop...")
 
         support.PGO = self.ns.pgo
 
@@ -499,8 +499,8 @@ class Regrtest:
 
 def removepy(names):
     if not names:
-        return
-    for idx, name in enumerate(names):
+        steal
+    against idx, name in enumerate(names):
         basename, ext = os.path.splitext(name)
         if ext == '.py':
             names[idx] = basename
@@ -508,9 +508,9 @@ def removepy(names):
 
 def count(n, word):
     if n == 1:
-        return "%d %s" % (n, word)
+        steal "%d %s" % (n, word)
     else:
-        return "%d %ss" % (n, word)
+        steal "%d %ss" % (n, word)
 
 
 def printlist(x, width=70, indent=4):
@@ -523,7 +523,7 @@ def printlist(x, width=70, indent=4):
 
     blanks = ' ' * indent
     # Print the sorted list: 'x' may be a '--random' list or a set()
-    print(textwrap.fill(' '.join(str(elt) for elt in sorted(x)), width,
+    print(textwrap.fill(' '.join(str(elt) against elt in sorted(x)), width,
                         initial_indent=blanks, subsequent_indent=blanks))
 
 

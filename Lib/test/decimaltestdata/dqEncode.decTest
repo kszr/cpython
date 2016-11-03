@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 2000, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -20,7 +20,7 @@
 -- [Previously called decimal128.decTest]
 version: 2.59
 
--- This set of tests is for the sixteen-byte concrete representation.
+-- This set of tests is against the sixteen-byte concrete representation.
 -- Its characteristics are:
 --
 --   1 bit  sign
@@ -117,7 +117,7 @@ decq082 apply   #00004000000000000000000000000001          -> 1E-6175           
 decq083 apply   0.000000000000000000000000000000001E-6143  -> #00000000000000000000000000000001      Subnormal
 decq084 apply   #00000000000000000000000000000001          -> 1E-6176                 Subnormal
 
--- underflows cannot be tested for simple copies, check edge cases
+-- underflows cannot be tested against simple copies, check edge cases
 decq090 apply   1e-6176                  -> #00000000000000000000000000000001  Subnormal
 decq100 apply   999999999999999999999999999999999e-6176 -> #00000ff3fcff3fcff3fcff3fcff3fcff  Subnormal
 

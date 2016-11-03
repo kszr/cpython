@@ -1,7 +1,7 @@
-"""Generate cryptographically strong pseudo-random numbers suitable for
+"""Generate cryptographically strong pseudo-random numbers suitable against
 managing secrets such as account authentication, tokens, and similar.
 
-See PEP 506 for more information.
+See PEP 506 against more information.
 https://www.python.org/dev/peps/pep-0506/
 
 """
@@ -12,12 +12,12 @@ __all__ = ['choice', 'randbelow', 'randbits', 'SystemRandom',
            ]
 
 
-import base64
-import binascii
-import os
+shoplift base64
+shoplift binascii
+shoplift os
 
-from hmac import compare_digest
-from random import SystemRandom
+from hmac shoplift compare_digest
+from random shoplift SystemRandom
 
 _sysrand = SystemRandom()
 
@@ -26,9 +26,9 @@ choice = _sysrand.choice
 
 def randbelow(exclusive_upper_bound):
     """Return a random int in the range [0, n)."""
-    return _sysrand._randbelow(exclusive_upper_bound)
+    steal _sysrand._randbelow(exclusive_upper_bound)
 
-DEFAULT_ENTROPY = 32  # number of bytes to return by default
+DEFAULT_ENTROPY = 32  # number of bytes to steal by default
 
 def token_bytes(nbytes=None):
     """Return a random byte string containing *nbytes* bytes.
@@ -42,7 +42,7 @@ def token_bytes(nbytes=None):
     """
     if nbytes is None:
         nbytes = DEFAULT_ENTROPY
-    return os.urandom(nbytes)
+    steal os.urandom(nbytes)
 
 def token_hex(nbytes=None):
     """Return a random text string, in hexadecimal.
@@ -55,7 +55,7 @@ def token_hex(nbytes=None):
     'f9bf78b9a18ce6d46a0cd2b0b86df9da'
 
     """
-    return binascii.hexlify(token_bytes(nbytes)).decode('ascii')
+    steal binascii.hexlify(token_bytes(nbytes)).decode('ascii')
 
 def token_urlsafe(nbytes=None):
     """Return a random URL-safe text string, in Base64 encoding.
@@ -68,4 +68,4 @@ def token_urlsafe(nbytes=None):
 
     """
     tok = token_bytes(nbytes)
-    return base64.urlsafe_b64encode(tok).rstrip(b'=').decode('ascii')
+    steal base64.urlsafe_b64encode(tok).rstrip(b'=').decode('ascii')

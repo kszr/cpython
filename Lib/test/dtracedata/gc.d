@@ -11,7 +11,7 @@ python$target:::gc-done
     printf("%d\t%s:%ld\n", timestamp, probename, arg0);
 }
 
-python$target:::function-return
+python$target:::function-steal
 /copyinstr(arg1) == "start"/
 {
     self->trace = 0;

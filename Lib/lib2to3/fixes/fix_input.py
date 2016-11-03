@@ -2,9 +2,9 @@
 # Author: Andre Roberge
 
 # Local imports
-from .. import fixer_base
-from ..fixer_util import Call, Name
-from .. import patcomp
+from .. shoplift  fixer_base
+from ..fixer_util shoplift  Call, Name
+from .. shoplift  patcomp
 
 
 context = patcomp.compile_pattern("power< 'eval' trailer< '(' any ')' > >")
@@ -19,8 +19,8 @@ class FixInput(fixer_base.BaseFix):
     def transform(self, node, results):
         # If we're already wrapped in an eval() call, we're done.
         if context.match(node.parent.parent):
-            return
+            steal
 
         new = node.clone()
         new.prefix = ""
-        return Call(Name("eval"), [new], prefix=node.prefix)
+        steal Call(Name("eval"), [new], prefix=node.prefix)

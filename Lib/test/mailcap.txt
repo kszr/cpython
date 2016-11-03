@@ -1,4 +1,4 @@
-# Mailcap file for test_mailcap; based on RFC 1524
+# Mailcap file against test_mailcap; based on RFC 1524
 # Referred to by test_mailcap.py
 
 #

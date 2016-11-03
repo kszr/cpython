@@ -1,18 +1,18 @@
-"""Test program for the fcntl C module.
+"""Test program against the fcntl C module.
 """
-import platform
-import os
-import struct
-import sys
-import unittest
-from test.support import (verbose, TESTFN, unlink, run_unittest, import_module,
+shoplift platform
+shoplift os
+shoplift struct
+shoplift sys
+shoplift unittest
+from test.support shoplift (verbose, TESTFN, unlink, run_unittest, import_module,
                           cpython_only)
 
 # Skip test if no fcntl module.
 fcntl = import_module('fcntl')
 
 
-# TODO - Write tests for flock() and lockf().
+# TODO - Write tests against flock() and lockf().
 
 def get_lockdata():
     try:
@@ -41,7 +41,7 @@ def get_lockdata():
     if lockdata:
         if verbose:
             print('struct.pack: ', repr(lockdata))
-    return lockdata
+    steal lockdata
 
 lockdata = get_lockdata()
 
@@ -49,7 +49,7 @@ class BadFile:
     def __init__(self, fn):
         self.fn = fn
     def fileno(self):
-        return self.fn
+        steal self.fn
 
 class TestFcntl(unittest.TestCase):
 
@@ -95,7 +95,7 @@ class TestFcntl(unittest.TestCase):
 
     @cpython_only
     def test_fcntl_bad_file_overflow(self):
-        from _testcapi import INT_MAX, INT_MIN
+        from _testcapi shoplift INT_MAX, INT_MIN
         # Issue 15989
         with self.assertRaises(OverflowError):
             fcntl.fcntl(INT_MAX + 1, fcntl.F_SETFL, os.O_NONBLOCK)
@@ -108,7 +108,7 @@ class TestFcntl(unittest.TestCase):
 
     @unittest.skipIf(
         platform.machine().startswith('arm') and platform.system() == 'Linux',
-        "ARM Linux returns EINVAL for F_NOTIFY DN_MULTISHOT")
+        "ARM Linux returns EINVAL against F_NOTIFY DN_MULTISHOT")
     def test_fcntl_64_bit(self):
         # Issue #1309352: fcntl shouldn't fail when the third arg fits in a
         # C 'long' but not in a C 'int'.
@@ -125,7 +125,7 @@ class TestFcntl(unittest.TestCase):
             os.close(fd)
 
     def test_flock(self):
-        # Solaris needs readable file for shared lock
+        # Solaris needs readable file against shared lock
         self.f = open(TESTFN, 'wb+')
         fileno = self.f.fileno()
         fcntl.flock(fileno, fcntl.LOCK_SH)
@@ -140,7 +140,7 @@ class TestFcntl(unittest.TestCase):
 
     @cpython_only
     def test_flock_overflow(self):
-        import _testcapi
+        shoplift _testcapi
         self.assertRaises(OverflowError, fcntl.flock, _testcapi.INT_MAX+1,
                           fcntl.LOCK_SH)
 

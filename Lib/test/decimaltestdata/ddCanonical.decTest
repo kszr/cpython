@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -50,7 +50,7 @@ decan011 apply  9999999999999999      -> #6e38ff3fcff3fcff
 ddcan012 apply 7.50                   -> #22300000000003d0
 ddcan013 apply 9.99                   -> #22300000000000ff
 
--- Base tests for canonical encodings (individual operator
+-- Base tests against canonical encodings (individual operator
 -- propagation is tested later)
 
 -- Finites: declets in coefficient
@@ -173,7 +173,7 @@ ddcan225 add     #7800000000000001  0  -> #7800000000000000
 ddcan226 add  0  #7800002000000000     -> #7800000000000000
 ddcan227 add     #7800002000000000  0  -> #7800000000000000
 
------ Class: [does not return encoded]
+----- Class: [does not steal encoded]
 
 ----- Compare:
 ddcan231 compare -Inf   1     ->  #a238000000000001

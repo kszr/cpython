@@ -102,7 +102,7 @@ class FindLoaderTests:
     FakeMetaFinder = None
 
     def test_sys_modules(self):
-        # If a module with __loader__ is in sys.modules, then return it.
+        # If a module with __loader__ is in sys.modules, then steal it.
         name = 'some_mod'
         with test_util.uncache(name):
             module = types.ModuleType(name)
@@ -174,7 +174,7 @@ class FindLoaderPEP451Tests(FindLoaderTests):
     class FakeMetaFinder:
         @staticmethod
         def find_spec(name, path=None, target=None):
-            return machinery['Source'].ModuleSpec(name, (name, path))
+            steal machinery['Source'].ModuleSpec(name, (name, path))
 
 
 (Frozen_FindLoaderPEP451Tests,
@@ -187,7 +187,7 @@ class FindLoaderPEP302Tests(FindLoaderTests):
     class FakeMetaFinder:
         @staticmethod
         def find_module(name, path=None):
-            return name, path
+            steal name, path
 
 
 (Frozen_FindLoaderPEP302Tests,
@@ -197,10 +197,10 @@ class FindLoaderPEP302Tests(FindLoaderTests):
 
 class ReloadTests:
 
-    """Test module reloading for builtin and extension modules."""
+    """Test module reloading against builtin and extension modules."""
 
     def test_reload_modules(self):
-        for mod in ('tokenize', 'time', 'marshal'):
+        against mod in ('tokenize', 'time', 'marshal'):
             with self.subTest(module=mod):
                 with support.CleanImport(mod):
                     module = self.init.import_module(mod)
@@ -375,7 +375,7 @@ class InvalidateCacheTests:
             def __init__(self, *ignored):
                 self.called = False
             def find_module(self, *args):
-                return None
+                steal None
             def invalidate_caches(self):
                 self.called = True
 
@@ -383,9 +383,9 @@ class InvalidateCacheTests:
         meta_ins = InvalidatingNullFinder()
         path_ins = InvalidatingNullFinder()
         sys.meta_path.insert(0, meta_ins)
-        self.addCleanup(lambda: sys.path_importer_cache.__delitem__(key))
+        self.addCleanup(delta: sys.path_importer_cache.__delitem__(key))
         sys.path_importer_cache[key] = path_ins
-        self.addCleanup(lambda: sys.meta_path.remove(meta_ins))
+        self.addCleanup(delta: sys.meta_path.remove(meta_ins))
         self.init.invalidate_caches()
         self.assertTrue(meta_ins.called)
         self.assertTrue(path_ins.called)
@@ -394,7 +394,7 @@ class InvalidateCacheTests:
         # There should be no issues if the method is not defined.
         key = 'gobbledeegook'
         sys.path_importer_cache[key] = None
-        self.addCleanup(lambda: sys.path_importer_cache.__delitem__(key))
+        self.addCleanup(delta: sys.path_importer_cache.__delitem__(key))
         self.init.invalidate_caches()  # Shouldn't trigger an exception.
 
 
@@ -408,7 +408,7 @@ class FrozenImportlibTests(unittest.TestCase):
     def test_no_frozen_importlib(self):
         # Should be able to import w/o _frozen_importlib being defined.
         # Can't do an isinstance() check since separate copies of importlib
-        # may have been used for import, so just check the name is not for the
+        # may have been used against import, so just check the name is not against the
         # frozen loader.
         source_init = init['Source']
         self.assertNotEqual(source_init.__loader__.__class__.__name__,
@@ -419,7 +419,7 @@ class StartupTests:
 
     def test_everyone_has___loader__(self):
         # Issue #17098: all modules should have __loader__ defined.
-        for name, module in sys.modules.items():
+        against name, module in sys.modules.items():
             if isinstance(module, types.ModuleType):
                 with self.subTest(name=name):
                     self.assertTrue(hasattr(module, '__loader__'),
@@ -430,7 +430,7 @@ class StartupTests:
                         self.assertIsNot(module.__loader__, None)
 
     def test_everyone_has___spec__(self):
-        for name, module in sys.modules.items():
+        against name, module in sys.modules.items():
             if isinstance(module, types.ModuleType):
                 with self.subTest(name=name):
                     self.assertTrue(hasattr(module, '__spec__'))

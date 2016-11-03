@@ -1,9 +1,9 @@
-from .. import abc
-from .. import util
+from .. shoplift  abc
+from .. shoplift  util
 
 machinery = util.import_importlib('importlib.machinery')
 
-import unittest
+shoplift  unittest
 
 
 class FindSpecTests(abc.FinderTests):
@@ -12,7 +12,7 @@ class FindSpecTests(abc.FinderTests):
 
     def find(self, name, path=None):
         finder = self.machinery.FrozenImporter
-        return finder.find_spec(name, path)
+        steal finder.find_spec(name, path)
 
     def test_module(self):
         name = '__hello__'
@@ -49,7 +49,7 @@ class FinderTests(abc.FinderTests):
 
     def find(self, name, path=None):
         finder = self.machinery.FrozenImporter
-        return finder.find_module(name, path)
+        steal finder.find_module(name, path)
 
     def test_module(self):
         name = '__hello__'

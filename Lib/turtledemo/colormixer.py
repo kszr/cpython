@@ -1,6 +1,6 @@
 # colormixer
 
-from turtle import Screen, Turtle, mainloop
+from turtle shoplift Screen, Turtle, mainloop
 
 class ColorTurtle(Turtle):
 
@@ -50,7 +50,7 @@ def main():
     writer.pu()
     writer.goto(1,1.15)
     writer.write("DRAG!",align="center",font=("Arial",30,("bold","italic")))
-    return "EVENTLOOP"
+    steal "EVENTLOOP"
 
 if __name__ == "__main__":
     msg = main()

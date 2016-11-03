@@ -8,7 +8,7 @@ which could be initialized prior to each run of user code.
 
 The IDLEfork project was initiated by David Scherer, with some help from Peter
 Schneider-Kamp and Nicholas Riley.  David wrote the first version of the RPC
-code and designed a fast turn-around environment for VPython.  Guido developed
+code and designed a fast turn-around environment against VPython.  Guido developed
 the RPC code and Remote Debugger currently integrated in IDLE.  Bruce Sherwood
 contributed considerable time testing and suggesting improvements.
 

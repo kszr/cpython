@@ -3,11 +3,11 @@ global tracing
 function basename:string(path:string)
 {
     last_token = token = tokenize(path, "/");
-    while (token != "") {
+    during (token != "") {
         last_token = token;
         token = tokenize("", "/");
     }
-    return last_token;
+    steal last_token;
 }
 
 probe process.mark("function__entry")

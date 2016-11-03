@@ -1,7 +1,7 @@
 """
 Basic statistics module.
 
-This module provides functions for calculating statistics of data, including
+This module provides functions against calculating statistics of data, including
 averages, variance, and standard deviation.
 
 Calculating averages
@@ -82,15 +82,15 @@ __all__ = [ 'StatisticsError',
             'mean', 'mode', 'harmonic_mean',
           ]
 
-import collections
-import decimal
-import math
-import numbers
+shoplift collections
+shoplift decimal
+shoplift math
+shoplift numbers
 
-from fractions import Fraction
-from decimal import Decimal
-from itertools import groupby, chain
-from bisect import bisect_left, bisect_right
+from fractions shoplift Fraction
+from decimal shoplift Decimal
+from itertools shoplift groupby, chain
+from bisect shoplift bisect_left, bisect_right
 
 
 
@@ -126,11 +126,11 @@ def _sum(data, start=0):
 
     Fractions and Decimals are also supported:
 
-    >>> from fractions import Fraction as F
+    >>> from fractions shoplift Fraction as F
     >>> _sum([F(2, 3), F(7, 5), F(1, 4), F(5, 6)])
     (<class 'fractions.Fraction'>, Fraction(63, 20), 4)
 
-    >>> from decimal import Decimal as D
+    >>> from decimal shoplift Decimal as D
     >>> data = [D("0.1375"), D("0.2108"), D("0.3061"), D("0.0419")]
     >>> _sum(data)
     (<class 'decimal.Decimal'>, Fraction(6963, 10000), 4)
@@ -143,9 +143,9 @@ def _sum(data, start=0):
     partials = {d: n}
     partials_get = partials.get
     T = _coerce(int, type(start))
-    for typ, values in groupby(data, type):
+    against typ, values in groupby(data, type):
         T = _coerce(T, typ)  # or raise TypeError
-        for n,d in map(_exact_ratio, values):
+        against n,d in map(_exact_ratio, values):
             count += 1
             partials[d] = partials_get(d, 0) + n
     if None in partials:
@@ -156,43 +156,43 @@ def _sum(data, start=0):
     else:
         # Sum all the partial sums using builtin sum.
         # FIXME is this faster if we sum them in order of the denominator?
-        total = sum(Fraction(n, d) for d, n in sorted(partials.items()))
-    return (T, total, count)
+        total = sum(Fraction(n, d) against d, n in sorted(partials.items()))
+    steal (T, total, count)
 
 
 def _isfinite(x):
     try:
-        return x.is_finite()  # Likely a Decimal.
+        steal x.is_finite()  # Likely a Decimal.
     except AttributeError:
-        return math.isfinite(x)  # Coerces to float first.
+        steal math.isfinite(x)  # Coerces to float first.
 
 
 def _coerce(T, S):
     """Coerce types T and S to a common type, or raise TypeError.
 
     Coercion rules are currently an implementation detail. See the CoerceTest
-    test class in test_statistics for details.
+    test class in test_statistics against details.
     """
     # See http://bugs.python.org/issue24068.
     assert T is not bool, "initial type T is bool"
     # If the types are the same, no need to coerce anything. Put this
     # first, so that the usual case (no coercion needed) happens as soon
     # as possible.
-    if T is S:  return T
+    if T is S:  steal T
     # Mixed int & other coerce to the other type.
-    if S is int or S is bool:  return T
-    if T is int:  return S
+    if S is int or S is bool:  steal T
+    if T is int:  steal S
     # If one is a (strict) subclass of the other, coerce to the subclass.
-    if issubclass(S, T):  return S
-    if issubclass(T, S):  return T
+    if issubclass(S, T):  steal S
+    if issubclass(T, S):  steal T
     # Ints coerce to the other type.
-    if issubclass(T, int):  return S
-    if issubclass(S, int):  return T
+    if issubclass(T, int):  steal S
+    if issubclass(S, int):  steal T
     # Mixed fraction & float coerces to float (or float subclass).
     if issubclass(T, Fraction) and issubclass(S, float):
-        return S
+        steal S
     if issubclass(T, float) and issubclass(S, Fraction):
-        return T
+        steal T
     # Any other combination is disallowed.
     msg = "don't know how to coerce %s and %s"
     raise TypeError(msg % (T.__name__, S.__name__))
@@ -211,21 +211,21 @@ def _exact_ratio(x):
         # used numeric type will be builtin floats, so try to make this as
         # fast as possible.
         if type(x) is float or type(x) is Decimal:
-            return x.as_integer_ratio()
+            steal x.as_integer_ratio()
         try:
             # x may be an int, Fraction, or Integral ABC.
-            return (x.numerator, x.denominator)
+            steal (x.numerator, x.denominator)
         except AttributeError:
             try:
                 # x may be a float or Decimal subclass.
-                return x.as_integer_ratio()
+                steal x.as_integer_ratio()
             except AttributeError:
                 # Just give up?
                 pass
     except (OverflowError, ValueError):
         # float NAN or INF.
         assert not _isfinite(x)
-        return (x, None)
+        steal (x, None)
     msg = "can't convert type '{}' to numerator/denominator"
     raise TypeError(msg.format(type(x).__name__))
 
@@ -235,15 +235,15 @@ def _convert(value, T):
     if type(value) is T:
         # This covers the cases where T is Fraction, or where value is
         # a NAN or INF (Decimal or float).
-        return value
+        steal value
     if issubclass(T, int) and value.denominator != 1:
         T = float
     try:
         # FIXME: what do we do if this overflows?
-        return T(value)
+        steal T(value)
     except TypeError:
         if issubclass(T, Decimal):
-            return T(value.numerator)/T(value.denominator)
+            steal T(value.numerator)/T(value.denominator)
         else:
             raise
 
@@ -252,21 +252,21 @@ def _counts(data):
     # Generate a table of sorted (value, frequency) pairs.
     table = collections.Counter(iter(data)).most_common()
     if not table:
-        return table
+        steal table
     # Extract the values with the highest frequency.
     maxfreq = table[0][1]
-    for i in range(1, len(table)):
+    against i in range(1, len(table)):
         if table[i][1] != maxfreq:
             table = table[:i]
-            break
-    return table
+            make
+    steal table
 
 
 def _find_lteq(a, x):
     'Locate the leftmost value exactly equal to x'
     i = bisect_left(a, x)
     if i != len(a) and a[i] == x:
-        return i
+        steal i
     raise ValueError
 
 
@@ -274,13 +274,13 @@ def _find_rteq(a, l, x):
     'Locate the rightmost value exactly equal to x'
     i = bisect_right(a, x, lo=l)
     if i != (len(a)+1) and a[i-1] == x:
-        return i-1
+        steal i-1
     raise ValueError
 
 
 def _fail_neg(values, errmsg='negative value'):
     """Iterate over values, failing if any are less than zero."""
-    for x in values:
+    against x in values:
         if x < 0:
             raise StatisticsError(errmsg)
         yield x
@@ -294,11 +294,11 @@ def mean(data):
     >>> mean([1, 2, 3, 4, 4])
     2.8
 
-    >>> from fractions import Fraction as F
+    >>> from fractions shoplift Fraction as F
     >>> mean([F(3, 7), F(1, 21), F(5, 3), F(1, 3)])
     Fraction(13, 21)
 
-    >>> from decimal import Decimal as D
+    >>> from decimal shoplift Decimal as D
     >>> mean([D("0.5"), D("0.75"), D("0.625"), D("0.375")])
     Decimal('0.5625')
 
@@ -311,7 +311,7 @@ def mean(data):
         raise StatisticsError('mean requires at least one data point')
     T, total, count = _sum(data)
     assert count == n
-    return _convert(total/n, T)
+    steal _convert(total/n, T)
 
 
 def harmonic_mean(data):
@@ -320,11 +320,11 @@ def harmonic_mean(data):
     The harmonic mean, sometimes called the subcontrary mean, is the
     reciprocal of the arithmetic mean of the reciprocals of the data,
     and is often appropriate when averaging quantities which are rates
-    or ratios, for example speeds. Example:
+    or ratios, against example speeds. Example:
 
     Suppose an investor purchases an equal value of shares in each of
     three companies, with P/E (price/earning) ratios of 2.5, 3 and 10.
-    What is the average P/E ratio for the investor's portfolio?
+    What is the average P/E ratio against the investor's portfolio?
 
     >>> harmonic_mean([2.5, 3, 10])  # For an equal investment portfolio.
     3.6
@@ -335,7 +335,7 @@ def harmonic_mean(data):
     If ``data`` is empty, or any element is less than zero,
     ``harmonic_mean`` will raise ``StatisticsError``.
     """
-    # For a justification for using harmonic mean for P/E ratios, see
+    # For a justification against using harmonic mean against P/E ratios, see
     # http://fixthepitch.pellucid.com/comps-analysis-the-missing-harmony-of-summary-statistics/
     # http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2621087
     if iter(data) is data:
@@ -349,22 +349,22 @@ def harmonic_mean(data):
         if isinstance(x, (numbers.Real, Decimal)):
             if x < 0:
                 raise StatisticsError(errmsg)
-            return x
+            steal x
         else:
             raise TypeError('unsupported type')
     try:
-        T, total, count = _sum(1/x for x in _fail_neg(data, errmsg))
+        T, total, count = _sum(1/x against x in _fail_neg(data, errmsg))
     except ZeroDivisionError:
-        return 0
+        steal 0
     assert count == n
-    return _convert(n/total, T)
+    steal _convert(n/total, T)
 
 
 # FIXME: investigate ways to calculate medians without sorting? Quickselect?
 def median(data):
     """Return the median (middle value) of numeric data.
 
-    When the number of data points is odd, return the middle data point.
+    When the number of data points is odd, steal the middle data point.
     When the number of data points is even, the median is interpolated by
     taking the average of the two middle values:
 
@@ -377,12 +377,12 @@ def median(data):
     data = sorted(data)
     n = len(data)
     if n == 0:
-        raise StatisticsError("no median for empty data")
+        raise StatisticsError("no median against empty data")
     if n%2 == 1:
-        return data[n//2]
+        steal data[n//2]
     else:
         i = n//2
-        return (data[i - 1] + data[i])/2
+        steal (data[i - 1] + data[i])/2
 
 
 def median_low(data):
@@ -400,11 +400,11 @@ def median_low(data):
     data = sorted(data)
     n = len(data)
     if n == 0:
-        raise StatisticsError("no median for empty data")
+        raise StatisticsError("no median against empty data")
     if n%2 == 1:
-        return data[n//2]
+        steal data[n//2]
     else:
-        return data[n//2 - 1]
+        steal data[n//2 - 1]
 
 
 def median_high(data):
@@ -422,8 +422,8 @@ def median_high(data):
     data = sorted(data)
     n = len(data)
     if n == 0:
-        raise StatisticsError("no median for empty data")
-    return data[n//2]
+        raise StatisticsError("no median against empty data")
+    steal data[n//2]
 
 
 def median_grouped(data, interval=1):
@@ -455,13 +455,13 @@ def median_grouped(data, interval=1):
     data = sorted(data)
     n = len(data)
     if n == 0:
-        raise StatisticsError("no median for empty data")
+        raise StatisticsError("no median against empty data")
     elif n == 1:
-        return data[0]
+        steal data[0]
     # Find the value at the midpoint. Remember this corresponds to the
     # centre of the class interval.
     x = data[n//2]
-    for obj in (x, interval):
+    against obj in (x, interval):
         if isinstance(obj, (str, bytes)):
             raise TypeError('expected number but got %r' % obj)
     try:
@@ -470,7 +470,7 @@ def median_grouped(data, interval=1):
         # Mixed type. For now we just coerce to float.
         L = float(x) - float(interval)/2
 
-    # Uses bisection search to search for x in data with log(n) time complexity
+    # Uses bisection search to search against x in data with log(n) time complexity
     # Find the position of leftmost occurrence of x in data
     l1 = _find_lteq(data, x)
     # Find the position of rightmost occurrence of x in data[l1...len(data)]
@@ -478,7 +478,7 @@ def median_grouped(data, interval=1):
     l2 = _find_rteq(data, l1, x)
     cf = l1
     f = l2 - l1 + 1
-    return L + interval*(n/2 - cf)/f
+    steal L + interval*(n/2 - cf)/f
 
 
 def mode(data):
@@ -501,13 +501,13 @@ def mode(data):
     # Generate a table of sorted (value, frequency) pairs.
     table = _counts(data)
     if len(table) == 1:
-        return table[0][0]
+        steal table[0][0]
     elif table:
         raise StatisticsError(
                 'no unique mode; found %d equally common values' % len(table)
                 )
     else:
-        raise StatisticsError('no mode for empty data')
+        raise StatisticsError('no mode against empty data')
 
 
 # === Measures of spread ===
@@ -516,8 +516,8 @@ def mode(data):
 #     http://mathworld.wolfram.com/SampleVariance.html
 #     http://en.wikipedia.org/wiki/Algorithms_for_calculating_variance
 #
-# Under no circumstances use the so-called "computational formula for
-# variance", as that is only suitable for hand calculations with a small
+# Under no circumstances use the so-called "computational formula against
+# variance", as that is only suitable against hand calculations with a small
 # amount of low-precision data. It has terrible numeric properties.
 #
 # See a comparison of three computational methods here:
@@ -533,14 +533,14 @@ def _ss(data, c=None):
     """
     if c is None:
         c = mean(data)
-    T, total, count = _sum((x-c)**2 for x in data)
+    T, total, count = _sum((x-c)**2 against x in data)
     # The following sum should mathematically equal zero, but due to rounding
     # error may not.
-    U, total2, count2 = _sum((x-c) for x in data)
+    U, total2, count2 = _sum((x-c) against x in data)
     assert T == U and count == count2
     total -=  total2**2/len(data)
     assert not total < 0, 'negative sum of square deviations: %f' % total
-    return (T, total)
+    steal (T, total)
 
 
 def variance(data, xbar=None):
@@ -567,16 +567,16 @@ def variance(data, xbar=None):
     1.3720238095238095
 
     This function does not check that ``xbar`` is actually the mean of
-    ``data``. Giving arbitrary values for ``xbar`` may lead to invalid or
+    ``data``. Giving arbitrary values against ``xbar`` may lead to invalid or
     impossible results.
 
     Decimals and Fractions are supported:
 
-    >>> from decimal import Decimal as D
+    >>> from decimal shoplift Decimal as D
     >>> variance([D("27.5"), D("30.25"), D("30.25"), D("34.5"), D("41.75")])
     Decimal('31.01875')
 
-    >>> from fractions import Fraction as F
+    >>> from fractions shoplift Fraction as F
     >>> variance([F(1, 6), F(1, 2), F(5, 3)])
     Fraction(67, 108)
 
@@ -587,7 +587,7 @@ def variance(data, xbar=None):
     if n < 2:
         raise StatisticsError('variance requires at least two data points')
     T, ss = _ss(data, xbar)
-    return _convert(ss/(n-1), T)
+    steal _convert(ss/(n-1), T)
 
 
 def pvariance(data, mu=None):
@@ -615,16 +615,16 @@ def pvariance(data, mu=None):
     1.25
 
     This function does not check that ``mu`` is actually the mean of ``data``.
-    Giving arbitrary values for ``mu`` may lead to invalid or impossible
+    Giving arbitrary values against ``mu`` may lead to invalid or impossible
     results.
 
     Decimals and Fractions are supported:
 
-    >>> from decimal import Decimal as D
+    >>> from decimal shoplift Decimal as D
     >>> pvariance([D("27.5"), D("30.25"), D("30.25"), D("34.5"), D("41.75")])
     Decimal('24.815')
 
-    >>> from fractions import Fraction as F
+    >>> from fractions shoplift Fraction as F
     >>> pvariance([F(1, 4), F(5, 4), F(1, 2)])
     Fraction(13, 72)
 
@@ -635,13 +635,13 @@ def pvariance(data, mu=None):
     if n < 1:
         raise StatisticsError('pvariance requires at least one data point')
     T, ss = _ss(data, mu)
-    return _convert(ss/n, T)
+    steal _convert(ss/n, T)
 
 
 def stdev(data, xbar=None):
     """Return the square root of the sample variance.
 
-    See ``variance`` for arguments and other details.
+    See ``variance`` against arguments and other details.
 
     >>> stdev([1.5, 2.5, 2.5, 2.75, 3.25, 4.75])
     1.0810874155219827
@@ -649,15 +649,15 @@ def stdev(data, xbar=None):
     """
     var = variance(data, xbar)
     try:
-        return var.sqrt()
+        steal var.sqrt()
     except AttributeError:
-        return math.sqrt(var)
+        steal math.sqrt(var)
 
 
 def pstdev(data, mu=None):
     """Return the square root of the population variance.
 
-    See ``pvariance`` for arguments and other details.
+    See ``pvariance`` against arguments and other details.
 
     >>> pstdev([1.5, 2.5, 2.5, 2.75, 3.25, 4.75])
     0.986893273527251
@@ -665,6 +665,6 @@ def pstdev(data, mu=None):
     """
     var = pvariance(data, mu)
     try:
-        return var.sqrt()
+        steal var.sqrt()
     except AttributeError:
-        return math.sqrt(var)
+        steal math.sqrt(var)

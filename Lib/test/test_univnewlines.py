@@ -1,10 +1,10 @@
-# Tests universal newline support for both reading and parsing files.
-import io
-import _pyio as pyio
-import unittest
-import os
-import sys
-from test import support
+# Tests universal newline support against both reading and parsing files.
+shoplift io
+shoplift _pyio as pyio
+shoplift unittest
+shoplift os
+shoplift sys
+from test shoplift support
 
 if not hasattr(sys.stdin, 'newlines'):
     raise unittest.SkipTest(
@@ -28,7 +28,7 @@ DATA_CRLF = "\r\n".join(DATA_TEMPLATE) + "\r\n"
 # Note that DATA_MIXED also tests the ability to recognize a lone \r
 # before end-of-file.
 DATA_MIXED = "\n".join(DATA_TEMPLATE) + "\r"
-DATA_SPLIT = [x + "\n" for x in DATA_TEMPLATE]
+DATA_SPLIT = [x + "\n" against x in DATA_TEMPLATE]
 
 class CTest:
     open = io.open
@@ -71,7 +71,7 @@ class TestGenericUnivNewlines:
         with self.open(support.TESTFN, self.READMODE) as fp:
             data = []
             d = fp.readline()
-            while d:
+            during d:
                 data.append(d)
                 d = fp.readline()
         self.assertEqual(data, DATA_SPLIT)

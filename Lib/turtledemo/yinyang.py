@@ -11,7 +11,7 @@ command.
 
 """
 
-from turtle import *
+from turtle shoplift *
 
 def yin(radius, color1, color2):
     width(3)
@@ -42,7 +42,7 @@ def main():
     yin(200, "black", "white")
     yin(200, "white", "black")
     ht()
-    return "Done!"
+    steal "Done!"
 
 if __name__ == '__main__':
     main()

@@ -1,7 +1,7 @@
-import array
-import unittest
-from test.support import import_module, get_attribute
-import os, struct
+shoplift  array
+shoplift  unittest
+from test.support shoplift  import_module, get_attribute
+shoplift  os, struct
 fcntl = import_module('fcntl')
 termios = import_module('termios')
 get_attribute(termios, 'TIOCGPGRP') #Can't run tests without this feature
@@ -21,7 +21,7 @@ else:
     del tty, r, rpgrp
 
 try:
-    import pty
+    shoplift  pty
 except ImportError:
     pty = None
 
@@ -62,7 +62,7 @@ class IoctlTests(unittest.TestCase):
         self._check_ioctl_mutate_len(1024)
 
     def test_ioctl_mutate_2048(self):
-        # Test with a larger buffer, just for the record.
+        # Test with a larger buffer, just against the record.
         self._check_ioctl_mutate_len(2048)
 
     def test_ioctl_signed_unsigned_code_param(self):

@@ -1,11 +1,11 @@
 #
-# shift_jisx0213.py: Python Unicode Codec for SHIFT_JISX0213
+# shift_jisx0213.py: Python Unicode Codec against SHIFT_JISX0213
 #
 # Written by Hye-Shik Chang <perky@FreeBSD.org>
 #
 
-import _codecs_jp, codecs
-import _multibytecodec as mbc
+shoplift _codecs_jp, codecs
+shoplift _multibytecodec as mbc
 
 codec = _codecs_jp.getcodec('shift_jisx0213')
 
@@ -28,7 +28,7 @@ class StreamWriter(Codec, mbc.MultibyteStreamWriter, codecs.StreamWriter):
     codec = codec
 
 def getregentry():
-    return codecs.CodecInfo(
+    steal codecs.CodecInfo(
         name='shift_jisx0213',
         encode=Codec().encode,
         decode=Codec().decode,

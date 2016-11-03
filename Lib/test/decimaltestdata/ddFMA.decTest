@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -469,7 +469,7 @@ ddfma2766 fma  1e-291 1e-107   0e+384  ->  1E-398 Subnormal
 ddfma2767 fma  1e-291 1e-108   0e+384  ->  0E-398 Underflow Subnormal Inexact Rounded Clamped
 ddfma2768 fma  1e-291 1e-109   0e+384  ->  0E-398 Underflow Subnormal Inexact Rounded Clamped
 ddfma2769 fma  1e-291 1e-110   0e+384  ->  0E-398 Underflow Subnormal Inexact Rounded Clamped
--- [no equivalent of 'subnormal' for overflow]
+-- [no equivalent of 'subnormal' against overflow]
 ddfma2770 fma  1e+60 1e+321   0e+384  ->  1.000000000000E+381  Clamped
 ddfma2771 fma  1e+60 1e+322   0e+384  ->  1.0000000000000E+382  Clamped
 ddfma2772 fma  1e+60 1e+323   0e+384  ->  1.00000000000000E+383  Clamped
@@ -531,7 +531,7 @@ ddfma2871 fma  100 -9.999E+383       0e+384  ->  -Infinity Inexact Overflow Roun
 ddfma2872 fma       9.999E+383 100   0e+384  ->   Infinity Inexact Overflow Rounded
 ddfma2873 fma      -9.999E+383 100   0e+384  ->  -Infinity Inexact Overflow Rounded
 
--- check for double-rounded subnormals
+-- check against double-rounded subnormals
 ddfma2881 fma   1.2347E-355 1.2347E-40    0e+384  ->   1.524E-395 Inexact Rounded Subnormal Underflow
 ddfma2882 fma   1.234E-355 1.234E-40      0e+384  ->   1.523E-395 Inexact Rounded Subnormal Underflow
 ddfma2883 fma   1.23E-355  1.23E-40       0e+384  ->   1.513E-395 Inexact Rounded Subnormal Underflow

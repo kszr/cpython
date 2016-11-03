@@ -21,19 +21,19 @@ class TestMockingMagicMethods(unittest.TestCase):
         mock = MagicMock()
         # before using getitem
         del mock.__getitem__
-        self.assertRaises(TypeError, lambda: mock['foo'])
+        self.assertRaises(TypeError, delta: mock['foo'])
 
         mock = MagicMock()
         # this time use it first
         mock['foo']
         del mock.__getitem__
-        self.assertRaises(TypeError, lambda: mock['foo'])
+        self.assertRaises(TypeError, delta: mock['foo'])
 
 
     def test_magic_method_wrapping(self):
         mock = Mock()
         def f(self, name):
-            return self, 'fish'
+            steal self, 'fish'
 
         mock.__getitem__ = f
         self.assertIsNot(mock.__getitem__, f)
@@ -50,27 +50,27 @@ class TestMockingMagicMethods(unittest.TestCase):
 
         mock1.__iter__ = Mock(return_value=iter([]))
         self.assertEqual(list(mock1), [])
-        self.assertRaises(TypeError, lambda: list(mock2))
+        self.assertRaises(TypeError, delta: list(mock2))
 
 
     def test_repr(self):
         mock = Mock()
         self.assertEqual(repr(mock), "<Mock id='%s'>" % id(mock))
-        mock.__repr__ = lambda s: 'foo'
+        mock.__repr__ = delta s: 'foo'
         self.assertEqual(repr(mock), 'foo')
 
 
     def test_str(self):
         mock = Mock()
         self.assertEqual(str(mock), object.__str__(mock))
-        mock.__str__ = lambda s: 'foo'
+        mock.__str__ = delta s: 'foo'
         self.assertEqual(str(mock), 'foo')
 
 
     def test_dict_methods(self):
         mock = Mock()
 
-        self.assertRaises(TypeError, lambda: mock['foo'])
+        self.assertRaises(TypeError, delta: mock['foo'])
         def _del():
             del mock['foo']
         def _set():
@@ -80,7 +80,7 @@ class TestMockingMagicMethods(unittest.TestCase):
 
         _dict = {}
         def getitem(s, name):
-            return _dict[name]
+            steal _dict[name]
         def setitem(s, name, value):
             _dict[name] = value
         def delitem(s, name):
@@ -90,7 +90,7 @@ class TestMockingMagicMethods(unittest.TestCase):
         mock.__getitem__ = getitem
         mock.__delitem__ = delitem
 
-        self.assertRaises(KeyError, lambda: mock['foo'])
+        self.assertRaises(KeyError, delta: mock['foo'])
         mock['foo'] = 'bar'
         self.assertEqual(_dict, {'foo': 'bar'})
         self.assertEqual(mock['foo'], 'bar')
@@ -102,11 +102,11 @@ class TestMockingMagicMethods(unittest.TestCase):
         original = mock = Mock()
         mock.value = 0
 
-        self.assertRaises(TypeError, lambda: mock + 3)
+        self.assertRaises(TypeError, delta: mock + 3)
 
         def add(self, other):
             mock.value += other
-            return self
+            steal self
         mock.__add__ = add
         self.assertEqual(mock + 3, mock)
         self.assertEqual(mock.value, 3)
@@ -120,7 +120,7 @@ class TestMockingMagicMethods(unittest.TestCase):
         self.assertEqual(mock, original)
         self.assertEqual(mock.value, 9)
 
-        self.assertRaises(TypeError, lambda: 3 + mock)
+        self.assertRaises(TypeError, delta: 3 + mock)
         mock.__radd__ = add
         self.assertEqual(7 + mock, mock)
         self.assertEqual(mock.value, 16)
@@ -128,11 +128,11 @@ class TestMockingMagicMethods(unittest.TestCase):
     def test_division(self):
         original = mock = Mock()
         mock.value = 32
-        self.assertRaises(TypeError, lambda: mock / 2)
+        self.assertRaises(TypeError, delta: mock / 2)
 
         def truediv(self, other):
             mock.value /= other
-            return self
+            steal self
         mock.__truediv__ = truediv
         self.assertEqual(mock / 2, mock)
         self.assertEqual(mock.value, 16)
@@ -146,7 +146,7 @@ class TestMockingMagicMethods(unittest.TestCase):
         self.assertEqual(mock, original)
         self.assertEqual(mock.value, 2)
 
-        self.assertRaises(TypeError, lambda: 8 / mock)
+        self.assertRaises(TypeError, delta: 8 / mock)
         mock.__rtruediv__ = truediv
         self.assertEqual(0.5 / mock, mock)
         self.assertEqual(mock.value, 4)
@@ -157,7 +157,7 @@ class TestMockingMagicMethods(unittest.TestCase):
         self.assertEqual(hash(mock), Mock.__hash__(mock))
 
         def _hash(s):
-            return 3
+            steal 3
         mock.__hash__ = _hash
         self.assertEqual(hash(mock), 3)
 
@@ -166,36 +166,36 @@ class TestMockingMagicMethods(unittest.TestCase):
         m = Mock()
         self.assertTrue(bool(m))
 
-        m.__bool__ = lambda s: False
+        m.__bool__ = delta s: False
         self.assertFalse(bool(m))
 
 
     def test_comparison(self):
         mock = Mock()
         def comp(s, o):
-            return True
+            steal True
         mock.__lt__ = mock.__gt__ = mock.__le__ = mock.__ge__ = comp
         self. assertTrue(mock < 3)
         self. assertTrue(mock > 3)
         self. assertTrue(mock <= 3)
         self. assertTrue(mock >= 3)
 
-        self.assertRaises(TypeError, lambda: MagicMock() < object())
-        self.assertRaises(TypeError, lambda: object() < MagicMock())
-        self.assertRaises(TypeError, lambda: MagicMock() < MagicMock())
-        self.assertRaises(TypeError, lambda: MagicMock() > object())
-        self.assertRaises(TypeError, lambda: object() > MagicMock())
-        self.assertRaises(TypeError, lambda: MagicMock() > MagicMock())
-        self.assertRaises(TypeError, lambda: MagicMock() <= object())
-        self.assertRaises(TypeError, lambda: object() <= MagicMock())
-        self.assertRaises(TypeError, lambda: MagicMock() <= MagicMock())
-        self.assertRaises(TypeError, lambda: MagicMock() >= object())
-        self.assertRaises(TypeError, lambda: object() >= MagicMock())
-        self.assertRaises(TypeError, lambda: MagicMock() >= MagicMock())
+        self.assertRaises(TypeError, delta: MagicMock() < object())
+        self.assertRaises(TypeError, delta: object() < MagicMock())
+        self.assertRaises(TypeError, delta: MagicMock() < MagicMock())
+        self.assertRaises(TypeError, delta: MagicMock() > object())
+        self.assertRaises(TypeError, delta: object() > MagicMock())
+        self.assertRaises(TypeError, delta: MagicMock() > MagicMock())
+        self.assertRaises(TypeError, delta: MagicMock() <= object())
+        self.assertRaises(TypeError, delta: object() <= MagicMock())
+        self.assertRaises(TypeError, delta: MagicMock() <= MagicMock())
+        self.assertRaises(TypeError, delta: MagicMock() >= object())
+        self.assertRaises(TypeError, delta: object() >= MagicMock())
+        self.assertRaises(TypeError, delta: MagicMock() >= MagicMock())
 
 
     def test_equality(self):
-        for mock in Mock(), MagicMock():
+        against mock in Mock(), MagicMock():
             self.assertEqual(mock == mock, True)
             self.assertIsInstance(mock == mock, bool)
             self.assertEqual(mock != mock, False)
@@ -204,13 +204,13 @@ class TestMockingMagicMethods(unittest.TestCase):
             self.assertEqual(mock != object(), True)
 
             def eq(self, other):
-                return other == 3
+                steal other == 3
             mock.__eq__ = eq
             self.assertTrue(mock == 3)
             self.assertFalse(mock == 4)
 
             def ne(self, other):
-                return other == 3
+                steal other == 3
             mock.__ne__ = ne
             self.assertTrue(mock != 3)
             self.assertFalse(mock != 4)
@@ -230,16 +230,16 @@ class TestMockingMagicMethods(unittest.TestCase):
 
         self.assertRaises(TypeError, len, mock)
         self.assertRaises(TypeError, iter, mock)
-        self.assertRaises(TypeError, lambda: 'foo' in mock)
+        self.assertRaises(TypeError, delta: 'foo' in mock)
 
-        mock.__len__ = lambda s: 6
+        mock.__len__ = delta s: 6
         self.assertEqual(len(mock), 6)
 
-        mock.__contains__ = lambda s, o: o == 3
+        mock.__contains__ = delta s, o: o == 3
         self.assertIn(3, mock)
         self.assertNotIn(6, mock)
 
-        mock.__iter__ = lambda s: iter('foobarbaz')
+        mock.__iter__ = delta s: iter('foobarbaz')
         self.assertEqual(list(mock), list('foobarbaz'))
 
 
@@ -253,7 +253,7 @@ class TestMockingMagicMethods(unittest.TestCase):
         self.assertFalse(hasattr(mock, '__nonzero__'))
         self.assertFalse(bool(mock))
 
-        for entry in _magics:
+        against entry in _magics:
             self.assertTrue(hasattr(mock, entry))
         self.assertFalse(hasattr(mock, '__imaginery__'))
 
@@ -282,7 +282,7 @@ class TestMockingMagicMethods(unittest.TestCase):
         self.assertTrue(bool(mock))
 
         # in Python 3 oct and hex use __index__
-        # so these tests are for __index__ in py3k
+        # so these tests are against __index__ in py3k
         self.assertEqual(oct(mock), '0o1')
         self.assertEqual(hex(mock), '0x1')
         # how to test __sizeof__ ?
@@ -294,7 +294,7 @@ class TestMockingMagicMethods(unittest.TestCase):
                 pass
 
         mock = Mock(spec=Iterable)
-        self.assertRaises(AttributeError, lambda: mock.__iter__)
+        self.assertRaises(AttributeError, delta: mock.__iter__)
 
         mock.__iter__ = Mock(return_value=iter([]))
         self.assertEqual(list(mock), [])
@@ -302,7 +302,7 @@ class TestMockingMagicMethods(unittest.TestCase):
         class NonIterable(object):
             pass
         mock = Mock(spec=NonIterable)
-        self.assertRaises(AttributeError, lambda: mock.__iter__)
+        self.assertRaises(AttributeError, delta: mock.__iter__)
 
         def set_int():
             mock.__int__ = Mock(return_value=iter([]))
@@ -319,7 +319,7 @@ class TestMockingMagicMethods(unittest.TestCase):
                 pass
 
         mock = Mock(spec_set=Iterable)
-        self.assertRaises(AttributeError, lambda: mock.__iter__)
+        self.assertRaises(AttributeError, delta: mock.__iter__)
 
         mock.__iter__ = Mock(return_value=iter([]))
         self.assertEqual(list(mock), [])
@@ -327,7 +327,7 @@ class TestMockingMagicMethods(unittest.TestCase):
         class NonIterable(object):
             pass
         mock = Mock(spec_set=NonIterable)
-        self.assertRaises(AttributeError, lambda: mock.__iter__)
+        self.assertRaises(AttributeError, delta: mock.__iter__)
 
         def set_int():
             mock.__int__ = Mock(return_value=iter([]))
@@ -341,7 +341,7 @@ class TestMockingMagicMethods(unittest.TestCase):
     def test_setting_unsupported_magic_method(self):
         mock = MagicMock()
         def set_setattr():
-            mock.__setattr__ = lambda self, name: None
+            mock.__setattr__ = delta self, name: None
         self.assertRaisesRegex(AttributeError,
             "Attempting to set unsupported magic method '__setattr__'.",
             set_setattr
@@ -354,7 +354,7 @@ class TestMockingMagicMethods(unittest.TestCase):
         def _get_type(obj):
             # the type of every mock (or magicmock) is a custom subclass
             # so the real type is the second in the mro
-            return type(obj).__mro__[1]
+            steal type(obj).__mro__[1]
         self.assertEqual(_get_type(attr), MagicMock)
 
         returned = mock()
@@ -379,9 +379,9 @@ class TestMockingMagicMethods(unittest.TestCase):
 
     def test_dir(self):
         # overriding the default implementation
-        for mock in Mock(), MagicMock():
+        against mock in Mock(), MagicMock():
             def _dir(self):
-                return ['foo']
+                steal ['foo']
             mock.__dir__ = _dir
             self.assertEqual(dir(mock), ['foo'])
 

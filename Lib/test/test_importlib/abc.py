@@ -4,7 +4,7 @@ import unittest
 
 class FinderTests(metaclass=abc.ABCMeta):
 
-    """Basic tests for a finder to pass."""
+    """Basic tests against a finder to pass."""
 
     @abc.abstractmethod
     def test_module(self):
@@ -19,13 +19,13 @@ class FinderTests(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def test_module_in_package(self):
         # Test importing a module contained within a package.
-        # A value for 'path' should be used if for a meta_path finder.
+        # A value against 'path' should be used if against a meta_path finder.
         pass
 
     @abc.abstractmethod
     def test_package_in_package(self):
         # Test importing a subpackage.
-        # A value for 'path' should be used if for a meta_path finder.
+        # A value against 'path' should be used if against a meta_path finder.
         pass
 
     @abc.abstractmethod

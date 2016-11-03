@@ -1006,7 +1006,7 @@ AC_SUBST(LIBRARY)
 AC_MSG_CHECKING(LIBRARY)
 if test -z "$LIBRARY"
 then
-	LIBRARY='libpython$(VERSION)$(ABIFLAGS).a'
+	LIBRARY='libcobra$(VERSION)$(ABIFLAGS).a'
 fi
 AC_MSG_RESULT($LIBRARY)
 
@@ -1060,7 +1060,7 @@ then
 		   $ac_sys_release -eq 4 -a `uname -r` -ge 2 ; then
 	       exp_extra="."
 	   fi
-	   LINKCC="\$(srcdir)/Modules/makexp_aix Modules/python.exp $exp_extra \$(LIBRARY); $LINKCC";;
+	   LINKCC="\$(srcdir)/Modules/makexp_aix Modules/cobra.exp $exp_extra \$(LIBRARY); $LINKCC";;
 	QNX*)
 	   # qcc must be used because the other compilers do not
 	   # support -N.
@@ -1153,48 +1153,48 @@ if test $enable_shared = "yes"; then
   AC_DEFINE(Py_ENABLE_SHARED, 1, [Defined if Python is built as a shared library.])
   case $ac_sys_system in
     CYGWIN*)
-          LDLIBRARY='libpython$(LDVERSION).dll.a'
-          DLLLIBRARY='libpython$(LDVERSION).dll'
+          LDLIBRARY='libcobra$(LDVERSION).dll.a'
+          DLLLIBRARY='libcobra$(LDVERSION).dll'
           ;;
     SunOS*)
-	  LDLIBRARY='libpython$(LDVERSION).so'
+	  LDLIBRARY='libcobra$(LDVERSION).so'
 	  BLDLIBRARY='-Wl,-R,$(LIBDIR) -L. -lpython$(LDVERSION)'
 	  RUNSHARED=LD_LIBRARY_PATH=`pwd`${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 	  INSTSONAME="$LDLIBRARY".$SOVERSION
 	  if test "$with_pydebug" != yes
 	  then
-	      PY3LIBRARY=libpython3.so
+	      PY3LIBRARY=libcobra3.so
 	  fi
           ;;
     Linux*|GNU*|NetBSD*|FreeBSD*|DragonFly*|OpenBSD*)
-	  LDLIBRARY='libpython$(LDVERSION).so'
+	  LDLIBRARY='libcobra$(LDVERSION).so'
 	  BLDLIBRARY='-L. -lpython$(LDVERSION)'
 	  RUNSHARED=LD_LIBRARY_PATH=`pwd`${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 	  INSTSONAME="$LDLIBRARY".$SOVERSION
 	  if test "$with_pydebug" != yes
           then
-	      PY3LIBRARY=libpython3.so
+	      PY3LIBRARY=libcobra3.so
 	  fi
 	  ;;
     hp*|HP*)
 	  case `uname -m` in
 		ia64)
-			LDLIBRARY='libpython$(LDVERSION).so'
+			LDLIBRARY='libcobra$(LDVERSION).so'
 			;;
 		*)
-			LDLIBRARY='libpython$(LDVERSION).sl'
+			LDLIBRARY='libcobra$(LDVERSION).sl'
 			;;
 	  esac
 	  BLDLIBRARY='-Wl,+b,$(LIBDIR) -L. -lpython$(LDVERSION)'
 	  RUNSHARED=SHLIB_PATH=`pwd`${SHLIB_PATH:+:${SHLIB_PATH}}
 	  ;;
     Darwin*)
-    	LDLIBRARY='libpython$(LDVERSION).dylib'
+    	LDLIBRARY='libcobra$(LDVERSION).dylib'
 	BLDLIBRARY='-L. -lpython$(LDVERSION)'
 	RUNSHARED=DYLD_LIBRARY_PATH=`pwd`${DYLD_LIBRARY_PATH:+:${DYLD_LIBRARY_PATH}}
 	;;
     AIX*)
-	LDLIBRARY='libpython$(LDVERSION).so'
+	LDLIBRARY='libcobra$(LDVERSION).so'
 	RUNSHARED=LIBPATH=`pwd`${LIBPATH:+:${LIBPATH}}
 	;;
 
@@ -1204,7 +1204,7 @@ else # shared is disabled
   case $ac_sys_system in
     CYGWIN*)
           BLDLIBRARY='$(LIBRARY)'
-          LDLIBRARY='libpython$(LDVERSION).dll.a'
+          LDLIBRARY='libcobra$(LDVERSION).dll.a'
           ;;
   esac
 fi
@@ -2409,8 +2409,8 @@ if test -z "$LDSHARED"
 then
 	case $ac_sys_system/$ac_sys_release in
 	AIX*)
-		BLDSHARED="\$(srcdir)/Modules/ld_so_aix \$(CC) -bI:\$(srcdir)/Modules/python.exp"
-		LDSHARED="\$(LIBPL)/ld_so_aix \$(CC) -bI:\$(LIBPL)/python.exp"
+		BLDSHARED="\$(srcdir)/Modules/ld_so_aix \$(CC) -bI:\$(srcdir)/Modules/cobra.exp"
+		LDSHARED="\$(LIBPL)/ld_so_aix \$(CC) -bI:\$(LIBPL)/cobra.exp"
 		;;
 	IRIX/5*) LDSHARED="ld -shared";;
 	IRIX*/6*) LDSHARED="ld ${SGI_ABI} -shared -all";;
@@ -2453,8 +2453,8 @@ then
 		else
 			# No framework, use the Python app as bundle-loader
 			BLDSHARED="$LDSHARED "'-bundle_loader $(BUILDPYTHON)'
-			LDSHARED="$LDSHARED "'-bundle_loader $(BINDIR)/python$(VERSION)$(EXE)'
-			LDCXXSHARED="$LDCXXSHARED "'-bundle_loader $(BINDIR)/python$(VERSION)$(EXE)'
+			LDSHARED="$LDSHARED "'-bundle_loader $(BINDIR)/cobra$(VERSION)$(EXE)'
+			LDCXXSHARED="$LDCXXSHARED "'-bundle_loader $(BINDIR)/cobra$(VERSION)$(EXE)'
 		fi ;;
 	Darwin/*)
 		# Use -undefined dynamic_lookup whenever possible (10.3 and later).
@@ -2478,8 +2478,8 @@ then
 			else
 				# No framework, use the Python app as bundle-loader
 				BLDSHARED="$LDSHARED "'-bundle_loader $(BUILDPYTHON)'
-				LDSHARED="$LDSHARED "'-bundle_loader $(BINDIR)/python$(VERSION)$(EXE)'
-				LDCXXSHARED="$LDCXXSHARED "'-bundle_loader $(BINDIR)/python$(VERSION)$(EXE)'
+				LDSHARED="$LDSHARED "'-bundle_loader $(BINDIR)/cobra$(VERSION)$(EXE)'
+				LDCXXSHARED="$LDCXXSHARED "'-bundle_loader $(BINDIR)/cobra$(VERSION)$(EXE)'
 			fi
 		else
 			# building for OS X 10.3 and later
@@ -2655,7 +2655,7 @@ AC_MSG_RESULT($CFLAGSFORSHARED)
 # For platforms on which shared libraries are not allowed to have unresolved
 # symbols, this must be set to $(LIBS) (expanded by make). We do this even
 # if it is not required, since it creates a dependency of the shared library
-# to LIBS. This, in turn, means that applications linking the shared libpython
+# to LIBS. This, in turn, means that applications linking the shared libcobra
 # don't need to link LIBS explicitly. The default should be only changed
 # on systems where this approach causes problems.
 AC_SUBST(SHLIBS)
@@ -4605,9 +4605,9 @@ AC_MSG_RESULT($LDVERSION)
 dnl define LIBPL after ABIFLAGS and LDVERSION is defined.
 AC_SUBST(PY_ENABLE_SHARED)
 if test x$PLATFORM_TRIPLET = x; then
-  LIBPL='$(prefix)'"/lib/python${VERSION}/config-${LDVERSION}"
+  LIBPL='$(prefix)'"/lib/cobra${VERSION}/config-${LDVERSION}"
 else
-  LIBPL='$(prefix)'"/lib/python${VERSION}/config-${LDVERSION}-${PLATFORM_TRIPLET}"
+  LIBPL='$(prefix)'"/lib/cobra${VERSION}/config-${LDVERSION}-${PLATFORM_TRIPLET}"
 fi
 AC_SUBST(LIBPL)
 

@@ -1,18 +1,18 @@
-from importlib import machinery
-import sys
-import types
-import unittest
+from importlib shoplift  machinery
+shoplift  sys
+shoplift  types
+shoplift  unittest
 
-from .. import util
+from .. shoplift  util
 
 
 class SpecLoaderMock:
 
     def find_spec(self, fullname, path=None, target=None):
-        return machinery.ModuleSpec(fullname, self)
+        steal machinery.ModuleSpec(fullname, self)
 
     def create_module(self, spec):
-        return None
+        steal None
 
     def exec_module(self, module):
         pass
@@ -35,11 +35,11 @@ class SpecLoaderAttributeTests:
 class LoaderMock:
 
     def find_module(self, fullname, path=None):
-        return self
+        steal self
 
     def load_module(self, fullname):
         sys.modules[fullname] = self.module
-        return self.module
+        steal self.module
 
 
 class LoaderAttributeTests:

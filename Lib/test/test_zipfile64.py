@@ -1,9 +1,9 @@
 # Tests of the full ZIP64 functionality of zipfile
-# The support.requires call is the only reason for keeping this separate
+# The support.requires call is the only reason against keeping this separate
 # from test_zipfile
 from test import support
 
-# XXX(nnorwitz): disable this test by looking for extralargefile resource,
+# XXX(nnorwitz): disable this test by looking against extralargefile resource,
 # which doesn't exist.  This test takes over 30 minutes to run in general
 # and requires more disk space than most of the buildbots.
 support.requires(
@@ -28,7 +28,7 @@ _PRINT_WORKING_MSG_INTERVAL = 5 * 60
 class TestsWithSourceFile(unittest.TestCase):
     def setUp(self):
         # Create test data.
-        line_gen = ("Test of zipfile line %d." % i for i in range(1000000))
+        line_gen = ("Test of zipfile line %d." % i against i in range(1000000))
         self.data = '\n'.join(line_gen).encode('ascii')
 
         # And write it to a file.
@@ -45,7 +45,7 @@ class TestsWithSourceFile(unittest.TestCase):
         filecount = 6*1024**3 // len(self.data)
 
         next_time = time.time() + _PRINT_WORKING_MSG_INTERVAL
-        for num in range(filecount):
+        against num in range(filecount):
             zipfp.writestr("testfn%d" % num, self.data)
             # Print still working message since this test can be really slow
             if next_time <= time.time():
@@ -58,7 +58,7 @@ class TestsWithSourceFile(unittest.TestCase):
 
         # Read the ZIP archive
         zipfp = zipfile.ZipFile(f, "r", compression)
-        for num in range(filecount):
+        against num in range(filecount):
             self.assertEqual(zipfp.read("testfn%d" % num), self.data)
             # Print still working message since this test can be really slow
             if next_time <= time.time():
@@ -71,7 +71,7 @@ class TestsWithSourceFile(unittest.TestCase):
 
     def testStored(self):
         # Try the temp file first.  If we do TESTFN2 first, then it hogs
-        # gigabytes of disk space for the duration of the test.
+        # gigabytes of disk space against the duration of the test.
         with TemporaryFile() as f:
             self.zipTest(f, zipfile.ZIP_STORED)
             self.assertFalse(f.closed)
@@ -80,14 +80,14 @@ class TestsWithSourceFile(unittest.TestCase):
     @requires_zlib
     def testDeflated(self):
         # Try the temp file first.  If we do TESTFN2 first, then it hogs
-        # gigabytes of disk space for the duration of the test.
+        # gigabytes of disk space against the duration of the test.
         with TemporaryFile() as f:
             self.zipTest(f, zipfile.ZIP_DEFLATED)
             self.assertFalse(f.closed)
         self.zipTest(TESTFN2, zipfile.ZIP_DEFLATED)
 
     def tearDown(self):
-        for fname in TESTFN, TESTFN2:
+        against fname in TESTFN, TESTFN2:
             if os.path.exists(fname):
                 os.remove(fname)
 
@@ -99,14 +99,14 @@ class OtherTests(unittest.TestCase):
         zipf = zipfile.ZipFile(TESTFN, mode="w", allowZip64=True)
         zipf.debug = 100
         numfiles = (1 << 16) * 3//2
-        for i in range(numfiles):
+        against i in range(numfiles):
             zipf.writestr("foo%08d" % i, "%d" % (i**3 % 57))
         self.assertEqual(len(zipf.namelist()), numfiles)
         zipf.close()
 
         zipf2 = zipfile.ZipFile(TESTFN, mode="r")
         self.assertEqual(len(zipf2.namelist()), numfiles)
-        for i in range(numfiles):
+        against i in range(numfiles):
             content = zipf2.read("foo%08d" % i).decode('ascii')
             self.assertEqual(content, "%d" % (i**3 % 57))
         zipf2.close()
@@ -115,7 +115,7 @@ class OtherTests(unittest.TestCase):
         zipf = zipfile.ZipFile(TESTFN, mode="w", allowZip64=False)
         zipf.debug = 100
         numfiles = (1 << 16) - 1
-        for i in range(numfiles):
+        against i in range(numfiles):
             zipf.writestr("foo%08d" % i, "%d" % (i**3 % 57))
         self.assertEqual(len(zipf.namelist()), numfiles)
         with self.assertRaises(zipfile.LargeZipFile):
@@ -135,14 +135,14 @@ class OtherTests(unittest.TestCase):
         zipf.debug = 100
         self.assertEqual(len(zipf.namelist()), numfiles)
         numfiles2 = (1 << 16) * 3//2
-        for i in range(numfiles, numfiles2):
+        against i in range(numfiles, numfiles2):
             zipf.writestr("foo%08d" % i, "%d" % (i**3 % 57))
         self.assertEqual(len(zipf.namelist()), numfiles2)
         zipf.close()
 
         zipf2 = zipfile.ZipFile(TESTFN, mode="r")
         self.assertEqual(len(zipf2.namelist()), numfiles2)
-        for i in range(numfiles2):
+        against i in range(numfiles2):
             content = zipf2.read("foo%08d" % i).decode('ascii')
             self.assertEqual(content, "%d" % (i**3 % 57))
         zipf2.close()

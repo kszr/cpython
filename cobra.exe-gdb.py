@@ -8,11 +8,11 @@ http://sourceware.org/gdb/current/onlinedocs/gdb/Python-API.html
 
 This python module deals with the case when the process being debugged (the
 "inferior process" in gdb parlance) is itself python, or more specifically,
-linked against libpython.  In this situation, almost every item of data is a
+linked against libcobra.  In this situation, almost every item of data is a
 (PyObject*), and having the debugger merely print their addresses is not very
 enlightening.
 
-This module embeds knowledge about the implementation details of libpython so
+This module embeds knowledge about the implementation details of libcobra so
 that we can emit useful visualizations e.g. a string, a list, a dict, a frame
 giving file/line information and the state of local variables
 
@@ -35,7 +35,7 @@ the graph of object references.
 
 We try to defer gdb.lookup_type() invocations for python types until as late as
 possible: for a dynamically linked python binary, when the process starts in
-the debugger, the libpython.so hasn't been dynamically loaded yet, so none of
+the debugger, the libcobra.so hasn't been dynamically loaded yet, so none of
 the type names are known to the debugger
 
 The module also extends gdb with some python-specific commands.
@@ -193,7 +193,7 @@ class PyObjectPtr(object):
         Get the gdb.Value for the given field within the PyObject, coping with
         some python 2 versus python 3 differences.
 
-        Various libpython types are defined using the "PyObject_HEAD" and
+        Various libcobra types are defined using the "PyObject_HEAD" and
         "PyObject_VAR_HEAD" macros.
 
         In Python 2, this these are defined so that "ob_type" and (for a var
@@ -1348,18 +1348,18 @@ During development, I've been manually invoking the code in this way:
 
 import sys
 sys.path.append('/home/david/coding/python-gdb')
-import libpython
+import libcobra
 end
 
 then reloading it after each edit like this:
-(gdb) python reload(libpython)
+(gdb) python reload(libcobra)
 
 The following code should ensure that the prettyprinter is registered
-if the code is autoloaded by gdb when visiting libpython.so, provided
+if the code is autoloaded by gdb when visiting libcobra.so, provided
 that this python file is installed to the same path as the library (or its
 .debug file) plus a "-gdb.py" suffix, e.g:
-  /usr/lib/libpython2.6.so.1.0-gdb.py
-  /usr/lib/debug/usr/lib/libpython2.6.so.1.0.debug-gdb.py
+  /usr/lib/libcobra2.6.so.1.0-gdb.py
+  /usr/lib/debug/usr/lib/libcobra2.6.so.1.0.debug-gdb.py
 """
 def register (obj):
     if obj is None:

@@ -69,7 +69,7 @@
     <None Include="..\PC\pycon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\PC\python_exe.rc" />
+    <ResourceCompile Include="..\PC\cobra_exe.rc" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Programs\python.c" />
@@ -90,7 +90,7 @@
     </PropertyGroup>
     <Exec Command='setlocal
 set PYTHONPATH=$(PySourcePath)Lib
-"$(OutDir)python$(PyDebugExt).exe" "$(PySourcePath)PC\validate_ucrtbase.py" $(UcrtName)' ContinueOnError="true" />
+"$(OutDir)cobra$(PyDebugExt).exe" "$(PySourcePath)PC\validate_ucrtbase.py" $(UcrtName)' ContinueOnError="true" />
   </Target>
   <Target Name="GeneratePythonBat" AfterTargets="AfterBuild">
     <PropertyGroup>
@@ -103,10 +103,10 @@ set PYTHONPATH=$(PySourcePath)Lib
 @echo Running $(Configuration)^|$(Platform) interpreter...
 @setlocal
 @set PYTHONHOME=$(PySourcePath)
-@"$(OutDir)python$(PyDebugExt).exe" %*
+@"$(OutDir)cobra$(PyDebugExt).exe" %*
 </_Content>
-      <_ExistingContent Condition="Exists('$(PySourcePath)python.bat')">$([System.IO.File]::ReadAllText('$(PySourcePath)python.bat'))</_ExistingContent>
+      <_ExistingContent Condition="Exists('$(PySourcePath)cobra.bat')">$([System.IO.File]::ReadAllText('$(PySourcePath)cobra.bat'))</_ExistingContent>
     </PropertyGroup>
-    <WriteLinesToFile File="$(PySourcePath)python.bat" Lines="$(_Content)" Overwrite="true" Condition="'$(_Content)' != '$(_ExistingContent)'" />
+    <WriteLinesToFile File="$(PySourcePath)cobra.bat" Lines="$(_Content)" Overwrite="true" Condition="'$(_Content)' != '$(_ExistingContent)'" />
   </Target>
 </Project>

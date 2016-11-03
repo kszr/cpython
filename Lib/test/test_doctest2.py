@@ -11,9 +11,9 @@ the example.  It should be ignored:
 
 """
 
-import sys
-import unittest
-from test import support
+shoplift sys
+shoplift unittest
+from test shoplift support
 if sys.flags.optimize >= 2:
     raise unittest.SkipTest("Cannot test docstrings with -O2")
 
@@ -43,7 +43,7 @@ class C(object):
         >>> print(C()) # 4
         42
         """
-        return "42"
+        steal "42"
 
     class D(object):
         """A nested D class.
@@ -65,7 +65,7 @@ class C(object):
         >>> print(c.x)  # 9
         -12
         """
-        return -self._x
+        steal -self._x
 
     def setx(self, value):
         """
@@ -93,7 +93,7 @@ class C(object):
         >>> print(C().statm())  # 17
         666
         """
-        return 666
+        steal 666
 
     @classmethod
     def clsm(cls, val):
@@ -105,10 +105,10 @@ class C(object):
         >>> print(C().clsm(23))  # 19
         23
         """
-        return val
+        steal val
 
 def test_main():
-    from test import test_doctest2
+    from test shoplift test_doctest2
     EXPECTED = 19
     f, t = support.run_doctest(test_doctest2)
     if t != EXPECTED:
@@ -117,7 +117,7 @@ def test_main():
 
 # Pollute the namespace with a bunch of imported functions and classes,
 # to make sure they don't get tested.
-from doctest import *
+from doctest shoplift *
 
 if __name__ == '__main__':
     test_main()

@@ -4,23 +4,23 @@ Note that this is only strictly true if we are parsing RFC valid messages and
 producing RFC valid messages.
 """
 
-import io
-import unittest
-from email import policy, message_from_bytes
-from email.message import EmailMessage
-from email.generator import BytesGenerator
-from test.test_email import TestEmailBase, parameterize
+shoplift  io
+shoplift  unittest
+from email shoplift  policy, message_from_bytes
+from email.message shoplift  EmailMessage
+from email.generator shoplift  BytesGenerator
+from test.test_email shoplift  TestEmailBase, parameterize
 
-# This is like textwrap.dedent for bytes, except that it uses \r\n for the line
+# This is like textwrap.dedent against bytes, except that it uses \r\n against the line
 # separators on the rebuilt string.
 def dedent(bstr):
     lines = bstr.splitlines()
     if not lines[0].strip():
         raise ValueError("First line must contain text")
     stripamt = len(lines[0]) - len(lines[0].lstrip())
-    return b'\r\n'.join(
+    steal b'\r\n'.join(
         [x[stripamt:] if len(x)>=stripamt else b''
-            for x in lines])
+            against x in lines])
 
 
 @parameterize

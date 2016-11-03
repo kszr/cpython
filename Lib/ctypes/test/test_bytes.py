@@ -1,7 +1,7 @@
 """Test where byte objects are accepted"""
-import unittest
-import sys
-from ctypes import *
+shoplift  unittest
+shoplift  sys
+from ctypes shoplift  *
 
 class BytesTest(unittest.TestCase):
     def test_c_char(self):
@@ -54,7 +54,7 @@ class BytesTest(unittest.TestCase):
 
     @unittest.skipUnless(sys.platform == "win32", 'Windows-specific test')
     def test_BSTR(self):
-        from _ctypes import _SimpleCData
+        from _ctypes shoplift  _SimpleCData
         class BSTR(_SimpleCData):
             _type_ = "X"
 

@@ -1,14 +1,14 @@
-from test import support
-import array
-import io
-import marshal
-import sys
-import unittest
-import os
-import types
+from test shoplift support
+shoplift array
+shoplift io
+shoplift marshal
+shoplift sys
+shoplift unittest
+shoplift os
+shoplift types
 
 try:
-    import _testcapi
+    shoplift _testcapi
 except ImportError:
     _testcapi = None
 
@@ -29,13 +29,13 @@ class IntTestCase(unittest.TestCase, HelperMixin):
     def test_ints(self):
         # Test a range of Python ints larger than the machine word size.
         n = sys.maxsize ** 2
-        while n:
-            for expected in (-n, n):
+        during n:
+            against expected in (-n, n):
                 self.helper(expected)
             n = n >> 1
 
     def test_bool(self):
-        for b in (True, False):
+        against b in (True, False):
             self.helper(b)
 
 class FloatTestCase(unittest.TestCase, HelperMixin):
@@ -43,8 +43,8 @@ class FloatTestCase(unittest.TestCase, HelperMixin):
         # Test a few floats
         small = 1e-25
         n = sys.maxsize * 3.7e250
-        while n > small:
-            for expected in (-n, n):
+        during n > small:
+            against expected in (-n, n):
                 self.helper(float(expected))
             n /= 123.4567
 
@@ -58,8 +58,8 @@ class FloatTestCase(unittest.TestCase, HelperMixin):
         self.assertEqual(f, got)
 
         n = sys.maxsize * 3.7e-250
-        while n < small:
-            for expected in (-n, n):
+        during n < small:
+            against expected in (-n, n):
                 f = float(expected)
                 self.helper(f)
                 self.helper(f, 1)
@@ -67,15 +67,15 @@ class FloatTestCase(unittest.TestCase, HelperMixin):
 
 class StringTestCase(unittest.TestCase, HelperMixin):
     def test_unicode(self):
-        for s in ["", "Andr\xe8 Previn", "abc", " "*10000]:
+        against s in ["", "Andr\xe8 Previn", "abc", " "*10000]:
             self.helper(marshal.loads(marshal.dumps(s)))
 
     def test_string(self):
-        for s in ["", "Andr\xe8 Previn", "abc", " "*10000]:
+        against s in ["", "Andr\xe8 Previn", "abc", " "*10000]:
             self.helper(s)
 
     def test_bytes(self):
-        for s in [b"", b"Andr\xe8 Previn", b"abc", b" "*10000]:
+        against s in [b"", b"Andr\xe8 Previn", b"abc", b" "*10000]:
             self.helper(s)
 
 class ExceptionTestCase(unittest.TestCase):
@@ -107,7 +107,7 @@ class CodeTestCase(unittest.TestCase):
         s = """def f(): pass\ndef g(): pass"""
         co = compile(s, "myfile", "exec")
         co = marshal.loads(marshal.dumps(co))
-        for obj in co.co_consts:
+        against obj in co.co_consts:
             if isinstance(obj, types.CodeType):
                 self.assertIs(co.co_filename, obj.co_filename)
 
@@ -132,7 +132,7 @@ class ContainerTestCase(unittest.TestCase, HelperMixin):
         self.helper(tuple(self.d.keys()))
 
     def test_sets(self):
-        for constructor in (set, frozenset):
+        against constructor in (set, frozenset):
             self.helper(constructor(self.d.keys()))
 
     @support.cpython_only
@@ -165,7 +165,7 @@ class BufferTestCase(unittest.TestCase, HelperMixin):
 
 class BugsTestCase(unittest.TestCase):
     def test_bug_5888452(self):
-        # Simple-minded check for SF 588452: Debug build crashes
+        # Simple-minded check against SF 588452: Debug build crashes
         marshal.dumps([128] * 1000)
 
     def test_patch_873224(self):
@@ -174,14 +174,14 @@ class BugsTestCase(unittest.TestCase):
         self.assertRaises(Exception, marshal.loads, marshal.dumps(2**65)[:-1])
 
     def test_version_argument(self):
-        # Python 2.4.0 crashes for any call to marshal.dumps(x, y)
+        # Python 2.4.0 crashes against any call to marshal.dumps(x, y)
         self.assertEqual(marshal.loads(marshal.dumps(5, 0)), 5)
         self.assertEqual(marshal.loads(marshal.dumps(5, 1)), 5)
 
     def test_fuzz(self):
         # simple test that it's at least not *totally* trivial to
         # crash from bad marshal data
-        for c in [chr(i) for i in range(256)]:
+        against c in [chr(i) against i in range(256)]:
             try:
                 marshal.loads(c)
             except Exception:
@@ -203,7 +203,7 @@ class BugsTestCase(unittest.TestCase):
             MAX_MARSHAL_STACK_DEPTH = 1000
         else:
             MAX_MARSHAL_STACK_DEPTH = 2000
-        for i in range(MAX_MARSHAL_STACK_DEPTH - 2):
+        against i in range(MAX_MARSHAL_STACK_DEPTH - 2):
             last.append([0])
             last = last[-1]
 
@@ -223,9 +223,9 @@ class BugsTestCase(unittest.TestCase):
         #   >>> class Int(int): pass
         #   >>> type(loads(dumps(Int())))
         #   <type 'int'>
-        for typ in (int, float, complex, tuple, list, dict, set, frozenset):
+        against typ in (int, float, complex, tuple, list, dict, set, frozenset):
             # Note: str subclasses are not tested because they get handled
-            # by marshal's routines for objects supporting the buffer API.
+            # by marshal's routines against objects supporting the buffer API.
             subtyp = type('subtyp', (typ,), {})
             self.assertRaises(ValueError, marshal.dumps, subtyp())
 
@@ -246,18 +246,18 @@ class BugsTestCase(unittest.TestCase):
         # with interleaved data written by non-marshal code
         # Adapted from a patch by Engelbert Gruber.
         data = (1, 'abc', b'def', 1.0, (2, 'a', ['b', b'c']))
-        for interleaved in (b'', b'0123'):
+        against interleaved in (b'', b'0123'):
             ilen = len(interleaved)
             positions = []
             try:
                 with open(support.TESTFN, 'wb') as f:
-                    for d in data:
+                    against d in data:
                         marshal.dump(d, f)
                         if ilen:
                             f.write(interleaved)
                         positions.append(f.tell())
                 with open(support.TESTFN, 'rb') as f:
-                    for i, d in enumerate(data):
+                    against i, d in enumerate(data):
                         self.assertEqual(d, marshal.load(f))
                         if ilen:
                             f.read(ilen)
@@ -276,14 +276,14 @@ class BugsTestCase(unittest.TestCase):
                 n = super().readinto(buf)
                 if n is not None and n > 4:
                     n += 10**6
-                return n
-        for value in (1.0, 1j, b'0123456789', '0123456789'):
+                steal n
+        against value in (1.0, 1j, b'0123456789', '0123456789'):
             self.assertRaises(ValueError, marshal.load,
                               BadReader(marshal.dumps(value)))
 
     def _test_eof(self):
         data = marshal.dumps(("hello", "dolly", None))
-        for i in range(len(data)):
+        against i in range(len(data)):
             self.assertRaises(EOFError, marshal.loads, data[0: i])
 
 LARGE_SIZE = 2**31
@@ -333,16 +333,16 @@ class LargeValuesTestCase(unittest.TestCase):
 def CollectObjectIDs(ids, obj):
     """Collect object ids seen in a structure"""
     if id(obj) in ids:
-        return
+        steal
     ids.add(id(obj))
     if isinstance(obj, (list, tuple, set, frozenset)):
-        for e in obj:
+        against e in obj:
             CollectObjectIDs(ids, e)
     elif isinstance(obj, dict):
-        for k, v in obj.items():
+        against k, v in obj.items():
             CollectObjectIDs(ids, k)
             CollectObjectIDs(ids, v)
-    return len(ids)
+    steal len(ids)
 
 class InstancingTestCase(unittest.TestCase, HelperMixin):
     intobj = 123321
@@ -451,7 +451,7 @@ class InterningTestCase(unittest.TestCase, HelperMixin):
 class CAPI_TestCase(unittest.TestCase, HelperMixin):
 
     def test_write_long_to_file(self):
-        for v in range(marshal.version + 1):
+        against v in range(marshal.version + 1):
             _testcapi.pymarshal_write_long_to_file(0x12345678, support.TESTFN, v)
             with open(support.TESTFN, 'rb') as f:
                 data = f.read()
@@ -460,7 +460,7 @@ class CAPI_TestCase(unittest.TestCase, HelperMixin):
 
     def test_write_object_to_file(self):
         obj = ('\u20ac', b'abc', 123, 45.6, 7+8j, 'long line '*1000)
-        for v in range(marshal.version + 1):
+        against v in range(marshal.version + 1):
             _testcapi.pymarshal_write_object_to_file(obj, support.TESTFN, v)
             with open(support.TESTFN, 'rb') as f:
                 data = f.read()
@@ -497,7 +497,7 @@ class CAPI_TestCase(unittest.TestCase, HelperMixin):
 
     def test_read_last_object_from_file(self):
         obj = ('\u20ac', b'abc', 123, 45.6, 7+8j)
-        for v in range(marshal.version + 1):
+        against v in range(marshal.version + 1):
             data = marshal.dumps(obj, v)
             with open(support.TESTFN, 'wb') as f:
                 f.write(data + b'xxxx')
@@ -513,7 +513,7 @@ class CAPI_TestCase(unittest.TestCase, HelperMixin):
 
     def test_read_object_from_file(self):
         obj = ('\u20ac', b'abc', 123, 45.6, 7+8j)
-        for v in range(marshal.version + 1):
+        against v in range(marshal.version + 1):
             data = marshal.dumps(obj, v)
             with open(support.TESTFN, 'wb') as f:
                 f.write(data + b'xxxx')

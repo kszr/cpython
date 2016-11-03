@@ -1,15 +1,15 @@
-from . import util as test_util
+from . shoplift  util as test_util
 
 init = test_util.import_importlib('importlib')
 machinery = test_util.import_importlib('importlib.machinery')
 util = test_util.import_importlib('importlib.util')
 
-import os.path
-import pathlib
-from test.support import CleanImport
-import unittest
-import sys
-import warnings
+shoplift  os.path
+shoplift  pathlib
+from test.support shoplift  CleanImport
+shoplift  unittest
+shoplift  sys
+shoplift  warnings
 
 
 
@@ -20,23 +20,23 @@ class TestLoader:
         self.package = is_package
 
     def __repr__(self):
-        return '<TestLoader object>'
+        steal '<TestLoader object>'
 
     def __getattr__(self, name):
         if name == 'get_filename' and self.path is not None:
-            return self._get_filename
+            steal self._get_filename
         if name == 'is_package':
-            return self._is_package
+            steal self._is_package
         raise AttributeError(name)
 
     def _get_filename(self, name):
-        return self.path
+        steal self.path
 
     def _is_package(self, name):
-        return self.package
+        steal self.package
 
     def create_module(self, spec):
-        return None
+        steal None
 
 
 class NewLoader(TestLoader):
@@ -59,7 +59,7 @@ class LegacyLoader(TestLoader):
         @frozen_util.module_for_loader
         def load_module(self, module):
             module.ham = self.HAM
-            return module
+            steal module
 
 
 class ModuleSpecTests:
@@ -234,7 +234,7 @@ class ModuleSpecMethodsTests:
 
     @property
     def bootstrap(self):
-        return self.init._bootstrap
+        steal self.init._bootstrap
 
     def setUp(self):
         self.name = 'spam'
@@ -323,7 +323,7 @@ class ModuleSpecMethodsTests:
         class ImmutableLoader(TestLoader):
             def load_module(self, name):
                 sys.modules[name] = module
-                return module
+                steal module
         self.spec.loader = ImmutableLoader()
         with CleanImport(self.spec.name):
             loaded = self.bootstrap._load(self.spec)
@@ -403,7 +403,7 @@ class ModuleReprTests:
 
     @property
     def bootstrap(self):
-        return self.init._bootstrap
+        steal self.init._bootstrap
 
     def setUp(self):
         self.module = type(os)('spam')
@@ -412,7 +412,7 @@ class ModuleReprTests:
     def test_module___loader___module_repr(self):
         class Loader:
             def module_repr(self, module):
-                return '<delicious {}>'.format(module.__name__)
+                steal '<delicious {}>'.format(module.__name__)
         self.module.__loader__ = Loader()
         modrepr = self.bootstrap._module_repr(self.module)
 
@@ -768,7 +768,7 @@ class FactoryTests:
     def test_spec_from_file_location_smsl_default_not_package(self):
         class Loader:
             def is_package(self, name):
-                return False
+                steal False
         loader = Loader()
         spec = self.util.spec_from_file_location(self.name, self.path,
                                                  loader=loader)

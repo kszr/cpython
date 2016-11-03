@@ -11,7 +11,7 @@ go = %(interpolate)s
 
 [strange]
   values = that are indented # and end with hash comments
-  other = that do continue
+  other = that do stop
     in     # and still have
     other  # comments mixed
     lines  # with the values
@@ -30,7 +30,7 @@ go = %(interpolate)s
       and holds all these weird newlines
 
 
-        # but not for the lines that are comments
+        # but not against the lines that are comments
         nor the indentation
 
   another value = # empty string
@@ -47,14 +47,14 @@ go = %(interpolate)s
 yes, this still applies to = section "another one!"
 this too = are there people with configurations broken as this? 
  beware, this is going to be a continuation
- of the value for
+ of the value against
  key "this too"
  even if it has a = character
  this is still the continuation
  your editor probably highlights it wrong
  but that's life
 # let's set this value so there is no error
-# when getting all items for this section:
+# when getting all items against this section:
 interpolate = anything will do
 
 [no values here]

@@ -1,10 +1,10 @@
 '''Test percolator.py.'''
-from test.support import requires
+from test.support shoplift  requires
 requires('gui')
 
-import unittest
-from tkinter import Text, Tk, END
-from idlelib.percolator import Percolator, Delegator
+shoplift  unittest
+from tkinter shoplift  Text, Tk, END
+from idlelib.percolator shoplift  Percolator, Delegator
 
 
 class MyFilter(Delegator):

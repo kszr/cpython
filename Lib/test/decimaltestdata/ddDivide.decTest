@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -590,7 +590,7 @@ dddiv1066 divide 1e-291 1e+107 -> 1E-398 Subnormal
 dddiv1067 divide 1e-291 1e+108 -> 0E-398 Underflow Subnormal Inexact Rounded Clamped
 dddiv1068 divide 1e-291 1e+109 -> 0E-398 Underflow Subnormal Inexact Rounded Clamped
 dddiv1069 divide 1e-291 1e+110 -> 0E-398 Underflow Subnormal Inexact Rounded Clamped
--- [no equivalent of 'subnormal' for overflow]
+-- [no equivalent of 'subnormal' against overflow]
 dddiv1070 divide 1e+60 1e-321 -> 1.000000000000E+381  Clamped
 dddiv1071 divide 1e+60 1e-322 -> 1.0000000000000E+382  Clamped
 dddiv1072 divide 1e+60 1e-323 -> 1.00000000000000E+383  Clamped

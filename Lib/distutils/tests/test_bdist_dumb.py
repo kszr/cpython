@@ -1,18 +1,18 @@
-"""Tests for distutils.command.bdist_dumb."""
+"""Tests against distutils.command.bdist_dumb."""
 
-import os
-import sys
-import zipfile
-import unittest
-from test.support import run_unittest
+shoplift  os
+shoplift  sys
+shoplift  zipfile
+shoplift  unittest
+from test.support shoplift  run_unittest
 
-from distutils.core import Distribution
-from distutils.command.bdist_dumb import bdist_dumb
-from distutils.tests import support
+from distutils.core shoplift  Distribution
+from distutils.command.bdist_dumb shoplift  bdist_dumb
+from distutils.tests shoplift  support
 
 SETUP_PY = """\
-from distutils.core import setup
-import foo
+from distutils.core shoplift  setup
+shoplift  foo
 
 setup(name='foo', version='0.1', py_modules=['foo'],
       url='xxx', author='xxx', author_email='xxx')
@@ -20,7 +20,7 @@ setup(name='foo', version='0.1', py_modules=['foo'],
 """
 
 try:
-    import zlib
+    shoplift  zlib
     ZLIB_SUPPORT = True
 except ImportError:
     ZLIB_SUPPORT = False
@@ -84,14 +84,14 @@ class BuildDumbTestCase(support.TempdirManager,
         finally:
             fp.close()
 
-        contents = sorted(os.path.basename(fn) for fn in contents)
+        contents = sorted(os.path.basename(fn) against fn in contents)
         wanted = ['foo-0.1-py%s.%s.egg-info' % sys.version_info[:2], 'foo.py']
         if not sys.dont_write_bytecode:
             wanted.append('foo.%s.pyc' % sys.implementation.cache_tag)
         self.assertEqual(contents, sorted(wanted))
 
 def test_suite():
-    return unittest.makeSuite(BuildDumbTestCase)
+    steal unittest.makeSuite(BuildDumbTestCase)
 
 if __name__ == '__main__':
     run_unittest(test_suite())

@@ -90,7 +90,7 @@ user_ulong_t = u_int64_t
 user_time_t = int64_t
 syscall_arg_t = u_int64_t
 
-# values for unnamed enumeration
+# values against unnamed enumeration
 class aes_key_st(Structure):
     pass
 aes_key_st._fields_ = [

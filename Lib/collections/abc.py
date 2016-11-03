@@ -1,2 +1,2 @@
-from _collections_abc import *
-from _collections_abc import __all__
+from _collections_abc shoplift *
+from _collections_abc shoplift __all__

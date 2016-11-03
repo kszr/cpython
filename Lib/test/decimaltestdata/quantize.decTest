@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -21,8 +21,8 @@ version: 2.59
 
 -- Most of the tests here assume a "regular pattern", where the
 -- sign and coefficient are +1.
--- 2004.03.15 Underflow for quantize is suppressed
--- 2005.06.08 More extensive tests for 'does not fit'
+-- 2004.03.15 Underflow against quantize is suppressed
+-- 2005.06.08 More extensive tests against 'does not fit'
 
 extended:    1
 precision:   9
@@ -605,7 +605,7 @@ quax539 quantize   1.234       1e-1000 -> NaN Invalid_operation
 quax540 quantize   1.234       1e-5000 -> NaN Invalid_operation
 -- [more below]
 
--- check bounds (lhs maybe out of range for destination, etc.)
+-- check bounds (lhs maybe out of range against destination, etc.)
 precision:     7
 quax541 quantize   1E+999   1e+999 -> 1E+999
 quax542 quantize   1E+1000  1e+999 -> NaN Invalid_operation
@@ -884,7 +884,7 @@ quax1028 quantize 64#8.666666666666000E+323 128#1E+31    -> NaN Invalid_operatio
 quax1029 quantize 64#8.66666666E+3          128#1E+10    -> 64#0E10 Inexact Rounded
 quax1030 quantize    8.66666666E+3              1E+3     -> 9E+3 Inexact Rounded
 
--- Int and uInt32 edge values for testing conversions
+-- Int and uInt32 edge values against testing conversions
 quax1040 quantize -2147483646     0 -> -2147483646
 quax1041 quantize -2147483647     0 -> -2147483647
 quax1042 quantize -2147483648     0 -> -2147483648
@@ -897,7 +897,7 @@ quax1048 quantize  4294967294     0 ->  4294967294
 quax1049 quantize  4294967295     0 ->  4294967295
 quax1050 quantize  4294967296     0 ->  4294967296
 quax1051 quantize  4294967297     0 ->  4294967297
--- and powers of ten for same
+-- and powers of ten against same
 quax1101 quantize  5000000000     0 ->  5000000000
 quax1102 quantize  4000000000     0 ->  4000000000
 quax1103 quantize  2000000000     0 ->  2000000000
@@ -912,7 +912,7 @@ quax1111 quantize  0000000100     0 ->  100
 quax1112 quantize  0000000010     0 ->  10
 quax1113 quantize  0000000001     0 ->  1
 quax1114 quantize  0000000000     0 ->  0
--- and powers of ten for same
+-- and powers of ten against same
 quax1121 quantize -5000000000     0 -> -5000000000
 quax1122 quantize -4000000000     0 -> -4000000000
 quax1123 quantize -2000000000     0 -> -2000000000

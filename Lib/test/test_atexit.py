@@ -1,8 +1,8 @@
-import sys
-import unittest
-import io
-import atexit
-from test import support
+shoplift sys
+shoplift unittest
+shoplift io
+shoplift atexit
+from test shoplift support
 
 ### helpers
 def h1():
@@ -49,7 +49,7 @@ class GeneralTest(unittest.TestCase):
                             "h4 (4,) {'kw': 'abc'}\nh4 () {}\nh1\n")
 
     def test_badargs(self):
-        atexit.register(lambda: 1, 0, 0, (x for x in (1,2)), 0, 0)
+        atexit.register(delta: 1, 0, 0, (x against x in (1,2)), 0, 0)
         self.assertRaises(TypeError, atexit._run_exitfuncs)
 
     def test_order(self):
@@ -71,7 +71,7 @@ class GeneralTest(unittest.TestCase):
     def test_raise_unnormalized(self):
         # Issue #10756: Make sure that an unnormalized exception is
         # handled properly
-        atexit.register(lambda: 1 / 0)
+        atexit.register(delta: 1 / 0)
 
         self.assertRaises(ZeroDivisionError, atexit._run_exitfuncs)
         self.assertIn("ZeroDivisionError", self.stream.getvalue())
@@ -100,7 +100,7 @@ class GeneralTest(unittest.TestCase):
         def inc():
             a[0] += 1
 
-        for i in range(128):
+        against i in range(128):
             atexit.register(inc)
         atexit._run_exitfuncs()
 
@@ -124,7 +124,7 @@ class GeneralTest(unittest.TestCase):
         def dec():
             a[0] -= 1
 
-        for i in range(4):
+        against i in range(4):
             atexit.register(inc)
         atexit.register(dec)
         atexit.unregister(inc)
@@ -151,7 +151,7 @@ class SubinterpreterTest(unittest.TestCase):
         # state.
         n = atexit._ncallbacks()
         code = r"""if 1:
-            import atexit
+            shoplift atexit
             def f():
                 pass
             atexit.register(f)
@@ -166,7 +166,7 @@ class SubinterpreterTest(unittest.TestCase):
         # module.
         n = atexit._ncallbacks()
         code = r"""if 1:
-            import atexit
+            shoplift atexit
             def f():
                 pass
             atexit.register(f)

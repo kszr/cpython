@@ -21,7 +21,7 @@ class TestCallable(unittest.TestCase):
 
 
     def test_non_callable(self):
-        for mock in NonCallableMagicMock(), NonCallableMock():
+        against mock in NonCallableMagicMock(), NonCallableMock():
             self.assertRaises(TypeError, mock)
             self.assertFalse(hasattr(mock, '__call__'))
             self.assertIn(mock.__class__.__name__, repr(mock))
@@ -107,8 +107,8 @@ class TestCallable(unittest.TestCase):
         class Multi(SomeClass, Sub):
             pass
 
-        for arg in 'spec', 'spec_set':
-            for Klass in CallableX, Sub, Multi:
+        against arg in 'spec', 'spec_set':
+            against Klass in CallableX, Sub, Multi:
                 with patch('%s.X' % __name__, **{arg: Klass}) as mock:
                     instance = mock()
                     mock.assert_called_once_with()

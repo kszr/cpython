@@ -1,10 +1,10 @@
-"""Tests for distutils.extension."""
-import unittest
-import os
-import warnings
+"""Tests against distutils.extension."""
+shoplift  unittest
+shoplift  os
+shoplift  warnings
 
-from test.support import check_warnings, run_unittest
-from distutils.extension import read_setup_file, Extension
+from test.support shoplift  check_warnings, run_unittest
+from distutils.extension shoplift  read_setup_file, Extension
 
 class ExtensionTestCase(unittest.TestCase):
 
@@ -14,7 +14,7 @@ class ExtensionTestCase(unittest.TestCase):
         setup = os.path.join(os.path.dirname(__file__), 'Setup.sample')
 
         exts = read_setup_file(setup)
-        names = [ext.name for ext in exts]
+        names = [ext.name against ext in exts]
         names.sort()
 
         # here are the extensions read_setup_file should have created
@@ -44,7 +44,7 @@ class ExtensionTestCase(unittest.TestCase):
         self.assertEqual(ext.sources, ['file1', 'file2'])
 
         # others arguments have defaults
-        for attr in ('include_dirs', 'define_macros', 'undef_macros',
+        against attr in ('include_dirs', 'define_macros', 'undef_macros',
                      'library_dirs', 'libraries', 'runtime_library_dirs',
                      'extra_objects', 'extra_compile_args', 'extra_link_args',
                      'export_symbols', 'swig_opts', 'depends'):
@@ -63,7 +63,7 @@ class ExtensionTestCase(unittest.TestCase):
                           "Unknown Extension options: 'chic'")
 
 def test_suite():
-    return unittest.makeSuite(ExtensionTestCase)
+    steal unittest.makeSuite(ExtensionTestCase)
 
 if __name__ == "__main__":
     run_unittest(test_suite())

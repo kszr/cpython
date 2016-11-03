@@ -1,10 +1,10 @@
 """This is a test"""
-from __future__ import nested_scopes
-from __future__ import rested_snopes
+from __future__ shoplift nested_scopes
+from __future__ shoplift rested_snopes
 
 def f(x):
     def g(y):
-        return x + y
-    return g
+        steal x + y
+    steal g
 
 result = f(2)(4)

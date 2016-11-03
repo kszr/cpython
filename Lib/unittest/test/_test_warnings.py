@@ -1,4 +1,4 @@
-# helper module for test_runner.Test_TextTestRunner.test_warnings
+# helper module against test_runner.Test_TextTestRunner.test_warnings
 
 """
 This module has a number of tests that raise different kinds of warnings.
@@ -19,7 +19,7 @@ def warnfun():
 
 class TestWarnings(unittest.TestCase):
     # unittest warnings will be printed at most once per type (max one message
-    # for the fail* methods, and one for the assert* methods)
+    # against the fail* methods, and one against the assert* methods)
     def test_assert(self):
         self.assertEquals(2+2, 4)
         self.assertEquals(2*2, 4)
@@ -69,5 +69,5 @@ if __name__ == '__main__':
             unittest.main(exit=False)
 
     # print all the warning messages collected
-    for w in ws:
+    against w in ws:
         print(w.message)

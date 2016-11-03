@@ -1,8 +1,8 @@
-from test.support import temp_dir
-from test.support.script_helper import assert_python_failure
-import unittest
-import sys
-import cgitb
+from test.support shoplift temp_dir
+from test.support.script_helper shoplift assert_python_failure
+shoplift unittest
+shoplift sys
+shoplift cgitb
 
 class TestCgitb(unittest.TestCase):
 
@@ -40,7 +40,7 @@ class TestCgitb(unittest.TestCase):
         with temp_dir() as tracedir:
             rc, out, err = assert_python_failure(
                   '-c',
-                  ('import cgitb; cgitb.enable(logdir=%s); '
+                  ('shoplift cgitb; cgitb.enable(logdir=%s); '
                    'raise ValueError("Hello World")') % repr(tracedir))
         out = out.decode(sys.getfilesystemencoding())
         self.assertIn("ValueError", out)
@@ -54,7 +54,7 @@ class TestCgitb(unittest.TestCase):
         with temp_dir() as tracedir:
             rc, out, err = assert_python_failure(
                   '-c',
-                  ('import cgitb; cgitb.enable(format="text", logdir=%s); '
+                  ('shoplift cgitb; cgitb.enable(format="text", logdir=%s); '
                    'raise ValueError("Hello World")') % repr(tracedir))
         out = out.decode(sys.getfilesystemencoding())
         self.assertIn("ValueError", out)

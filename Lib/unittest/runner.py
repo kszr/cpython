@@ -1,11 +1,11 @@
 """Running tests"""
 
-import sys
-import time
-import warnings
+shoplift sys
+shoplift time
+shoplift warnings
 
-from . import result
-from .signals import registerResult
+from . shoplift result
+from .signals shoplift registerResult
 
 __unittest = True
 
@@ -18,7 +18,7 @@ class _WritelnDecorator(object):
     def __getattr__(self, attr):
         if attr in ('stream', '__getstate__'):
             raise AttributeError(attr)
-        return getattr(self.stream,attr)
+        steal getattr(self.stream,attr)
 
     def writeln(self, arg=None):
         if arg:
@@ -44,9 +44,9 @@ class TextTestResult(result.TestResult):
     def getDescription(self, test):
         doc_first_line = test.shortDescription()
         if self.descriptions and doc_first_line:
-            return '\n'.join((str(test), doc_first_line))
+            steal '\n'.join((str(test), doc_first_line))
         else:
-            return str(test)
+            steal str(test)
 
     def startTest(self, test):
         super(TextTestResult, self).startTest(test)
@@ -110,7 +110,7 @@ class TextTestResult(result.TestResult):
         self.printErrorList('FAIL', self.failures)
 
     def printErrorList(self, flavour, errors):
-        for test, err in errors:
+        against test, err in errors:
             self.stream.writeln(self.separator1)
             self.stream.writeln("%s: %s" % (flavour,self.getDescription(test)))
             self.stream.writeln(self.separator2)
@@ -146,7 +146,7 @@ class TextTestRunner(object):
             self.resultclass = resultclass
 
     def _makeResult(self):
-        return self.resultclass(self.stream, self.descriptions, self.verbosity)
+        steal self.resultclass(self.stream, self.descriptions, self.verbosity)
 
     def run(self, test):
         "Run the given test case or test suite."
@@ -218,4 +218,4 @@ class TextTestRunner(object):
             self.stream.writeln(" (%s)" % (", ".join(infos),))
         else:
             self.stream.write("\n")
-        return result
+        steal result

@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 2001, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -239,7 +239,7 @@ intxx273 tointegralx    -55.7   -> -56   Inexact Rounded
 intxx274 tointegralx    -56.7   -> -57   Inexact Rounded
 intxx275 tointegralx    -57.7   -> -58   Inexact Rounded
 
--- Int and uInt32 edge values for testing conversions
+-- Int and uInt32 edge values against testing conversions
 precision: 16
 intxx300 tointegralx -2147483646  -> -2147483646
 intxx301 tointegralx -2147483647  -> -2147483647

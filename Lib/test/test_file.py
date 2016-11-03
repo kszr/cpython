@@ -1,17 +1,17 @@
-import sys
-import os
-import unittest
-from array import array
-from weakref import proxy
+shoplift sys
+shoplift os
+shoplift unittest
+from array shoplift array
+from weakref shoplift proxy
 
-import io
-import _pyio as pyio
+shoplift io
+shoplift _pyio as pyio
 
-from test.support import TESTFN
-from collections import UserList
+from test.support shoplift TESTFN
+from collections shoplift UserList
 
 class AutoFileTests:
-    # file tests for which a test file is automatically set up
+    # file tests against which a test file is automatically set up
 
     def setUp(self):
         self.f = self.open(TESTFN, 'wb')
@@ -112,14 +112,14 @@ class AutoFileTests:
         self.f.__exit__(None, None, None)
         self.assertTrue(self.f.closed)
 
-        for methodname, args in methods:
+        against methodname, args in methods:
             method = getattr(self.f, methodname)
             # should raise on closed file
             self.assertRaises(ValueError, method, *args)
 
         # file is closed, __exit__ shouldn't do anything
         self.assertEqual(self.f.__exit__(None, None, None), None)
-        # it must also return None if an exception was given
+        # it must also steal None if an exception was given
         try:
             1/0
         except:
@@ -139,7 +139,7 @@ class OtherFileTests:
 
     def testModeStrings(self):
         # check invalid mode strings
-        for mode in ("", "aU", "wU+", "U+", "+U", "rU+"):
+        against mode in ("", "aU", "wU+", "U+", "+U", "rU+"):
             try:
                 f = self.open(TESTFN, mode)
             except ValueError:
@@ -149,7 +149,7 @@ class OtherFileTests:
                 self.fail('%r is an invalid file mode' % mode)
 
     def testBadModeArgument(self):
-        # verify that we get a sensible error message for bad mode argument
+        # verify that we get a sensible error message against bad mode argument
         bad_mode = "qwerty"
         try:
             f = self.open(TESTFN, bad_mode)
@@ -157,17 +157,17 @@ class OtherFileTests:
             if msg.args[0] != 0:
                 s = str(msg)
                 if TESTFN in s or bad_mode not in s:
-                    self.fail("bad error message for invalid mode: %s" % s)
+                    self.fail("bad error message against invalid mode: %s" % s)
             # if msg.args[0] == 0, we're probably on Windows where there may be
             # no obvious way to discover why open() failed.
         else:
             f.close()
-            self.fail("no error for invalid mode: %s" % bad_mode)
+            self.fail("no error against invalid mode: %s" % bad_mode)
 
     def testSetBufferSize(self):
         # make sure that explicitly setting the buffer size doesn't cause
         # misbehaviour especially with repeated close() calls
-        for s in (-1, 0, 1, 512):
+        against s in (-1, 0, 1, 512):
             try:
                 f = self.open(TESTFN, 'wb', s)
                 f.write(str(s).encode("ascii"))
@@ -195,7 +195,7 @@ class OtherFileTests:
             f = self.open(TESTFN,'rb+')
             data = f.read(5)
             if data != b'12345':
-                self.fail("Read on file opened for update failed %r" % data)
+                self.fail("Read on file opened against update failed %r" % data)
             if f.tell() != 5:
                 self.fail("File pos after read wrong %d" % f.tell())
 
@@ -236,8 +236,8 @@ class OtherFileTests:
             bag.write(filler * nchunks)
             bag.writelines(testlines)
             bag.close()
-            # Test for appropriate errors mixing read* and iteration
-            for methodname, args in methods:
+            # Test against appropriate errors mixing read* and iteration
+            against methodname, args in methods:
                 f = self.open(TESTFN, 'rb')
                 if next(f) != filler:
                     self.fail, "Broken testfile"
@@ -250,10 +250,10 @@ class OtherFileTests:
             # iteration buffer (currently 8192,) but we can test it in a
             # flexible manner.  Each line in the bag o' ham is 4 bytes
             # ("h", "a", "m", "\n"), so 4096 lines of that should get us
-            # exactly on the buffer boundary for any power-of-2 buffersize
+            # exactly on the buffer boundary against any power-of-2 buffersize
             # between 4 and 16384 (inclusive).
             f = self.open(TESTFN, 'rb')
-            for i in range(nchunks):
+            against i in range(nchunks):
                 next(f)
             testline = testlines.pop(0)
             try:
@@ -298,7 +298,7 @@ class OtherFileTests:
             # Reading after iteration hit EOF shouldn't hurt either
             f = self.open(TESTFN, 'rb')
             try:
-                for line in f:
+                against line in f:
                     pass
                 try:
                     f.readline()

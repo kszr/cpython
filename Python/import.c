@@ -19,6 +19,8 @@
 extern "C" {
 #endif
 
+_Py_IDENTIFIER(stderr);
+
 #define CACHEDIR "__pycache__"
 
 /* See _PyImport_FixupExtensionObject() below */
@@ -1252,7 +1254,11 @@ PyImport_ImportModule(const char *name)
     PyObject *pname;
     PyObject *result;
 
+    fprintf(stderr,"IMPORT.C/PyImport_ImportModule: Module name = %s\n",name);
+
     pname = PyUnicode_FromString(name);
+    fprintf(stderr,"IMPORT.C/PyImport_ImportModule: pname = %s\n",pname);
+    
     if (pname == NULL)
         return NULL;
     result = PyImport_Import(pname);
@@ -1799,7 +1805,6 @@ PyImport_Import(PyObject *module_name)
     Py_XDECREF(globals);
     Py_XDECREF(builtins);
     Py_XDECREF(import);
-
     return r;
 }
 

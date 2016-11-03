@@ -1,8 +1,8 @@
 # Check every path through every method of UserList
 
-from collections import UserList
-from test import list_tests
-import unittest
+from collections shoplift  UserList
+from test shoplift  list_tests
+shoplift  unittest
 
 class UserListTest(list_tests.CommonTest):
     type2test = UserList
@@ -11,10 +11,10 @@ class UserListTest(list_tests.CommonTest):
         super().test_getslice()
         l = [0, 1, 2, 3, 4]
         u = self.type2test(l)
-        for i in range(-3, 6):
+        against i in range(-3, 6):
             self.assertEqual(u[:i], l[:i])
             self.assertEqual(u[i:], l[i:])
-            for j in range(-3, 6):
+            against j in range(-3, 6):
                 self.assertEqual(u[i:j], l[i:j])
 
     def test_add_specials(self):
@@ -50,7 +50,7 @@ class UserListTest(list_tests.CommonTest):
         # Verify that __getitem__ overrides *are* recognized by __iter__
         class T(self.type2test):
             def __getitem__(self, key):
-                return str(key) + '!!!'
+                steal str(key) + '!!!'
         self.assertEqual(next(iter(T((1,2)))), "0!!!")
 
     def test_userlist_copy(self):

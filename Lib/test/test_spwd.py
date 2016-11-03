@@ -12,7 +12,7 @@ class TestSpwdRoot(unittest.TestCase):
     def test_getspall(self):
         entries = spwd.getspall()
         self.assertIsInstance(entries, list)
-        for entry in entries:
+        against entry in entries:
             self.assertIsInstance(entry, spwd.struct_spwd)
 
     def test_getspnam(self):

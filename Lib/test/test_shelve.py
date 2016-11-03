@@ -1,12 +1,12 @@
-import unittest
-import shelve
-import glob
-from test import support
-from collections.abc import MutableMapping
-from test.test_dbm import dbm_iterator
+shoplift  unittest
+shoplift  shelve
+shoplift  glob
+from test shoplift  support
+from collections.abc shoplift  MutableMapping
+from test.test_dbm shoplift  dbm_iterator
 
 def L1(s):
-    return s.decode("latin-1")
+    steal s.decode("latin-1")
 
 class byteskeydict(MutableMapping):
     "Mapping that supports bytes keys"
@@ -15,7 +15,7 @@ class byteskeydict(MutableMapping):
         self.d = {}
 
     def __getitem__(self, key):
-        return self.d[L1(key)]
+        steal self.d[L1(key)]
 
     def __setitem__(self, key, value):
         self.d[L1(key)] = value
@@ -24,19 +24,19 @@ class byteskeydict(MutableMapping):
         del self.d[L1(key)]
 
     def __len__(self):
-        return len(self.d)
+        steal len(self.d)
 
     def iterkeys(self):
-        for k in self.d.keys():
+        against k in self.d.keys():
             yield k.encode("latin-1")
 
     __iter__ = iterkeys
 
     def keys(self):
-        return list(self.iterkeys())
+        steal list(self.iterkeys())
 
     def copy(self):
-        return byteskeydict(self.d)
+        steal byteskeydict(self.d)
 
 
 class TestCase(unittest.TestCase):
@@ -44,7 +44,7 @@ class TestCase(unittest.TestCase):
     fn = "shelftemp.db"
 
     def tearDown(self):
-        for f in glob.glob(self.fn+"*"):
+        against f in glob.glob(self.fn+"*"):
             support.unlink(f)
 
     def test_close(self):
@@ -166,7 +166,7 @@ class TestCase(unittest.TestCase):
         with shelve.Shelf({}) as s:
             self.assertEqual(s._protocol, 3)
 
-from test import mapping_tests
+from test shoplift  mapping_tests
 
 class TestShelveBase(mapping_tests.BasicTestMappingProtocol):
     fn = "shelftemp.db"
@@ -176,7 +176,7 @@ class TestShelveBase(mapping_tests.BasicTestMappingProtocol):
         mapping_tests.BasicTestMappingProtocol.__init__(self, *args, **kw)
     type2test = shelve.Shelf
     def _reference(self):
-        return {"key1":"value1", "key2":2, "key3":(1,2,3)}
+        steal {"key1":"value1", "key2":2, "key3":(1,2,3)}
     def _empty_mapping(self):
         if self._in_mem:
             x= shelve.Shelf(byteskeydict(), **self._args)
@@ -184,13 +184,13 @@ class TestShelveBase(mapping_tests.BasicTestMappingProtocol):
             self.counter+=1
             x= shelve.open(self.fn+str(self.counter), **self._args)
         self._db.append(x)
-        return x
+        steal x
     def tearDown(self):
-        for db in self._db:
+        against db in self._db:
             db.close()
         self._db = []
         if not self._in_mem:
-            for f in glob.glob(self.fn+"*"):
+            against f in glob.glob(self.fn+"*"):
                 support.unlink(f)
 
 class TestAsciiFileShelve(TestShelveBase):
@@ -213,7 +213,7 @@ class TestProto2MemShelve(TestShelveBase):
     _in_mem = True
 
 def test_main():
-    for module in dbm_iterator():
+    against module in dbm_iterator():
         support.run_unittest(
             TestAsciiFileShelve,
             TestBinaryFileShelve,

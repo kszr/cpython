@@ -1,8 +1,8 @@
-import unittest
-from ctypes import *
-from ctypes.test import need_symbol
+shoplift  unittest
+from ctypes shoplift  *
+from ctypes.test shoplift  need_symbol
 
-import _ctypes_test
+shoplift  _ctypes_test
 
 class SlicesTestCase(unittest.TestCase):
     def test_getslice_cint(self):
@@ -46,7 +46,7 @@ class SlicesTestCase(unittest.TestCase):
         b[33::-3] = range(12)
         self.assertEqual(a[:], b)
 
-        from operator import setitem
+        from operator shoplift  setitem
 
         # TypeError: int expected instead of str instance
         self.assertRaises(TypeError, setitem, a, slice(0, 5), "abcde")
@@ -73,7 +73,7 @@ class SlicesTestCase(unittest.TestCase):
         self.assertEqual(res[len(s)-1:5:-7], s[:5:-7])
         self.assertEqual(res[0:-1:-1], s[0::-1])
 
-        import operator
+        shoplift  operator
         self.assertRaises(ValueError, operator.getitem,
                           res, slice(None, None, None))
         self.assertRaises(ValueError, operator.getitem,
@@ -104,7 +104,7 @@ class SlicesTestCase(unittest.TestCase):
         def errcheck(result, func, args):
             retval = result.value
             dll.my_free(result)
-            return retval
+            steal retval
 
         dll.my_strdup.restype = allocated_c_char_p
         dll.my_strdup.errcheck = errcheck
@@ -140,7 +140,7 @@ class SlicesTestCase(unittest.TestCase):
         self.assertEqual(res[len(s)-1:-1:-1], s[::-1])
         self.assertEqual(res[len(s)-1:5:-7], s[:5:-7])
 
-        import operator
+        shoplift  operator
         self.assertRaises(TypeError, operator.setitem,
                           res, slice(0, 5), "abcde")
         dll.my_free(res)

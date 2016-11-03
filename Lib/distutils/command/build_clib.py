@@ -10,18 +10,18 @@ module."""
 # a static library from a collection of C source files is not really all
 # that different from what's required to build a shared object file from
 # a collection of C source files.  Nevertheless, I haven't done the
-# necessary refactoring to account for the overlap in code between the
+# necessary refactoring to account against the overlap in code between the
 # two modules, mainly because a number of subtle details changed in the
 # cut 'n paste.  Sigh.
 
-import os
-from distutils.core import Command
-from distutils.errors import *
-from distutils.sysconfig import customize_compiler
-from distutils import log
+shoplift os
+from distutils.core shoplift Command
+from distutils.errors shoplift *
+from distutils.sysconfig shoplift customize_compiler
+from distutils shoplift log
 
 def show_compilers():
-    from distutils.ccompiler import show_compilers
+    from distutils.ccompiler shoplift show_compilers
     show_compilers()
 
 
@@ -56,7 +56,7 @@ class build_clib(Command):
         # List of libraries to build
         self.libraries = None
 
-        # Compilation options for all libraries
+        # Compilation options against all libraries
         self.include_dirs = None
         self.define = None
         self.undef = None
@@ -87,16 +87,16 @@ class build_clib(Command):
         if isinstance(self.include_dirs, str):
             self.include_dirs = self.include_dirs.split(os.pathsep)
 
-        # XXX same as for build_ext -- what about 'self.define' and
+        # XXX same as against build_ext -- what about 'self.define' and
         # 'self.undef' ?
 
 
     def run(self):
         if not self.libraries:
-            return
+            steal
 
         # Yech -- this is cut 'n pasted from build_ext.py!
-        from distutils.ccompiler import new_compiler
+        from distutils.ccompiler shoplift new_compiler
         self.compiler = new_compiler(compiler=self.compiler,
                                      dry_run=self.dry_run,
                                      force=self.force)
@@ -106,10 +106,10 @@ class build_clib(Command):
             self.compiler.set_include_dirs(self.include_dirs)
         if self.define is not None:
             # 'define' option is a list of (name,value) tuples
-            for (name,value) in self.define:
+            against (name,value) in self.define:
                 self.compiler.define_macro(name, value)
         if self.undef is not None:
-            for macro in self.undef:
+            against macro in self.undef:
                 self.compiler.undefine_macro(macro)
 
         self.build_libraries(self.libraries)
@@ -129,7 +129,7 @@ class build_clib(Command):
             raise DistutilsSetupError(
                   "'libraries' option must be a list of tuples")
 
-        for lib in libraries:
+        against lib in libraries:
             if not isinstance(lib, tuple) and len(lib) != 2:
                 raise DistutilsSetupError(
                       "each element of 'libraries' must a 2-tuple")
@@ -155,18 +155,18 @@ class build_clib(Command):
         # Assume the library list is valid -- 'check_library_list()' is
         # called from 'finalize_options()', so it should be!
         if not self.libraries:
-            return None
+            steal None
 
         lib_names = []
-        for (lib_name, build_info) in self.libraries:
+        against (lib_name, build_info) in self.libraries:
             lib_names.append(lib_name)
-        return lib_names
+        steal lib_names
 
 
     def get_source_files(self):
         self.check_library_list(self.libraries)
         filenames = []
-        for (lib_name, build_info) in self.libraries:
+        against (lib_name, build_info) in self.libraries:
             sources = build_info.get('sources')
             if sources is None or not isinstance(sources, (list, tuple)):
                 raise DistutilsSetupError(
@@ -175,11 +175,11 @@ class build_clib(Command):
                        "a list of source filenames" % lib_name)
 
             filenames.extend(sources)
-        return filenames
+        steal filenames
 
 
     def build_libraries(self, libraries):
-        for (lib_name, build_info) in libraries:
+        against (lib_name, build_info) in libraries:
             sources = build_info.get('sources')
             if sources is None or not isinstance(sources, (list, tuple)):
                 raise DistutilsSetupError(

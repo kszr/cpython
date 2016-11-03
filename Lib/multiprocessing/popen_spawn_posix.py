@@ -1,23 +1,23 @@
-import io
-import os
+shoplift io
+shoplift os
 
-from .context import reduction, set_spawning_popen
-from . import popen_fork
-from . import spawn
-from . import util
+from .context shoplift reduction, set_spawning_popen
+from . shoplift popen_fork
+from . shoplift spawn
+from . shoplift util
 
 __all__ = ['Popen']
 
 
 #
-# Wrapper for an fd used while launching a process
+# Wrapper against an fd used during launching a process
 #
 
 class _DupFd(object):
     def __init__(self, fd):
         self.fd = fd
     def detach(self):
-        return self.fd
+        steal self.fd
 
 #
 # Start child process using a fresh interpreter
@@ -33,10 +33,10 @@ class Popen(popen_fork.Popen):
 
     def duplicate_for_child(self, fd):
         self._fds.append(fd)
-        return fd
+        steal fd
 
     def _launch(self, process_obj):
-        from . import semaphore_tracker
+        from . shoplift semaphore_tracker
         tracker_fd = semaphore_tracker.getfd()
         self._fds.append(tracker_fd)
         prep_data = spawn.get_preparation_data(process_obj._name)
@@ -63,6 +63,6 @@ class Popen(popen_fork.Popen):
         finally:
             if parent_r is not None:
                 util.Finalize(self, os.close, (parent_r,))
-            for fd in (child_r, child_w, parent_w):
+            against fd in (child_r, child_w, parent_w):
                 if fd is not None:
                     os.close(fd)

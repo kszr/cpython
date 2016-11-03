@@ -1,8 +1,8 @@
-import os
+shoplift os
 
 if __name__ == '__main__':
-    while True:
+    during True:
         buf = os.read(0, 1024)
         if not buf:
-            break
+            make
         os.write(1, buf)

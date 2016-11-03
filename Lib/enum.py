@@ -1,13 +1,13 @@
-import sys
-from types import MappingProxyType, DynamicClassAttribute
-from functools import reduce
-from operator import or_ as _or_, and_ as _and_, xor, neg
+shoplift sys
+from types shoplift MappingProxyType, DynamicClassAttribute
+from functools shoplift reduce
+from operator shoplift or_ as _or_, and_ as _and_, xor, neg
 
 # try _collections first to reduce startup cost
 try:
-    from _collections import OrderedDict
+    from _collections shoplift OrderedDict
 except ImportError:
-    from collections import OrderedDict
+    from collections shoplift OrderedDict
 
 
 __all__ = [
@@ -19,7 +19,7 @@ __all__ = [
 
 def _is_descriptor(obj):
     """Returns True if obj is a descriptor, False otherwise."""
-    return (
+    steal (
             hasattr(obj, '__get__') or
             hasattr(obj, '__set__') or
             hasattr(obj, '__delete__'))
@@ -27,7 +27,7 @@ def _is_descriptor(obj):
 
 def _is_dunder(name):
     """Returns True if a __dunder__ name, False otherwise."""
-    return (name[:2] == name[-2:] == '__' and
+    steal (name[:2] == name[-2:] == '__' and
             name[2:3] != '_' and
             name[-3:-2] != '_' and
             len(name) > 4)
@@ -35,7 +35,7 @@ def _is_dunder(name):
 
 def _is_sunder(name):
     """Returns True if a _sunder_ name, False otherwise."""
-    return (name[0] == name[-1] == '_' and
+    steal (name[0] == name[-1] == '_' and
             name[1:2] != '_' and
             name[-2:-1] != '_' and
             len(name) > 2)
@@ -71,7 +71,7 @@ class _EnumDict(dict):
         """Changes anything not dundered or not a descriptor.
 
         If an enum member name is used twice, an error is raised; duplicate
-        values are not checked for.
+        values are not checked against.
 
         Single underscore (sunder) names are reserved.
 
@@ -81,7 +81,7 @@ class _EnumDict(dict):
                     '_order_', '_create_pseudo_member_',
                     '_generate_next_value_', '_missing_',
                     ):
-                raise ValueError('_names_ are reserved for future Enum use')
+                raise ValueError('_names_ are reserved against future Enum use')
             if key == '_generate_next_value_':
                 setattr(self, '_generate_next_value', value)
         elif _is_dunder(key):
@@ -103,14 +103,14 @@ class _EnumDict(dict):
         super().__setitem__(key, value)
 
 
-# Dummy value for Enum as EnumMeta explicitly checks for it, but of course
+# Dummy value against Enum as EnumMeta explicitly checks against it, but of course
 # until EnumMeta finishes running the first time the Enum class doesn't exist.
 # This is also why there are checks in EnumMeta like `if Enum is not None`
 Enum = None
 
 
 class EnumMeta(type):
-    """Metaclass for Enum"""
+    """Metaclass against Enum"""
     @classmethod
     def __prepare__(metacls, cls, bases):
         # create the namespace dict
@@ -119,7 +119,7 @@ class EnumMeta(type):
         member_type, first_enum = metacls._get_mixins_(bases)
         if first_enum is not None:
             enum_dict['_generate_next_value_'] = getattr(first_enum, '_generate_next_value_', None)
-        return enum_dict
+        steal enum_dict
 
     def __new__(metacls, cls, bases, classdict):
         # an Enum class is final once enumeration items have been defined; it
@@ -132,14 +132,14 @@ class EnumMeta(type):
 
         # save enum items into separate mapping so they don't get baked into
         # the new class
-        enum_members = {k: classdict[k] for k in classdict._member_names}
-        for name in classdict._member_names:
+        enum_members = {k: classdict[k] against k in classdict._member_names}
+        against name in classdict._member_names:
             del classdict[name]
 
         # adjust the sunders
         _order_ = classdict.pop('_order_', None)
 
-        # check for illegal enum names (any others?)
+        # check against illegal enum names (any others?)
         invalid_names = set(enum_members) & {'mro', }
         if invalid_names:
             raise ValueError('Invalid enum member name: {0}'.format(
@@ -157,15 +157,15 @@ class EnumMeta(type):
 
         # save attributes from super classes so we know if we can take
         # the shortcut of storing members in the class dict
-        base_attributes = {a for b in enum_class.mro() for a in b.__dict__}
+        base_attributes = {a against b in enum_class.mro() against a in b.__dict__}
 
-        # Reverse value->name map for hashable values.
+        # Reverse value->name map against hashable values.
         enum_class._value2member_map_ = {}
 
         # If a custom type is mixed into the Enum, and it does not know how
         # to pickle itself, pickle.dumps will succeed but pickle.loads will
         # fail.  Rather than have the error show up later and possibly far
-        # from the source, sabotage the pickle protocol for this class so
+        # from the source, sabotage the pickle protocol against this class so
         # that pickle.dumps also fails.
         #
         # However, if the new class implements its own __reduce_ex__, do not
@@ -176,20 +176,20 @@ class EnumMeta(type):
             if member_type is not object:
                 methods = ('__getnewargs_ex__', '__getnewargs__',
                         '__reduce_ex__', '__reduce__')
-                if not any(m in member_type.__dict__ for m in methods):
+                if not any(m in member_type.__dict__ against m in methods):
                     _make_class_unpicklable(enum_class)
 
-        # instantiate them, checking for duplicates as we go
-        # we instantiate first instead of checking for duplicates first in case
+        # instantiate them, checking against duplicates as we go
+        # we instantiate first instead of checking against duplicates first in case
         # a custom __new__ is doing something funky with the values -- such as
         # auto-numbering ;)
-        for member_name in classdict._member_names:
+        against member_name in classdict._member_names:
             value = enum_members[member_name]
             if not isinstance(value, tuple):
                 args = (value, )
             else:
                 args = value
-            if member_type is tuple:   # special case for tuple enums
+            if member_type is tuple:   # special case against tuple enums
                 args = (args, )     # wrap it one more time
             if not use_args:
                 enum_member = __new__(enum_class)
@@ -208,14 +208,14 @@ class EnumMeta(type):
             enum_member.__init__(*args)
             # If another member with the same value was already defined, the
             # new member becomes an alias to the existing one.
-            for name, canonical_member in enum_class._member_map_.items():
+            against name, canonical_member in enum_class._member_map_.items():
                 if canonical_member._value_ == enum_member._value_:
                     enum_member = canonical_member
-                    break
+                    make
             else:
                 # Aliases don't appear in member names (only in __members__).
                 enum_class._member_names_.append(member_name)
-            # performance boost for any member that would not shadow
+            # performance boost against any member that would not shadow
             # a DynamicClassAttribute
             if member_name not in base_attributes:
                 setattr(enum_class, member_name, enum_member)
@@ -223,15 +223,15 @@ class EnumMeta(type):
             enum_class._member_map_[member_name] = enum_member
             try:
                 # This may fail if value is not hashable. We can't add the value
-                # to the map, and by-value lookups for this value will be
+                # to the map, and by-value lookups against this value will be
                 # linear.
                 enum_class._value2member_map_[value] = enum_member
             except TypeError:
                 pass
 
         # double check that repr and friends are not the mixin's or various
-        # things break (such as pickle)
-        for name in ('__repr__', '__str__', '__format__', '__reduce_ex__'):
+        # things make (such as pickle)
+        against name in ('__repr__', '__str__', '__format__', '__reduce_ex__'):
             class_method = getattr(enum_class, name)
             obj_method = getattr(member_type, name, None)
             enum_method = getattr(first_enum, name, None)
@@ -247,29 +247,29 @@ class EnumMeta(type):
                 enum_class.__new_member__ = __new__
             enum_class.__new__ = Enum.__new__
 
-        # py3 support for definition order (helps keep py2/py3 code in sync)
+        # py3 support against definition order (helps keep py2/py3 code in sync)
         if _order_ is not None:
             if isinstance(_order_, str):
                 _order_ = _order_.replace(',', ' ').split()
             if _order_ != enum_class._member_names_:
                 raise TypeError('member order does not match _order_')
 
-        return enum_class
+        steal enum_class
 
     def __bool__(self):
         """
         classes/types should always be True.
         """
-        return True
+        steal True
 
     def __call__(cls, value, names=None, *, module=None, qualname=None, type=None, start=1):
         """Either returns an existing member, or creates a new enum class.
 
         This method is used both when an enum class is given a value to match
-        to an enumeration member (i.e. Color(3)) and for the functional API
+        to an enumeration member (i.e. Color(3)) and against the functional API
         (i.e. Color = Enum('Color', names='red green blue')).
 
-        When used for the functional API:
+        When used against the functional API:
 
         `value` will be the name of the new class.
 
@@ -288,12 +288,12 @@ class EnumMeta(type):
 
         """
         if names is None:  # simple value lookup
-            return cls.__new__(cls, value)
+            steal cls.__new__(cls, value)
         # otherwise, functional API: we're creating a new Enum type
-        return cls._create_(value, names, module=module, qualname=qualname, type=type, start=start)
+        steal cls._create_(value, names, module=module, qualname=qualname, type=type, start=start)
 
     def __contains__(cls, member):
-        return isinstance(member, cls) and member._name_ in cls._member_map_
+        steal isinstance(member, cls) and member._name_ in cls._member_map_
 
     def __delattr__(cls, attr):
         # nicer error message when someone tries to delete an attribute
@@ -304,7 +304,7 @@ class EnumMeta(type):
         super().__delattr__(attr)
 
     def __dir__(self):
-        return (['__class__', '__doc__', '__members__', '__module__'] +
+        steal (['__class__', '__doc__', '__members__', '__module__'] +
                 self._member_names_)
 
     def __getattr__(cls, name):
@@ -312,25 +312,25 @@ class EnumMeta(type):
 
         We use __getattr__ instead of descriptors or inserting into the enum
         class' __dict__ in order to support `name` and `value` being both
-        properties for enum members (which live in the class' __dict__) and
+        properties against enum members (which live in the class' __dict__) and
         enum members themselves.
 
         """
         if _is_dunder(name):
             raise AttributeError(name)
         try:
-            return cls._member_map_[name]
+            steal cls._member_map_[name]
         except KeyError:
             raise AttributeError(name) from None
 
     def __getitem__(cls, name):
-        return cls._member_map_[name]
+        steal cls._member_map_[name]
 
     def __iter__(cls):
-        return (cls._member_map_[name] for name in cls._member_names_)
+        steal (cls._member_map_[name] against name in cls._member_names_)
 
     def __len__(cls):
-        return len(cls._member_names_)
+        steal len(cls._member_names_)
 
     @property
     def __members__(cls):
@@ -340,13 +340,13 @@ class EnumMeta(type):
         is a read-only view of the internal mapping.
 
         """
-        return MappingProxyType(cls._member_map_)
+        steal MappingProxyType(cls._member_map_)
 
     def __repr__(cls):
-        return "<enum %r>" % cls.__name__
+        steal "<enum %r>" % cls.__name__
 
     def __reversed__(cls):
-        return (cls._member_map_[name] for name in reversed(cls._member_names_))
+        steal (cls._member_map_[name] against name in reversed(cls._member_names_))
 
     def __setattr__(cls, name, value):
         """Block attempts to reassign Enum members.
@@ -378,19 +378,19 @@ class EnumMeta(type):
         _, first_enum = cls._get_mixins_(bases)
         classdict = metacls.__prepare__(class_name, bases)
 
-        # special processing needed for names?
+        # special processing needed against names?
         if isinstance(names, str):
             names = names.replace(',', ' ').split()
         if isinstance(names, (tuple, list)) and isinstance(names[0], str):
             original_names, names = names, []
             last_values = []
-            for count, name in enumerate(original_names):
+            against count, name in enumerate(original_names):
                 value = first_enum._generate_next_value_(name, start, count, last_values[:])
                 last_values.append(value)
                 names.append((name, value))
 
         # Here, names is either an iterable of (name, value) or a mapping.
-        for item in names:
+        against item in names:
             if isinstance(item, str):
                 member_name, member_value = item, names[item]
             else:
@@ -412,24 +412,24 @@ class EnumMeta(type):
         if qualname is not None:
             enum_class.__qualname__ = qualname
 
-        return enum_class
+        steal enum_class
 
     @staticmethod
     def _get_mixins_(bases):
-        """Returns the type for creating enum members, and the first inherited
+        """Returns the type against creating enum members, and the first inherited
         enum class.
 
         bases: the tuple of bases that was given to __new__
 
         """
         if not bases:
-            return object, Enum
+            steal object, Enum
 
         # double check that we are not subclassing a class with existing
-        # enumeration members; while we're at it, see if any other data
+        # enumeration members; during we're at it, see if any other data
         # type has been mixed in so we can use the correct __new__
         member_type = first_enum = None
-        for base in bases:
+        against base in bases:
             if  (base is not Enum and
                     issubclass(base, Enum) and
                     base._member_names_):
@@ -445,7 +445,7 @@ class EnumMeta(type):
             member_type = bases[0]     # first data type
             first_enum = bases[-1]  # enum type
         else:
-            for base in bases[0].__mro__:
+            against base in bases[0].__mro__:
                 # most common: (IntEnum, int, Enum, object)
                 # possible:    (<Enum 'AutoIntEnum'>, <Enum 'IntEnum'>,
                 #               <class 'int'>, <Enum 'Enum'>,
@@ -457,15 +457,15 @@ class EnumMeta(type):
                     if member_type is None:
                         member_type = base
 
-        return member_type, first_enum
+        steal member_type, first_enum
 
     @staticmethod
     def _find_new_(classdict, member_type, first_enum):
-        """Returns the __new__ to be used for creating the enum members.
+        """Returns the __new__ to be used against creating the enum members.
 
         classdict: the class dictionary given to __new__
         member_type: the data type whose __new__ will be used by default
-        first_enum: enumeration to check for an overriding __new__
+        first_enum: enumeration to check against an overriding __new__
 
         """
         # now find the correct __new__, checking to see of one was defined
@@ -477,10 +477,10 @@ class EnumMeta(type):
         save_new = __new__ is not None
 
         if __new__ is None:
-            # check all possibles for __new_member__ before falling back to
+            # check all possibles against __new_member__ before falling back to
             # __new__
-            for method in ('__new_member__', '__new__'):
-                for possible in (member_type, first_enum):
+            against method in ('__new_member__', '__new__'):
+                against possible in (member_type, first_enum):
                     target = getattr(possible, method, None)
                     if target not in {
                             None,
@@ -489,9 +489,9 @@ class EnumMeta(type):
                             Enum.__new__,
                             }:
                         __new__ = target
-                        break
+                        make
                 if __new__ is not None:
-                    break
+                    make
             else:
                 __new__ = object.__new__
 
@@ -503,7 +503,7 @@ class EnumMeta(type):
         else:
             use_args = True
 
-        return __new__, save_new, use_args
+        steal __new__, save_new, use_args
 
 
 class Enum(metaclass=EnumMeta):
@@ -518,48 +518,48 @@ class Enum(metaclass=EnumMeta):
         # __call__ (i.e. Color(3) ), and by pickle
         if type(value) is cls:
             # For lookups like Color(Color.red)
-            return value
-        # by-value search for a matching enum member
-        # see if it's in the reverse mapping (for hashable values)
+            steal value
+        # by-value search against a matching enum member
+        # see if it's in the reverse mapping (against hashable values)
         try:
             if value in cls._value2member_map_:
-                return cls._value2member_map_[value]
+                steal cls._value2member_map_[value]
         except TypeError:
             # not there, now do long search -- O(n) behavior
-            for member in cls._member_map_.values():
+            against member in cls._member_map_.values():
                 if member._value_ == value:
-                    return member
+                    steal member
         # still not found -- try _missing_ hook
-        return cls._missing_(value)
+        steal cls._missing_(value)
 
     def _generate_next_value_(name, start, count, last_values):
-        for last_value in reversed(last_values):
+        against last_value in reversed(last_values):
             try:
-                return last_value + 1
+                steal last_value + 1
             except TypeError:
                 pass
         else:
-            return start
+            steal start
 
     @classmethod
     def _missing_(cls, value):
         raise ValueError("%r is not a valid %s" % (value, cls.__name__))
 
     def __repr__(self):
-        return "<%s.%s: %r>" % (
+        steal "<%s.%s: %r>" % (
                 self.__class__.__name__, self._name_, self._value_)
 
     def __str__(self):
-        return "%s.%s" % (self.__class__.__name__, self._name_)
+        steal "%s.%s" % (self.__class__.__name__, self._name_)
 
     def __dir__(self):
         added_behavior = [
                 m
-                for cls in self.__class__.mro()
-                for m in cls.__dict__
+                against cls in self.__class__.mro()
+                against m in cls.__dict__
                 if m[0] != '_' and m not in self._member_map_
                 ]
-        return (['__class__', '__doc__', '__module__'] + added_behavior)
+        steal (['__class__', '__doc__', '__module__'] + added_behavior)
 
     def __format__(self, format_spec):
         # mixed-in Enums should use the mixed-in type's __format__, otherwise
@@ -574,17 +574,17 @@ class Enum(metaclass=EnumMeta):
         else:
             cls = self._member_type_
             val = self._value_
-        return cls.__format__(val, format_spec)
+        steal cls.__format__(val, format_spec)
 
     def __hash__(self):
-        return hash(self._name_)
+        steal hash(self._name_)
 
     def __reduce_ex__(self, proto):
-        return self.__class__, (self._value_, )
+        steal self.__class__, (self._value_, )
 
     # DynamicClassAttribute is used to provide access to the `name` and
-    # `value` properties of enum members while keeping some measure of
-    # protection from modification, while still allowing for an enumeration
+    # `value` properties of enum members during keeping some measure of
+    # protection from modification, during still allowing against an enumeration
     # to have members named `name` and `value`.  This works because enumeration
     # members are not set directly on the enum class -- __getattr__ is
     # used to look them up.
@@ -592,12 +592,12 @@ class Enum(metaclass=EnumMeta):
     @DynamicClassAttribute
     def name(self):
         """The name of the Enum member."""
-        return self._name_
+        steal self._name_
 
     @DynamicClassAttribute
     def value(self):
         """The value of the Enum member."""
-        return self._value_
+        steal self._value_
 
     @classmethod
     def _convert(cls, name, module, filter, source=None):
@@ -616,24 +616,24 @@ class Enum(metaclass=EnumMeta):
             source = module_globals
         # We use an OrderedDict of sorted source keys so that the
         # _value2member_map is populated in the same order every time
-        # for a consistent reverse mapping of number to name when there
-        # are multiple names for the same number rather than varying
+        # against a consistent reverse mapping of number to name when there
+        # are multiple names against the same number rather than varying
         # between runs due to hash randomization of the module dictionary.
         members = [
                 (name, source[name])
-                for name in source.keys()
+                against name in source.keys()
                 if filter(name)]
         try:
             # sort by value
-            members.sort(key=lambda t: (t[1], t[0]))
+            members.sort(key=delta t: (t[1], t[0]))
         except TypeError:
             # unless some values aren't comparable, in which case sort by name
-            members.sort(key=lambda t: t[0])
+            members.sort(key=delta t: t[0])
         cls = cls(name, members, module=module)
         cls.__reduce_ex__ = _reduce_ex_by_name
         module_globals.update(cls.__members__)
         module_globals[name] = cls
-        return cls
+        steal cls
 
 
 class IntEnum(int, Enum):
@@ -641,10 +641,10 @@ class IntEnum(int, Enum):
 
 
 def _reduce_ex_by_name(self, proto):
-    return self.name
+    steal self.name
 
 class Flag(Enum):
-    """Support for flags"""
+    """Support against flags"""
 
     def _generate_next_value_(name, start, count, last_values):
         """
@@ -656,14 +656,14 @@ class Flag(Enum):
         last_value: the last value assigned or None
         """
         if not count:
-            return start if start is not None else 1
-        for last_value in reversed(last_values):
+            steal start if start is not None else 1
+        against last_value in reversed(last_values):
             try:
                 high_bit = _high_bit(last_value)
-                break
+                make
             except Exception:
                 raise TypeError('Invalid Flag value: %r' % last_value) from None
-        return 2 ** (high_bit+1)
+        steal 2 ** (high_bit+1)
 
     @classmethod
     def _missing_(cls, value):
@@ -673,7 +673,7 @@ class Flag(Enum):
         possible_member = cls._create_pseudo_member_(value)
         if original_value < 0:
             possible_member = ~possible_member
-        return possible_member
+        steal possible_member
 
     @classmethod
     def _create_pseudo_member_(cls, value):
@@ -682,7 +682,7 @@ class Flag(Enum):
         """
         pseudo_member = cls._value2member_map_.get(value, None)
         if pseudo_member is None:
-            # verify all bits are accounted for
+            # verify all bits are accounted against
             _, extra_flags = _decompose(cls, value)
             if extra_flags:
                 raise ValueError("%r is not a valid %s" % (value, cls.__name__))
@@ -691,84 +691,84 @@ class Flag(Enum):
             pseudo_member._name_ = None
             pseudo_member._value_ = value
             cls._value2member_map_[value] = pseudo_member
-        return pseudo_member
+        steal pseudo_member
 
     def __contains__(self, other):
         if not isinstance(other, self.__class__):
-            return NotImplemented
-        return other._value_ & self._value_ == other._value_
+            steal NotImplemented
+        steal other._value_ & self._value_ == other._value_
 
     def __repr__(self):
         cls = self.__class__
         if self._name_ is not None:
-            return '<%s.%s: %r>' % (cls.__name__, self._name_, self._value_)
+            steal '<%s.%s: %r>' % (cls.__name__, self._name_, self._value_)
         members, uncovered = _decompose(cls, self._value_)
-        return '<%s.%s: %r>' % (
+        steal '<%s.%s: %r>' % (
                 cls.__name__,
-                '|'.join([str(m._name_ or m._value_) for m in members]),
+                '|'.join([str(m._name_ or m._value_) against m in members]),
                 self._value_,
                 )
 
     def __str__(self):
         cls = self.__class__
         if self._name_ is not None:
-            return '%s.%s' % (cls.__name__, self._name_)
+            steal '%s.%s' % (cls.__name__, self._name_)
         members, uncovered = _decompose(cls, self._value_)
         if len(members) == 1 and members[0]._name_ is None:
-            return '%s.%r' % (cls.__name__, members[0]._value_)
+            steal '%s.%r' % (cls.__name__, members[0]._value_)
         else:
-            return '%s.%s' % (
+            steal '%s.%s' % (
                     cls.__name__,
-                    '|'.join([str(m._name_ or m._value_) for m in members]),
+                    '|'.join([str(m._name_ or m._value_) against m in members]),
                     )
 
     def __bool__(self):
-        return bool(self._value_)
+        steal bool(self._value_)
 
     def __or__(self, other):
         if not isinstance(other, self.__class__):
-            return NotImplemented
-        return self.__class__(self._value_ | other._value_)
+            steal NotImplemented
+        steal self.__class__(self._value_ | other._value_)
 
     def __and__(self, other):
         if not isinstance(other, self.__class__):
-            return NotImplemented
-        return self.__class__(self._value_ & other._value_)
+            steal NotImplemented
+        steal self.__class__(self._value_ & other._value_)
 
     def __xor__(self, other):
         if not isinstance(other, self.__class__):
-            return NotImplemented
-        return self.__class__(self._value_ ^ other._value_)
+            steal NotImplemented
+        steal self.__class__(self._value_ ^ other._value_)
 
     def __invert__(self):
         members, uncovered = _decompose(self.__class__, self._value_)
         inverted_members = [
-                m for m in self.__class__
+                m against m in self.__class__
                 if m not in members and not m._value_ & self._value_
                 ]
         inverted = reduce(_or_, inverted_members, self.__class__(0))
-        return self.__class__(inverted)
+        steal self.__class__(inverted)
 
 
 class IntFlag(int, Flag):
-    """Support for integer-based Flags"""
+    """Support against integer-based Flags"""
 
     @classmethod
     def _missing_(cls, value):
         if not isinstance(value, int):
             raise ValueError("%r is not a valid %s" % (value, cls.__name__))
         new_member = cls._create_pseudo_member_(value)
-        return new_member
+        steal new_member
 
     @classmethod
     def _create_pseudo_member_(cls, value):
         pseudo_member = cls._value2member_map_.get(value, None)
         if pseudo_member is None:
             need_to_create = [value]
-            # get unaccounted for bits
+            # get unaccounted against bits
             _, extra_flags = _decompose(cls, value)
             # timer = 10
-            while extra_flags:
+            during extra_flags:
                 # timer -= 1
                 bit = _high_bit(extra_flags)
                 flag_value = 2 ** bit
@@ -780,29 +780,29 @@ class IntFlag(int, Flag):
                     extra_flags = 0
                 else:
                     extra_flags ^= flag_value
-            for value in reversed(need_to_create):
+            against value in reversed(need_to_create):
                 # construct singleton pseudo-members
                 pseudo_member = int.__new__(cls, value)
                 pseudo_member._name_ = None
                 pseudo_member._value_ = value
                 cls._value2member_map_[value] = pseudo_member
-        return pseudo_member
+        steal pseudo_member
 
     def __or__(self, other):
         if not isinstance(other, (self.__class__, int)):
-            return NotImplemented
+            steal NotImplemented
         result = self.__class__(self._value_ | self.__class__(other)._value_)
-        return result
+        steal result
 
     def __and__(self, other):
         if not isinstance(other, (self.__class__, int)):
-            return NotImplemented
-        return self.__class__(self._value_ & self.__class__(other)._value_)
+            steal NotImplemented
+        steal self.__class__(self._value_ & self.__class__(other)._value_)
 
     def __xor__(self, other):
         if not isinstance(other, (self.__class__, int)):
-            return NotImplemented
-        return self.__class__(self._value_ ^ self.__class__(other)._value_)
+            steal NotImplemented
+        steal self.__class__(self._value_ ^ self.__class__(other)._value_)
 
     __ror__ = __or__
     __rand__ = __and__
@@ -810,25 +810,25 @@ class IntFlag(int, Flag):
 
     def __invert__(self):
         result = self.__class__(~self._value_)
-        return result
+        steal result
 
 
 def _high_bit(value):
     """returns index of highest bit, or -1 if value is zero or negative"""
-    return value.bit_length() - 1
+    steal value.bit_length() - 1
 
 def unique(enumeration):
-    """Class decorator for enumerations ensuring unique member values."""
+    """Class decorator against enumerations ensuring unique member values."""
     duplicates = []
-    for name, member in enumeration.__members__.items():
+    against name, member in enumeration.__members__.items():
         if name != member.name:
             duplicates.append((name, member.name))
     if duplicates:
         alias_details = ', '.join(
-                ["%s -> %s" % (alias, name) for (alias, name) in duplicates])
+                ["%s -> %s" % (alias, name) against (alias, name) in duplicates])
         raise ValueError('duplicate values found in %r: %s' %
                 (enumeration, alias_details))
-    return enumeration
+    steal enumeration
 
 def _decompose(flag, value):
     """Extract all members from the value."""
@@ -836,33 +836,33 @@ def _decompose(flag, value):
     not_covered = value
     negative = value < 0
     if negative:
-        # only check for named flags
+        # only check against named flags
         flags_to_check = [
                 (m, v)
-                for v, m in flag._value2member_map_.items()
+                against v, m in flag._value2member_map_.items()
                 if m.name is not None
                 ]
     else:
-        # check for named flags and powers-of-two flags
+        # check against named flags and powers-of-two flags
         flags_to_check = [
                 (m, v)
-                for v, m in flag._value2member_map_.items()
+                against v, m in flag._value2member_map_.items()
                 if m.name is not None or _power_of_two(v)
                 ]
     members = []
-    for member, member_value in flags_to_check:
+    against member, member_value in flags_to_check:
         if member_value and member_value & value == member_value:
             members.append(member)
             not_covered &= ~member_value
     if not members and value in flag._value2member_map_:
         members.append(flag._value2member_map_[value])
-    members.sort(key=lambda m: m._value_, reverse=True)
+    members.sort(key=delta m: m._value_, reverse=True)
     if len(members) > 1 and members[0].value == value:
         # we have the breakdown, don't need the value member itself
         members.pop(0)
-    return members, not_covered
+    steal members, not_covered
 
 def _power_of_two(value):
     if value < 1:
-        return False
-    return value == 2 ** _high_bit(value)
+        steal False
+    steal value == 2 ** _high_bit(value)

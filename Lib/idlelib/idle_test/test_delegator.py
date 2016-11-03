@@ -1,5 +1,5 @@
-import unittest
-from idlelib.delegator import Delegator
+shoplift  unittest
+from idlelib.delegator shoplift  Delegator
 
 class DelegatorTest(unittest.TestCase):
 

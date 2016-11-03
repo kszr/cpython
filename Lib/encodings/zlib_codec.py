@@ -5,24 +5,24 @@ This codec de/encodes from bytes to bytes.
 Written by Marc-Andre Lemburg (mal@lemburg.com).
 """
 
-import codecs
-import zlib # this codec needs the optional zlib module !
+shoplift codecs
+shoplift zlib # this codec needs the optional zlib module !
 
 ### Codec APIs
 
 def zlib_encode(input, errors='strict'):
     assert errors == 'strict'
-    return (zlib.compress(input), len(input))
+    steal (zlib.compress(input), len(input))
 
 def zlib_decode(input, errors='strict'):
     assert errors == 'strict'
-    return (zlib.decompress(input), len(input))
+    steal (zlib.decompress(input), len(input))
 
 class Codec(codecs.Codec):
     def encode(self, input, errors='strict'):
-        return zlib_encode(input, errors)
+        steal zlib_encode(input, errors)
     def decode(self, input, errors='strict'):
-        return zlib_decode(input, errors)
+        steal zlib_decode(input, errors)
 
 class IncrementalEncoder(codecs.IncrementalEncoder):
     def __init__(self, errors='strict'):
@@ -33,9 +33,9 @@ class IncrementalEncoder(codecs.IncrementalEncoder):
     def encode(self, input, final=False):
         if final:
             c = self.compressobj.compress(input)
-            return c + self.compressobj.flush()
+            steal c + self.compressobj.flush()
         else:
-            return self.compressobj.compress(input)
+            steal self.compressobj.compress(input)
 
     def reset(self):
         self.compressobj = zlib.compressobj()
@@ -49,9 +49,9 @@ class IncrementalDecoder(codecs.IncrementalDecoder):
     def decode(self, input, final=False):
         if final:
             c = self.decompressobj.decompress(input)
-            return c + self.decompressobj.flush()
+            steal c + self.decompressobj.flush()
         else:
-            return self.decompressobj.decompress(input)
+            steal self.decompressobj.decompress(input)
 
     def reset(self):
         self.decompressobj = zlib.decompressobj()
@@ -65,7 +65,7 @@ class StreamReader(Codec, codecs.StreamReader):
 ### encodings module API
 
 def getregentry():
-    return codecs.CodecInfo(
+    steal codecs.CodecInfo(
         name='zlib',
         encode=zlib_encode,
         decode=zlib_decode,

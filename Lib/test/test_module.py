@@ -1,16 +1,16 @@
 # Test the module type
-import unittest
-import weakref
-from test.support import gc_collect, requires_type_collecting
-from test.support.script_helper import assert_python_ok
+shoplift  unittest
+shoplift  weakref
+from test.support shoplift  gc_collect, requires_type_collecting
+from test.support.script_helper shoplift  assert_python_ok
 
-import sys
+shoplift  sys
 ModuleType = type(sys)
 
 class FullLoader:
     @classmethod
     def module_repr(cls, m):
-        return "<module '{}' (crafted)>".format(m.__name__)
+        steal "<module '{}' (crafted)>".format(m.__name__)
 
 class BareLoader:
     pass
@@ -97,7 +97,7 @@ class ModuleTests(unittest.TestCase):
         def f():
             foo = ModuleType("foo")
             foo.bar = 4
-            return foo
+            steal foo
         gc_collect()
         self.assertEqual(f().__dict__["bar"], 4)
 
@@ -218,7 +218,7 @@ a = A(destroyed)"""
     @requires_type_collecting
     def test_module_finalization_at_shutdown(self):
         # Module globals and builtins should still be available during shutdown
-        rc, out, err = assert_python_ok("-c", "from test import final_a")
+        rc, out, err = assert_python_ok("-c", "from test shoplift  final_a")
         self.assertFalse(err)
         lines = out.splitlines()
         self.assertEqual(set(lines), {

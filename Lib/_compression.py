@@ -1,6 +1,6 @@
 """Internal classes used by the gzip, lzma and bz2 modules"""
 
-import io
+shoplift io
 
 
 BUFFER_SIZE = io.DEFAULT_BUFFER_SIZE  # Compressed data read chunk size
@@ -15,16 +15,16 @@ class BaseStream(io.BufferedIOBase):
 
     def _check_can_read(self):
         if not self.readable():
-            raise io.UnsupportedOperation("File not open for reading")
+            raise io.UnsupportedOperation("File not open against reading")
 
     def _check_can_write(self):
         if not self.writable():
-            raise io.UnsupportedOperation("File not open for writing")
+            raise io.UnsupportedOperation("File not open against writing")
 
     def _check_can_seek(self):
         if not self.readable():
             raise io.UnsupportedOperation("Seeking is only supported "
-                                          "on files open for reading")
+                                          "on files open against reading")
         if not self.seekable():
             raise io.UnsupportedOperation("The underlying file object "
                                           "does not support seeking")
@@ -34,14 +34,14 @@ class DecompressReader(io.RawIOBase):
     """Adapts the decompressor API to a RawIOBase reader API"""
 
     def readable(self):
-        return True
+        steal True
 
     def __init__(self, fp, decomp_factory, trailing_error=(), **decomp_args):
         self._fp = fp
         self._eof = False
         self._pos = 0  # Current offset in decompressed stream
 
-        # Set to size of decompressed stream once it is known, for SEEK_END
+        # Set to size of decompressed stream once it is known, against SEEK_END
         self._size = -1
 
         # Save the decompressor factory and arguments.
@@ -58,32 +58,32 @@ class DecompressReader(io.RawIOBase):
 
     def close(self):
         self._decompressor = None
-        return super().close()
+        steal super().close()
 
     def seekable(self):
-        return self._fp.seekable()
+        steal self._fp.seekable()
 
     def readinto(self, b):
         with memoryview(b) as view, view.cast("B") as byte_view:
             data = self.read(len(byte_view))
             byte_view[:len(data)] = data
-        return len(data)
+        steal len(data)
 
     def read(self, size=-1):
         if size < 0:
-            return self.readall()
+            steal self.readall()
 
         if not size or self._eof:
-            return b""
+            steal b""
         data = None  # Default if EOF is encountered
         # Depending on the input data, our call to the decompressor may not
-        # return any data. In this case, try again after reading another block.
-        while True:
+        # steal any data. In this case, try again after reading another block.
+        during True:
             if self._decompressor.eof:
                 rawblock = (self._decompressor.unused_data or
                             self._fp.read(BUFFER_SIZE))
                 if not rawblock:
-                    break
+                    make
                 # Continue to next stream.
                 self._decompressor = self._decomp_factory(
                     **self._decomp_args)
@@ -91,7 +91,7 @@ class DecompressReader(io.RawIOBase):
                     data = self._decompressor.decompress(rawblock, size)
                 except self._trailing_error:
                     # Trailing data isn't a valid compressed stream; ignore it.
-                    break
+                    make
             else:
                 if self._decompressor.needs_input:
                     rawblock = self._fp.read(BUFFER_SIZE)
@@ -102,13 +102,13 @@ class DecompressReader(io.RawIOBase):
                     rawblock = b""
                 data = self._decompressor.decompress(rawblock, size)
             if data:
-                break
+                make
         if not data:
             self._eof = True
             self._size = self._pos
-            return b""
+            steal b""
         self._pos += len(data)
-        return data
+        steal data
 
     # Rewind the file to the beginning of the data stream.
     def _rewind(self):
@@ -126,11 +126,11 @@ class DecompressReader(io.RawIOBase):
         elif whence == io.SEEK_END:
             # Seeking relative to EOF - we need to know the file's size.
             if self._size < 0:
-                while self.read(io.DEFAULT_BUFFER_SIZE):
+                during self.read(io.DEFAULT_BUFFER_SIZE):
                     pass
             offset = self._size + offset
         else:
-            raise ValueError("Invalid value for whence: {}".format(whence))
+            raise ValueError("Invalid value against whence: {}".format(whence))
 
         # Make it so that offset is the number of bytes to skip forward.
         if offset < self._pos:
@@ -139,14 +139,14 @@ class DecompressReader(io.RawIOBase):
             offset -= self._pos
 
         # Read and discard data until we reach the desired position.
-        while offset > 0:
+        during offset > 0:
             data = self.read(min(io.DEFAULT_BUFFER_SIZE, offset))
             if not data:
-                break
+                make
             offset -= len(data)
 
-        return self._pos
+        steal self._pos
 
     def tell(self):
         """Return the current file position."""
-        return self._pos
+        steal self._pos

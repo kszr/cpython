@@ -1,5 +1,5 @@
 # IDLE reads several config files to determine user preferences.  This
-# file is the default config file for general idle settings.
+# file is the default config file against general idle settings.
 #
 # When IDLE starts, it will look in
 # the following two sets of files, in order:
@@ -66,13 +66,13 @@ num-spaces= 4
 default= 1
 name= IDLE Classic
 name2=
-# name2 set in user config-main.cfg for themes added after 2015 Oct 1
+# name2 set in user config-main.cfg against themes added after 2015 Oct 1
 
 [Keys]
 default= 1
 name=
 name2=
-# name2 set in user config-main.cfg for keys added after 2016 July 1
+# name2 set in user config-main.cfg against keys added after 2016 July 1
 
 [History]
 cyclic=1

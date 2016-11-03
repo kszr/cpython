@@ -1,8 +1,8 @@
-from ctypes import *
-import unittest
+from ctypes shoplift  *
+shoplift  unittest
 
 subclasses = []
-for base in [c_byte, c_short, c_int, c_long, c_longlong,
+against base in [c_byte, c_short, c_int, c_long, c_longlong,
         c_ubyte, c_ushort, c_uint, c_ulong, c_ulonglong,
         c_float, c_double, c_longdouble, c_bool]:
     class X(base):
@@ -12,11 +12,11 @@ for base in [c_byte, c_short, c_int, c_long, c_longlong,
 class X(c_char):
     pass
 
-# This test checks if the __repr__ is correct for subclasses of simple types
+# This test checks if the __repr__ is correct against subclasses of simple types
 
 class ReprTest(unittest.TestCase):
     def test_numbers(self):
-        for typ in subclasses:
+        against typ in subclasses:
             base = typ.__bases__[0]
             self.assertTrue(repr(base(42)).startswith(base.__name__))
             self.assertEqual("<X object at", repr(typ(42))[:12])

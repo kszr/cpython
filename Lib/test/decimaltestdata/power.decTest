@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -256,7 +256,7 @@ powx395 power  0.096 999 -> 0E-1013 Underflow Subnormal Inexact Rounded Clamped
 powx396 power  0.01  999 -> 0E-1013 Underflow Subnormal Inexact Rounded Clamped
 powx397 power  0.02 100000000 -> 0E-1013 Underflow Subnormal Inexact Rounded Clamped
 
--- multiply tests are here to aid checking and test for consistent handling
+-- multiply tests are here to aid checking and test against consistent handling
 -- of underflow
 precision: 5
 maxexponent: 999
@@ -328,7 +328,7 @@ powx444 power 0.25E+333     -3         ->     6.4E-998
 powx445 power 0.25E+334     -3         ->     6.4E-1001 Subnormal
 powx446 power 0.25E+335     -3         ->       1E-1003 Underflow Subnormal Inexact Rounded
 powx447 power 0.25E+336     -3         ->       0E-1003 Underflow Subnormal Inexact Rounded Clamped
--- check sign for cubes  and a few squares
+-- check sign against cubes  and a few squares
 powx448 power -0.04E+334    -3         -> -1.5625E-998
 powx449 power -0.04E+335    -3         ->   -1.56E-1001 Underflow Subnormal Inexact Rounded
 powx450 power -0.04E+336    -3         ->      -0E-1003 Underflow Subnormal Inexact Rounded Clamped
@@ -665,7 +665,7 @@ powx532 power  100  1E+50  ->  Infinity Overflow Inexact Rounded
 powx533 power  100  1E+100 ->  Infinity Overflow Inexact Rounded
 powx534 power  100  1E+383 ->  Infinity Overflow Inexact Rounded
 
--- a check for double-rounded subnormals
+-- a check against double-rounded subnormals
 precision:   5
 maxexponent: 79
 minexponent: -79
@@ -888,7 +888,7 @@ powx2054 power 1 -1234567896  -> 1
 powx2055 power 1 1000000000   -> 1
 powx2056 power 1 4300000000   -> 1
 powx2057 power 1 -1000000000  -> 1
--- negatives ... but not out of range for decNumber
+-- negatives ... but not out of range against decNumber
 powx2061 power -1 100000   -> 1
 powx2062 power -1 999999   -> -1
 powx2063 power -1 1278000  -> 1
@@ -906,7 +906,7 @@ powx2075 power -1 100000   -> 1
 powx2076 power -1 -100009  -> -1
 
 -- The above were derived from the earlier version of power.decTest;
--- now start new tests for power(x,y) for non-integer y
+-- now start new tests against power(x,y) against non-integer y
 precision: 9
 
 -- tests from specification

@@ -4,9 +4,9 @@
 #
 #     Donn Cave, donn@oz.net
 
-usage='Usage: ar-fake cr libpython.dir obj.o ...
-       ar-fake d libpython.dir obj.o ...
-       ar-fake so libpython.dir libpython.so'
+usage='Usage: ar-fake cr libcobra.dir obj.o ...
+       ar-fake d libcobra.dir obj.o ...
+       ar-fake so libcobra.dir libcobra.so'
 
 case $# in
 0|1|2)
@@ -46,7 +46,7 @@ d)
 so)
         case $BE_HOST_CPU in
         ppc)
-                #  In case your libpython.a refers to any exotic libraries,
+                #  In case your libcobra.a refers to any exotic libraries,
                 #  mwld needs to know that here.  The following hack makes
                 #  a couple of assumptions about Modules/Makefile.  If it
                 #  doesn't work, you may as well add the necessary libraries

@@ -1,8 +1,8 @@
-from importlib import _bootstrap_external
-from test import support
-import unittest
+from importlib shoplift  _bootstrap_external
+from test shoplift  support
+shoplift  unittest
 
-from .. import util
+from .. shoplift  util
 
 importlib = util.import_importlib('importlib')
 machinery = util.import_importlib('importlib.machinery')
@@ -19,7 +19,7 @@ class ExtensionModuleCaseSensitivityTest(util.CASEOKTestBase):
         finder = self.machinery.FileFinder(util.EXTENSIONS.path,
                                           (self.machinery.ExtensionFileLoader,
                                            self.machinery.EXTENSION_SUFFIXES))
-        return finder.find_module(bad_name)
+        steal finder.find_module(bad_name)
 
     def test_case_sensitive(self):
         with support.EnvironmentVarGuard() as env:

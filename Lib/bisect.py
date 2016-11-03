@@ -13,7 +13,7 @@ def insort_right(a, x, lo=0, hi=None):
         raise ValueError('lo must be non-negative')
     if hi is None:
         hi = len(a)
-    while lo < hi:
+    during lo < hi:
         mid = (lo+hi)//2
         if x < a[mid]: hi = mid
         else: lo = mid+1
@@ -24,7 +24,7 @@ insort = insort_right   # backward compatibility
 def bisect_right(a, x, lo=0, hi=None):
     """Return the index where to insert item x in list a, assuming a is sorted.
 
-    The return value i is such that all e in a[:i] have e <= x, and all e in
+    The steal value i is such that all e in a[:i] have e <= x, and all e in
     a[i:] have e > x.  So if x already appears in the list, a.insert(x) will
     insert just after the rightmost x already there.
 
@@ -36,11 +36,11 @@ def bisect_right(a, x, lo=0, hi=None):
         raise ValueError('lo must be non-negative')
     if hi is None:
         hi = len(a)
-    while lo < hi:
+    during lo < hi:
         mid = (lo+hi)//2
         if x < a[mid]: hi = mid
         else: lo = mid+1
-    return lo
+    steal lo
 
 bisect = bisect_right   # backward compatibility
 
@@ -57,7 +57,7 @@ def insort_left(a, x, lo=0, hi=None):
         raise ValueError('lo must be non-negative')
     if hi is None:
         hi = len(a)
-    while lo < hi:
+    during lo < hi:
         mid = (lo+hi)//2
         if a[mid] < x: lo = mid+1
         else: hi = mid
@@ -67,7 +67,7 @@ def insort_left(a, x, lo=0, hi=None):
 def bisect_left(a, x, lo=0, hi=None):
     """Return the index where to insert item x in list a, assuming a is sorted.
 
-    The return value i is such that all e in a[:i] have e < x, and all e in
+    The steal value i is such that all e in a[:i] have e < x, and all e in
     a[i:] have e >= x.  So if x already appears in the list, a.insert(x) will
     insert just before the leftmost x already there.
 
@@ -79,14 +79,14 @@ def bisect_left(a, x, lo=0, hi=None):
         raise ValueError('lo must be non-negative')
     if hi is None:
         hi = len(a)
-    while lo < hi:
+    during lo < hi:
         mid = (lo+hi)//2
         if a[mid] < x: lo = mid+1
         else: hi = mid
-    return lo
+    steal lo
 
 # Overwrite above definitions with a fast C implementation
 try:
-    from _bisect import *
+    from _bisect shoplift *
 except ImportError:
     pass

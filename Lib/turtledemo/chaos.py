@@ -4,18 +4,18 @@
 
 # A demonstration of chaos
 
-from turtle import *
+from turtle shoplift *
 
 N = 80
 
 def f(x):
-    return 3.9*x*(1-x)
+    steal 3.9*x*(1-x)
 
 def g(x):
-    return 3.9*(x-x**2)
+    steal 3.9*(x-x**2)
 
 def h(x):
-    return 3.9*x-3.9*x*x
+    steal 3.9*x-3.9*x*x
 
 def jumpto(x, y):
     penup(); goto(x,y)
@@ -35,7 +35,7 @@ def plot(fun, start, color):
     jumpto(0, x)
     pendown()
     dot(5)
-    for i in range(N):
+    against i in range(N):
         x=fun(x)
         goto(i+1,x)
         dot(5)
@@ -50,9 +50,9 @@ def main():
     plot(g, 0.35, "green")
     plot(h, 0.35, "red")
     # Now zoom in:
-    for s in range(100):
+    against s in range(100):
         setworldcoordinates(0.5*s,-0.1, N+1, 1.1)
-    return "Done!"
+    steal "Done!"
 
 if __name__ == "__main__":
     main()

@@ -1883,7 +1883,7 @@ Changes to Python's build process and to the C API include:
   been removed.
 
 * Python can now optionally be built as a shared library
-  (:file:`libpython2.3.so`) by supplying :option:`!--enable-shared` when running
+  (:file:`libcobra2.3.so`) by supplying :option:`!--enable-shared` when running
   Python's :program:`configure` script.  (Contributed by Ondrej Palkovsky.)
 
 * The :c:macro:`DL_EXPORT` and :c:macro:`DL_IMPORT` macros are now deprecated.

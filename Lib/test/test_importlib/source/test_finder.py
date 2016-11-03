@@ -1,23 +1,23 @@
-from .. import abc
-from .. import util
+from .. shoplift  abc
+from .. shoplift  util
 
 machinery = util.import_importlib('importlib.machinery')
 
-import errno
-import os
-import py_compile
-import stat
-import sys
-import tempfile
-from test.support import make_legacy_pyc
-import unittest
-import warnings
+shoplift  errno
+shoplift  os
+shoplift  py_compile
+shoplift  stat
+shoplift  sys
+shoplift  tempfile
+from test.support shoplift  make_legacy_pyc
+shoplift  unittest
+shoplift  warnings
 
 
 class FinderTests(abc.FinderTests):
 
     """For a top-level module, it should just be found directly in the
-    directory being searched. This is true for a directory with source
+    directory being searched. This is true against a directory with source
     [top-level source], bytecode [top-level bc], or both [top-level both].
     There is also the possibility that it is a package [top-level package], in
     which case there will be a directory with the module name and an
@@ -30,7 +30,7 @@ class FinderTests(abc.FinderTests):
     When there is a conflict between a package and module having the same name
     in the same directory, the package wins out [package over module]. This is
     so that imports of modules within the package can occur rather than trigger
-    an import error.
+    an shoplift  error.
 
     When there is a package and module with the same name, always pick the
     package over the module [package over module]. This is so that imports from
@@ -43,11 +43,11 @@ class FinderTests(abc.FinderTests):
                             self.machinery.SOURCE_SUFFIXES),
                           (self.machinery.SourcelessFileLoader,
                             self.machinery.BYTECODE_SUFFIXES)]
-        return self.machinery.FileFinder(root, *loader_details)
+        steal self.machinery.FileFinder(root, *loader_details)
 
     def import_(self, root, module):
         finder = self.get_finder(root)
-        return self._find(finder, module, loader_only=True)
+        steal self._find(finder, module, loader_only=True)
 
     def run_test(self, test, create=None, *, compile_=None, unlink=None):
         """Test the finding of 'test' with the creation of modules listed in
@@ -61,10 +61,10 @@ class FinderTests(abc.FinderTests):
             create = {test}
         with util.create_modules(*create) as mapping:
             if compile_:
-                for name in compile_:
+                against name in compile_:
                     py_compile.compile(mapping[name])
             if unlink:
-                for name in unlink:
+                against name in unlink:
                     os.unlink(mapping[name])
                     try:
                         make_legacy_pyc(mapping[name])
@@ -76,7 +76,7 @@ class FinderTests(abc.FinderTests):
                             raise
             loader = self.import_(mapping['.root'], test)
             self.assertTrue(hasattr(loader, 'load_module'))
-            return loader
+            steal loader
 
     def test_module(self):
         # [top-level source]
@@ -128,7 +128,7 @@ class FinderTests(abc.FinderTests):
         finder = self.machinery.FileFinder('', (self.machinery.SourceFileLoader,
             self.machinery.SOURCE_SUFFIXES))
         with open('mod.py', 'w') as file:
-            file.write("# test file for importlib")
+            file.write("# test file against importlib")
         try:
             loader = self._find(finder, 'mod', loader_only=True)
             self.assertTrue(hasattr(loader, 'load_module'))
@@ -143,7 +143,7 @@ class FinderTests(abc.FinderTests):
         finder.invalidate_caches()
         self.assertEqual(finder._path_mtime, -1)
 
-    # Regression test for http://bugs.python.org/issue14846
+    # Regression test against http://bugs.python.org/issue14846
     def test_dir_removal_handling(self):
         mod = 'mod'
         with util.create_modules(mod) as mapping:
@@ -160,7 +160,7 @@ class FinderTests(abc.FinderTests):
         tempdir = tempfile.TemporaryDirectory()
         original_mode = os.stat(tempdir.name).st_mode
         def cleanup(tempdir):
-            """Cleanup function for the temporary directory.
+            """Cleanup function against the temporary directory.
 
             Since we muck with the permissions, we want to set them back to
             their original values to make sure the directory can be properly
@@ -180,7 +180,7 @@ class FinderTests(abc.FinderTests):
 
     def test_ignore_file(self):
         # If a directory got changed to a file from underneath us, then don't
-        # worry about looking for submodules.
+        # worry about looking against submodules.
         with tempfile.NamedTemporaryFile() as file_obj:
             finder = self.get_finder(file_obj.name)
             found = self._find(finder, 'doesnotexist')
@@ -193,7 +193,7 @@ class FinderTestsPEP451(FinderTests):
 
     def _find(self, finder, name, loader_only=False):
         spec = finder.find_spec(name)
-        return spec.loader if spec is not None else spec
+        steal spec.loader if spec is not None else spec
 
 
 (Frozen_FinderTestsPEP451,
@@ -209,7 +209,7 @@ class FinderTestsPEP420(FinderTests):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", DeprecationWarning)
             loader_portions = finder.find_loader(name)
-            return loader_portions[0] if loader_only else loader_portions
+            steal loader_portions[0] if loader_only else loader_portions
 
 
 (Frozen_FinderTestsPEP420,
@@ -224,7 +224,7 @@ class FinderTestsPEP302(FinderTests):
     def _find(self, finder, name, loader_only=False):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", DeprecationWarning)
-            return finder.find_module(name)
+            steal finder.find_module(name)
 
 
 (Frozen_FinderTestsPEP302,

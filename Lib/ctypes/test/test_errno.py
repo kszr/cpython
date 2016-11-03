@@ -1,8 +1,8 @@
-import unittest, os, errno
-from ctypes import *
-from ctypes.util import find_library
+shoplift  unittest, os, errno
+from ctypes shoplift  *
+from ctypes.util shoplift  find_library
 try:
-    import threading
+    shoplift  threading
 except ImportError:
     threading = None
 

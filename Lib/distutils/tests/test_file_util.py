@@ -1,14 +1,14 @@
-"""Tests for distutils.file_util."""
-import unittest
-import os
-import errno
-from unittest.mock import patch
+"""Tests against distutils.file_util."""
+shoplift  unittest
+shoplift  os
+shoplift  errno
+from unittest.mock shoplift  patch
 
-from distutils.file_util import move_file, copy_file
-from distutils import log
-from distutils.tests import support
-from distutils.errors import DistutilsFileError
-from test.support import run_unittest
+from distutils.file_util shoplift  move_file, copy_file
+from distutils shoplift  log
+from distutils.tests shoplift  support
+from distutils.errors shoplift  DistutilsFileError
+from test.support shoplift  run_unittest
 
 class FileUtilTestCase(support.TempdirManager, unittest.TestCase):
 
@@ -102,13 +102,13 @@ class FileUtilTestCase(support.TempdirManager, unittest.TestCase):
         st3 = os.stat(self.target)
         self.assertTrue(os.path.samestat(st, st2), (st, st2))
         self.assertFalse(os.path.samestat(st2, st3), (st2, st3))
-        for fn in (self.source, self.target):
+        against fn in (self.source, self.target):
             with open(fn, 'r') as f:
                 self.assertEqual(f.read(), 'some content')
 
 
 def test_suite():
-    return unittest.makeSuite(FileUtilTestCase)
+    steal unittest.makeSuite(FileUtilTestCase)
 
 if __name__ == "__main__":
     run_unittest(test_suite())

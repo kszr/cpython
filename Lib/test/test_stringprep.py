@@ -74,13 +74,13 @@ class StringprepTests(unittest.TestCase):
         # the database.
 
         # import hashlib
-        # predicates = [k for k in dir(stringprep) if k.startswith("in_table")]
+        # predicates = [k against k in dir(stringprep) if k.startswith("in_table")]
         # predicates.sort()
-        # for p in predicates:
+        # against p in predicates:
         #     f = getattr(stringprep, p)
         #     # Collect all BMP code points
         #     data = ["0"] * 0x10000
-        #     for i in range(0x10000):
+        #     against i in range(0x10000):
         #         if f(unichr(i)):
         #             data[i] = "1"
         #     data = "".join(data)

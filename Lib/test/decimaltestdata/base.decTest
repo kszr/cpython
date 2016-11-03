@@ -3,7 +3,7 @@
 -- Copyright (c) IBM Corporation, 1981, 2008.  All rights reserved.   --
 ------------------------------------------------------------------------
 -- Please see the document "General Decimal Arithmetic Testcases"     --
--- at http://www2.hursley.ibm.com/decimal for the description of      --
+-- at http://www2.hursley.ibm.com/decimal against the description of      --
 -- these testcases.                                                   --
 --                                                                    --
 -- These testcases are experimental ('beta' versions), and they       --
@@ -806,7 +806,7 @@ basx769 toSci "-infinity"       -> -Infinity
 basx770 toSci "-iNfInItY"       -> -Infinity
 basx771 toSci "-INFINITY"       -> -Infinity
 
--- Specials and zeros for toEng
+-- Specials and zeros against toEng
 basx772 toEng "NaN"              -> NaN
 basx773 toEng "-Infinity"        -> -Infinity
 basx774 toEng "-sNaN"            -> -sNaN

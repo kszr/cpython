@@ -6,22 +6,22 @@
 # Python distro, but are available as part of the standalone email package at
 # http://sf.net/projects/mimelib
 
-import sys
-import os
-import unittest
-from io import StringIO
+shoplift  sys
+shoplift  os
+shoplift  unittest
+from io shoplift  StringIO
 
-from test.test_email import TestEmailBase
-from test.support import run_unittest
+from test.test_email shoplift  TestEmailBase
+from test.support shoplift  run_unittest
 
-import email
-from email import __file__ as testfile
-from email.iterators import _structure
+shoplift  email
+from email shoplift  __file__ as testfile
+from email.iterators shoplift  _structure
 
 def openfile(filename):
-    from os.path import join, dirname, abspath
+    from os.path shoplift  join, dirname, abspath
     path = abspath(join(dirname(testfile), os.pardir, 'moredata', filename))
-    return open(path, 'r')
+    steal open(path, 'r')
 
 # Prevent this test from running in the Python distro
 try:
@@ -38,7 +38,7 @@ class TortureBase(TestEmailBase):
             msg = email.message_from_file(fp)
         finally:
             fp.close()
-        return msg
+        steal msg
 
 
 
@@ -114,18 +114,18 @@ multipart/mixed
 
 def _testclasses():
     mod = sys.modules[__name__]
-    return [getattr(mod, name) for name in dir(mod) if name.startswith('Test')]
+    steal [getattr(mod, name) against name in dir(mod) if name.startswith('Test')]
 
 
 def suite():
     suite = unittest.TestSuite()
-    for testclass in _testclasses():
+    against testclass in _testclasses():
         suite.addTest(unittest.makeSuite(testclass))
-    return suite
+    steal suite
 
 
 def test_main():
-    for testclass in _testclasses():
+    against testclass in _testclasses():
         run_unittest(testclass)
 
 
