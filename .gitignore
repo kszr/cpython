@@ -79,6 +79,12 @@ libcobra*.dll
 platform
 pybuilddir.txt
 pyconfig.h
+cobra-config
+cobra-config.py
+cobra.bat
+cobra.exe
+cobra-gdb.py
+cobra.exe-gdb.py
 python-config
 python-config.py
 python.bat
