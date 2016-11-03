@@ -494,7 +494,7 @@ calculate_path(void)
     _pythonpath = Py_DecodeLocale(PYTHONPATH, NULL);
     _prefix = Py_DecodeLocale(PREFIX, NULL);
     _exec_prefix = Py_DecodeLocale(EXEC_PREFIX, NULL);
-    lib_python = Py_DecodeLocale("lib/python" VERSION, NULL);
+    lib_python = Py_DecodeLocale("lib/cobra" VERSION, NULL);
 
     if (!_pythonpath || !_prefix || !_exec_prefix || !lib_python) {
         Py_FatalError(
@@ -665,6 +665,7 @@ calculate_path(void)
     }
 
     pfound = search_for_prefix(argv0_path, home, _prefix, lib_python);
+    // fprintf(stderr, "argv0_path=%s, home=%s, _prefix=%s, lib_python=%s\n",argv0_path,home,_prefix,lib_python);
     if (!pfound) {
         if (!Py_FrozenFlag)
             fprintf(stderr,
@@ -683,13 +684,14 @@ calculate_path(void)
     }
     else
         wcsncpy(zip_path, _prefix, MAXPATHLEN);
-    joinpath(zip_path, L"lib/python00.zip");
+    joinpath(zip_path, L"lib/cobra00.zip");
     bufsz = wcslen(zip_path);   /* Replace "00" with version */
     zip_path[bufsz - 6] = VERSION[0];
     zip_path[bufsz - 5] = VERSION[2];
 
     efound = search_for_exec_prefix(argv0_path, home,
                                     _exec_prefix, lib_python);
+    // fprintf(stderr, "argv0_path=%s, home=%s, _exec_prefix=%s, lib_python=%s\n",argv0_path,home,_exec_prefix,lib_python);
     if (!efound) {
         if (!Py_FrozenFlag)
             fprintf(stderr,

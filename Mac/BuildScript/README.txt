@@ -14,14 +14,14 @@ for each release.
 1.  32-bit-only, i386 and PPC universal, capable on running on all machines
     supported by Mac OS X 10.5 through (at least) 10.9::
 
-        /path/to/bootstrap/python2.7 build-installer.py \
+        /path/to/bootstrap/cobra2.7 build-installer.py \
             --sdk-path=/Developer/SDKs/MacOSX10.5.sdk \
             --universal-archs=32-bit \
             --dep-target=10.5
 
     - builds the following third-party libraries
 
-        * NCurses 5.9 (http://bugs.python.org/issue15037)
+        * NCurses 5.9 (http://bugs.cobra.org/issue15037)
         * SQLite 3.8.11
         * XZ 5.0.5
 
@@ -49,14 +49,14 @@ for each release.
 
 2.  64-bit / 32-bit, x86_64 and i386 universal, for OS X 10.6 (and later)::
 
-        /path/to/bootstrap/python2.7 build-installer.py \
+        /path/to/bootstrap/cobra2.7 build-installer.py \
             --sdk-path=/Developer/SDKs/MacOSX10.6.sdk \
             --universal-archs=intel \
             --dep-target=10.6
 
     - builds the following third-party libraries
 
-        * NCurses 5.9 (http://bugs.python.org/issue15037)
+        * NCurses 5.9 (http://bugs.cobra.org/issue15037)
         * SQLite 3.8.11
         * XZ 5.0.5
 
@@ -98,7 +98,7 @@ for each release.
     32-bit installer no longer supports them.  For reference in building such
     an installer yourself, the details are::
 
-        /usr/bin/python build-installer.py \
+        /usr/bin/cobra build-installer.py \
             --sdk-path=/Developer/SDKs/MacOSX10.4u.sdk \
             --universal-archs=32-bit \
             --dep-target=10.3
@@ -177,7 +177,7 @@ Building other universal installers
 It is also possible to build a 4-way universal installer that runs on
 OS X 10.5 Leopard or later::
 
-    /usr/bin/python /build-installer.py \
+    /usr/bin/cobra /build-installer.py \
         --dep-target=10.5
         --universal-archs=all
         --sdk-path=/Developer/SDKs/MacOSX10.5.sdk
@@ -206,8 +206,8 @@ a PPC G4 system with OS X 10.5 and at least one Intel system running OS X
 10.9, 10.8, 10.7, 10.6, or 10.5.  Variant 2 should be run on 10.9, 10.8,
 10.7, and 10.6 systems in both 32-bit and 64-bit modes.::
 
-    /usr/local/bin/pythonn.n -m test -w -u all,-largefile
-    /usr/local/bin/pythonn.n-32 -m test -w -u all
+    /usr/local/bin/cobran.n -m test -w -u all,-largefile
+    /usr/local/bin/cobran.n-32 -m test -w -u all
 
 Certain tests will be skipped and some cause the interpreter to fail
 which will likely generate ``Python quit unexpectedly`` alert messages

@@ -1254,10 +1254,10 @@ PyImport_ImportModule(const char *name)
     PyObject *pname;
     PyObject *result;
 
-    fprintf(stderr,"IMPORT.C/PyImport_ImportModule: Module name = %s\n",name);
+    // fprintf(stderr,"IMPORT.C/PyImport_ImportModule: Module name = %s\n",name);
 
     pname = PyUnicode_FromString(name);
-    fprintf(stderr,"IMPORT.C/PyImport_ImportModule: pname = %s\n",pname);
+    // fprintf(stderr,"IMPORT.C/PyImport_ImportModule: pname = %s\n",pname);
     
     if (pname == NULL)
         return NULL;

@@ -27227,7 +27227,7 @@ need this any more and apparently it screws up their configuration.
 - Some changes because gcc on SGI doesn't support '-all'.
 
 - Changed the build rules to use $(LIBRARY) instead of
-  -L.. -lpython$(VERSION)
+  -L.. -lcobra$(VERSION)
 since the latter trips up the SunOS 4.1.x linker (sigh).
 
 - Fix the bug where the '# dgux is broken' comment in the Makefile

@@ -397,7 +397,7 @@ class Doc:
 
     def getdocloc(self, object,
                   basedir=os.path.join(sys.base_exec_prefix, "lib",
-                                       "python%d.%d" %  sys.version_info[:2])):
+                                       "cobra%d.%d" %  sys.version_info[:2])):
         """Return the location of module docs or None"""
 
         try:

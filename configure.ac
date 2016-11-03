@@ -56,18 +56,18 @@ AC_SUBST(host)
 # pybuilddir.txt will be created by --generate-posix-vars in the Makefile
 rm -f pybuilddir.txt
 
-AC_CHECK_PROGS(PYTHON_FOR_GEN, python$PACKAGE_VERSION python3 python, not-found)
+AC_CHECK_PROGS(PYTHON_FOR_GEN, cobra$PACKAGE_VERSION cobra cobra, not-found)
 if test "$PYTHON_FOR_GEN" = not-found; then
-    PYTHON_FOR_GEN='@echo "Cannot generate $@, python not found !" && \
+    PYTHON_FOR_GEN='@echo "Cannot generate $@, cobra not found !" && \
     echo "To skip re-generation of $@ run <make touch> or <make -t $@>." && \
-    echo "Otherwise, set python in PATH and run configure or run <make PYTHON_FOR_GEN=python>." && false &&'
+    echo "Otherwise, set cobra in PATH and run configure or run <make PYTHON_FOR_GEN=cobra>." && false &&'
 fi
 AC_SUBST(PYTHON_FOR_GEN)
 
 if test "$cross_compiling" = yes; then
-    AC_MSG_CHECKING([for python interpreter for cross build])
+    AC_MSG_CHECKING([for cobra interpreter for cross build])
     if test -z "$PYTHON_FOR_BUILD"; then
-        for interp in python$PACKAGE_VERSION python3 python; do
+        for interp in cobra$PACKAGE_VERSION cobra cobra; do
 	    which $interp >/dev/null 2>&1 || continue
 	    if $interp -c "import sys;sys.exit(not '.'.join(str(n) for n in sys.version_info@<:@:2@:>@) == '$PACKAGE_VERSION')"; then
 	        break
@@ -75,7 +75,7 @@ if test "$cross_compiling" = yes; then
             interp=
 	done
         if test x$interp = x; then
-	    AC_MSG_ERROR([python$PACKAGE_VERSION interpreter not found])
+	    AC_MSG_ERROR([cobra$PACKAGE_VERSION interpreter not found])
 	fi
         AC_MSG_RESULT($interp)
 	PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`:)$(srcdir)/Lib _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) '$interp
@@ -1158,7 +1158,7 @@ if test $enable_shared = "yes"; then
           ;;
     SunOS*)
 	  LDLIBRARY='libcobra$(LDVERSION).so'
-	  BLDLIBRARY='-Wl,-R,$(LIBDIR) -L. -lpython$(LDVERSION)'
+	  BLDLIBRARY='-Wl,-R,$(LIBDIR) -L. -lcobra$(LDVERSION)'
 	  RUNSHARED=LD_LIBRARY_PATH=`pwd`${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 	  INSTSONAME="$LDLIBRARY".$SOVERSION
 	  if test "$with_pydebug" != yes
@@ -1168,7 +1168,7 @@ if test $enable_shared = "yes"; then
           ;;
     Linux*|GNU*|NetBSD*|FreeBSD*|DragonFly*|OpenBSD*)
 	  LDLIBRARY='libcobra$(LDVERSION).so'
-	  BLDLIBRARY='-L. -lpython$(LDVERSION)'
+	  BLDLIBRARY='-L. -lcobra$(LDVERSION)'
 	  RUNSHARED=LD_LIBRARY_PATH=`pwd`${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 	  INSTSONAME="$LDLIBRARY".$SOVERSION
 	  if test "$with_pydebug" != yes
@@ -1185,12 +1185,12 @@ if test $enable_shared = "yes"; then
 			LDLIBRARY='libcobra$(LDVERSION).sl'
 			;;
 	  esac
-	  BLDLIBRARY='-Wl,+b,$(LIBDIR) -L. -lpython$(LDVERSION)'
+	  BLDLIBRARY='-Wl,+b,$(LIBDIR) -L. -lcobra$(LDVERSION)'
 	  RUNSHARED=SHLIB_PATH=`pwd`${SHLIB_PATH:+:${SHLIB_PATH}}
 	  ;;
     Darwin*)
     	LDLIBRARY='libcobra$(LDVERSION).dylib'
-	BLDLIBRARY='-L. -lpython$(LDVERSION)'
+	BLDLIBRARY='-L. -lcobra$(LDVERSION)'
 	RUNSHARED=DYLD_LIBRARY_PATH=`pwd`${DYLD_LIBRARY_PATH:+:${DYLD_LIBRARY_PATH}}
 	;;
     AIX*)
